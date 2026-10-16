@@ -3551,8 +3551,18 @@ const DATOS=[
  ['Se definía como un hombre de tierra adentro.','Beto Casella fue su amigo y lo entrevistó varias veces en televisión.','Vivía en Coronel Suárez, lejos del ruido de la ciudad.'],
  ['En 2023 estaba de gira por el país con "Unas estrofas más".','La gira pasó por Trelew en septiembre de 2023. Iorio murió el 24 de octubre de 2023, en Coronel Suárez.','Beto Casella, su amigo, lo entrevistó varias veces en la tele.']];
 let datoT=0,datoI=0,dato=null;
-function datoTick(){loroTick();discoTick();bajoTick();albumTick();guiTick();if(state!=='play'){return;}datoT++;if(datoT%2400===420){const L=DATOS[lvl]||[];if(L.length){const fs=nextFact(L);if(fs)dato={s:fs,t:420};}}if(dato&&--dato.t<=0)dato=null;}
-function datoDraw(){if(!dato||state!=='play')return;if(banner){return;}const a=Math.min(1,dato.t/30,(420-dato.t)/20);ctx.globalAlpha=a;
+// Jefe final: un recuadro con el título de un tema que dialoga con la pelea. El texto de la segunda línea es del juego, no es la letra.
+let songCap=null,songCapT=0,songCapI=0;
+const SONGCAP_L=[['BUITRES','ALMAFUERTE · 1995','Los que quieren alambrar el arroyo dan vueltas sobre el pueblo.'],['DEJA DE ROBAR','HERMÉTICA · 1989','El loteador firma papeles de una tierra que no es suya.'],['COMO LOS BUEYES','ALMAFUERTE · 1995','Se pelea con paciencia, paso a paso y sin aflojar.'],['TORO Y PAMPA','ALMAFUERTE · 2006','La tierra es de quien la camina y la trabaja.']];
+const SONGCAP_M=[['MUERE MONSTRUO MUERE','ALMAFUERTE · 2012','El espanto cae y el pueblo vuelve a dormir tranquilo.'],['SENTIR INDIANO','ALMAFUERTE · 1995','La sangre tehuelche de la familia pesa en cada golpe.'],['ZAMBA DE RESURRECCIÓN','ALMAFUERTE · 1995','Después de cada caída, se vuelve a levantar.'],['DESTRUCCIÓN','V8 · 1983','Volumen al máximo contra el bicho.']];
+function songCapTick(){const on=LV&&LV.final&&boss&&!boss.gone&&boss.hp>0;
+  if(on){songCapT++;if(songCapT%540===90){const L=boss.D.monster?SONGCAP_M:SONGCAP_L;songCap={c:L[songCapI++%L.length],t:330};}}else{songCapT=0;if(!boss||boss.gone)songCap=null;}
+  if(songCap&&--songCap.t<=0)songCap=null;}
+function songCapDraw(){if(!songCap||state!=='play')return;const [a,b,c]=songCap.c,k=songCap,al=Math.min(1,k.t/20,(330-k.t)/20);ctx.globalAlpha=al;
+  const w=232,x0=W/2-w/2,y0=76;ctx.fillStyle='rgba(10,8,14,.88)';ctx.fillRect(x0,y0,w,32);ctx.fillStyle='#e2462c';ctx.fillRect(x0,y0,3,32);
+  txt('♫ '+a,W/2+1,y0+4,'#f2b632',6,'center');txt(b,W/2+1,y0+13,'#9b8aa3',4,'center');txt(c,W/2+1,y0+22,'#efe4d2',4,'center');ctx.globalAlpha=1;}
+function datoTick(){loroTick();discoTick();bajoTick();albumTick();guiTick();if(state!=='play'){return;}songCapTick();datoT++;if(datoT%2400===420){const L=DATOS[lvl]||[];if(L.length){const fs=nextFact(L);if(fs)dato={s:fs,t:420};}}if(dato&&--dato.t<=0)dato=null;}
+function datoDraw(){songCapDraw();if(!dato||state!=='play')return;if(banner){return;}const a=Math.min(1,dato.t/30,(420-dato.t)/20);ctx.globalAlpha=a;
   const lines=wrapTxt(dato.s,46);const h=16+lines.length*10,y0=H-h-22;ctx.fillStyle='rgba(10,8,14,.86)';ctx.fillRect(W/2-150,y0,300,h);ctx.fillStyle='#f2b632';ctx.fillRect(W/2-150,y0,3,h);
   txt('¿SABÍAS QUE...?',W/2-142,y0+4,'#f2b632',6);lines.forEach((l,i)=>txt(l,W/2-142,y0+15+i*10,'#efe4d2',6));ctx.globalAlpha=1;}
 function wrapTxt(s,n){const w=s.split(' '),out=[];let c='';for(const x of w){if((c+' '+x).trim().length>n){out.push(c.trim());c=x;}else c+=' '+x;}if(c.trim())out.push(c.trim());return out;}
