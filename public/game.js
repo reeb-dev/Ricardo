@@ -681,6 +681,29 @@ const R16 = (s) => s.trim().split(/\s+/).map(x => x === "-" ? null : +x);
 const R12 = (s) => s.trim().split(/\s+/).map(x => x === "-" ? null : +x);
 
 const SONGS = {
+  // Cap Malvinas: Patria al Hombro (Almafuerte / Ricardo Iorio)
+  patria_al_hombro: {
+    name: "PATRIA AL HOMBRO (ALMAFUERTE)",
+    bpm: 148, div: 12, order: ["A", "A", "B", "A", "C", "B"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, 3, 5], riff: R12("0 - 0 3 - 0 5 - 3 0 - 0"), m: "o.po.po.po.p", k: "x..x..x..x..", s: "...x.....x..", h: "sh", bombo: "x..x..x.x..x",
+           lead: [[0, 12, 3], [3, 15, 3], [6, 17, 6], [12, 19, 3], [15, 17, 3], [18, 15, 6], [24, 17, 3], [27, 15, 3], [30, 12, 6], [36, 10, 3], [39, 12, 9]] },
+      B: { bars: 4, roots: [0, 5, 3, -2], riff: R12("0 - - 0 - - 0 - - 0 - -"), m: "l.....l.....", k: "x.....x.....", s: "...x.....x..", h: "ride", bombo: "x.....x.....", fill: 1,
+           lead: [[0, 24, 3], [3, 22, 3], [6, 19, 6], [12, 22, 3], [15, 19, 3], [18, 17, 6], [24, 15, 6], [30, 12, 6], [36, 12, 12]] },
+      C: { bars: 2, roots: [0, 0], riff: R12("0 0 0 0 0 0 0 0 0 0 0 0"), m: "pppppppppppp", k: "xxxxxxxxxxxx", dk: 1, s: "......x.....", h: "16", fill: 1 }
+    }
+  },
+  // Boss Malvinas: Sentir Indiano / Combate Austral
+  sentir_indiano: {
+    name: "SENTIR INDIANO (ALMAFUERTE - BOSS)",
+    bpm: 158, div: 12, order: ["A", "A", "B"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, 1, -2], riff: R12("0 - 0 1 - 0 7 - 6 0 - 0"), m: "o.po.po.oo.p", k: "x..x..x..x..", s: "......x.....", h: "8", bombo: "x..x..x.x..x",
+           lead: [[0, 12, 3], [3, 15, 3], [6, 18, 6], [12, 17, 3], [15, 15, 3], [18, 12, 6]] },
+      B: { bars: 4, roots: [0, -4, -2, 1], riff: R12("0 - - - - - 1 - - - - -"), m: "llllllllllll", k: "xxxxxxxxxxxx", dk: 1, s: "...x.....x..", h: "ride", fill: 1, bombo: "x.....x.....",
+           lead: [[0, 19, 3], [3, 17, 3], [6, 15, 6], [12, 17, 3], [15, 19, 3], [18, 22, 6]] }
+    }
+  },
   // Cap 1: Muy Cansado Estoy (V8)
   c0: {
     name: "MUY CANSADO ESTOY (V8)",
@@ -1050,7 +1073,7 @@ cv.addEventListener('pointerdown',e=>{audioInit();if(AC&&AC.state==='suspended')
   }
   else if(state==='title'){
     if(cy>=198&&cy<=220&&cx>=216&&cx<=468){diffSet(diff+1);sfx('blip');return;}
-    if(cy>=80&&cy<=200&&cx>=218&&cx<=468){const row=Math.floor((cy-80)/10);if(row>=0&&row<LEVELS.length){sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}sfx('blip');return;}}
+    if(cy>=78&&cy<=202&&cx>=218&&cx<=468){const row=Math.floor((cy-78)/9);if(row>=0&&row<LEVELS.length){sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}sfx('blip');return;}}
     one.start=1;}
   else if(state==='results'){
     if(cy>=192&&cy<=220&&cx>=W/2+20&&cx<=W/2+160){toTitleMenu();return;}
@@ -1724,6 +1747,8 @@ function updNPC(n){if(n.ally){updAlly(n);return;}
 // Armas: Escopeta recortada calibre 12, pistola Bersa Thunder 9mm, cajón de papas, boleadoras y damajuana
 Object.assign(MOVES,{gun:{dmg:18,kd:1.2,h:40},buck:{dmg:14,kd:1.6,h:44},frase:{dmg:14,kd:1.1,h:40}});
 const GUNS={
+  fal:{name:'FAL CRIOLLO 7.62',ammo:12,dur:14,col:'#8fd2ff'},
+  mate_cocido:{name:'JARRO DE MATE COCIDO',ammo:4,dur:18,col:'#ffd27a'},
   escopeta:{name:'ESCOPETA RECORTADA',ammo:8,dur:22,col:'#ff5a36'},
   bersa:{name:'BERSA THUNDER 9MM',ammo:15,dur:12,col:'#72c6ff'},
   cajon:{name:'CAJÓN DE PAPAS',ammo:6,dur:20,col:'#d8a24a'},
@@ -1741,6 +1766,14 @@ function gunTick(f){const G=GUNS[f.hold];f.t++;if(!G){f.state='idle';return;}
       parts.push({k:'wave',x,y:f.y,t:0,max:10,col:'255,170,70'});
       for(let p=0;p<5;p++)parts.push({k:'deb',x:x+f.face*14,y:f.y-z,vx:f.face*rnd(2,5),vy:rnd(-2.5,1.5),t:0,max:18,c:rnd(0,1)>.5?'#f29c32':'#e8e8ea',w:2,h:2});
       floatTxt(x,f.y-z-16,pick(['¡PLOMO!','¡FOGONAZO!','¡BOOOM!','¡ESCOPETAZO!']),'#ff6a3a');
+    }
+    else if(f.hold==='fal'){
+      for(let b=0;b<2;b++)shots.push({x:x+b*8*f.face,y:f.y+rnd(-2,2),z:z+rnd(-1,1),vx:f.face*12,owner:f,t:0,k:'bala',back:true,mv:MOVES.gun,life:45});
+      sfx('gun');shake=Math.max(shake,3);parts.push({k:'wave',x,y:f.y,t:0,max:8,col:'140,210,255'});floatTxt(x,f.y-z-16,pick(['¡7.62!','¡RÁFAGA!','¡FAL!']),'#8fd2ff');
+    }
+    else if(f.hold==='mate_cocido'){
+      shots.push({x,y:f.y,z:z+3,vx:f.face*5.5,vz:1.1,owner:f,t:0,k:'jarro',back:true,mv:MOVES.buck,life:50});
+      sfx('whoosh');floatTxt(x,f.y-z-16,'¡MATE COCIDO CALIENTE!','#ffd27a');
     }
     else if(f.hold==='bersa'){
       shots.push({x,y:f.y,z,vx:f.face*11,owner:f,t:0,k:'bala',back:true,mv:MOVES.gun,life:42});
@@ -1764,7 +1797,26 @@ function gunTick(f){const G=GUNS[f.hold];f.t++;if(!G){f.state='idle';return;}
   if(f.t>=G.dur)f.state='idle';}
 function pickGun(f,it){f.hold=it.kind;f.ammo=it.ammo||GUNS[it.kind].ammo;it.gone=true;sfx('pickup');floatTxt(f.x,f.y-80,GUNS[it.kind].name+'!',GUNS[it.kind].col);}
 function drawGunItem(k,X,y){const R=(a,b,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(a,b,w,h);};
-  if(k==='escopeta'){
+  if(k==='fal'){
+    R(X-14,y-14,28,4,OUT);R(X-13,y-13,26,2,'#363c32');
+    R(X-6,y-11,5,7,OUT);R(X-5,y-10,4,6,'#222620');
+    R(X-12,y-12,6,5,'#4a5244');R(X+11,y-14,3,1,'#7a8274');
+  }
+  else if(k==='mate_cocido'){
+    R(X-6,y-15,12,14,OUT);R(X-5,y-14,10,12,'#5a7088');R(X-5,y-14,10,2,'#c8d6e4');
+    R(X+5,y-12,3,6,OUT);R(X+5,y-11,2,4,'#5a7088');
+    ctx.fillStyle='rgba(255,255,255,.4)';ctx.fillRect(X-3,y-17,2,2);ctx.fillRect(X+1,y-19,2,2);
+  }
+  else   if(k==='fal'){
+    for(const p of [0,1])L(hx-dx*10,hy-dy*10,hx+dx*16,hy+dy*16,3.8,'#363c32',p);
+    L(hx+dx*16,hy+dy*16,hx+dx*22,hy+dy*22,2.2,'#7a8274',1);
+    L(hx-dx*2-nx*3,hy-dy*2-ny*3,hx+dx*2,hy+dy*2,3.5,'#222620',1);
+    L(hx-dx*8,hy-dy*8,hx-dx*2,hy-dy*2,4.2,'#4a5244',1);
+  }
+  else if(k==='mate_cocido'){
+    ctx.fillStyle=OUT;ctx.fillRect(hx-5,hy-9,10,12);ctx.fillStyle='#5a7088';ctx.fillRect(hx-4,hy-8,8,10);ctx.fillStyle='#c8d6e4';ctx.fillRect(hx-4,hy-8,8,2);
+  }
+  else   if(k==='escopeta'){
     R(X-13,y-13,6,6,OUT);R(X-12,y-12,5,4,'#6a3a1e');
     R(X-7,y-14,6,6,OUT);R(X-6,y-13,5,4,'#3e424c');
     R(X-1,y-14,14,3,OUT);R(X-1,y-13,13,2,'#7c8494');
@@ -1976,7 +2028,7 @@ const LM = { askOff: 1, retro: true, tracks: [], userTracks: [], cur: null, want
 const ERA_KEYS = [
   ['v8', 'luchando', 'paso mas', 'inicuos', 'destruccion', 'brigadas', 'cautivo', 'luchar'],
   ['hermetica', 'acido', 'vaciamiento', 'interpretes', 'oeste', 'seguridad', 'siglos', 'gil', 'olvidalo', 'camionero', 'liniers'],
-  ['almafuerte', 'guanaco', 'entorno', 'fondo blanco', 'piedra libre', 'ultimando', 'toro', 'pampa', 'trillando', 'peso argento', 'iorio', 'flavio', 'pelusa', 'tierra adentro', 'vos amigo', 'amasijo', 'triunfo', 'se vos', 'ruta 76', 'monstruo']
+  ['almafuerte', 'guanaco', 'entorno', 'fondo blanco', 'piedra libre', 'ultimando', 'toro', 'pampa', 'trillando', 'peso argento', 'iorio', 'flavio', 'pelusa', 'tierra adentro', 'vos amigo', 'amasijo', 'triunfo', 'se vos', 'ruta 76', 'monstruo', 'patria al hombro', 'sentir indiano', 'malvinas']
 ];
 
 function lmNorm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
@@ -2754,7 +2806,182 @@ const RUTA_SCENE={weather:'mist',light:'#8f9ab8',
     for(const x of [1700,1800,2060,2120])tree(x,176,84,'#14201c',24);
     for(const x of [520,1280,2080])lamp(x,70);}
 };
+
+/* ================= CAPÍTULO MALVINAS ARGENTINAS ================= */
+Object.assign(STY,{
+  ingles:{scale:1.02,skin:'#e8c2a0',hair:'cap',capC:'#3e4a38',top:'#4a5642',shirt:'#2c3626',pants:'#384232',boots:'#1a1c18',torsoW:10.5,helmet:true},
+  comando:{scale:1.04,skin:'#d8a680',hair:'cap',capC:'#8a2424',stache:'#2a1810',top:'#2e3828',shirt:'#1c2418',pants:'#242c20',boots:'#101210',torsoW:11,vest:'#3a4834'},
+  lord_pirata:{scale:1.32,skin:'#e8baa0',hair:'short',hairC:'#d8d2cc',stache:'#d8d2cc',top:'#1c2638',shirt:'#f4f4f0',tie:'#c8322a',vest:'#28364e',pants:'#1c2434',boots:'#0d1018',torsoW:15,belly:1.2,glasses:true},
+  combatiente:{scale:1.0,skin:'#d9a67e',hair:'cap',capC:'#3e4a38',top:'#424e3a',shirt:'#2a3424',pants:'#384430',boots:'#1a1a16',torsoW:9.8}
+});
+Object.assign(DEFS,{
+  ingles:E('ingles',32,1.25,'SOLDADO COLONIAL BRITÁNICO',180,{wind:11,punch:'mpunch',reach:28}),
+  comando:E('comando',38,1.4,'COMANDO DE LA CORONA',220,{punch:'mpunch',wind:10,reach:30,ai:'hitrun',shot:'te',hold:'phone'}),
+  lord_pirata:E('lord_pirata',460,.88,'LORD COLONIALISTA PIRATA',9500,{boss:1,bthrow:'te',heavy:1}),
+  combatiente:N('combatiente')
+});
+Object.assign(NAMES,{ingles:'SOLDADO BRITÁNICO',comando:'COMANDO DE LA CORONA',lord_pirata:'LORD COLONIALISTA PIRATA',combatiente:'SOLDADO ARGENTINO'});
+Object.assign(BARKS,{
+  ingles:['¡Drop your weapons!','¡God save the Queen!','¡Surrender the island!','¡Leave this rock!'],
+  comando:['¡Royal Marine commando!','¡Take cover!','¡Rule Britannia!'],
+  lord_pirata:['¡The British Empire rules the seas!','¡No negotiation with south americans!','¡Tea time is over!']
+});
+Object.assign(DIEQ,{
+  ingles:'¡Las Malvinas fueron, son y serán argentinas!',
+  comando:'¡Nuestra juventud derramó sangre santa en estos montes, usurpador!',
+  lord_pirata:'¡El imperialismo no tiene futuro en nuestra América criolla!'
+});
+
+function malvinasLevel(){
+  const L=L_STD(
+    [[['ingles','R'],['ingles','R']],[['comando','R'],['ingles','L']]],
+    [[['ingles','R'],['comando','L'],['ingles','R']],[['comando','R'],['ingles','L'],['comando','L']]],
+    [[['ingles','R'],['ingles','L'],['comando','R']],[['comando','L'],['ingles','R'],['ingles','R']]],
+    [[['comando','L'],['ingles','R'],['comando','R']],[['ingles','R'],['comando','L'],['ingles','L'],['comando','R']]]
+  );
+  return {
+    LW:2800,skin:'ric5',song:'patria_al_hombro',bossSong:'sentir_indiano',food:'asado',lmKey:'malvinas',
+    villains:'Soldados coloniales británicos, comandos de la Corona y el Lord Colonialista Pirata',
+    title:'MALVINAS ARGENTINAS',place:'PUERTO ARGENTINO · ISLAS MALVINAS',hazard:'patrullero',
+    card:[
+      'Homenaje a los 649 héroes caídos en 1982 y a los veteranos de la Gesta de Malvinas.',
+      'Ricardo Iorio siempre llevó la causa patriótica y el honor de los combatientes como estandarte sagrado en canciones como "Patria al hombro".',
+      'Entre turba helada, viento austral y trincheras, Ricardo defiende el suelo irrenunciable contra la soberbia pirata del imperio británico.'
+    ],
+    npcs:[{kind:'combatiente',x:250,y:198,face:1,hold:'mate'}],
+    guns:[[650,'fal'],[1350,'mate_cocido'],[1850,'fal'],[2200,'escopeta']],
+    locks:L,
+    rescue:{kind:'combatiente',x:1420,y:192},
+    props:[[380,'tacho','asado'],[840,'fardo','asado'],[1480,'tacho','mate'],[1960,'fardo','asado'],[2320,'tacho','asado']],
+    pipe:[1460,240],
+    intro:[
+      {w:'combatiente',s:'¡Ricardo! El viento austral sopla fuerte y los piratas ingleses avanzan desde el estrecho.'},
+      {w:'ric5',s:'Firme en la trinchera, muchacho. 649 centinelas eternos nos cuidan desde este suelo.'},
+      {w:'combatiente',s:'Un Lord colonialista mandó a sus tropas a confiscar hasta los recuerdos de nuestros pibes.'},
+      {w:'ric5',s:'A la Patria se la lleva en el alma y se la defiende de pie. ¡Viva la Patria, carajo!'}
+    ],
+    rescueLines:[
+      {w:'combatiente',s:'¡Gracias por el aguante, Iorio! Nos tenían rodeados en el cerro, pero no entregamos la enseña patria.'},
+      {w:'ric5',s:'Jamás se rinde el gaucho ni el soldado argentino. Tomate un mate cocido caliente.'},
+      {w:'combatiente',s:'El Lord Pirata está en el búnker naval con sus comandos tomando té mientras saquean.'},
+      {w:'ric5',s:'Vamos a enseñarle que en esta tierra manda la dignidad criolla.'}
+    ],
+    boss:'lord_pirata',
+    summons:[['comando','ingles'],['comando','comando']],
+    bossLines:[
+      {w:'lord_pirata',s:'¡Surrender, gaucho! This archipelago belongs to the British Crown forever!'},
+      {w:'ric5',s:'Ustedes son piratas del mundo: robaron tierras en todos los continentes, pero acá no pasarán.'},
+      {w:'lord_pirata',s:'¡Guards, open fire! Let us eliminate this rebel singer!'}
+    ],
+    winLines:[
+      {w:'lord_pirata',s:'¡Disgrace! My troops are defeated by a handful of brave fighters...'},
+      {w:'ric5',s:'¡Las Malvinas son argentinas, ayer, hoy y para toda la eternidad! ¡Honor y gloria a los caídos!'}
+    ],
+    winSay:'¡LAS MALVINAS SON ARGENTINAS!',
+    quips:[
+      '¡649 héroes que viven por siempre en nuestra memoria!',
+      '¡La Patria no se negocia ni se vende a ningún imperio!',
+      '¡Viento austral y corazón de metal argento!',
+      '¡Honor y gloria a los veteranos de Malvinas!'
+    ]
+  };
+}
+
+const MALVINAS_SCENE={
+  weather:'mist',light:'#9cb2c8',
+  lamps:[{x:480,y:80,r:100,c:'210,230,255'},{x:1240,y:80,r:100,c:'210,230,255',flick:true},{x:2100,y:80,r:100,c:'210,230,255'}],
+  signs:[],
+  far(g){
+    sky(g,['#0a1420','#182638','#283c50','#4a6278'],95);
+    // Nubes plomizas y cielo austral
+    for(let i=0;i<6;i++){
+      g.fillStyle='rgba(180,200,220,'+(.15+hsh(i,3)*.15).toFixed(2)+')';
+      g.beginPath();g.ellipse(120+i*220,40+hsh(i,4)*30,90,18,0,0,7);g.fill();
+    }
+    // Mar austral agitado (Estrecho San Carlos)
+    g.fillStyle='#14283c';g.fillRect(0,140,1400,50);
+    for(let x=0;x<1400;x+=28){
+      g.fillStyle='rgba(200,230,255,.3)';g.fillRect(x+hsh(x,2)*10,145+Math.sin(x*.02)*4,14,2);
+    }
+    // Cerros pedregosos y turba de fondo (Monte Longdon / Two Sisters)
+    g.fillStyle='#223226';
+    g.beginPath();g.moveTo(0,170);
+    for(let x=0;x<=1400;x+=25){
+      g.lineTo(x,122-Math.sin(x*.005)*24-Math.sin(x*.02)*8-hsh(x,3)*6);
+    }
+    g.lineTo(1400,190);g.lineTo(0,190);g.fill();
+  },
+  bg(K){
+    const {R,T,g,tree,lamp,poster}=K;
+    // Suelo de turba malvinense y piedras
+    R(0,172,2800,98,'#2a3628');
+    for(let x=0;x<2800;x+=30){
+      R(x,172,30,4,'#1e281e');
+      if(hsh(x,1)>.4){
+        // Rocas y piedras
+        g.fillStyle='#444c48';g.beginPath();g.arc(x+hsh(x,2)*20,182+hsh(x,3)*14,hsh(x,4)*6+3,0,7);g.fill();
+        g.fillStyle='#2e3432';g.beginPath();g.arc(x+hsh(x,2)*20,182+hsh(x,3)*14,hsh(x,4)*4+2,0,7);g.fill();
+      }
+    }
+    // Trinchera argentina con bolsas de arena y bandera
+    for(let k=0;k<8;k++){
+      R(200+k*18,154,20,10,'#7a7458');R(202+k*18,155,16,8,'#9c9472');
+      R(210+k*18,146,20,10,'#6a644c');R(212+k*18,147,16,8,'#888062');
+    }
+    // Mástil con Bandera Argentina flameando en Malvinas
+    R(360,60,4,114,'#b0b8c0');
+    drawFlag(364,62,44,26,tick);
+
+    // Cartel histórico y patriótico
+    R(520,106,240,46,'#1a2430');R(522,108,236,42,'#243444');
+    T('ISLAS MALVINAS',640,113,'#ffffff',6,'center');
+    T('TERRITORIO ARGENTINO',640,123,'#6cace4',5.5,'center');
+    T('HONOR Y GLORIA A LOS 649 HÉROES',640,134,'#f2b632',4,'center');
+    R(550,152,4,22,'#4a5460');R(710,152,4,22,'#4a5460');
+
+    // Cruces de Darwin / Monte Longdon en homenaje
+    for(const cx of [880,940,1000,1060]){
+      R(cx,142,3,28,'#e8e4dc');R(cx-6,148,15,3,'#e8e4dc');
+      g.fillStyle='rgba(108,172,228,.8)';g.fillRect(cx-4,150,11,2);
+    }
+    T('CEMENTERIO DE DARWIN',970,132,'#d8d4cc',4,'center');
+
+    // Búnker colonialista y nido de ametralladoras inglés
+    R(1560,110,220,64,'#3e4644');R(1556,104,228,8,'#2a3230');
+    for(let k=0;k<7;k++)R(1568+k*28,140,24,12,'#5a6460');
+    R(1620,124,100,12,'#141818');
+    T('BRITISH MILITARY POST',1670,114,'#c8322a',4,'center');
+
+    // Cartel usurpador tachado
+    R(2240,102,260,52,'#1a1e28');R(2242,104,256,48,'#2a3040');
+    T('FALKLAND ISLANDS',2370,112,'#8894a4',5,'center');
+    // Tachón rojo con aerosol argentino
+    g.strokeStyle='#c8322a';g.lineWidth=3;g.beginPath();g.moveTo(2260,116);g.lineTo(2480,116);g.stroke();
+    T('¡LAS MALVINAS SON ARGENTINAS!',2370,128,'#6cace4',5,'center');
+    T('1982 · PROHIBIDO OLVIDAR',2370,138,'#f2b632',4.5,'center');
+    R(2270,154,4,20,'#4a5060');R(2470,154,4,20,'#4a5060');
+  }
+};
+
+function malvinasInsert(){
+  const L=malvinasLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
+  // Insertar en la posición 10 (Capítulo 11), desplazando a Tierra Adentro al 12 y Ruta 76 al 13
+  LEVELS.splice(10,0,L);SCENES.splice(10,0,MALVINAS_SCENE);
+  DISCOS.splice(10,0,{t:'PATRIA AL HOMBRO',c:'#6cace4',s:'Homenaje al sentimiento patriótico de Ricardo Iorio, los 649 caídos y los veteranos de la Gesta de Malvinas de 1982.'});
+  AFICHES.splice(10,0,[[640,'LAS MALVINAS','SON ARGENTINAS','1982','#6cace4'],[2260,'HONOR Y GLORIA','A LOS 649','HÉROES','#f2b632']]);
+  DATOS.splice(10,0,[
+    'Ricardo Iorio siempre reivindicó la Causa Malvinas y a los veteranos de guerra en recitales, discursos y canciones.',
+    '649 soldados argentinos dieron su vida en el Atlántico Sur en defensa de la soberanía nacional.',
+    'Temas como "Patria al hombro" reflejan el profundo respeto por la identidad, la historia y la memoria de la tierra argentina.',
+    'Las Islas Malvinas, Georgias del Sur y Sandwich del Sur son parte inalienable del territorio nacional argentino.'
+  ]);
+  MODS.splice(10,0,'');
+  CLIMA.splice(10,0,{moth:1,sep:.35,lbl:'PUERTO ARGENTINO · MALVINAS'});
+  LEVEL_TRACK_MAP.splice(10,0,{song:'patria_al_hombro',boss:'sentir_indiano'});
+}
+
 function rutaInsert(){
+
   const L=rutaLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
   LEVELS.push(L);SCENES.push(RUTA_SCENE);
   DISCOS.push({t:'RUTA 76',c:'#5a6a9a',s:'Bonus: homenaje al tema "Ruta 76" de Almafuerte, del disco "Ultimando" (2003). Ficción de fans, sin la letra.'});
@@ -2769,7 +2996,8 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   AFICHES.splice(9,0,[[640,'ALMAFUERTE','TRILLANDO','LA FINA','#6a8a3a'],[2260,'SE VENDE','GALPÓN','CON ESPANTO','#e8e2d0']]);
   DATOS.splice(9,0,['"Trillando la fina" (2012) fue el último disco de estudio de Almafuerte.','"Muere monstruo muere" tiene letra de Iorio y música de Claudio Marciello.','La figura del comerciante informador aparece en "El amasijo de un gran sueño" (Mundo guanaco, 1995): el periodismo que lucra con rumores y rupturas.','Beto Casella, su amigo, lo entrevistó varias veces en televisión.']);
   MODS.splice(9,0,'');
-  rutaInsert();
+  malvinasInsert();
+rutaInsert();
   if(LEVELS[10])LEVELS[10].guns=[[700,'boleadora'],[1400,'damajuana'],[1900,'escopeta']];
   DATOS[0].unshift('En 1972 recibió su primera guitarra y en 1978 su primer bajo, un Faim que le compraron sus padres.');
   AFICHES[4].push([1300,'BLACK SABBATH','OBRAS 1992','ABRE HERMÉTICA','#7a5a9a']);AFICHES[5].push([1700,'MONSTERS OF ROCK','KISS Y SABBATH','RIVER 3/9/94','#c8a060']);
@@ -3684,6 +3912,16 @@ function drawEnt(e){if(e.gone||e.state==='ride'||e.state==='hidden')return;if(e.
   if(e.dazed>0){for(let i=0;i<3;i++){const a=tick*.15+i*2.1;ctx.fillStyle='#f2e6a0';ctx.fillRect(X+Math.cos(a)*12-1,Y-90*e.st.scale+Math.sin(a)*3,3,3);}}}
 function drawShot(s){const X=Math.round(s.x-cam.x),Y=Math.round(s.y-s.z);ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(X,Math.round(s.y),5,2,0,0,Math.PI*2);ctx.fill();
   if(s.k==='frase'){drawFrase(s,X,Y);return;}if(s.k==='pizza'){drawPizza(s,X,Y);return;}
+  if(s.k==='jarro'){
+    ctx.save();ctx.translate(X,Y);ctx.rotate(s.t*.3);
+    ctx.fillStyle=OUT;ctx.fillRect(-6,-6,12,12);ctx.fillStyle='#5a7088';ctx.fillRect(-5,-5,10,10);ctx.fillStyle='#c8d6e4';ctx.fillRect(-5,-5,10,2);
+    ctx.restore();return;
+  }
+  if(s.k==='te'){
+    ctx.save();ctx.translate(X,Y);ctx.rotate(s.t*.25);
+    ctx.fillStyle=OUT;ctx.fillRect(-5,-5,10,10);ctx.fillStyle='#d8d4c8';ctx.fillRect(-4,-4,8,8);ctx.fillStyle='#c8322a';ctx.fillRect(-3,-2,6,4);
+    ctx.restore();return;
+  }
   if(s.k==='soda'){const d=Math.sign(s.vx);ctx.fillStyle='rgba(200,235,255,.55)';ctx.fillRect(d>0?X-16:X,Y-1.5,16,3);ctx.fillStyle='#f4fbff';for(let k=0;k<4;k++)ctx.fillRect(X-d*k*4+Math.sin(s.t+k)*1.5,Y-2+Math.cos(s.t*1.3+k)*2,1.5,1.5);return;}
   if(s.k==='bala'||s.k==='perdigon'){const d=Math.sign(s.vx),l=s.k==='bala'?14:8;ctx.fillStyle='rgba(255,220,120,.45)';ctx.fillRect(X-d*l-(d<0?-l:0)*0,Y-1,l*d,2);ctx.fillStyle='#fff6c8';ctx.fillRect(X-1.5,Y-1,3,2);return;}
   ctx.save();ctx.translate(X,Y);ctx.rotate(s.t*.45);const k=s.k||'phone';
@@ -3798,9 +4036,9 @@ function drawTitle(){
   txt(L5.place.split('·').pop().trim(),109,240,'#f2b632',8,'center');
   ctx.save();ctx.translate(342,30);ctx.rotate(-.05);txt('RICARDO IORIO',3,3,'#7a1a14',18,'center');txt('RICARDO IORIO',0,0,'#f2b632',18,'center');ctx.restore();
   ctx.fillStyle='#e2462c';ctx.save();ctx.translate(342,66);ctx.rotate(-.05);ctx.fillRect(-112,-8,224,18);txt('UNA VIDA DE METAL',0,-3,'#fff',9,'center');ctx.restore();
-  LEVELS.forEach((L,i)=>{const y=82+i*10,open=i<unl,on=i===sel;
-    if(on){ctx.fillStyle='rgba(226,70,44,.28)';ctx.fillRect(222,y-2,240,11);ctx.fillStyle='#f2b632';ctx.fillRect(222,y-2,3,11);}
-    txt((L.bonus?'★':(i+1)+'.')+' '+(open?L.title:'???'),230,y,open?(on?'#fff':'#efe4d2'):'#5a4a5e',5);});
+  LEVELS.forEach((L,i)=>{const y=80+i*9,open=i<unl,on=i===sel;
+    if(on){ctx.fillStyle='rgba(226,70,44,.28)';ctx.fillRect(222,y-2,240,10);ctx.fillStyle='#f2b632';ctx.fillRect(222,y-2,3,10);}
+    txt((L.bonus?'★':(i+1)+'.')+' '+(open?L.title:'???'),230,y,open?(on?'#fff':'#efe4d2'):'#5a4a5e',4.5);});
   const df=DIFFS[diff];
   ctx.fillStyle='rgba(18,14,24,.92)';ctx.fillRect(222,201,240,17);
   ctx.strokeStyle=df.col;ctx.lineWidth=1.2;ctx.strokeRect(222.5,201.5,239,16);
