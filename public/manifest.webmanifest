@@ -1,0 +1,13 @@
+{
+  "name": "Ricardio: Una vida de metal",
+  "short_name": "Ricardio",
+  "description": "Beat em up arcade de 16 bits. Homenaje de fan no oficial.",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0b0910",
+  "theme_color": "#0b0910",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

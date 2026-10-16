@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ricardio: Una vida de metal</title>
+<meta name="description" content="Beat em up arcade de 16 bits en el navegador: 11 capítulos, jefes y banda sonora chiptune. Homenaje de fan no oficial.">
+<meta name="theme-color" content="#0b0910">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ricardio: Una vida de metal">
+<meta property="og:description" content="Beat em up arcade de 16 bits en el navegador. Homenaje de fan no oficial.">
+<meta property="og:locale" content="es_AR">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <canvas id="game" width="960" height="540" tabindex="0" aria-label="Juego Ricardio: Una vida de metal"></canvas>
+  <p class="rot" aria-hidden="true">GIRÁ EL TELÉFONO PARA JUGAR EN GRANDE</p>
+  <div class="touch" id="touch">
+    <div class="dpad" id="dpad" role="group" aria-label="Dirección"></div>
+    <div class="btns">
+      <button class="btn spc" id="bSpc" type="button" aria-label="Ataque especial">ESPEC</button>
+      <button class="btn ddg" id="bDdg" type="button" aria-label="Esquivar">ESQUI</button>
+      <button class="btn pap" id="bPap" type="button">PAPA</button>
+      <button class="btn atk" id="bAtk" type="button" aria-label="Golpe">GOLPE</button>
+      <button class="btn jmp" id="bJmp" type="button" aria-label="Salto">SALTO</button>
+    </div>
+    <button class="pause" id="bPause" type="button" aria-label="Pausa">II</button>
+  </div>
+</div>
+<p class="help"><b>Flechas</b> moverse · <b>Z</b> golpe (combo) · <b>X</b> salto · <b>C</b> Bajazo · <b>B</b> tirar papas · <b>Shift</b> esquive · <b>Enter / P</b> pausa · <b>Esc / Q</b> volver al menú · <b>doble toque</b> adelante: correr · <b>G</b> álbum · <b>M</b> música</p>
+
+<noscript><p class="help">Este juego necesita JavaScript.</p></noscript>
+<script src="game.js"></script>
+<script>if("serviceWorker" in navigator&&location.protocol!=="file:")addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
+
+</body></html>
