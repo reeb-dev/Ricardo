@@ -1,0 +1,40 @@
+/* Layout: one-screen arcade cabinet. 16:9 canvas fitted to the stage, legend below, touch pad over the stage on phones. Deliberately single dark look. */
+:root{
+  --bg:#0b0910;
+  --panel:#1a1320;
+  --fg:#efe4d2;
+  --muted:#9b8aa3;
+  --accent:#e2462c;
+  --gold:#f2b632;
+  --pad:rgba(239,228,210,.13);
+  --pad-line:rgba(239,228,210,.36);
+  --font-pixel:"Press Start 2P", ui-monospace, "Courier New", monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-pixel);margin:0;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;overflow:hidden}
+.stage{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
+canvas{display:block;image-rendering:pixelated;image-rendering:crisp-edges;background:#000;box-shadow:0 0 0 2px var(--panel),0 0 50px rgba(226,70,44,.16);touch-action:none;outline:none}
+canvas:focus-visible{box-shadow:0 0 0 2px var(--gold)}
+.help{margin:0;font-size:8px;line-height:2;color:var(--muted);text-align:center;max-width:100ch;text-wrap:balance}
+.help b{color:var(--gold);font-weight:400}
+.touch{display:none;position:absolute;inset:0;pointer-events:none}
+.dpad,.btn,.pause{pointer-events:auto;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.dpad{position:absolute;left:4px;bottom:4px;width:132px;height:132px;border-radius:50%;background:var(--pad);border:2px solid var(--pad-line)}
+.dpad::before,.dpad::after{content:"";position:absolute;background:var(--pad-line);border-radius:4px}
+.dpad::before{left:50%;top:18%;width:30%;height:64%;transform:translateX(-50%)}
+.dpad::after{top:50%;left:18%;height:30%;width:64%;transform:translateY(-50%)}
+.btns{position:absolute;right:4px;bottom:4px;width:150px;height:150px}
+.btn{position:absolute;width:62px;height:62px;border-radius:50%;border:2px solid var(--pad-line);background:var(--pad);color:var(--fg);font:7px var(--font-pixel);display:grid;place-items:center;padding:0}
+.btn.atk{right:0;top:44px;background:rgba(226,70,44,.34)}
+.btn.jmp{left:44px;bottom:0}
+.btn.spc{left:44px;top:0;background:rgba(242,182,50,.26)}
+.btn.ddg{left:0;top:44px}
+.btn.pap{right:0;top:0;width:42px;height:42px;background:rgba(160,112,58,.4);font-size:6px}
+.btn.on{background:var(--pad-line)}
+.pause{position:absolute;right:4px;top:4px;width:40px;height:32px;border-radius:6px;border:2px solid var(--pad-line);background:var(--pad);color:var(--fg);font:8px var(--font-pixel)}
+@media (pointer:coarse){.touch{display:block}.help{display:none}}
+.rot{display:none}
+@media (pointer:coarse) and (orientation:portrait){body{padding-left:6px;padding-right:6px}.stage{align-items:flex-start;padding-top:4px}.rot{display:block;position:absolute;left:0;right:0;top:calc(56.25vw + 14px);text-align:center;font-size:8px;line-height:2;color:var(--muted);pointer-events:none}.dpad{width:150px;height:150px;bottom:14px;left:10px}.btns{right:10px;bottom:14px;width:164px;height:164px}.btn{width:66px;height:66px}.btn.atk,.btn.ddg{top:49px}.btn.jmp,.btn.spc{left:49px}}
+@media (pointer:coarse) and (orientation:landscape){body{padding-block:4px;gap:0}.dpad{width:112px;height:112px;left:0;bottom:10px}.btns{right:0;bottom:10px;width:128px;height:128px}.btn{width:52px;height:52px;font-size:6px}.btn.atk,.btn.ddg{top:38px}.btn.jmp,.btn.spc{left:38px}.btn.pap{width:36px;height:36px}}
