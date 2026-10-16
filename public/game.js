@@ -1276,8 +1276,9 @@ function v15Villains(){if(v15Villains.done)return;v15Villains.done=1;
     lagarto:{scale:1.02,skin:'#5e8e3e',hair:'bald',lizard:true,top:'#a8b0b8',shirt:'#d8dce0',pants:'#a8b0b8',boots:'#5a6068',torsoW:10.5},
     puntero:{scale:1.06,skin:'#d8a07a',hair:'short',hairC:'#2a1a10',stache:'#2a1a10',top:'#3a5a8a',shirt:'#e8e8ea',pants:'#2a2a30',boots:'#1a1a1e',torsoW:12,belly:true},
     progre:{scale:.96,skin:'#e8c2a0',hair:'cap',capC:'#3a5a4a',glasses:true,top:'#7a3a52',shirt:'#e8dfd8',pants:'#3a4a3a',boots:'#5a4430',torsoW:9.2},
-    cumbiero:{scale:1.03,skin:'#b8825c',hair:'cap',capC:'#ffffff',top:'#2a5aa8',shirt:'#f0f0f4',pants:'#1a1c24',boots:'#ffffff',torsoW:10.5,jacket:true}}
-  );
+    cumbiero:{scale:1.03,skin:'#b8825c',hair:'cap',capC:'#ffffff',top:'#2a5aa8',shirt:'#f0f0f4',pants:'#1a1c24',boots:'#ffffff',torsoW:10.5,jacket:true},
+    luzmala:{scale:1.0,skin:'#80ffe0',top:'#80ffe0',shirt:'#80ffe0',pants:'#80ffe0',boots:'#80ffe0',torsoW:8}
+  });
   Object.assign(DEFS,{
     soho:E('soho',26,1.05,'TURISTA DE PALERMO SOHO',140,{wind:13}),
     poser:E('poser',30,1.1,'CARETA CON REMERA NUEVA',150,{wind:12,hold:'phone'}),
@@ -1286,9 +1287,10 @@ function v15Villains(){if(v15Villains.done)return;v15Villains.done=1;
     lagarto:E('lagarto',32,1.15,'REPTILOIDE DE LAS SIERRAS',230,{ai:'ranged',shot:'baba'}),
     puntero:E('puntero',40,.9,'PUNTERO DEL COMITÉ',200,{ai:'ranged',shot:'promesa'}),
     progre:E('progre',28,1.05,'PROGRE MORALISTA',160,{wind:12,hold:'phone'}),
-    cumbiero:E('cumbiero',36,1.2,'CUMBIERO CHORRO',180,{punch:'mpunch',wind:10,reach:29,ai:'hitrun'})
+    cumbiero:E('cumbiero',36,1.2,'CUMBIERO CHORRO',180,{punch:'mpunch',wind:10,reach:29,ai:'hitrun'}),
+    luzmala:E('luzmala',34,1.35,'LA LUZ MALA DE LA PAMPA',240,{ai:'ranged',shot:'fuego',wind:14})
   });
-  Object.assign(NAMES,{soho:'MODERNO DE PALERMO SOHO',poser:'POSER DE MODA',faran:'PANELISTA FARANDULERO',vendido:'MÚSICO VENDIDO',puntero:'PUNTERO POLÍTICO',lagarto:'REPTILOIDE ESPACIAL',progre:'PROGRE MORALISTA',cumbiero:'CUMBIERO CHORRO'});
+  Object.assign(NAMES,{soho:'MODERNO DE PALERMO SOHO',poser:'POSER DE MODA',faran:'PANELISTA FARANDULERO',vendido:'MÚSICO VENDIDO',puntero:'PUNTERO POLÍTICO',lagarto:'REPTILOIDE ESPACIAL',progre:'PROGRE MORALISTA',cumbiero:'CUMBIERO CHORRO',luzmala:'LA LUZ MALA'});
   Object.assign(BARKS,{soho:['¡El campo es re aesthetic, gordo!','¿Tenés flat white con leche de almendras?','¡Qué vintage tu molino, boludo!'],
     poser:['¡Compré la remera en el shopping!','¿V8? ¿No es un motor de camioneta?','¡Sacame una selfie haciendo cuernitos!'],
     faran:['¡Decí algo polémico para el graph!','¡Necesito veinte puntos de rating!','¡Recortale esa frase que es viral!'],
@@ -1296,16 +1298,19 @@ function v15Villains(){if(v15Villains.done)return;v15Villains.done=1;
     lagarto:['¡Venimosss de Ganímedesss!','¡Entregá las vacasss, terrícola!','¡Ssse nos cayó el plato en el cerro!','¡Sssomos el nuevo orden!'],
     puntero:['¡Subí al micro que pasan lista!','¡Votá la boleta entera y te doy una chapa!','¡Después de las elecciones vemos!'],
     progre:['¡Tu discurso no es deconstruido, Ricardo!','¡Canceladísimo por falta de empatía!','¡Te falta taller de sensibilidad!','¡Cuidado que me da ansiedad tu bajo!'],
-    cumbiero:['¡Largá las zapatillas y el bajo, logi!','¡Esa campera con tachas me gusta para mí!','¡Aguante la vagancia y el choreo!','¡Rescatate que te vamo a dar masa!']
+    cumbiero:['¡Largá las zapatillas y el bajo, logi!','¡Esa campera con tachas me gusta para mí!','¡Aguante la vagancia y el choreo!','¡Rescatate que te vamo a dar masa!'],
+    luzmala:['¡Fosforescencia en el bañado!','¡El fuego fatuo de los huesos!','¡Alma en pena del cerro!','¡No mires la luz del descampado!']
   });
   Object.assign(DIEQ,{soho:'Andá a carpir la tierra en invierno y después hablamos.',poser:'El sentimiento pesado se lleva adentro, no en una etiqueta.',faran:'Con la honra de la gente no se hace rating.',
     vendido:'Prefiero comer pan duro antes que traicionar mi canción.',puntero:'Al pueblo se le da trabajo digno, no limosna.',lagarto:'En la pampa no mandan los bichos de otro planeta.',
     progre:'¡La corrección política es la censura de los cobardes!',
     cumbiero:'¡La yuta existe por ustedes, soretes! ¡Por ustedes que le roban al laburante!',
-    chorro:'¡La yuta existe por ustedes, soretes! ¡Por ustedes que le roban al laburante!'});
+    chorro:'¡La yuta existe por ustedes, soretes! ¡Por ustedes que le roban al laburante!',
+    luzmala:'La luz mala es fosforescencia de osamenta, no me asusta ningún fantasma.'});
   const add=(i,k)=>{const L=LEVELS[i];if(!L)return;L.locks.forEach((l,j)=>{if(l.groups&&l.groups.length)l.groups[j%l.groups.length].push([k,j%2?'L':'R']);});};
   add(2,'vendido');add(3,'poser');add(4,'puntero');add(5,'poser');add(6,'vendido');add(7,'puntero');add(8,'soho');add(9,'faran');add(9,'soho');add(8,'lagarto');add(9,'lagarto');
   add(0,'cumbiero');add(1,'cumbiero');add(3,'progre');add(4,'cumbiero');add(5,'progre');add(7,'cumbiero');add(8,'progre');add(9,'cumbiero');add(10,'progre');
+  add(7,'luzmala');add(8,'luzmala');add(10,'luzmala');
   const vs=['','','Músicos vendidos, ','Posers, ','Punteros políticos, ','Posers, ','Músicos vendidos, ','Punteros políticos, ','Reptiloides de las sierras, modernos de Palermo Soho, ','Panelistas faranduleros, reptiloides, modernos de Palermo Soho, '];
   LEVELS.forEach((L,i)=>{if(vs[i])L.villains=vs[i]+L.villains.charAt(0).toLowerCase()+L.villains.slice(1);});}
 function v14Levels(){v15Villains();if(v14Levels.done)return;v14Levels.done=1;LEVELS.forEach((L,i)=>{L.song='c'+i;L.bossSong=['b0','b0','b0','b2','b1','b1','b2','b1','b2','b2'][i];});
@@ -2301,6 +2306,22 @@ function SKIRT(st,hipY,sl,cl,k1,k2,fl){const w=st.torsoW,h=w/2,bel=(+st.belly||0
   INK([p],LG(hi,y0,lo,ky,st.top,1.15,.55));ctx.strokeStyle=shade(st.top,.5);ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(x0+h*.6,y0-2);ctx.lineTo((hi+x0)/2+1,ky);ctx.stroke();
   ctx.fillStyle=shade(st.top,.45);ctx.beginPath();ctx.arc(x0+h*.66,y0+2,.6,0,7);ctx.fill();ctx.fillStyle=shade(st.top,.7);ctx.fillRect(x0-h*.3,y0+3,h*.9,.5);}
 function drawPuppet(f,X,Y){
+  if(f.kind==='luzmala'){
+    ctx.save();ctx.translate(X,Y-22+Math.sin(tick*.15+(f.x||0)*.1)*6);
+    const rad=16+Math.sin(tick*.2)*2;
+    const gl=ctx.createRadialGradient(0,0,2,0,0,rad*1.8);
+    gl.addColorStop(0,'rgba(255,255,240,.95)');
+    gl.addColorStop(.3,'rgba(120,255,220,.7)');
+    gl.addColorStop(.7,'rgba(60,180,240,.35)');
+    gl.addColorStop(1,'rgba(20,80,200,0)');
+    ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,rad*1.8,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.arc(0,0,6+Math.sin(tick*.3)*1.5,0,Math.PI*2);ctx.fill();
+    // llama fluctuante
+    ctx.fillStyle='rgba(180,255,240,.8)';
+    ctx.beginPath();ctx.moveTo(-7,2);ctx.quadraticCurveTo(0,-16+Math.sin(tick*.4)*4,7,2);ctx.quadraticCurveTo(0,-6,-7,2);ctx.fill();
+    ctx.restore();
+    return;
+  }
   const st=f.st,P=livePose(f),s=st.scale,fl=f.flash>0,BK=st.bulk||1;
   ctx.save();ctx.translate(X,Y);ctx.scale(f.face*s,s);ctx.lineCap='round';
   if(P.rot){ctx.translate(0,-Math.abs(Math.sin(P.rot))*6);ctx.rotate(P.rot);}
@@ -3564,7 +3585,12 @@ function drawShot(s){const X=Math.round(s.x-cam.x),Y=Math.round(s.y-s.z);ctx.fil
   else if(k==='promesa'){ctx.rotate(-s.t*.45);ctx.fillStyle=OUT;ctx.fillRect(-11,-6,22,11);ctx.fillStyle=s.back?'#ffd27a':'#f4efe4';ctx.fillRect(-10,-5,20,9);ctx.fillStyle='#1a1418';ctx.font='4px '+FONT;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText('BLA',0,-3);}
   else if(k==='papa'&&lvl>=2){drawVinilo(s);}
   else if(k==='papa'){ctx.rotate(s.t*.25);ctx.fillStyle='rgba(10,8,13,.8)';ctx.beginPath();ctx.ellipse(0,0,10.5,7.6,0,0,Math.PI*2);ctx.fill();const pg=ctx.createRadialGradient(-3,-3,1,0,0,10);pg.addColorStop(0,'#e0b47a');pg.addColorStop(.6,'#b8864a');pg.addColorStop(1,'#7a5430');ctx.fillStyle=pg;ctx.beginPath();ctx.ellipse(0,0,9.5,6.8,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#5a3a1e';for(const [a,b] of [[-4,-1],[3,2],[1,-3],[-1,3],[5,-1]])ctx.fillRect(a,b,1.3,1.3);ctx.fillStyle='rgba(255,240,210,.5)';ctx.beginPath();ctx.ellipse(-3,-3,3,1.4,-.4,0,7);ctx.fill();}
-  else if(k==='baba'){const gl=ctx.createRadialGradient(0,0,1,0,0,16);gl.addColorStop(0,'rgba(220,255,240,.95)');gl.addColorStop(.35,s.back?'rgba(255,210,120,.7)':'rgba(120,230,200,.6)');gl.addColorStop(1,'rgba(80,200,180,0)');ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,16,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f4fff8';ctx.beginPath();ctx.arc(0,0,4,0,Math.PI*2);ctx.fill();}
+  else if(k==='fuego'||k==='luzmala'){
+    const gl=ctx.createRadialGradient(0,0,1,0,0,14);
+    gl.addColorStop(0,'#ffffff');gl.addColorStop(.3,'#7affdf');gl.addColorStop(.7,'rgba(60,180,250,.6)');gl.addColorStop(1,'rgba(0,100,200,0)');
+    ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,14,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(0,0,4,0,Math.PI*2);ctx.fill();
+  } else if(k==='baba'){const gl=ctx.createRadialGradient(0,0,1,0,0,16);gl.addColorStop(0,'rgba(220,255,240,.95)');gl.addColorStop(.35,s.back?'rgba(255,210,120,.7)':'rgba(120,230,200,.6)');gl.addColorStop(1,'rgba(80,200,180,0)');ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,16,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f4fff8';ctx.beginPath();ctx.arc(0,0,4,0,Math.PI*2);ctx.fill();}
   else if(k==='patacon'){ctx.fillStyle=OUT;ctx.fillRect(-7,-4,14,8);ctx.fillStyle=s.back?'#ffd27a':'#a8c08a';ctx.fillRect(-6,-3,12,6);ctx.fillStyle='#5a7a4a';ctx.fillRect(-2,-2,4,4);}
   else{ctx.fillStyle=OUT;ctx.fillRect(-4,-6,8,12);ctx.fillStyle=s.back?'#ffd27a':'#9fd0ff';ctx.fillRect(-3,-5,6,10);}
   ctx.restore();}
