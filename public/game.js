@@ -1798,15 +1798,29 @@ function drawTruckL(X){ctx.save();ctx.translate(Math.round(X),224);ctx.scale(-1.
 
 // v24: Banda sonora 16-bits de Ricardo Iorio (V8, Hermética, Almafuerte, Solista) integrada directamente en el proyecto
 const BUILTIN_TRACKS = [
+  // Época V8
   { era: 0, key: 'c0', name: 'Momento de luchar (V8)', url: 'audio/c0.mp3' },
   { era: 0, key: 'c1', name: 'Brigadas metálicas (V8)', url: 'audio/c1.mp3' },
   { era: 0, key: 'c2', name: 'Destrucción (V8)', url: 'audio/c2.mp3' },
   { era: 0, key: 'b0', name: 'Cautivos del sistema (V8)', url: 'audio/b0.mp3' },
+  // Época Hermética
+  { era: 1, key: 'desde_el_oeste', name: 'Desde el oeste (Hermética)', url: 'audio/desde_el_oeste.mp3' },
+  { era: 1, key: 'del_camionero', name: 'Del camionero (Hermética)', url: 'audio/del_camionero.mp3' },
+  { era: 1, key: 'liniers', name: 'En las calles de Liniers (Hermética)', url: 'audio/liniers.mp3' },
   { era: 1, key: 'c3', name: 'Tú eres su seguridad (Hermética)', url: 'audio/c3.mp3' },
   { era: 1, key: 'c4', name: 'Memoria de siglos (Hermética)', url: 'audio/c4.mp3' },
   { era: 1, key: 'c5', name: 'Gil trabajador (Hermética)', url: 'audio/c5.mp3' },
   { era: 1, key: 'b1', name: 'Olvídalo y volverá por más (Hermética)', url: 'audio/b1.mp3' },
-  { era: 2, key: 'c6', name: 'El amasijo de un gran sueño (Almafuerte)', url: 'audio/c6.mp3' },
+  // Época Almafuerte
+  { era: 2, key: 'el_amasijo', name: 'El amasijo de un gran sueño (Almafuerte)', url: 'audio/el_amasijo.mp3' },
+  { era: 2, key: 'del_entorno', name: 'Del entorno (Almafuerte)', url: 'audio/del_entorno.mp3' },
+  { era: 2, key: 'almafuerte', name: 'Almafuerte (Almafuerte)', url: 'audio/almafuerte.mp3' },
+  { era: 2, key: 'convide_rutero', name: 'Convide rutero (Almafuerte)', url: 'audio/convide_rutero.mp3' },
+  { era: 2, key: 'piedra_libre', name: 'Piedra libre (Almafuerte)', url: 'audio/piedra_libre.mp3' },
+  { era: 2, key: 'toro_y_pampa', name: 'Toro y pampa (Almafuerte)', url: 'audio/toro_y_pampa.mp3' },
+  { era: 2, key: 'monstruo', name: 'Muere monstruo muere (Almafuerte)', url: 'audio/monstruo.mp3' },
+  { era: 2, key: 'tierra_adentro', name: 'Tierra adentro (Iorio - Flavio)', url: 'audio/tierra_adentro.mp3' },
+  { era: 2, key: 'ruta_76', name: 'Ruta 76 (Almafuerte)', url: 'audio/ruta_76.mp3' },
   { era: 2, key: 'c7', name: 'Sé vos (Almafuerte)', url: 'audio/c7.mp3' },
   { era: 2, key: 'c8', name: 'Toro y pampa (Almafuerte)', url: 'audio/c8.mp3' },
   { era: 2, key: 'c10', name: 'A vos amigo (Almafuerte)', url: 'audio/c10.mp3' },
@@ -1814,11 +1828,39 @@ const BUILTIN_TRACKS = [
   { era: 2, key: 'intro', name: 'Tierra adentro (Iorio - Flavio)', url: 'audio/intro.mp3' }
 ];
 
+// Mapa directo de canciones 16-bits para cada capítulo y jefe (temas exactos según historia)
+const LEVEL_TRACK_MAP = [
+  // Cap 1: El Papero (Caseros 1978, verdulería / orígenes)
+  { song: 'c0', boss: 'b0' }, // Momento de luchar / Cautivos del sistema
+  // Cap 2: Nace V8 (Ciudadela / Caseros 1979, garajes, comisaría)
+  { song: 'c1', boss: 'b0' }, // Brigadas metálicas / Cautivos del sistema
+  // Cap 3: BA Rock 1982 (Obras Sanitarias, naranjas / Destrucción)
+  { song: 'c2', boss: 'b0' }, // Destrucción / Cautivos del sistema
+  // Cap 4: Hermética 1988 (Recoleta / San Martín, Helloween)
+  { song: 'desde_el_oeste', boss: 'c3' }, // Desde el oeste / Tú eres su seguridad
+  // Cap 5: Ácido Argentino 1991 (El Oeste, desguace industrial)
+  { song: 'del_camionero', boss: 'c5' }, // Del camionero / Gil trabajador
+  // Cap 6: Monumental 1994 (Estadio River, Víctimas del vaciamiento)
+  { song: 'liniers', boss: 'b1' }, // En las calles de Liniers / Olvídalo y volverá por más
+  // Cap 7: Cemento 1995 (Nace Almafuerte, Mundo Guanaco, clausurador)
+  { song: 'el_amasijo', boss: 'del_entorno' }, // El amasijo de un gran sueño / Del entorno
+  // Cap 8: Rutas del interior 2001 (Crisis, corralito, Obras 2001)
+  { song: 'convide_rutero', boss: 'piedra_libre' }, // Convide rutero / Piedra libre
+  // Cap 9: Sierras 2006 (Sierra de la Ventana, Toro y pampa)
+  { song: 'toro_y_pampa', boss: 'b2' }, // Toro y pampa / Triunfo
+  // Cap 10: Muere monstruo muere 2012 (Pueblo de campo, Trillando la fina, Beto Casella)
+  { song: 'monstruo', boss: 'el_amasijo' }, // Muere monstruo muere / El Comerciante Informador
+  // Cap 11: Tierra adentro 2023 (Coronel Suárez, raíces pampas y tehuelches, Mandinga)
+  { song: 'tierra_adentro', boss: 'b2' }, // Tierra adentro / Triunfo
+  // Cap 12 (Bonus): Ruta 76 (Noche, peaje, KM 76)
+  { song: 'ruta_76', boss: 'b2' } // Ruta 76 / Triunfo
+];
+
 const LM = { askOff: 1, retro: true, tracks: [], userTracks: [], cur: null, want: null, el: null, label: null, labT: 0, era: -1 };
 const ERA_KEYS = [
   ['v8', 'luchando', 'paso mas', 'inicuos', 'destruccion', 'brigadas', 'cautivo', 'luchar'],
-  ['hermetica', 'acido', 'vaciamiento', 'interpretes', 'oeste', 'seguridad', 'siglos', 'gil', 'olvidalo'],
-  ['almafuerte', 'guanaco', 'entorno', 'fondo blanco', 'piedra libre', 'ultimando', 'toro', 'pampa', 'trillando', 'peso argento', 'iorio', 'flavio', 'pelusa', 'tierra adentro', 'vos amigo', 'amasijo', 'triunfo', 'se vos']
+  ['hermetica', 'acido', 'vaciamiento', 'interpretes', 'oeste', 'seguridad', 'siglos', 'gil', 'olvidalo', 'camionero', 'liniers'],
+  ['almafuerte', 'guanaco', 'entorno', 'fondo blanco', 'piedra libre', 'ultimando', 'toro', 'pampa', 'trillando', 'peso argento', 'iorio', 'flavio', 'pelusa', 'tierra adentro', 'vos amigo', 'amasijo', 'triunfo', 'se vos', 'ruta 76', 'monstruo']
 ];
 
 function lmNorm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
@@ -1829,15 +1871,23 @@ function lmPick(){
   const pool = LM.userTracks.length ? LM.userTracks : LM.tracks;
   if(!pool.length) return null;
   const isBoss = state==='play' && boss && !boss.gone;
+  
+  if(!LM.userTracks.length && typeof lvl === 'number' && LEVEL_TRACK_MAP[lvl]){
+    const map = LEVEL_TRACK_MAP[lvl];
+    const targetKey = isBoss ? map.boss : map.song;
+    const match = pool.find(t=>t.key === targetKey);
+    if(match) return match;
+  }
+  
   if(LV && !LM.userTracks.length){
+    if(LV.lmKey && !isBoss){
+      const matchK = pool.find(t=>lmNorm(t.name).includes(LV.lmKey) || lmNorm(t.key||'').includes(LV.lmKey));
+      if(matchK) return matchK;
+    }
     const targetKey = isBoss ? LV.bossSong : LV.song;
     if(targetKey){
       const match = pool.find(t=>t.key===targetKey);
       if(match) return match;
-    }
-    if(LV.lmKey && !isBoss){
-      const matchK = pool.find(t=>lmNorm(t.name).includes(LV.lmKey) || lmNorm(t.key||'').includes(LV.lmKey));
-      if(matchK) return matchK;
     }
   }
   const era = lmChapterEra();
@@ -3302,7 +3352,17 @@ function lombrizPick(it,f){if(it.kind!=='lombriz')return false;it.gone=true;scor
   dato={s:'Beto Casella fue su amigo y lo entrevistó varias veces en televisión.',t:420};say(f,'Esta va por Beto.',110);return true;}
 
 // v23: Bandas sonoras de Ricardo Iorio en 16-bits (V8, Hermética, Almafuerte)
-function musicByEra(){LEVELS.forEach((L,i)=>{L.song=SONGS['c'+i]?'c'+i:'c8';L.bossSong=i<=2?'b0':i<=5?'b1':'b2';});}
+function musicByEra(){
+  LEVELS.forEach((L,i)=>{
+    if(LEVEL_TRACK_MAP[i]){
+      L.song = LEVEL_TRACK_MAP[i].song;
+      L.bossSong = LEVEL_TRACK_MAP[i].boss;
+    } else {
+      L.song = SONGS['c'+i] ? 'c'+i : 'c8';
+      L.bossSong = i<=2 ? 'b0' : i<=5 ? 'b1' : 'b2';
+    }
+  });
+}
 
 function stepWorld(){
   timeF++;
