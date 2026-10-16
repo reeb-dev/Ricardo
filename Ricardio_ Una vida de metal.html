@@ -67,7 +67,7 @@ canvas:focus-visible{box-shadow:0 0 0 2px var(--gold)}
     <button class="pause" id="bPause" type="button" aria-label="Pausa">II</button>
   </div>
 </div>
-<p class="help"><b>Flechas</b> moverse · <b>Z</b> golpe (combo) · <b>X</b> salto · <b>C</b> Bajazo · <b>B</b> tirar papas · <b>Shift</b> esquive · <b>doble toque</b> adelante: correr · <b>G</b> álbum · caminá contra un enemigo para <b>agarrarlo</b> (Z rodilla, atrás+Z revoleo) · <b>Z</b> sobre un caño lo levanta · golpeá lo que te tiran para <b>devolverlo</b> · en el título <b>arriba/abajo</b> elige capítulo · <b>Enter</b> pausa · <b>M</b> música · también joystick</p>
+<p class="help"><b>Flechas</b> moverse · <b>Z</b> golpe (combo) · <b>X</b> salto · <b>C</b> Bajazo · <b>B</b> tirar papas · <b>Shift</b> esquive · <b>Enter / P</b> pausa · <b>Esc / Q</b> volver al menú · <b>doble toque</b> adelante: correr · <b>G</b> álbum · <b>M</b> música</p>
 
 <script>
 (()=>{
@@ -1066,7 +1066,7 @@ function sfx(n){if(!AC)return;const t=AC.currentTime;switch(n){
 /* ================= input ================= */
 const keys={},touch={},one={};
 const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',
-  KeyZ:'atk',KeyJ:'atk',KeyX:'jump',KeyK:'jump',Space:'jump',KeyC:'spec',KeyL:'spec',ShiftLeft:'dodge',ShiftRight:'dodge',KeyV:'dodge',Enter:'start',Escape:'start',KeyP:'start',KeyM:'mute',KeyB:'papa',KeyF:'papa',KeyI:'papa',KeyG:'album'};
+  KeyZ:'atk',KeyJ:'atk',KeyX:'jump',KeyK:'jump',Space:'jump',KeyC:'spec',KeyL:'spec',ShiftLeft:'dodge',ShiftRight:'dodge',KeyV:'dodge',Enter:'start',Escape:'esc',KeyP:'pause',KeyM:'menu',KeyQ:'menu',KeyR:'restart',KeyB:'papa',KeyF:'papa',KeyI:'papa',KeyG:'album'};
 addEventListener('keydown',e=>{const a=KMAP[e.code];if(!a)return;e.preventDefault();audioInit();if(AC&&AC.state==='suspended')AC.resume();if(!e.repeat)one[a]=1;keys[a]=1;});
 addEventListener('keyup',e=>{const a=KMAP[e.code];if(a)keys[a]=0;});
 addEventListener('blur',()=>{for(const k in keys)keys[k]=0;if(state==='play')state='pause';});
@@ -1080,20 +1080,35 @@ dpad.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')dp
 [['bAtk','atk'],['bJmp','jump'],['bSpc','spec'],['bDdg','dodge'],['bPap','papa']].forEach(([id,k])=>{const b=document.getElementById(id);
   b.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();touch[k]=1;one[k]=1;b.classList.add('on');});
   ['pointerup','pointercancel','pointerleave'].forEach(n=>b.addEventListener(n,()=>{touch[k]=0;b.classList.remove('on');}));});
-document.getElementById('bPause').addEventListener('pointerdown',e=>{e.preventDefault();one.start=1;});
+document.getElementById('bPause').addEventListener('pointerdown',e=>{e.preventDefault();audioInit();if(state==='pause')state='play';else if(state==='play')state='pause';else one.start=1;});
 cv.addEventListener('pointerdown',e=>{audioInit();cv.focus();
-  if(state==='gameover'&&gameoverT>15){resurrectPlayer();}
+  const rect=cv.getBoundingClientRect(),cy=(e.clientY-rect.top)*(H/rect.height),cx=(e.clientX-rect.left)*(W/rect.width);
+  if(state==='gameover'){
+    if(cy>=178&&cy<=208&&cx>=W/2-105&&cx<=W/2+105){toTitleMenu();return;}
+    if(gameoverT>15){resurrectPlayer();}
+  }
+  else if(state==='pause'){
+    if(cx>=W/2-105&&cx<=W/2+105){
+      if(cy>=86&&cy<=114){state='play';sfx('blip');return;}
+      if(cy>=116&&cy<=142){startChapter(lvl,false);sfx('blip');return;}
+      if(cy>=144&&cy<=172){toTitleMenu();return;}
+    }
+    state='play';
+  }
   else if(state==='title'){
-    const rect=cv.getBoundingClientRect(),cy=(e.clientY-rect.top)*(H/rect.height),cx=(e.clientX-rect.left)*(W/rect.width);
     if(cy>=198&&cy<=220&&cx>=216&&cx<=468){diffSet(diff+1);sfx('blip');return;}
     if(cy>=78&&cy<=198&&cx>=218&&cx<=468){const row=Math.floor((cy-78)/11.2);if(row>=0&&row<LEVELS.length){sel=row;sfx('blip');return;}}
     one.start=1;}
+  else if(state==='results'){
+    if(cy>=192&&cy<=220&&cx>=W/2+20&&cx<=W/2+160){toTitleMenu();return;}
+    one.start=1;
+  }
   else if(state!=='play')one.start=1;});
 document.getElementById('touch').addEventListener('contextmenu',e=>e.preventDefault());
 let inp={},press={},lastPad={};
 function readInput(){let gp=null;try{for(const p of (navigator.getGamepads?navigator.getGamepads():[]))if(p){gp=p;break;}}catch(e){}
   const g=k=>!!(keys[k]||touch[k]);inp={left:g('left'),right:g('right'),up:g('up'),down:g('down'),atk:g('atk')};
-  press={};for(const k of ['atk','jump','spec','dodge','start','mute','left','right','up','down','papa','album'])press[k]=!!one[k];
+  press={};for(const k of ['atk','jump','spec','dodge','start','mute','left','right','up','down','papa','album','esc','menu','restart','pause'])press[k]=!!one[k];
   if(gp){const B=i=>!!(gp.buttons[i]&&gp.buttons[i].pressed),ax=gp.axes[0]||0,ay=gp.axes[1]||0;
     inp.left=inp.left||ax<-.4||B(14);inp.right=inp.right||ax>.4||B(15);inp.up=inp.up||ay<-.4||B(12);inp.down=inp.down||ay>.4||B(13);
     const m={atk:2,jump:0,spec:1,dodge:5,start:9,papa:7};for(const k in m){const v=B(m[k])||(k==='dodge'&&B(4))||(k==='atk'&&B(3));if(v&&!lastPad[k])press[k]=true;lastPad[k]=v;}inp.atk=inp.atk||B(2);}
@@ -1696,6 +1711,16 @@ function drawHeart(x,y,full,sz){sz=sz||1;ctx.save();ctx.translate(x,y);ctx.scale
   ctx.bezierCurveTo(-4.2,4.8,0,7.5,0,9);ctx.bezierCurveTo(0,7.5,4.2,4.8,4.2,2);ctx.bezierCurveTo(4.2,-1,0,-1,0,2);ctx.fill();
   if(full){ctx.fillStyle='rgba(255,255,255,.65)';ctx.fillRect(-2.5,.8,1.2,1.2);}
   else{ctx.strokeStyle='#5a1e24';ctx.lineWidth=.8;ctx.stroke();}ctx.restore();}
+function toTitleMenu(){
+  audioInit();
+  saveHi();
+  state='title';
+  sel=Math.min(lvl,LEVELS.length-1);
+  boss=null;ents=[];items=[];props=[];parts=[];bubbles=[];shots=[];hazard=null;cut=null;CINE=null;SHOW=null;truck=null;
+  musicOn=true;
+  try{song=LEVELS[sel].song;}catch(e){}
+  sfx('blip');
+}
 function resurrectPlayer(){
   lives=3;score=Math.max(0,Math.floor(score*.85));const p=player;
   p.hp=p.max;hpTrail=p.max;p.state='getup';p.t=0;p.inv=220;meter=300;papas=Math.max(papas,6);
@@ -1840,6 +1865,8 @@ function lmSetup(){try{const stage=document.getElementById('stage');
   const b1=mk2('bMusDir','CARPETA DE MÚSICA');const b2=mk2('bMusFiles','ELEGIR TEMAS');const b3=mk2('bMusRetro','MODO 16 BITS: SÍ');
   const bDiff=mk2('bDiff','DIFICULTAD: '+DIFFS[diff].name);bDiff.style.borderColor=DIFFS[diff].col;bDiff.style.color=DIFFS[diff].col;
   bDiff.addEventListener('click',()=>{diffSet(diff+1);sfx('blip');});
+  const bMenu=mk2('bMenu','VOLVER AL MENÚ');bMenu.style.borderColor='#ff4a3a';bMenu.style.color='#ff6a5a';
+  bMenu.addEventListener('click',()=>{toTitleMenu();});
   // cartel grande al inicio: los temas de Iorio los pone el jugador desde su equipo (no van dentro del juego)
   const ov=document.createElement('div');ov.id='lmAsk';ov.style.cssText='position:absolute;z-index:6;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92%,420px);padding:14px;border:3px solid #e2462c;border-radius:10px;background:rgba(12,9,14,.94);color:#f2e6c8;font:8px/1.9 var(--font-pixel,monospace);text-align:center;display:none;';
   ov.innerHTML='<div style="color:#f2b632;font-size:10px;margin-bottom:6px">PONÉ LOS TEMAS DE IORIO</div><div>Elegí tus MP3 de V8, Hermética y Almafuerte. Suenan en 16 bits, según la época de cada capítulo, y quedan guardados para la próxima.</div>';
@@ -1849,7 +1876,7 @@ function lmSetup(){try{const stage=document.getElementById('stage');
   b1.title='Elegí la carpeta con tus discos de V8, Hermética y Almafuerte';b2.title='Elegí temas sueltos';
   b1.addEventListener('click',()=>{audioInit();inDir.click();});b2.addEventListener('click',()=>{audioInit();inFiles.click();});
   inDir.addEventListener('change',()=>lmLoad(inDir.files));inFiles.addEventListener('change',()=>lmLoad(inFiles.files));
-  LM.btns=[b1,b2,b3,bDiff];LM.el=new Audio();LM.el.volume=.75;LM.el.addEventListener('ended',()=>{LM.skip=(LM.skip||0)+1;LM.cur=null;});
+  LM.btns=[b1,b2,b3,bDiff,bMenu];LM.el=new Audio();LM.el.volume=.75;LM.el.addEventListener('ended',()=>{LM.skip=(LM.skip||0)+1;LM.cur=null;});
 }catch(e){}}
 // modo juego: filtro que se abre en las peleas, retro opcional (bits reducidos) y cámara lenta al caer un jefe
 // modo 16 bits: re-muestreo a ~16 kHz con retención (como un chip de consola), cuantizado, filtro de cartucho y eco de sala
@@ -1865,7 +1892,10 @@ function lmGraph(){if(!AC||!LM.el)return;try{if(!LM.src){LM.src=AC.createMediaEl
   const r=!!LM.retro,t=AC.currentTime;LM.cart.frequency.setTargetAtTime(r?5200:20000,t,.05);LM.fb.gain.setTargetAtTime(r?.32:0,t,.05);LM.wet.gain.setTargetAtTime(r?.22:0,t,.05);}catch(e){}}
 function lmOn(){return LM.tracks.length>0;}
 function lmTick(){if(!LM.el)return;if(LM.labT>0)LM.labT--;
-  for(const b of LM.btns||[])b.style.display=(state==='title'||state==='pause')?'block':'none';
+  for(const b of LM.btns||[]){
+    if(b.id==='bMenu')b.style.display=(state==='pause'||state==='gameover')?'block':'none';
+    else b.style.display=(state==='title'||state==='pause')?'block':'none';
+  }
   if(LM.ov)LM.ov.style.display=(state==='title'&&!LM.tracks.length&&!LM.askOff&&tick>40)?'block':'none';
   const want=musicOn&&lmOn()&&state!=='gameover';
   if(!want){if(!LM.el.paused)LM.el.pause();return;}
@@ -3235,18 +3265,33 @@ function update(){tick++;readInput();if(state!=='play')noPause=40;else if(noPaus
   else if(state==='intro'){updIntro();for(const e of ents)if(e!==player&&e.team===2)updNPC(e);updParts();}
   else if(state==='cut'){updCut();for(const e of ents)if(e.team===2)updNPC(e);updParts();}
   else if(state==='play'){
-    if(press.start&&noPause<=0){state='pause';return;}
+    if((press.start||press.pause||press.esc)&&noPause<=0){state='pause';return;}
     modTick();datoTick();if(banner&&--banner.t<=0)banner=null;if(goT>0)goT--;
     if(slowT>0){slowT--;if(slowT%3===0){stepWorld();}if(boss&&boss.D.monster&&!boss.gone)monsterDeath();updParts();if(slowT===0){if(LV.final&&boss&&!boss.D.monster)startMonsterCut();else startWinCut();}}
     else if(stopT>0){stopT--;updParts();}
     else{stepWorld();updParts();if(papas<8&&++papaT>=200){papas++;papaT=0;}}
   }
-  else if(state==='pause'){if(press.start)state='play';if(press.album)albumOpen();}else if(state==='cine'){cineUpd();}else if(state==='album'){albumUpd();}
+  else if(state==='pause'){
+    if(press.start||press.pause)state='play';
+    else if(press.esc||press.menu){toTitleMenu();return;}
+    else if(press.restart){startChapter(lvl,false);return;}
+    if(press.album)albumOpen();
+  }
+  else if(state==='cine'){if(press.esc||press.menu){toTitleMenu();return;}cineUpd();}
+  else if(state==='album'){albumUpd();}
   else if(state==='victory'){introT++;updParts();if(introT===20)say(player,LV.winSay,130);if(introT===150){if(LV.truck&&!truckDone)startTruck();else{makeResults();state='results';}}}
   else if(state==='truck'){updTruck();updParts();}
-  else if(state==='results'){results.k++;if(results.k>60&&(press.start||press.atk||press.jump)){showStart();}}else if(state==='show'){showUpd();}
-  else if(state==='ending'){endT++;updParts();if(endT>300&&endT<420&&(press.start||press.atk||press.jump)){endT=420;}else if(endT>620&&(press.start||press.atk||press.jump)){state='title';sel=Math.min(sel,unl-1);}}
-  else if(state==='gameover'){gameoverT++;if(gameoverT>20&&(press.start||press.atk||press.jump||press.papa||press.spec||press.dodge)){resurrectPlayer();}if(gameoverT>800){state='title';sel=Math.min(sel,unl-1);}}
+  else if(state==='results'){
+    if(press.esc||press.menu){toTitleMenu();return;}
+    results.k++;if(results.k>60&&(press.start||press.atk||press.jump)){showStart();}
+  }
+  else if(state==='show'){if(press.esc||press.menu){toTitleMenu();return;}showUpd();}
+  else if(state==='ending'){if(press.esc||press.menu){toTitleMenu();return;}endT++;updParts();if(endT>300&&endT<420&&(press.start||press.atk||press.jump)){endT=420;}else if(endT>620&&(press.start||press.atk||press.jump)){toTitleMenu();}}
+  else if(state==='gameover'){
+    if(press.esc||press.menu){toTitleMenu();return;}
+    gameoverT++;if(gameoverT>20&&(press.start||press.atk||press.jump||press.papa||press.spec||press.dodge)){resurrectPlayer();}
+    if(gameoverT>800){toTitleMenu();}
+  }
   for(const e of ents)smoothPose(e);
   musicTick();lmTick();}
 
@@ -3639,28 +3684,55 @@ function render0(){
   if(state==='cut'||state==='intro'){ctx.fillStyle='#000';ctx.fillRect(0,0,W,14);ctx.fillRect(0,H-6,W,6);}
   if(state!=='intro'&&state!=='cut'&&state!=='results')drawHUD();
   if(state==='cut')drawCut();
-  if(state==='pause'){ctx.fillStyle='rgba(8,6,11,.7)';ctx.fillRect(0,0,W,H);txt('PAUSA',W/2,110,'#f2b632',14,'center');txt(coarse?'TOCÁ II PARA SEGUIR':'ENTER PARA SEGUIR',W/2,134,'#9b8aa3',7,'center');}
+  if(state==='pause'){drawPause();return;}
   if(state==='gameover'){
     ctx.fillStyle='rgba(8,6,11,.88)';ctx.fillRect(0,0,W,H);
     const rg=ctx.createRadialGradient(W/2,H/2,10,W/2,H/2,190);
     rg.addColorStop(0,'rgba(180,26,20,.42)');rg.addColorStop(1,'rgba(0,0,0,.75)');
     ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
-    txt('¡ÚLTIMA OPORTUNIDAD!',W/2,32,'#f2b632',16,'center');
-    txt('¿QUERÉS RESUCITAR?',W/2,52,'#ff4a3a',10,'center');
+    txt('¡ÚLTIMA OPORTUNIDAD!',W/2,26,'#f2b632',15,'center');
+    txt('¿QUERÉS RESUCITAR?',W/2,44,'#ff4a3a',9.5,'center');
     const pulse=1+Math.sin(tick*.15)*.12;
-    for(let i=0;i<3;i++){drawHeart(W/2-32+i*32,78,true,2.6*pulse);}
-    txt('3 CORAZONES RESTAURADOS',W/2,112,'#f8e6a0',7,'center');
-    txt('"El metal pesado nunca muere. Levantate y seguí peleando."',W/2,126,'#d8cfc0',6,'center');
-    txt(LV.chap+' · '+LV.title+'   |   PUNTAJE: '+String(score).padStart(7,'0'),W/2,140,'#8a7a8e',5.5,'center');
-    const bx=W/2-115,by=154,bw=230,bh=38;
+    for(let i=0;i<3;i++){drawHeart(W/2-32+i*32,68,true,2.4*pulse);}
+    txt('3 CORAZONES RESTAURADOS',W/2,98,'#f8e6a0',6.5,'center');
+    txt('"El metal pesado nunca muere. Levantate y seguí peleando."',W/2,110,'#d8cfc0',5.5,'center');
+    txt(LV.chap+' · '+LV.title+'   |   PUNTAJE: '+String(score).padStart(7,'0'),W/2,122,'#8a7a8e',5,'center');
+    const bx=W/2-115,by=136,bw=230,bh=36;
     const btnOn=(tick%40<26);
     ctx.fillStyle=btnOn?'#c8241c':'#941612';ctx.fillRect(bx,by,bw,bh);
     ctx.strokeStyle='#f2b632';ctx.lineWidth=2;ctx.strokeRect(bx,by,bw,bh);
-    txt('♥  TOCÁ ACÁ PARA RESUCITAR  ♥',W/2,by+8,'#fff',8.5,'center');
-    txt(coarse?'TOCÁ CUALQUIER PARTE PARA RESUCITAR':'PRESIONÁ ENTER · ESPACIO · Z · CUALQUIER TECLA',W/2,by+22,'#f8e6a0',5.5,'center');
-    txt('O ESPERÁ PARA VOLVER AL TÍTULO',W/2,210,'#7a6a7e',5,'center');
+    txt('♥  TOCÁ ACÁ PARA RESUCITAR  ♥',W/2,by+7,'#fff',8,'center');
+    txt(coarse?'TOCÁ ACÁ PARA RESUCITAR':'ENTER / ESPACIO / Z: RESUCITAR',W/2,by+20,'#f8e6a0',5,'center');
+    const mx=W/2-95,my=180,mw=190,mh=22;
+    ctx.fillStyle='rgba(26,20,30,.92)';ctx.fillRect(mx,my,mw,mh);
+    ctx.strokeStyle='#ff4a3a';ctx.lineWidth=1.2;ctx.strokeRect(mx,my,mw,mh);
+    txt('🏠 VOLVER AL MENÚ (ESC / M)',W/2,my+6,'#ff6a5a',6.5,'center');
+    txt('O ESPERÁ PARA VOLVER AUTOMÁTICAMENTE',W/2,212,'#7a6a7e',4.5,'center');
   }
   if(state==='results')drawResults();
+}
+function drawPause(){
+  ctx.fillStyle='rgba(6,4,9,.82)';ctx.fillRect(0,0,W,H);
+  const px=W/2-115,py=40,pw=230,ph=170;
+  ctx.fillStyle='rgba(16,12,20,.95)';ctx.fillRect(px,py,pw,ph);
+  ctx.strokeStyle='#e2462c';ctx.lineWidth=2;ctx.strokeRect(px,py,pw,ph);
+  txt('PAUSA',W/2,py+10,'#f2b632',14,'center');
+  txt(LV.chap+' · '+LV.title,W/2,py+28,'#efe4d2',6.5,'center');
+  txt(LV.place,W/2,py+38,'#9b8aa3',5,'center');
+  const by1=py+48;
+  ctx.fillStyle='rgba(30,24,36,.92)';ctx.fillRect(px+16,by1,pw-32,22);
+  ctx.strokeStyle='#f2b632';ctx.lineWidth=1.2;ctx.strokeRect(px+16,by1,pw-32,22);
+  txt('► CONTINUAR (ENTER / II)',W/2,by1+6,'#fff',7,'center');
+  const by2=py+76;
+  ctx.fillStyle='rgba(30,24,36,.92)';ctx.fillRect(px+16,by2,pw-32,22);
+  ctx.strokeStyle='#e2462c';ctx.lineWidth=1;ctx.strokeRect(px+16,by2,pw-32,22);
+  txt('⟳ REINICIAR CAPÍTULO (R)',W/2,by2+6,'#efe4d2',6.5,'center');
+  const by3=py+104;
+  ctx.fillStyle='rgba(42,16,18,.94)';ctx.fillRect(px+16,by3,pw-32,22);
+  ctx.strokeStyle='#ff4a3a';ctx.lineWidth=1.3;ctx.strokeRect(px+16,by3,pw-32,22);
+  txt('🏠 VOLVER AL MENÚ (ESC / M)',W/2,by3+6,'#ff6a5a',7,'center');
+  txt(DIFFS[diff].name+' · '+DIFFS[diff].tag,W/2,py+138,DIFFS[diff].col,5,'center');
+  txt('G: ÁLBUM DE FIGURITAS',W/2,py+148,'#7a6a7e',4.5,'center');
 }
 
 // v32: personajes más definidos y golpes con efecto.
