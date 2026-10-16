@@ -3529,7 +3529,7 @@ function modTick(){const m=modOf();if(!m||!player)return;MOD.t++;
   if(m==='apagon'){if(MOD.t%600===0){MOD.dark=150;floatTxt(player.x,player.y-90,'¡SE CORTÓ LA LUZ!','#9fc4ff');}if(MOD.dark>0)MOD.dark--;}
   if(m==='flash'&&MOD.t%240===0)flashT=Math.max(flashT,4);}
 function modDraw(){const m=modOf();if(state!=='play'&&state!=='cut')return;if(!player)return;
-  const dark=m==='noche'?.36:(m==='apagon'&&MOD.dark>0?(MOD.dark%40<4?.2:.8):0);if(!dark)return;
+  const dark=m==='noche'?0:(m==='apagon'&&MOD.dark>0?(MOD.dark%40<4?.2:.8):0);if(!dark)return;
   if(!modDraw.c){modDraw.c=document.createElement('canvas');modDraw.c.width=W;modDraw.c.height=H;}
   const c=modDraw.c,g=c.getContext('2d');g.globalCompositeOperation='source-over';g.clearRect(0,0,W,H);g.fillStyle='rgba(4,4,14,'+dark+')';g.fillRect(0,34,W,H-34);
   g.globalCompositeOperation='destination-out';const px=player.x-cam.x,py=player.y-34-(player.z||0);
