@@ -34,7 +34,7 @@ const STY={
   viejo:{scale:1.0,skin:'#c98d66',hair:'boina',hairC:'#6a625a',stache:'#5a5048',top:'#6a5a48',shirt:'#c9c2b0',pants:'#3a3a40',boots:'#2a1a10',torsoW:12,apron:'#d6ceb4'},
   chofa:{scale:1.02,skin:'#e3b089',hair:'long',hairC:'#2a1a10',top:'#2a2a30',shirt:'#c8c2b0',pants:'#34507a',boots:'#111',torsoW:9.5,bell:true},
   carpo:{scale:1.14,skin:'#d79a74',hair:'long',hairC:'#100c0a',beard:true,beardC:'#100c0a',top:'#1c1a1e',shirt:'#3a3a40',pants:'#2a2a30',boots:'#0b0b0d',torsoW:13,jacket:true,belly:true},
-  heavy:{scale:.98,skin:'#e6b48e',hair:'long',hairC:'#5a3a1e',band:'#c8322a',top:'#151418',shirt:'#0d0d10',pants:'#2f4a7a',boots:'#0b0b0d',torsoW:9.5,jacket:true,studs:true},
+  heavy:{scale:1.02,skin:'#e6b48e',hair:'long',hairC:'#161214',band:'#d82626',top:'#101014',shirt:'#0a0a0c',logo:'H',jacket:true,leather:true,studs:true,wrist:'#141418',pants:'#253552',boots:'#0b0b0d',torsoW:10.5},
   vecina:{scale:.92,skin:'#e0aa86',hair:'boina',hairC:'#8a8278',top:'#6a3a5a',shirt:'#e0d8c8',pants:'#4a3a4a',boots:'#2a1a10',torsoW:11},
   tornero:{scale:1.04,skin:'#c98d66',hair:'short',hairC:'#2a1a10',stache:'#2a1a10',top:'#2c4a72',shirt:'#2c4a72',overall:'#2c4a72',pants:'#2c4a72',boots:'#1a1410',torsoW:11.5},
   jubilado:{scale:.95,skin:'#d8a07c',hair:'boina',hairC:'#d8d2c6',stache:'#e6e0d4',top:'#5a5a62',shirt:'#c9c2b0',pants:'#3a3a40',boots:'#2a1a10',torsoW:11},
@@ -75,7 +75,7 @@ const STY={
   agrimensor:{scale:1.02,skin:'#d8a07c',hair:'cap',hairC:'#1a1a1e',capC:'#e8e2d0',top:'#e07a1a',shirt:'#e07a1a',pants:'#3a4a5a',boots:'#1a1410',torsoW:10.5},
   loteador:{scale:1.32,skin:'#d79a74',hair:'cap',hairC:'#1b1612',capC:'#e8c83a',stache:'#1b1612',top:'#e07a1a',shirt:'#e07a1a',pants:'#3a4a5a',boots:'#1a0f08',torsoW:13.5,belly:true}
 };
-const NAMES={ric1:'RICARDO',ric2:'RICARDO',ric3:'RICARDO',ric4:'RICARDO',ric5:'RICARDO',viejo:'EL VIEJO',chofa:'EL CHOFA',carpo:'EL CARPO',heavy:'UN HEAVY',vecina:'DOÑA NÉLIDA',tornero:'EL TORNERO',
+const NAMES={ric1:'RICARDO',ric2:'RICARDO',ric3:'RICARDO',ric4:'RICARDO',ric5:'RICARDO',viejo:'EL VIEJO',chofa:'EL CHOFA',carpo:'EL CARPO',heavy:'BRIGADA METÁLICA',vecina:'DOÑA NÉLIDA',tornero:'EL TORNERO',
   jubilado:'DON TITO',camionero:'EL CAMIONERO',anselmo:'DON ANSELMO',peon:'EL PEÓN',movilero:'EL MOVILERO',capanga:'EL CAPANGA',productor:'EL PRODUCTOR',vaciador:'EL VACIADOR',banquero:'EL BANQUERO',loteador:'EL LOTEADOR',reptil:'LOBIZÓN',reptilazo:'MANDINGA'};
 
 // v9: más épocas de Ricardio (10 capítulos) y los villanos nuevos
@@ -1865,7 +1865,7 @@ function updAlly(n){if(state!=='play'){n.state='idle';return;}
     if(tgt){n.face=tgt.x>n.x?1:-1;const dx=tgt.x-n.x,dy=tgt.y-n.y;
       if(Math.abs(dx)>30||Math.abs(dy)>8){n.x+=clamp(dx,-2.5,2.5);n.y+=clamp(dy,-1.3,1.3);n.walkPh+=.34;n.state='walk';}
       else{n.state='idle';if(--n.cd<=0){n.cd=38+rnd(0,20);n.state='atk';n.t=0;if(Math.random()<.35)say(n,pick(['¡Tomá, careta!','¡Sentí el metal!','¡Por Iorio!','¡Al suelo!']),70);}}}
-    else{const tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4),dx=tx-n.x,dy=ty-n.y;if(Math.abs(dx)>8||Math.abs(dy)>4){n.x+=clamp(dx,-2.2,2.2);n.y+=clamp(dy,-1.2,1.2);n.walkPh+=.3;n.state='walk';}else n.state='idle';n.face=p.face;}
+    else{const tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4),dx=tx-n.x,dy=ty-n.y;if(Math.abs(dx)>8||Math.abs(dy)>4){n.x+=clamp(dx,-2.2,2.2);n.y+=clamp(dy,-1.2,1.2);n.walkPh+=.3;n.state='walk';}else{n.state='idle';n.walkPh+=.18;}n.face=p.face;}
     return;
   }
   const tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4);
@@ -2926,6 +2926,7 @@ function walkPose(ph,base){const p=Object.assign({},base||PO.idle);const s=Math.
   else{p.fa1+=-s*.16;p.fa2+=-s*.1;p.ba1+=s*.16;p.ba2+=s*.1;}return p;}
 // en guardia el peso va de un pie al otro, y al recibir un golpe la cabeza se va para atrás
 function livePose(f){const P=f.pose;if(!P||f.x===undefined)return P;const st=f.state;
+  if(f.kind==='heavy'&&f.ally&&st==='idle'){const bang=Math.sin(tick*.22);return Object.assign({},P,{tilt:bang*.24,lean:.12+Math.max(0,bang)*.14,crouch:Math.abs(bang)*2.2,fa1:(P.fa1||0)-.1+bang*.08,ba1:(P.ba1||0)+.1-bang*.08});}
   if(st==='idle'&&f.team!==2){const w=Math.sin(tick*.05+(f.x||0)*.07);return Object.assign({},P,{lean:P.lean+w*.025,crouch:P.crouch+.8+w*.6,ft1:P.ft1+w*.05,bt1:P.bt1+w*.05,fa1:P.fa1+Math.sin(tick*.09)*.05,ba1:P.ba1+Math.cos(tick*.09)*.05});}
   if(st==='hurt'&&f.t<6)return Object.assign({},P,{tilt:P.tilt-.25*(1-f.t/6)});
   return P;}
@@ -3675,6 +3676,7 @@ function drawEnt(e){if(e.gone||e.state==='ride'||e.state==='hidden')return;if(e.
   if(e.D.dozer&&(e.state==='bcharge'||e.state==='ctele'))drawDozer(e,X,Y);
   if(e.st.tail){const s=e.st.scale,w=Math.sin(tick*.1)*6;for(const p of [0,1]){ctx.strokeStyle=p?e.st.skin:OUT;ctx.lineWidth=p?7:10;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(X-e.face*4*s,Y-22*s);ctx.quadraticCurveTo(X-e.face*24*s,Y-8+w,X-e.face*44*s,Y-6-w);ctx.stroke();}if(e.st.horns){const tx=X-e.face*44*s,ty=Y-6-w;ctx.fillStyle=e.st.skin;ctx.beginPath();ctx.moveTo(tx,ty-6*s);ctx.lineTo(tx-e.face*8*s,ty);ctx.lineTo(tx,ty+6*s);ctx.fill();}}
   drawPuppetLit(e,X,Y);
+  if(e.kind==='heavy'&&e.ally){const hb=Math.sin(tick*.22)*2;txt('🤘 BRIGADA 🤘',X,Y-96*e.st.scale+hb,'#f2b632',4.5,'center');}
   if(e.papeT>0){e.papeT--;const bob=Math.sin(tick*.25)*2;txt('¡PAPERO!',X,Y-98*e.st.scale+bob,'#ff6a4a',5,'center');ctx.fillStyle='#b8864a';ctx.beginPath();ctx.ellipse(X,Y-86*e.st.scale+bob,5,3.6,0,0,7);ctx.fill();}
   if(e===npcs.rescue&&e.state==='tied'){ctx.strokeStyle='#c9b26a';ctx.lineWidth=1.5;for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(X-9,Y-38+i*7);ctx.lineTo(X+6,Y-40+i*7);ctx.stroke();}}
   if(e.state==='ctele'){ctx.fillStyle='#ff3b2a';txt('!',X,Y-86*e.st.scale,'#ff3b2a',12,'center');}
