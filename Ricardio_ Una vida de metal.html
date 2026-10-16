@@ -859,10 +859,10 @@ const tintGlow={};function glow(col){if(tintGlow[col])return tintGlow[col];const
 
 /* ================= audio ================= */
 let AC=null,master,musicBus,calmG,fightG,gL,gR,bassIn,delayIn,noiseBuf,musicOn=true,nextT=0,step=0,song='c7',combatMix=0;
-function audioInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();
+function audioInit(){if(AC){if(AC.state==='suspended')AC.resume();return;}try{AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();
   const comp=AC.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=4;comp.connect(AC.destination);
-  master=AC.createGain();master.gain.value=.55;master.connect(comp);
-  musicBus=AC.createGain();musicBus.gain.value=.5;musicBus.connect(master);
+  master=AC.createGain();master.gain.value=.75;master.connect(comp);
+  musicBus=AC.createGain();musicBus.gain.value=.7;musicBus.connect(master);
   calmG=AC.createGain();calmG.gain.value=.8;calmG.connect(musicBus);fightG=AC.createGain();fightG.gain.value=0;fightG.connect(musicBus);
   noiseBuf=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
   const curve=k=>{const n=2048,c=new Float32Array(n);for(let i=0;i<n;i++){const v=i*2/n-1;c[i]=Math.tanh(v*k);}return c;};
@@ -1246,7 +1246,7 @@ dpad.addEventListener('pointermove',e=>{if(e.buttons||e.pointerType==='touch')dp
   b.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();touch[k]=1;one[k]=1;b.classList.add('on');});
   ['pointerup','pointercancel','pointerleave'].forEach(n=>b.addEventListener(n,()=>{touch[k]=0;b.classList.remove('on');}));});
 document.getElementById('bPause').addEventListener('pointerdown',e=>{e.preventDefault();audioInit();if(state==='pause')state='play';else if(state==='play')state='pause';else one.start=1;});
-cv.addEventListener('pointerdown',e=>{audioInit();cv.focus();
+cv.addEventListener('pointerdown',e=>{audioInit();if(AC&&AC.state==='suspended')AC.resume();cv.focus();
   const rect=cv.getBoundingClientRect(),cy=(e.clientY-rect.top)*(H/rect.height),cx=(e.clientX-rect.left)*(W/rect.width);
   if(state==='gameover'){
     if(cy>=178&&cy<=208&&cx>=W/2-105&&cx<=W/2+105){toTitleMenu();return;}
@@ -2027,7 +2027,7 @@ function lmSetup(){try{const stage=document.getElementById('stage');
   const inFiles=document.createElement('input');inFiles.type='file';inFiles.multiple=true;inFiles.accept='audio/*';inFiles.style.display='none';stage.appendChild(inFiles);
   const bar=document.createElement('div');bar.style.cssText='position:absolute;z-index:5;left:6px;top:6px;right:52px;display:flex;flex-wrap:wrap;gap:4px;pointer-events:none;';stage.appendChild(bar);
   const mk2=(id,txt)=>{const b=mk(id,txt,'position:static;pointer-events:auto;');bar.appendChild(b);return b;};
-  const b1=mk2('bMusDir','CARPETA DE MÚSICA');const b2=mk2('bMusFiles','ELEGIR TEMAS');const b3=mk2('bMusRetro','MODO 16 BITS: SÍ');
+  const b1=mk2('bMusInfo','♫ 16-BIT IORIO: ON');b1.style.borderColor='#f2b632';b1.addEventListener('click',()=>{musicOn=!musicOn;b1.textContent=musicOn?'♫ 16-BIT IORIO: ON':'♫ 16-BIT IORIO: OFF';sfx('blip');});const b2=mk2('bMusFiles','CARGAR MP3 (OPCIONAL)');const b3=mk2('bMusRetro','FILTRO RETRO: SÍ');
   const bDiff=mk2('bDiff','DIFICULTAD: '+DIFFS[diff].name);bDiff.style.borderColor=DIFFS[diff].col;bDiff.style.color=DIFFS[diff].col;
   bDiff.addEventListener('click',()=>{diffSet(diff+1);sfx('blip');});
   const bMenu=mk2('bMenu','VOLVER AL MENÚ');bMenu.style.borderColor='#ff4a3a';bMenu.style.color='#ff6a5a';
@@ -2061,7 +2061,7 @@ function lmTick(){if(!LM.el)return;if(LM.labT>0)LM.labT--;
     if(b.id==='bMenu')b.style.display=(state==='pause'||state==='gameover')?'block':'none';
     else b.style.display=(state==='title'||state==='pause')?'block':'none';
   }
-  if(LM.ov)LM.ov.style.display=(state==='title'&&!LM.tracks.length&&!LM.askOff&&tick>40)?'block':'none';
+  if(LM.ov)LM.ov.style.display='none';
   const want=musicOn&&lmOn()&&state!=='gameover';
   if(!want){if(!LM.el.paused)LM.el.pause();return;}
   const t=lmPick();if(t&&t!==LM.cur){LM.cur=t;LM.el.src=t.url;LM.el.play().catch(()=>{});LM.label='SUENA: '+t.name.toUpperCase();LM.labT=240;}
@@ -2071,7 +2071,7 @@ function lmTick(){if(!LM.el)return;if(LM.labT>0)LM.labT--;
   const slow=state==='play'&&slowT>0;LM.el.preservesPitch=!slow;LM.el.playbackRate=slow?.62:1;
   LM.el.volume=state==='pause'?.25:.8;}
 function lmDraw(){if(LM.labT>0&&LM.label){ctx.globalAlpha=Math.min(1,LM.labT/30);const w=Math.min(300,U(LM.label).length*5+16);ctx.fillStyle='rgba(8,6,11,.8)';ctx.fillRect(W/2-w/2,H-20,w,13);txt(LM.label.slice(0,56),W/2,H-17,'#f2b632',5,'center');ctx.globalAlpha=1;}
-  if(state==='title')txt(lmOn()?'TU MÚSICA: '+LM.tracks.length+' TEMAS':'CARGÁ SUS DISCOS CON EL BOTÓN DE ARRIBA: SUENAN EN 16 BITS',342,238,lmOn()?'#8fd18a':'#9b8aa3',4,'center');}
+  if(state==='title'){const curS=SONGS[LEVELS[sel]?.song]||SONGS[song];txt('♫ BANDA SONORA NATIVA 16-BITS: '+(curS?curS.name:'RICARDO IORIO'),342,238,'#f2b632',5,'center');}}
 lmSetup();lmRestore();
 
 // v10: retratos más realistas (cinemáticas, título y HUD): cara con volumen, ojos, nariz, boca, pelo en mechones
