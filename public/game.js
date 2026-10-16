@@ -3552,9 +3552,9 @@ const DATOS=[
  ['En 2023 estaba de gira por el país con "Unas estrofas más".','La gira pasó por Trelew en septiembre de 2023. Iorio murió el 24 de octubre de 2023, en Coronel Suárez.','Beto Casella, su amigo, lo entrevistó varias veces en la tele.']];
 let datoT=0,datoI=0,dato=null;
 function datoTick(){loroTick();discoTick();bajoTick();albumTick();guiTick();if(state!=='play'){return;}datoT++;if(datoT%2400===420){const L=DATOS[lvl]||[];if(L.length){const fs=nextFact(L);if(fs)dato={s:fs,t:420};}}if(dato&&--dato.t<=0)dato=null;}
-function datoDraw(){if(!dato||state!=='play')return;if(banner){return;}const a=Math.min(1,dato.t/30,(420-dato.t)/20)*(bubbles.length?.22:1);ctx.globalAlpha=a;
-  const lines=wrapTxt(dato.s,46);const h=16+lines.length*10;ctx.fillStyle='rgba(10,8,14,.86)';ctx.fillRect(W/2-150,80,300,h);ctx.fillStyle='#f2b632';ctx.fillRect(W/2-150,80,3,h);
-  txt('¿SABÍAS QUE...?',W/2-142,84,'#f2b632',6);lines.forEach((l,i)=>txt(l,W/2-142,95+i*10,'#efe4d2',6));ctx.globalAlpha=1;}
+function datoDraw(){if(!dato||state!=='play')return;if(banner){return;}const a=Math.min(1,dato.t/30,(420-dato.t)/20);ctx.globalAlpha=a;
+  const lines=wrapTxt(dato.s,46);const h=16+lines.length*10,y0=H-h-22;ctx.fillStyle='rgba(10,8,14,.86)';ctx.fillRect(W/2-150,y0,300,h);ctx.fillStyle='#f2b632';ctx.fillRect(W/2-150,y0,3,h);
+  txt('¿SABÍAS QUE...?',W/2-142,y0+4,'#f2b632',6);lines.forEach((l,i)=>txt(l,W/2-142,y0+15+i*10,'#efe4d2',6));ctx.globalAlpha=1;}
 function wrapTxt(s,n){const w=s.split(' '),out=[];let c='';for(const x of w){if((c+' '+x).trim().length>n){out.push(c.trim());c=x;}else c+=' '+x;}if(c.trim())out.push(c.trim());return out;}
 // el campo: jaulas con pájaros, pileta, parrilla, fogón criollo, asado a la cruz y camino de ripio
 function extraBG(cv,i){if(i<8)return;const g=cv.getContext('2d');g.save();g.setTransform(RS,0,0,RS,0,0);const R=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x,y,w,h);};
