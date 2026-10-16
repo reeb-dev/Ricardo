@@ -1274,25 +1274,38 @@ function v15Villains(){if(v15Villains.done)return;v15Villains.done=1;
     faran:{scale:1.02,skin:'#f0b890',hair:'slick',hairC:'#1a1418',top:'#c8a8d8',shirt:'#f2f2f2',tie:'#e83a8a',pants:'#c8a8d8',boots:'#f2f2f2',torsoW:10.5},
     vendido:{scale:1.0,skin:'#e0b08e',hair:'slick',hairC:'#3a2a20',glasses:true,top:'#e8e8ea',shirt:'#e8e8ea',pants:'#3a6ab8',boots:'#e8e8ea',torsoW:9.5},
     lagarto:{scale:1.02,skin:'#5e8e3e',hair:'bald',lizard:true,top:'#a8b0b8',shirt:'#d8dce0',pants:'#a8b0b8',boots:'#5a6068',torsoW:10.5},
-    puntero:{scale:1.06,skin:'#d8a07a',hair:'short',hairC:'#2a1a10',stache:'#2a1a10',top:'#3a5a8a',shirt:'#e8e8ea',pants:'#2a2a30',boots:'#1a1a1e',torsoW:12,belly:true}});
+    puntero:{scale:1.06,skin:'#d8a07a',hair:'short',hairC:'#2a1a10',stache:'#2a1a10',top:'#3a5a8a',shirt:'#e8e8ea',pants:'#2a2a30',boots:'#1a1a1e',torsoW:12,belly:true},
+    progre:{scale:.96,skin:'#e8c2a0',hair:'cap',capC:'#3a5a4a',glasses:true,top:'#7a3a52',shirt:'#e8dfd8',pants:'#3a4a3a',boots:'#5a4430',torsoW:9.2},
+    cumbiero:{scale:1.03,skin:'#b8825c',hair:'cap',capC:'#ffffff',top:'#2a5aa8',shirt:'#f0f0f4',pants:'#1a1c24',boots:'#ffffff',torsoW:10.5,jacket:true}}
+  );
   Object.assign(DEFS,{
     soho:E('soho',26,1.05,'TURISTA DE PALERMO SOHO',140,{wind:13}),
     poser:E('poser',30,1.1,'CARETA CON REMERA NUEVA',150,{wind:12,hold:'phone'}),
     faran:E('faran',30,1.4,'PANELISTA DE CHIMENTOS',170,{punch:'mpunch',wind:9,reach:30,ai:'hitrun',hold:'mic'}),
     vendido:E('vendido',28,1.0,'MÚSICO TRANSERO DE LA INDUSTRIA',150,{wind:12}),
     lagarto:E('lagarto',32,1.15,'REPTILOIDE DE LAS SIERRAS',230,{ai:'ranged',shot:'baba'}),
-    puntero:E('puntero',40,.9,'PUNTERO DEL COMITÉ',200,{ai:'ranged',shot:'promesa'})});
-  Object.assign(NAMES,{soho:'MODERNO DE PALERMO SOHO',poser:'POSER DE MODA',faran:'PANELISTA FARANDULERO',vendido:'MÚSICO VENDIDO',puntero:'PUNTERO POLÍTICO',lagarto:'REPTILOIDE ESPACIAL'});
+    puntero:E('puntero',40,.9,'PUNTERO DEL COMITÉ',200,{ai:'ranged',shot:'promesa'}),
+    progre:E('progre',28,1.05,'PROGRE MORALISTA',160,{wind:12,hold:'phone'}),
+    cumbiero:E('cumbiero',36,1.2,'CUMBIERO CHORRO',180,{punch:'mpunch',wind:10,reach:29,ai:'hitrun'})
+  });
+  Object.assign(NAMES,{soho:'MODERNO DE PALERMO SOHO',poser:'POSER DE MODA',faran:'PANELISTA FARANDULERO',vendido:'MÚSICO VENDIDO',puntero:'PUNTERO POLÍTICO',lagarto:'REPTILOIDE ESPACIAL',progre:'PROGRE MORALISTA',cumbiero:'CUMBIERO CHORRO'});
   Object.assign(BARKS,{soho:['¡El campo es re aesthetic, gordo!','¿Tenés flat white con leche de almendras?','¡Qué vintage tu molino, boludo!'],
     poser:['¡Compré la remera en el shopping!','¿V8? ¿No es un motor de camioneta?','¡Sacame una selfie haciendo cuernitos!'],
     faran:['¡Decí algo polémico para el graph!','¡Necesito veinte puntos de rating!','¡Recortale esa frase que es viral!'],
     vendido:['¡El heavy ya fue, ahora rinde el pop!','¡Firmá con la multinacional y hacé playback!','¡Si no sonás en el boliche no existís!'],
     lagarto:['¡Venimosss de Ganímedesss!','¡Entregá las vacasss, terrícola!','¡Ssse nos cayó el plato en el cerro!','¡Sssomos el nuevo orden!'],
-    puntero:['¡Subí al micro que pasan lista!','¡Votá la boleta entera y te doy una chapa!','¡Después de las elecciones vemos!']});
+    puntero:['¡Subí al micro que pasan lista!','¡Votá la boleta entera y te doy una chapa!','¡Después de las elecciones vemos!'],
+    progre:['¡Tu discurso no es deconstruido, Ricardo!','¡Canceladísimo por falta de empatía!','¡Te falta taller de sensibilidad!','¡Cuidado que me da ansiedad tu bajo!'],
+    cumbiero:['¡Largá las zapatillas y el bajo, logi!','¡Esa campera con tachas me gusta para mí!','¡Aguante la vagancia y el choreo!','¡Rescatate que te vamo a dar masa!']
+  });
   Object.assign(DIEQ,{soho:'Andá a carpir la tierra en invierno y después hablamos.',poser:'El sentimiento pesado se lleva adentro, no en una etiqueta.',faran:'Con la honra de la gente no se hace rating.',
-    vendido:'Prefiero comer pan duro antes que traicionar mi canción.',puntero:'Al pueblo se le da trabajo digno, no limosna.',lagarto:'En la pampa no mandan los bichos de otro planeta.'});
+    vendido:'Prefiero comer pan duro antes que traicionar mi canción.',puntero:'Al pueblo se le da trabajo digno, no limosna.',lagarto:'En la pampa no mandan los bichos de otro planeta.',
+    progre:'¡La corrección política es la censura de los cobardes!',
+    cumbiero:'¡La yuta existe por ustedes, soretes! ¡Por ustedes que le roban al laburante!',
+    chorro:'¡La yuta existe por ustedes, soretes! ¡Por ustedes que le roban al laburante!'});
   const add=(i,k)=>{const L=LEVELS[i];if(!L)return;L.locks.forEach((l,j)=>{if(l.groups&&l.groups.length)l.groups[j%l.groups.length].push([k,j%2?'L':'R']);});};
   add(2,'vendido');add(3,'poser');add(4,'puntero');add(5,'poser');add(6,'vendido');add(7,'puntero');add(8,'soho');add(9,'faran');add(9,'soho');add(8,'lagarto');add(9,'lagarto');
+  add(0,'cumbiero');add(1,'cumbiero');add(3,'progre');add(4,'cumbiero');add(5,'progre');add(7,'cumbiero');add(8,'progre');add(9,'cumbiero');add(10,'progre');
   const vs=['','','Músicos vendidos, ','Posers, ','Punteros políticos, ','Posers, ','Músicos vendidos, ','Punteros políticos, ','Reptiloides de las sierras, modernos de Palermo Soho, ','Panelistas faranduleros, reptiloides, modernos de Palermo Soho, '];
   LEVELS.forEach((L,i)=>{if(vs[i])L.villains=vs[i]+L.villains.charAt(0).toLowerCase()+L.villains.slice(1);});}
 function v14Levels(){v15Villains();if(v14Levels.done)return;v14Levels.done=1;LEVELS.forEach((L,i)=>{L.song='c'+i;L.bossSong=['b0','b0','b0','b2','b1','b1','b2','b1','b2','b2'][i];});
@@ -3342,7 +3355,20 @@ function drawBubble2(b){const f=b.f;const X=Math.round(f.x-cam.x),Y0=Math.round(
 // a veces, al voltear a uno, Ricardio lo bardea
 const BARDO=['¡Andá a laburar, vago!','¡Sé vos, nomás, careta!','¡Esto es metal pesado argentino!','¡No seas menos de lo que valés!','¡Chupamedias del patrón!','¡Rajá de acá, comerciante informador!','¡Tomá, entregador!','¡Te falta calle y galpón, nene!','¡La pobreza es no superarse!','¡Andá a quejarte al multimedio!','¡Yo soy un trabajador de la música!','¡Cipayo de cuarta!'];
 let bardoT=0;
-function bardo(t){if(MOMENT||!t||t.team!==1||!player||state!=='play'||tick-bardoT<900||Math.random()>.12)return;if(bubbles.some(b=>b.f===player))return;bardoT=tick;say(player,pick(BARDO),110);}
+function bardo(t){
+  if(MOMENT||!t||t.team!==1||!player||state!=='play'||tick-bardoT<320||Math.random()>.35)return;
+  if(bubbles.some(b=>b.f===player))return;
+  bardoT=tick;
+  if(t.kind==='cumbiero'||t.kind==='chorro'){
+    say(player,'¡LA YUTA EXISTE POR USTEDES, SORETES!',150);
+    return;
+  }
+  if(t.kind==='progre'){
+    say(player,pick(['¡La corrección política es para los cobardes!','¡Andá a dar lecciones de moral a tu casa!','¡La verdad no se deconstruye, pichón!']),130);
+    return;
+  }
+  say(player,pick(BARDO),110);
+}
 const PAPERO_INS=['¡Papero del Abasto y a mucha honra, gil!','¡Con bolsas de papas me compré el bajo Faim!','¡Laburá vos, vago, que yo descargué el Bedford!','¡De repartir papas con mi viejo aprendí a no arrodillarme!','¡El trabajo dignifica, careta!','¡Andá a levantar un cajón al mercado, nabo!'];
 // los pájaros de su casa de campo (le contó a Casella que tenía setecientos) y la famosa lombriz doméstica
 function drawPajaros(cx){if(lvl<8)return;for(let f=0;f<2;f++){const T=(tick*.6+f*900)%(W+700)-300,by=40+f*26+Math.sin(tick*.01+f)*8;
