@@ -858,7 +858,7 @@ const GLOW=(()=>{const c=mkc(64,64),g=c.getContext('2d');const gr=g.createRadial
 const tintGlow={};function glow(col){if(tintGlow[col])return tintGlow[col];const c=mkc(64,64),g=c.getContext('2d');g.drawImage(GLOW,0,0);g.globalCompositeOperation='source-in';g.fillStyle=col;g.fillRect(0,0,64,64);return tintGlow[col]=c;}
 
 /* ================= audio ================= */
-let AC=null,master,musicBus,calmG,fightG,gL,gR,bassIn,delayIn,noiseBuf,musicOn=true,nextT=0,step=0,song='street',combatMix=0;
+let AC=null,master,musicBus,calmG,fightG,gL,gR,bassIn,delayIn,noiseBuf,musicOn=true,nextT=0,step=0,song='c7',combatMix=0;
 function audioInit(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)();
   const comp=AC.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=4;comp.connect(AC.destination);
   master=AC.createGain();master.gain.value=.55;master.connect(comp);
@@ -885,81 +885,206 @@ function kick(t,v,dest){const o=AC.createOscillator(),g=AC.createGain();o.freque
 function snare(t,v,dest){nz(t,.16,v,'bandpass',1900,dest,.8);osc('triangle',190,t,.09,v*.7,dest);}
 function hat(t,v,dest){nz(t,.035,v,'highpass',8000,dest);}
 function crash(t,v,dest){nz(t,1.3,v,'highpass',5200,dest);}
-// Temas por capítulo: secciones (estrofa, estribillo, puente) que se encadenan. riff = semitonos sobre la tónica del compás,
-// m = cómo suena cada golpe (p palm mute, o abierto, l largo), lead = solo en ciclos de 2 compases [paso, semitono sobre E3, largo].
-const SONGS={
-  l1:{bpm:118,div:12,order:['A','A','B','A','C'],pl:[[0,12],[6,7]],bo:'',sec:{
-    A:{bars:4,roots:[0,5,0,7],riff:[0,null,0,7,null,7,9,null,9,10,null,9],m:'p.pp.pp.pp.p',k:'x.....x..x..',s:'...x.....x..',h:'sh'},
-    B:{bars:4,roots:[5,5,0,0],riff:[0,null,0,7,null,7,9,null,9,10,null,9],m:'p.pp.pp.pp.p',k:'x.....x..x..',s:'...x.....x..',h:'ride',fill:1,hey:'...x.....x..',
-       lead:[[0,15,2],[2,17,1],[3,19,3],[6,22,2],[8,19,4],[12,17,2],[14,15,1],[15,12,3],[18,10,2],[20,12,4]]},
-    C:{bars:4,roots:[7,5,0,7],riff:[0,null,null,null,null,null,0,null,null,0,null,0],m:'llllllooo.o.',k:'x.....x.....',s:'...x.....x..',h:'sh',fill:1,
-       lead:[[0,24,3],[3,22,3],[6,19,6],[12,22,3],[15,19,3],[18,17,6]]}}},
-  l2:{bpm:208,div:16,order:['A','A','B','C','B'],pl:[[0,0],[6,12],[8,0],[14,15]],bo:'',sec:{
-    A:{bars:4,roots:[0,0,1,-2],riff:[0,null,0,0,0,null,0,0,3,null,3,3,1,null,1,1],m:'o.ppo.ppo.ppo.pp',k:'x.xxx.xxx.xxx.xx',s:'....x.......x...',h:'8'},
-    B:{bars:4,roots:[3,3,5,1],riff:[0,null,0,0,0,null,0,0,0,null,0,0,7,null,5,null],m:'o.ppo.ppo.ppo.o.',k:'xxxxxxxxxxxxxxxx',dk:1,s:'....x.......x...',h:'8',fill:1,
-       harm:3,hey:'....x.......x...',lead:[[0,19,2],[2,17,2],[4,15,2],[6,14,2],[8,15,4],[12,12,4],[16,19,2],[18,20,2],[20,22,4],[24,19,8]]},
-    C:{bars:4,roots:[0,0,-2,-1],riff:[0,null,null,0,null,null,0,null,null,0,null,null,0,null,null,null],m:'llllllllllllllll',k:'x..x..x..x..x...',s:'........x.......',h:'ride',fill:1}}},
-  l3:{bpm:168,div:16,order:['A','A','B','C','A','B'],pl:[[0,0],[3,7],[6,12],[8,0],[11,7],[14,15]],bo:'x.....x.x.......',sec:{
-    A:{bars:4,roots:[0,0,3,5],riff:[0,null,0,0,null,0,6,5,0,null,0,0,3,null,1,0],m:'o.pp.poo.o.ppo.oo',k:'x..x..x.x..x..x.',s:'....x.......x...',h:'8'},
-    B:{bars:4,roots:[0,-2,-4,-5],riff:[0,null,null,null,null,null,0,null,0,null,null,null,null,null,0,null],m:'llllllllllllllll',k:'x.......x.x.....',s:'....x.......x...',h:'ride',fill:1,
-       harm:4,lead:[[0,12,6],[6,10,2],[8,7,8],[16,12,6],[22,15,2],[24,14,8]]},
-    C:{bars:4,roots:[0,0,1,1],riff:[0,null,null,0,null,null,0,null,1,null,null,1,null,null,6,5],m:'o..o..o.o..o..oo',k:'x..x..x.x..x....',s:'........x.......',h:'ride',fill:1,hey:'x.......x.......'}}},
-  l4:{bpm:132,div:12,order:['A','A','B','C','B'],pl:[[0,12],[3,10],[6,7],[9,5]],bo:'x..x..x.x..x',sec:{
-    A:{bars:4,roots:[0,0,-2,-4],riff:[0,null,0,0,null,0,7,null,5,3,null,2],m:'o.po.poo.oo.',k:'x.....x..x..',s:'......x.....',h:'8',bombo:'x..x..x.x..x',
-       ch:[[0,12],[2,19],[4,16],[6,12],[8,19],[10,16]]},
-    B:{bars:4,roots:[0,-4,-2,-5],riff:[0,null,null,null,null,null,0,null,null,null,null,null],m:'llllllllllll',k:'x.....x.....',s:'......x.....',h:'ride',fill:1,bombo:'x.....x.....',
-       harm:3,hey:'x.....x.....',lead:[[0,12,3],[3,14,3],[6,15,6],[12,14,3],[15,12,3],[18,10,6]]},
-    C:{bars:2,roots:[0,0],riff:[0,null,0,0,null,0,0,null,0,0,null,0],m:'p.pp.pp.pp.p',k:'x..x..x..x..',s:'............',h:'',bombo:'x.xx.xx.xx.x'}}},
-  l5:{bpm:104,div:16,order:['A','B','A','B'],pl:[[0,7],[2,12],[4,15],[8,14],[10,12],[12,10]],bo:'x.......x...x...',sec:{
-    A:{bars:4,roots:[0,-4,-2,3],riff:[0,null,null,null,null,null,null,null,0,null,null,null,7,null,5,null],m:'lllllllllllloooo',k:'x.......x.x.....',s:'....x.......x...',h:'ride',
-       lead:[[0,19,8],[8,17,4],[12,15,4],[16,14,8],[24,12,8]],ch:[[0,12],[3,19],[6,15],[9,19],[12,12],[14,15]]},
-    B:{bars:4,roots:[0,0,-4,-2],riff:[0,0,null,0,0,null,0,0,0,0,null,0,3,null,2,null],m:'pp.pp.pppp.po.o.',k:'x.xx..x.x.xx..x.',s:'....x.......x...',h:'8',fill:1,
-       harm:-5,lead:[[0,24,2],[2,22,2],[4,19,4],[8,22,4],[12,24,4],[16,27,8],[24,26,4],[28,24,4]]}}},
-  bossRock:{bpm:158,div:16,order:['A','A','B'],pl:[[0,0],[3,1],[6,7],[8,0],[11,1],[14,10]],bo:'x..x..x.x.......',sec:{
-    A:{bars:4,roots:[0,0,1,-2],riff:[0,null,0,1,0,null,7,6,0,null,0,1,10,8,7,6],m:'o.ppo.ooo.ppoooo',k:'x..x..x...x..x..',s:'....x.......x...',h:'8'},
-    B:{bars:4,roots:[0,1,0,-1],riff:[0,0,0,0,0,0,0,0,1,1,1,1,6,6,6,6],m:'ppppppppppppoooo',k:'xxxxxxxxxxxxxxxx',dk:1,s:'....x.......x...',h:'8',fill:1,
-       lead:[[0,13,2],[2,12,2],[4,18,4],[8,17,2],[10,13,2],[12,12,4],[16,25,8],[24,24,8]]}}},
-  bossThrash:{bpm:182,div:16,order:['A','A','B'],pl:[[0,0],[3,1],[6,6],[8,0]],bo:'',sec:{
-    A:{bars:4,roots:[0,0,1,-1],riff:[0,0,0,0,1,0,0,0,6,0,0,0,5,0,3,1],m:'ppppopppopppopoo',k:'x.x.x.x.x.x.x.x.',s:'....x.......x...',h:'8'},
-    B:{bars:4,roots:[0,0,-2,-1],riff:[0,null,null,1,null,null,0,null,6,null,null,5,null,null,null,null],m:'llllllllllllllll',k:'x..x..x.x.......',s:'........x.......',h:'ride',fill:1,
-       lead:[[0,13,2],[2,12,2],[4,18,4],[8,17,2],[10,13,2],[12,12,4],[16,25,8],[24,24,8]]}}},
-  bossFolk:{bpm:140,div:12,order:['A','A','B'],pl:[[0,12],[3,13],[6,7]],bo:'x..x..x.x..x',sec:{
-    A:{bars:4,roots:[0,0,1,-2],riff:[0,null,0,1,null,0,7,null,6,0,null,0],m:'o.po.po.oo.p',k:'x..x..x..x..',s:'......x.....',h:'8',bombo:'x..x..x.x..x'},
-    B:{bars:4,roots:[0,-4,-2,1],riff:[0,null,null,null,null,null,1,null,null,null,null,null],m:'llllllllllll',k:'x.....x.....',s:'...x.....x..',h:'ride',fill:1,bombo:'x.....x.....',
-       lead:[[0,12,3],[3,13,3],[6,16,6],[12,15,3],[15,13,3],[18,12,6]]}}}
+// Bandas sonoras auténticas de Ricardo Iorio (V8, Hermética, Almafuerte) adaptadas a chiptune 16-bits (FM / SPC700)
+const R16 = (s) => s.trim().split(/\s+/).map(x => x === "-" ? null : +x);
+const R12 = (s) => s.trim().split(/\s+/).map(x => x === "-" ? null : +x);
+
+const SONGS = {
+  // Cap 1: Muy Cansado Estoy (V8)
+  c0: {
+    name: "MUY CANSADO ESTOY (V8)",
+    bpm: 132, div: 12, order: ["A", "A", "B", "B", "C", "A"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, 5, 0], riff: R12("0 - 0 3 - 5 6 - 5 3 - 0"), m: "o.po.poo.oo.", k: "x.....x..x..", s: "...x.....x..", h: "ride",
+           lead: [[0, 12, 3], [3, 15, 3], [6, 17, 3], [9, 18, 1], [10, 17, 2], [12, 15, 6], [18, 12, 3], [21, 10, 3], [24, 12, 6], [36, 15, 6], [42, 12, 6]] },
+      B: { bars: 4, roots: [5, 3, 0, -2], riff: R12("0 - - - - - 0 - - 0 - -"), m: "l.....l..l..", k: "x..x..x..x..", s: "...x.....x..", h: "8", fill: 1,
+           lead: [[0, 17, 3], [3, 19, 3], [6, 20, 6], [12, 19, 3], [15, 17, 3], [18, 15, 6], [24, 17, 3], [27, 15, 3], [30, 14, 6], [36, 12, 12]] },
+      C: { bars: 4, roots: [0, 3, 5, 7], riff: R12("0 - 0 0 - 0 0 - 0 0 - 0"), m: "p.pp.pp.pp.p", k: "x.xx.xx.xx.x", s: "...x.....x..", h: "16", fill: 1,
+           lead: [[0, 24, 3], [3, 22, 3], [6, 20, 3], [9, 19, 3], [12, 17, 6], [18, 15, 6], [24, 14, 6], [30, 12, 12]] }
+    }
+  },
+  // Cap 2: Brigadas Metálicas (V8)
+  c1: {
+    name: "BRIGADAS METÁLICAS (V8)",
+    bpm: 196, div: 16, order: ["A", "A", "B", "A", "B", "C"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, -4, -2], riff: R16("0 0 0 0 3 - 2 0 0 0 0 0 -2 - 0 0"), m: "ppppopopppppoopp", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
+           lead: [[0, 12, 2], [2, 12, 2], [4, 15, 2], [6, 14, 2], [8, 12, 4], [16, 15, 2], [18, 17, 2], [20, 19, 4], [24, 17, 4], [28, 15, 4]] },
+      B: { bars: 4, roots: [-4, -2, 0, 0], riff: R16("0 - - 0 - - 0 - 0 - 0 - 0 - 0 -"), m: "o..o..o.o.o.o.o.", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "....x.......x...", h: "ride", fill: 1,
+           lead: [[0, 8, 4], [4, 10, 4], [8, 12, 8], [16, 15, 4], [20, 14, 4], [24, 12, 8], [32, 15, 4], [36, 17, 4], [40, 19, 8], [48, 17, 4], [52, 15, 4], [56, 12, 8]] },
+      C: { bars: 2, roots: [0, 3], riff: R16("0 0 0 0 0 0 0 0 3 3 3 3 5 5 5 5"), m: "ppppppppoooooooo", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "..x...x...x...x.", h: "16", fill: 1 }
+    }
+  },
+  // Cap 3: Destrucción (V8)
+  c2: {
+    name: "DESTRUCCIÓN (V8)",
+    bpm: 208, div: 16, order: ["A", "A", "B", "A", "B", "C"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, 0, 1], riff: R16("0 0 0 0 3 - 2 - 0 0 0 0 1 - 0 0"), m: "ppppoppoppppoppp", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "....x.......x...", h: "8",
+           lead: [[0, 19, 4], [4, 22, 4], [8, 21, 2], [10, 20, 2], [12, 19, 4], [16, 17, 4], [20, 15, 4], [24, 12, 8]] },
+      B: { bars: 4, roots: [0, 0, 3, 1], riff: R16("0 - 7 - 0 - 7 - 0 - 8 - 7 - 5 -"), m: "o.o.o.o.o.o.o.o.", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "..x...x...x...x.", h: "ride", fill: 1,
+           lead: [[0, 24, 2], [2, 22, 2], [4, 19, 4], [8, 22, 4], [12, 24, 4], [16, 27, 8], [24, 26, 4], [28, 24, 4], [32, 22, 4], [36, 19, 4], [40, 24, 8]] },
+      C: { bars: 4, roots: [0, -2, -4, -1], riff: R16("0 - - - - - - - 0 - - - - - - -"), m: "l.......l.......", k: "x.....x.x.....x.", s: "....x.......x...", h: "ride", fill: 1 }
+    }
+  },
+  // Cap 4: Tú Eres Su Seguridad (Hermética)
+  c3: {
+    name: "TÚ ERES SU SEGURIDAD (HERMÉTICA)",
+    bpm: 172, div: 16, order: ["A", "A", "B", "A", "B", "C"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, 3, 5], riff: R16("0 - 0 0 3 - 0 0 5 - 6 5 3 - 0 0"), m: "o.ppo.ppo.poo.pp", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
+           lead: [[0, 12, 2], [2, 15, 2], [4, 17, 4], [8, 18, 2], [10, 17, 2], [12, 15, 4], [16, 12, 2], [18, 10, 2], [20, 12, 8]] },
+      B: { bars: 4, roots: [0, -2, -4, -2], riff: R16("0 - - - - - - - 0 - - - 0 - 0 -"), m: "l.......l...o.o.", k: "x..x..x.x..x..x.", s: "....x.......x...", h: "ride", fill: 1,
+           lead: [[0, 12, 4], [4, 14, 2], [6, 15, 2], [8, 14, 4], [12, 12, 4], [16, 10, 4], [20, 7, 4], [24, 10, 4], [28, 12, 8]] },
+      C: { bars: 2, roots: [0, 1], riff: R16("0 - - 0 - - 0 - 1 - - 1 - - 1 -"), m: "o..o..o.o..o..o.", k: "xx.xx.xx.xx.xx.x", s: "....x.......x...", h: "16", fill: 1 }
+    }
+  },
+  // Cap 5: Memoria de Siglos (Hermética)
+  c4: {
+    name: "MEMORIA DE SIGLOS (HERMÉTICA)",
+    bpm: 164, div: 16, order: ["A", "A", "B", "A", "B", "C"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, -2, -4], riff: R16("0 0 - 0 0 - 0 0 3 0 - 0 5 3 - 0"), m: "pp.pp.ppo.po.oo.", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
+           lead: [[0, 12, 2], [2, 15, 2], [4, 14, 2], [6, 12, 2], [8, 10, 2], [10, 7, 2], [12, 10, 2], [14, 12, 2],
+                  [16, 15, 2], [18, 17, 2], [20, 19, 2], [22, 17, 2], [24, 15, 2], [26, 14, 2], [28, 12, 4]] },
+      B: { bars: 4, roots: [-4, -2, 0, 0], riff: R16("0 - - 0 - - 0 - 0 - - 0 - - 0 -"), m: "o..o..o.o..o..o.", k: "x..x..x.x..x..x.", s: "....x.......x...", h: "ride", fill: 1,
+           lead: [[0, 8, 4], [4, 10, 4], [8, 12, 8], [16, 15, 4], [20, 14, 4], [24, 12, 8], [32, 15, 4], [36, 17, 4], [40, 19, 8], [48, 17, 4], [52, 15, 4], [56, 12, 8]] },
+      C: { bars: 4, roots: [0, 3, 5, 6], riff: R16("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"), m: "pppppppppppppppp", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "....x.......x...", h: "16", fill: 1 }
+    }
+  },
+  // Cap 6: Gil Trabajador (Hermética)
+  c5: {
+    name: "GIL TRABAJADOR (HERMÉTICA)",
+    bpm: 154, div: 16, order: ["A", "A", "B", "A", "B", "C"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, -2, 3], riff: R16("0 - - 0 - 0 3 - 0 - 6 5 3 - - 0"), m: "o..p.po.p.ooo..p", k: "x..x.x..x.x....x", s: "....x.......x...", h: "8",
+           lead: [[0, 12, 4], [4, 15, 2], [6, 12, 2], [8, 18, 2], [10, 17, 2], [12, 15, 2], [14, 12, 2],
+                  [16, 12, 4], [20, 15, 2], [22, 12, 2], [24, 18, 4], [28, 17, 4]] },
+      B: { bars: 4, roots: [0, 3, 5, 3], riff: R16("0 - - - - - 0 0 - - 0 - - - - -"), m: "l.....pp..l.....", k: "x.....xx..x.....", s: "........x.......", h: "ride", fill: 1,
+           lead: [[0, 12, 4], [4, 15, 4], [8, 17, 4], [12, 19, 4], [16, 17, 4], [20, 15, 4], [24, 12, 8]] },
+      C: { bars: 2, roots: [0, 1], riff: R16("0 0 - 0 0 - 0 - 0 0 - 0 - 0 6 5"), m: "pp.pp.o.pp.p.poo", k: "xx.xx.x.xx.x.x..", s: "....x.......x...", h: "8", fill: 1 }
+    }
+  },
+  // Cap 7: El Amasijo de un Gran Sueño (Almafuerte)
+  c6: {
+    name: "EL AMASIJO DE UN GRAN SUEÑO (ALMAFUERTE)",
+    bpm: 146, div: 12, order: ["A", "A", "B", "A", "B", "C"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, 5, 3], riff: R12("0 - 0 3 - 0 5 - 6 5 3 -"), m: "o.po.po.poo.", k: "x..x..x..x..", s: "...x.....x..", h: "sh", bombo: "x.xx..x.xx..",
+           lead: [[0, 12, 3], [3, 15, 3], [6, 17, 3], [9, 18, 1], [10, 17, 2], [12, 15, 6], [18, 12, 3], [21, 10, 3], [24, 12, 6], [30, 15, 3], [33, 12, 9]] },
+      B: { bars: 4, roots: [0, 3, 5, 7], riff: R12("0 - - 0 - - 0 - 0 0 - -"), m: "o..o..o.oo..", k: "x..x..x.xx..", s: "...x.....x..", h: "ride", bombo: "x..x..x..x..", fill: 1,
+           lead: [[0, 17, 3], [3, 19, 3], [6, 20, 6], [12, 19, 3], [15, 17, 3], [18, 15, 6], [24, 17, 3], [27, 15, 3], [30, 14, 6], [36, 12, 12]] },
+      C: { bars: 4, roots: [0, 0, -2, 0], riff: R12("0 - - - - - 0 - - - - -"), m: "l.....l.....", k: "xxxxxxxxxxxx", dk: 1, s: "......x.....", h: "ride", fill: 1, bombo: "x.....x....." }
+    }
+  },
+  // Cap 8: Sé Vos (Almafuerte)
+  c7: {
+    name: "SÉ VOS (ALMAFUERTE)",
+    bpm: 122, div: 16, order: ["A", "B", "A", "B", "C", "B"],
+    pl: [[0, 7], [4, 12], [8, 15], [12, 19]],
+    sec: {
+      A: { bars: 4, roots: [0, -4, -2, 3], riff: R16("0 - - - - - - - 0 - - - 0 - - -"), m: "l.......l...l...", k: "x.......x.x.....", s: "....x.......x...", h: "ride",
+           lead: [[0, 7, 2], [2, 8, 2], [4, 7, 2], [6, 5, 2], [8, 3, 2], [10, 5, 2], [12, 7, 4],
+                  [16, 3, 2], [18, 2, 2], [20, 0, 8],
+                  [32, 3, 2], [34, 5, 2], [36, 7, 4], [40, 10, 4], [44, 7, 2], [46, 5, 2],
+                  [48, 3, 2], [50, 2, 2], [52, 0, 12]] },
+      B: { bars: 4, roots: [0, -4, -2, 3], riff: R16("0 - 0 0 - 0 0 - 0 - 0 0 3 - 2 0"), m: "o.ppo.ppo.po.oop", k: "x.xx..x.x.xx..x.", s: "....x.......x...", h: "8", fill: 1,
+           lead: [[0, 19, 2], [2, 20, 2], [4, 19, 2], [6, 17, 2], [8, 15, 2], [10, 17, 2], [12, 19, 4],
+                  [16, 15, 2], [18, 14, 2], [20, 12, 8],
+                  [32, 15, 2], [34, 17, 2], [36, 19, 4], [40, 22, 4], [44, 19, 2], [46, 17, 2],
+                  [48, 15, 2], [50, 14, 2], [52, 12, 12]] },
+      C: { bars: 4, roots: [-4, -2, 0, 0], riff: R16("0 - - - 0 - - - 0 - - - 0 - - -"), m: "o...o...o...o...", k: "x...x...x...x...", s: "....x.......x...", h: "ride", fill: 1,
+           lead: [[0, 15, 4], [4, 17, 4], [8, 19, 8], [16, 17, 4], [20, 15, 4], [24, 14, 8], [32, 15, 4], [36, 17, 4], [40, 19, 8], [48, 22, 4], [52, 24, 8]] }
+    }
+  },
+  // Cap 9: Toro y Pampa (Almafuerte)
+  c8: {
+    name: "TORO Y PAMPA (ALMAFUERTE)",
+    bpm: 138, div: 12, order: ["A", "A", "B", "A", "C"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, -2, -4], riff: R12("0 - 0 3 - 0 5 - 3 0 - 0"), m: "o.po.po.po.p", k: "x..x..x..x..", s: "...x.....x..", h: "sh", bombo: "x..x..x.x..x",
+           lead: [[0, 12, 3], [3, 15, 3], [6, 17, 6], [12, 15, 3], [15, 14, 3], [18, 12, 6], [24, 15, 3], [27, 17, 3], [30, 19, 6], [36, 17, 3], [39, 15, 3], [42, 12, 6]] },
+      B: { bars: 4, roots: [0, 5, 3, -2], riff: R12("0 - - 0 - - 0 - - 0 - -"), m: "l.....l.....", k: "x.....x.....", s: "...x.....x..", h: "ride", bombo: "x.....x.....", fill: 1,
+           lead: [[0, 19, 3], [3, 17, 3], [6, 15, 6], [12, 17, 3], [15, 15, 3], [18, 14, 6], [24, 12, 6], [30, 10, 6], [36, 12, 12]] },
+      C: { bars: 2, roots: [0, 0], riff: R12("0 0 0 0 0 0 0 0 0 0 0 0"), m: "pppppppppppp", k: "xxxxxxxxxxxx", dk: 1, s: "......x.....", h: "16", fill: 1 }
+    }
+  },
+  // Cap 10: Muere Monstruo Muere (Almafuerte)
+  c9: {
+    name: "MUERE MONSTRUO MUERE (ALMAFUERTE)",
+    bpm: 160, div: 16, order: ["A", "A", "B", "A", "B", "C"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, 1, 3], riff: R16("0 0 0 0 1 - 0 0 3 - 0 0 1 - 0 0"), m: "ppppoppppoppoppp", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
+           lead: [[0, 12, 2], [2, 13, 2], [4, 12, 4], [8, 15, 4], [12, 13, 4], [16, 12, 2], [18, 10, 2], [20, 12, 8]] },
+      B: { bars: 4, roots: [0, 3, 1, -2], riff: R16("0 - - 0 - - 0 - 0 - 0 - 0 - 0 -"), m: "o..o..o.o.o.o.o.", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "....x.......x...", h: "ride", fill: 1,
+           lead: [[0, 15, 4], [4, 17, 4], [8, 18, 8], [16, 17, 4], [20, 15, 4], [24, 13, 4], [28, 12, 4], [32, 15, 4], [36, 13, 4], [40, 12, 8]] },
+      C: { bars: 4, roots: [0, 0, 1, 0], riff: R16("0 - - - - - 0 0 - - 0 - - - - -"), m: "l.....pp..l.....", k: "x.....xx..x.....", s: "........x.......", h: "ride", fill: 1 }
+    }
+  },
+  // Cap 11: A Vos Amigo (Almafuerte / Iorio)
+  c10: {
+    name: "A VOS AMIGO (ALMAFUERTE)",
+    bpm: 118, div: 12, order: ["A", "A", "B", "A", "B", "C"],
+    pl: [[0, 7], [3, 12], [6, 15], [9, 19]],
+    sec: {
+      A: { bars: 4, roots: [0, -4, -2, 0], riff: R12("0 - - - - - 0 - - - - -"), m: "l.....l.....", k: "x.....x.....", s: "...x.....x..", h: "ride",
+           lead: [[0, 12, 3], [3, 14, 3], [6, 15, 6], [12, 14, 3], [15, 12, 3], [18, 10, 6], [24, 12, 3], [27, 10, 3], [30, 7, 6], [36, 10, 3], [39, 12, 9]] },
+      B: { bars: 4, roots: [0, 3, 5, 3], riff: R12("0 - 0 3 - 0 5 - 3 0 - 0"), m: "o.po.po.po.p", k: "x..x..x..x..", s: "...x.....x..", h: "sh", bombo: "x..x..x.x..x", fill: 1,
+           lead: [[0, 15, 3], [3, 17, 3], [6, 19, 6], [12, 17, 3], [15, 15, 3], [18, 14, 6], [24, 15, 3], [27, 14, 3], [30, 12, 6], [36, 10, 3], [39, 12, 9]] },
+      C: { bars: 4, roots: [0, 7, 5, 0], riff: R12("0 - - 0 - - 0 - - 0 0 0"), m: "o..o..o..ooo", k: "x..x..x..xxx", s: "......x.....", h: "ride", fill: 1 }
+    }
+  },
+  // Boss V8: Cautivos del Sistema
+  b0: {
+    name: "CAUTIVOS DEL SISTEMA (V8 - BOSS)",
+    bpm: 204, div: 16, order: ["A", "A", "B"],
+    sec: {
+      A: { bars: 4, roots: [0, 1, 0, -2], riff: R16("0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1"), m: "ppppppppppppoooo", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "....x.......x...", h: "8",
+           lead: [[0, 12, 2], [2, 13, 2], [4, 15, 4], [8, 13, 2], [10, 12, 2], [12, 10, 4], [16, 12, 8], [24, 10, 8]] },
+      B: { bars: 4, roots: [0, 3, 5, 1], riff: R16("0 - 7 - 0 - 7 - 0 - 8 - 7 - 5 -"), m: "o.o.o.o.o.o.o.o.", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "..x...x...x...x.", h: "ride", fill: 1,
+           lead: [[0, 24, 2], [2, 22, 2], [4, 19, 4], [8, 22, 4], [12, 24, 4], [16, 27, 8], [24, 26, 4], [28, 24, 4]] }
+    }
+  },
+  // Boss Hermética: Olvídalo y Volverá por Más
+  b1: {
+    name: "OLVÍDALO Y VOLVERÁ POR MÁS (HERMÉTICA - BOSS)",
+    bpm: 198, div: 16, order: ["A", "A", "B"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, 1, -1], riff: R16("0 0 0 0 1 0 0 0 6 0 0 0 5 0 3 1"), m: "ppppopppopppopoo", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
+           lead: [[0, 13, 2], [2, 12, 2], [4, 18, 4], [8, 17, 2], [10, 13, 2], [12, 12, 4], [16, 25, 8], [24, 24, 8]] },
+      B: { bars: 4, roots: [0, 0, -2, -1], riff: R16("0 - - 1 - - 0 - 6 - - 5 - - - -"), m: "o..o..o.o..o....", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "....x.......x...", h: "ride", fill: 1,
+           lead: [[0, 24, 2], [2, 22, 2], [4, 19, 4], [8, 22, 4], [12, 24, 4], [16, 27, 8], [24, 26, 4], [28, 24, 4]] }
+    }
+  },
+  // Boss Almafuerte: Triunfo
+  b2: {
+    name: "TRIUNFO (ALMAFUERTE - BOSS)",
+    bpm: 156, div: 12, order: ["A", "A", "B"],
+    sec: {
+      A: { bars: 4, roots: [0, 0, 1, -2], riff: R12("0 - 0 1 - 0 7 - 6 0 - 0"), m: "o.po.po.oo.p", k: "x..x..x..x..", s: "......x.....", h: "8", bombo: "x..x..x.x..x",
+           lead: [[0, 12, 3], [3, 13, 3], [6, 16, 6], [12, 15, 3], [15, 13, 3], [18, 12, 6]] },
+      B: { bars: 4, roots: [0, -4, -2, 1], riff: R12("0 - - - - - 1 - - - - -"), m: "llllllllllll", k: "xxxxxxxxxxxx", dk: 1, s: "...x.....x..", h: "ride", fill: 1, bombo: "x.....x.....",
+           lead: [[0, 19, 3], [3, 18, 3], [6, 16, 6], [12, 18, 3], [15, 19, 3], [18, 22, 6]] }
+    }
+  }
 };
-for(const k in SONGS){const S=SONGS[k];S.total=S.order.reduce((a,id)=>a+S.sec[id].bars,0);}
-// v14: temas nuevos, más pesados y modernos (afinación baja, sin campanitas), uno por capítulo. Riffs originales.
-const R16=(s)=>s.split(' ').map(x=>x==='-'?null:+x);
-const T_THRASH={div:16,order:['A','A','B','A','C','B'],pl:[],bo:'',sec:{
-  A:{bars:4,roots:[0,0,3,5],riff:R16('0 - 0 0 0 - 0 0 3 - 3 3 5 - 6 5'),m:'p.ppp.ppo.ppo.oo',k:'x.x.x.x.x.x.x.x.',s:'....x.......x...',h:'8'},
-  B:{bars:4,roots:[0,-2,-4,-5],riff:R16('0 - - - - - - - 0 - - - 0 - 0 -'),m:'l.......l...o.o.',k:'xxxxxxxxxxxxxxxx',dk:1,s:'....x.......x...',h:'ride'},
-  C:{bars:4,roots:[0,0,1,0],riff:R16('0 - - 0 - - 0 - - 0 - - 1 - 0 -'),m:'o..o..o..o..o.o.',k:'x..x..x..x..x.x.',s:'........x.......',h:'ride',fill:1,
-     lead:[[0,12,2],[2,15,2],[4,17,4],[8,19,2],[10,17,2],[12,15,4],[16,12,2],[18,10,2],[20,12,8]]}}};
-const T_SPEED={div:16,order:['A','B','A','B','C'],pl:[],bo:'',sec:{
-  A:{bars:4,roots:[0,1,0,-2],riff:R16('0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1'),m:'pppppppppppppppp',k:'xxxxxxxxxxxxxxxx',dk:1,s:'....x.......x...',h:'8'},
-  B:{bars:4,roots:[0,0,3,1],riff:R16('0 - 7 - 0 - 7 - 0 - 8 - 7 - 5 -'),m:'o.o.o.o.o.o.o.o.',k:'xxxxxxxxxxxxxxxx',dk:1,s:'..x...x...x...x.',h:'ride'},
-  C:{bars:4,roots:[0,-2,-4,-1],riff:R16('0 - - - - - - - 0 - - - - - - -'),m:'l.......l.......',k:'x.....x.x.....x.',s:'....x.......x...',h:'ride',fill:1,
-     lead:[[0,19,1],[1,17,1],[2,15,1],[3,14,1],[4,15,2],[6,12,2],[8,19,1],[9,20,1],[10,22,2],[12,19,4],[16,24,4],[20,22,2],[22,19,2],[24,17,8]]}}};
-const T_PUNK={div:16,order:['A','A','B','A','B','C'],pl:[],bo:'',sec:{
-  A:{bars:4,roots:[0,0,5,3],riff:R16('0 - 0 - 0 - 0 - 0 - 0 - 0 - 0 -'),m:'p.p.p.p.o.p.p.p.',k:'x...x...x...x...',s:'..x...x...x...x.',h:'8'},
-  B:{bars:4,roots:[5,5,0,0],riff:R16('0 - - - 0 - - - 0 - - - 0 - 0 -'),m:'o...o...o...o.o.',k:'x.x.x.x.x.x.x.x.',s:'....x.......x...',h:'ride'},
-  C:{bars:2,roots:[0,3],riff:R16('0 - 0 - 3 - 3 - 5 - 5 - 6 - 5 -'),m:'o.o.o.o.o.o.o.o.',k:'xxxxxxxxxxxxxxxx',dk:1,s:'....x.......x...',h:'8',fill:1}}};
-const T_GROOVE={div:16,order:['A','A','B','C','A','B'],pl:[],bo:'',sec:{
-  A:{bars:4,roots:[0,0,0,0],riff:R16('0 - - 0 - 0 - - 3 - 0 - 1 - - 0'),m:'o..p.p..o.p.o..p',k:'x..x.x..x.x....x',s:'....x.......x...',h:'8'},
-  B:{bars:4,roots:[0,3,-2,1],riff:R16('0 - - - - - 0 0 - - 0 - - - - -'),m:'l.....pp..l.....',k:'x.....xx..x.....',s:'........x.......',h:'ride'},
-  C:{bars:4,roots:[0,0,1,1],riff:R16('0 0 - 0 0 - 0 - 0 0 - 0 - 0 6 5'),m:'pp.pp.o.pp.p.poo',k:'xx.xx.x.xx.x.x..',s:'....x.......x...',h:'8',fill:1,
-     lead:[[0,7,4],[4,10,4],[8,12,6],[16,15,4],[20,12,4],[24,10,8]]}}};
-const T_CRIOLLO={div:12,order:['A','A','B','A','C'],pl:[],bo:'x.....x..x..',sec:{
-  A:{bars:4,roots:[0,5,0,7],riff:R16('0 - 0 7 - 7 0 - 0 10 - 9'),m:'o.po.po.po.p',k:'x..x..x..x..',s:'...x.....x..',h:'sh',bombo:'x..x..x.....'},
-  B:{bars:4,roots:[5,3,0,-2],riff:R16('0 - - - - - 0 - - 0 - -'),m:'l.....l..l..',k:'xxxxxxxxxxxx',dk:1,s:'...x.....x..',h:'ride',bombo:'x.....x..x..'},
-  C:{bars:4,roots:[0,7,5,0],riff:R16('0 - - 0 - - 0 - - 0 0 0'),m:'o..o..o..ooo',k:'x..x..x..xxx',s:'......x.....',h:'ride',fill:1,
-     lead:[[0,12,3],[3,15,3],[6,17,6],[12,19,3],[15,17,3],[18,15,6]]}}};
-function songV(T,bpm,tr){const s=Object.assign({},T,{bpm,tr});s.total=s.order.reduce((a,id)=>a+s.sec[id].bars,0);return s;}
-Object.assign(SONGS,{
-  c0:songV(T_THRASH,184,0),c1:songV(T_PUNK,200,0),c2:songV(T_SPEED,190,0),c3:songV(T_GROOVE,138,2),c4:songV(T_THRASH,176,3),
-  c5:songV(T_SPEED,186,-2),c6:songV(T_GROOVE,128,-1),c7:songV(T_THRASH,196,-1),c8:songV(T_CRIOLLO,152,0),c9:songV(T_CRIOLLO,140,2),
-  b0:songV(T_SPEED,204,0),b1:songV(T_THRASH,200,2),b2:songV(T_GROOVE,146,0)});
+
+// Aliases para retrocompatibilidad total
+SONGS.l1 = SONGS.c0;
+SONGS.l2 = SONGS.c1;
+SONGS.l3 = SONGS.c3;
+SONGS.l4 = SONGS.c7;
+SONGS.l5 = SONGS.c8;
+SONGS.bossRock = SONGS.b0;
+SONGS.bossThrash = SONGS.b1;
+SONGS.bossFolk = SONGS.b2;
+SONGS.street = SONGS.c7;
+
+for (const k in SONGS) {
+  const S = SONGS[k];
+  if (S.order && S.sec) S.total = S.order.reduce((a, id) => a + (S.sec[id] ? S.sec[id].bars : 0), 0);
+}
+
 
 let revIn=null,leadWS=null;
 function revSetup(){try{const conv=AC.createConvolver(),n=AC.sampleRate*1.8|0,b=AC.createBuffer(2,n,AC.sampleRate);
@@ -982,27 +1107,49 @@ function pluck(m,t,v){const o=AC.createOscillator(),o2=AC.createOscillator(),f=A
   f.type='lowpass';f.frequency.setValueAtTime(3200,t);f.frequency.exponentialRampToValueAtTime(380,t+.35);env(g,t,.002,v,.7);o.connect(f);o2.connect(f);f.connect(g);g.connect(delayIn);o.start(t);o2.start(t);o.stop(t+.8);o2.stop(t+.8);}
 function bombo(t,v){const o=AC.createOscillator(),g=AC.createGain();o.frequency.setValueAtTime(105,t);o.frequency.exponentialRampToValueAtTime(62,t+.25);env(g,t,.003,v,.32);o.connect(g);g.connect(calmG);o.start(t);o.stop(t+.4);nz(t,.04,v*.5,'lowpass',400,calmG);}
 function musicTick(){if(!AC)return;const now=AC.currentTime;
-  const want=musicOn&&state!=='pause'&&state!=='gameover'&&!lmOn()?1:0;
-  musicBus.gain.setTargetAtTime(want*.5,now,.15);
-  const fightOn=((state==='play'&&combatMix)||state==='ending'||state==='truck')?1:0;fightG.gain.setTargetAtTime(fightOn,now,.35);calmG.gain.setTargetAtTime(fightOn?.14:.85,now,.6);
+  const want=musicOn&&state!==pause&&state!==gameover&&!lmOn()?1:0;
+  musicBus.gain.setTargetAtTime(want*.55,now,.15);
+  // Música 16-bits completa continua en menú, cinemáticas y combate
+  fightG.gain.setTargetAtTime(want?1:0,now,.15);
+  calmG.gain.setTargetAtTime(want?.35:0,now,.2);
   if(!want){nextT=now+.05;return;}
-  if(nextT<now)nextT=now+.03;const S=SONGS[song]||SONGS.l1,div=S.div,spb=60/S.bpm/(div===12?3:4);
+  if(nextT<now)nextT=now+.03;const S=SONGS[song]||SONGS.c7||SONGS.c0,div=S.div,spb=60/S.bpm/(div===12?3:4);
   while(nextT<now+.14){const bar=Math.floor(step/div),s=step%div,[sec,bi]=secOf(S,bar),root=36+(S.tr||0)+sec.roots[bi%sec.roots.length],t=nextT;
     const fill=sec.fill&&bi===sec.bars-1&&s>=div/2;
-    if(fightOn||fightG.gain.value>.05){
-      const v=sec.riff[s],md=sec.m[s];
-      if(v!==null&&v!==undefined&&!(fill&&s>=div-2)){const pm=md==='p',d=pm?spb*.55:md==='l'?spb*3.6:spb*1.7;gtr(root+v,t,d,pm?.042:.062,pm);bass(root+v-12,t,pm?spb*.7:d,pm?.14:.17);}
-      if(fill){if(s%2===0)tom(t,[220,180,140,110,90,80][((s-div/2)/2)|0]||90,.5,fightG);if(s%2===1)snare(t,.22,fightG);if(s===div-1)kick(t,.55,fightG);}
-      else{if(sec.k[s]==='x')kick(t,sec.dk?.42:.58,fightG);
-        if(sec.s[s]==='x'){snare(t,.32,fightG);if(revIn)nz(t,.24,.18,'bandpass',1700,revIn,.9);}
-        if(sec.h==='8'&&s%2===0)hat(t,s%4===0?.07:.045,fightG);else if(sec.h==='16')hat(t,s%2?.03:.06,fightG);else if(sec.h==='ride'&&s%2===0)ride(t,.07,fightG);else if(sec.h==='sh'&&s%3!==1)hat(t,s%3===0?.07:.04,fightG);}
-      
-      if(bi===0&&s===0)crash(t,.2,fightG);
-      if(sec.bombo&&sec.bombo[s]==='x')bombo(t,.5);
-      if(sec.lead){const pos=(bi%2)*div+s;for(const [p,n,len] of sec.lead)if(p===pos){lead(52+n,t,len*spb,.07);if(sec.harm)lead(52+n+sec.harm,t,len*spb,.05);}}
-      if(sec.ch){for(const [p,n] of sec.ch)if(p===s)pluck(root+24+n,t,.06);}}
-    for(const [st,iv] of S.pl)if(st===s)pluck(root+24+iv,t,.09);
-    if(S.bo&&S.bo[s]==='x')bombo(t,.4);if(s===0)bass(root-12,t,spb*(div-1),.12);
+    const v=sec.riff[s],md=sec.m[s];
+    if(v!==null&&v!==undefined&&!(fill&&s>=div-2)){
+      const pm=md===p,d=pm?spb*.55:md===l?spb*3.6:spb*1.7;
+      gtr(root+v,t,d,pm?.045:.068,pm);
+      bass(root+v-12,t,pm?spb*.75:d,pm?.15:.19);
+    }
+    if(fill){
+      if(s%2===0)tom(t,[220,180,140,110,90,80][((s-div/2)/2)|0]||90,.5,fightG);
+      if(s%2===1)snare(t,.24,fightG);
+      if(s===div-1)kick(t,.58,fightG);
+    } else {
+      if(sec.k[s]===x)kick(t,sec.dk?.45:.62,fightG);
+      if(sec.s[s]===x){snare(t,.34,fightG);if(revIn)nz(t,.24,.18,bandpass,1700,revIn,.9);}
+      if(sec.h===8&&s%2===0)hat(t,s%4===0?.075:.048,fightG);
+      else if(sec.h===16)hat(t,s%2?.035:.065,fightG);
+      else if(sec.h===ride&&s%2===0)ride(t,.075,fightG);
+      else if(sec.h===sh&&s%3!==1)hat(t,s%3===0?.075:.042,fightG);
+    }
+    if(bi===0&&s===0)crash(t,.22,fightG);
+    if(sec.bombo&&sec.bombo[s]===x)bombo(t,.5);
+    if(sec.lead){
+      const lBars=sec.leadBars||sec.bars||4;
+      const pos=(bi%lBars)*div+s;
+      for(const [p,n,len] of sec.lead){
+        if(p===pos){
+          lead(52+n,t,len*spb,.08);
+          if(sec.harm)lead(52+n+sec.harm,t,len*spb,.055);
+        }
+      }
+    }
+    if(sec.ch){for(const [p,n] of sec.ch)if(p===s)pluck(root+24+n,t,.06);}
+    if(S.pl)for(const [st,iv] of S.pl)if(st===s)pluck(root+24+iv,t,.09);
+    if(S.bo&&S.bo[s]===x)bombo(t,.4);
+    if(s===0&&(!sec.riff||sec.riff[0]===null))bass(root-12,t,spb*(div-1),.14);
     nextT+=spb;step++;}}
 
 // v10: sonido de banda de metal: dos guitarras con amplificador y caja simulados, bajo con púa, batería con cuerpo
@@ -1027,11 +1174,11 @@ function ampSetup(){try{
   drumG=AC.createGain();drumG.gain.value=1;const dc=AC.createDynamicsCompressor();dc.threshold.value=-20;dc.ratio.value=4;dc.attack.value=.004;dc.release.value=.12;
   const dg=AC.createGain();dg.gain.value=1.25;drumG.connect(dc);dc.connect(dg);dg.connect(fightG);if(revIn){const s=AC.createGain();s.gain.value=.22;drumG.connect(s);s.connect(revIn);}
 }catch(e){}}
-// guitarra rítmica: quinta con octava, dos cuerdas por lado levemente desafinadas, palm mute con filtro que se cierra
-function gtr(m,t,d,v,pm){for(const [dest,dt] of [[gL,-7],[gR,7]]){const g=AC.createGain(),f=AC.createBiquadFilter();f.type='lowpass';
-    if(pm){f.frequency.setValueAtTime(2600,t);f.frequency.exponentialRampToValueAtTime(420,t+.07);f.Q.value=1.2;}else{f.frequency.value=7000;}
+// guitarra rítmica 16-bits: dual FM crunch estéreo, palm mute resonante y acordes con cuerpo
+function gtr(m,t,d,v,pm){for(const [dest,dt] of [[gL,-7],[gR,7]]){const g=AC.createGain(),f=AC.createBiquadFilter();f.type=lowpass;
+    if(pm){f.frequency.setValueAtTime(2600,t);f.frequency.exponentialRampToValueAtTime(420,t+.07);f.Q.value=1.3;}else{f.frequency.value=7000;}
     g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v*1.6,t+.003);g.gain.setTargetAtTime(v*(pm?.5:1.1),t+.02,pm?.03:.25);g.gain.setTargetAtTime(.0001,t+d,.03);
-    for(const iv of (pm?[0,7]:[0,7,12]))for(const cents of [-4,5]){const o=AC.createOscillator();o.type='sawtooth';o.frequency.value=mf(m+iv);o.detune.value=dt+cents+(Math.random()*3-1.5);o.connect(f);o.start(t);o.stop(t+d+.2);}
+    for(const iv of (pm?[0,7]:[0,7,12])){const o=AC.createOscillator();o.type=sawtooth;o.frequency.value=mf(m+iv);o.detune.value=dt+(iv===7?4:0);o.connect(f);o.start(t);o.stop(t+d+.18);}
     f.connect(g);g.connect(dest);}}
 function bass(m,t,d,v){const g=AC.createGain(),f=AC.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(1800,t);f.frequency.exponentialRampToValueAtTime(500,t+.12);
   g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v*1.5,t+.004);g.gain.setTargetAtTime(v,t+.01,.1);g.gain.setTargetAtTime(.0001,t+d,.03);
@@ -1047,13 +1194,18 @@ function hat(t,v,dest){const D=drumG||dest;nz(t,.045,v*1.1,'highpass',7800,D);nz
 function crash(t,v,dest){const D=drumG||dest;nz(t,1.8,v*.9,'highpass',4200,D);nz(t,1.1,v*.5,'bandpass',6800,D,.8);nz(t,.06,v*.6,'bandpass',3000,D,1);}
 function tom(t,f,v,dest){const D=drumG||dest,o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.setValueAtTime(f*1.4,t);o.frequency.exponentialRampToValueAtTime(f*.8,t+.2);env(g,t,.001,v*1.3,.34);o.connect(g);g.connect(D);o.start(t);o.stop(t+.4);nz(t,.03,v*.3,'bandpass',f*4,D,1);}
 function ride(t,v,dest){const D=drumG||dest;nz(t,.5,v*.7,'bandpass',5600,D,2.4);osc('triangle',2900,t,.25,v*.22,D);osc('triangle',4310,t,.2,v*.12,D);}
-// solo: una sola guitarra saturada con vibrato y bending al entrar
-function lead(m,t,d,v){if(!gLead)return;const g=AC.createGain(),f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=5200;
-  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v*1.2,t+.008);g.gain.setTargetAtTime(v*.9,t+.05,.2);g.gain.setTargetAtTime(.0001,t+d,.05);
-  const o=AC.createOscillator();o.type='sawtooth';const fr=mf(m);o.frequency.setValueAtTime(fr*.94,t);o.frequency.exponentialRampToValueAtTime(fr,t+Math.min(.06,d*.3));
-  const lfo=AC.createOscillator(),lg=AC.createGain();lfo.frequency.value=5.8;lg.gain.setValueAtTime(0,t);lg.gain.linearRampToValueAtTime(fr*.018,t+Math.min(.35,d*.7));lfo.connect(lg);lg.connect(o.frequency);
-  o.connect(f);f.connect(g);g.connect(gLead);o.start(t);o.stop(t+d+.3);lfo.start(t);lfo.stop(t+d+.3);
-  if(delayIn){const s=AC.createGain();s.gain.value=.25;g.connect(s);s.connect(delayIn);}}
+// solo 16-bits: sintetizador FM solista con vibrato analógico, bending y delay
+function lead(m,t,d,v){if(!gLead)return;const g=AC.createGain(),f=AC.createBiquadFilter();f.type=lowpass;f.frequency.value=5400;f.Q.value=1.1;
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v*1.3,t+.006);g.gain.setTargetAtTime(v*.95,t+.04,.2);g.gain.setTargetAtTime(.0001,t+d,.04);
+  const fr=mf(m);
+  const o1=AC.createOscillator();o1.type=sawtooth;o1.frequency.setValueAtTime(fr*.95,t);o1.frequency.exponentialRampToValueAtTime(fr,t+Math.min(.05,d*.25));
+  const o2=AC.createOscillator();o2.type=square;o2.detune.value=7;o2.frequency.setValueAtTime(fr*.95,t);o2.frequency.exponentialRampToValueAtTime(fr,t+Math.min(.05,d*.25));
+  const o2g=AC.createGain();o2g.gain.value=.35;
+  const lfo=AC.createOscillator(),lg=AC.createGain();lfo.frequency.value=5.8;lg.gain.setValueAtTime(0,t);lg.gain.linearRampToValueAtTime(fr*.02,t+Math.min(.3,d*.6));
+  lfo.connect(lg);lg.connect(o1.frequency);lg.connect(o2.frequency);
+  o1.connect(f);o2.connect(o2g);o2g.connect(f);f.connect(g);g.connect(gLead);
+  o1.start(t);o1.stop(t+d+.25);o2.start(t);o2.stop(t+d+.25);lfo.start(t);lfo.stop(t+d+.25);
+  if(delayIn){const s=AC.createGain();s.gain.value=.28;g.connect(s);s.connect(delayIn);}}
 
 function sfx(n){if(!AC)return;const t=AC.currentTime;switch(n){
   case 'punch':nz(t,.08,.55,'lowpass',1400);osc('sine',130,t,.09,.45,master);break;
@@ -1110,7 +1262,7 @@ cv.addEventListener('pointerdown',e=>{audioInit();cv.focus();
   }
   else if(state==='title'){
     if(cy>=198&&cy<=220&&cx>=216&&cx<=468){diffSet(diff+1);sfx('blip');return;}
-    if(cy>=78&&cy<=198&&cx>=218&&cx<=468){const row=Math.floor((cy-78)/11.2);if(row>=0&&row<LEVELS.length){sel=row;sfx('blip');return;}}
+    if(cy>=78&&cy<=198&&cx>=218&&cx<=468){const row=Math.floor((cy-78)/11.2);if(row>=0&&row<LEVELS.length){sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}sfx('blip');return;}}
     one.start=1;}
   else if(state==='results'){
     if(cy>=192&&cy<=220&&cx>=W/2+20&&cx<=W/2+160){toTitleMenu();return;}
@@ -3210,7 +3362,7 @@ function drawHUD2(){
   if(GUNS[player.hold]){const G=GUNS[player.hold];txt(G.name+' x'+player.ammo,244,14,G.col,7);txt('Z DISPARA',244,25,'#c8b8cc',5);}
   txt(String(score).padStart(7,'0'),W-8,8,'#fff',10,'right');txt(LV.place,W-8,22,'#c8b8cc',6,'right');
   const df=DIFFS[diff];txt(df.name,W-8,32,df.col,5,'right');
-  if(!musicOn)txt('MÚSICA: NO',W-8,41,'#c8b8cc',5,'right');
+  if(!musicOn)txt('MÚSICA: NO',W-8,41,'#c8b8cc',5,'right');else{const cS=SONGS[song];if(cS&&cS.name)txt('♫ '+cS.name,W-8,41,'#f2b632',4.5,'right');}
   if(lastHit&&lastHit.e&&!lastHit.e.D.boss&&lastHit.e.max>1){const e=lastHit.e,v=Math.max(0,e.hp)/e.max;txt(e.D.name,8,63,'#efe4d2',6);hudBar(8,72,120,4,v,null,'#e2462c');}
   if(boss&&boss.hp>0&&state==='play'){const v=boss.hp/boss.max,bx=W/2-130,by=H-20;ctx.fillStyle='rgba(10,8,13,.8)';ctx.fillRect(bx-6,by-16,272,30);ctx.fillStyle='#e2462c';ctx.fillRect(bx-6,by-16,272,2);
     txt(boss.D.name,bx,by-12,'#ff6a4a',8);hudBar(bx,by,260,8,v,null,'#e2462c');}
@@ -3244,28 +3396,7 @@ function drawLombriz(X,y){ctx.strokeStyle=OUT;ctx.lineWidth=4;ctx.lineCap='round
 function lombrizPick(it,f){if(it.kind!=='lombriz')return false;it.gone=true;score+=700;sfx('pickup');floatTxt(f.x,f.y-90,'¡LA LOMBRIZ DOMÉSTICA! +700','#f2b4b4');
   dato={s:'En lo de Beto Casella contó que tenía unos setecientos pajaritos en el campo, y hasta una lombriz doméstica.',t:420};say(f,'Esta va con los setecientos pajaritos.',110);return true;}
 
-// v23: música propia del juego ajustada a cada época, con el carácter de cada banda (riffs y melodías originales, no se copia ningún tema):
-// 1978 hard rock setentoso (lo que escuchaba de pibe), V8 speed metal galopante, Hermética thrash pesado, Almafuerte heavy criollo en 6/8.
-const T_HARD70={div:12,order:['A','A','B','A','C','B'],pl:[],bo:'',sec:{
-  A:{bars:4,roots:[0,0,5,0],riff:R16('0 - 3 0 - 5 6 - 5 3 - 0'),m:'o.oo.ooo.oo.',k:'x.....x..x..',s:'...x.....x..',h:'ride'},
-  B:{bars:4,roots:[5,3,0,-2],riff:R16('0 - - - - - 0 - - 0 - -'),m:'l.....l..l..',k:'x..x..x..x..',s:'...x.....x..',h:'ride'},
-  C:{bars:4,roots:[0,0,5,0],riff:R16('0 - - 0 - - 0 - - 0 - -'),m:'o..o..o..o..',k:'x.....x.....',s:'...x.....x..',h:'ride',fill:1,
-     lead:[[0,12,3],[3,15,3],[6,17,3],[9,18,1],[10,17,2],[12,15,6],[18,12,3],[21,10,3],[24,12,6],[30,15,3],[33,12,9]]}}};
-const T_GALLOP={div:16,order:['A','A','B','A','C','B'],pl:[],bo:'',sec:{
-  A:{bars:4,roots:[0,0,-2,-4],riff:R16('0 - 0 0 0 - 0 0 0 - 0 0 3 - 0 0'),m:'o.ppo.ppo.ppo.pp',k:'x.xxx.xxx.xxx.xx',s:'....x.......x...',h:'8'},
-  B:{bars:4,roots:[0,3,5,3],riff:R16('0 - 0 0 0 - 0 0 0 - 0 0 0 - 0 0'),m:'o.ppo.ppo.ppo.pp',k:'x.xxx.xxx.xxx.xx',s:'....x.......x...',h:'ride',
-     lead:[[0,12,4],[4,15,4],[8,17,4],[12,19,4],[16,20,6],[22,19,2],[24,17,8],[32,15,4],[36,17,4],[40,19,8],[48,17,4],[52,15,4],[56,12,8]]},
-  C:{bars:4,roots:[0,-2,-4,-5],riff:R16('0 - - - - - - - 0 - - - 0 - 0 -'),m:'l.......l...o.o.',k:'xxxxxxxxxxxxxxxx',dk:1,s:'....x.......x...',h:'ride',fill:1,
-     lead:[[0,24,2],[2,22,2],[4,20,2],[6,19,2],[8,20,4],[12,17,4],[16,19,2],[18,20,2],[20,22,4],[24,24,8]]}}};
-const T_ALMA={div:12,order:['A','B','A','C','B'],pl:[],bo:'x.xx..x.xx..',sec:{
-  A:{bars:4,roots:[0,0,-2,-4],riff:R16('0 - 0 3 - 0 5 - 3 0 - -'),m:'o.po.po.po..',k:'x..x..x..x..',s:'...x.....x..',h:'sh',bombo:'x.xx..x.xx..'},
-  B:{bars:4,roots:[0,5,3,-2],riff:R16('0 - - 0 - - 0 - 0 0 - -'),m:'o..o..o.oo..',k:'x..x..x.xx..',s:'...x.....x..',h:'ride',bombo:'x..x..x..x..',
-     lead:[[0,12,3],[3,14,3],[6,15,6],[12,17,3],[15,15,3],[18,14,6],[24,12,3],[27,10,3],[30,12,6],[36,15,6],[42,12,6]]},
-  C:{bars:4,roots:[0,0,-2,0],riff:R16('0 - - - - - 0 - - - - -'),m:'l.....l.....',k:'xxxxxxxxxxxx',dk:1,s:'......x.....',h:'ride',fill:1,bombo:'x.....x.....'}}};
-Object.assign(SONGS,{
-  c0:songV(T_HARD70,126,0),c1:songV(T_SPEED,196,0),c2:songV(T_GALLOP,188,0),c3:songV(T_THRASH,172,-2),c4:songV(T_GROOVE,150,-2),c5:songV(T_THRASH,184,-3),
-  c6:songV(T_ALMA,132,-2),c7:songV(T_ALMA,144,0),c8:songV(T_CRIOLLO,140,0),c9:songV(T_ALMA,118,-3),c10:songV(T_CRIOLLO,128,2),
-  b0:songV(T_GALLOP,204,0),b1:songV(T_THRASH,200,-2),b2:songV(T_ALMA,152,-2)});
+// v23: Bandas sonoras de Ricardo Iorio en 16-bits (V8, Hermética, Almafuerte)
 function musicByEra(){LEVELS.forEach((L,i)=>{L.song='c'+i;L.bossSong=i<=2?'b0':i<=5?'b1':'b2';});}
 
 function stepWorld(){
@@ -3293,8 +3424,8 @@ function update(){tick++;readInput();if(state!=='play')noPause=40;else if(noPaus
   if(shake>0)shake=Math.max(0,shake-.3);if(flashT>0)flashT--;
   const hp=player?player.hp:0;if(player){if(hpTrail>hp)hpTrail=Math.max(hp,hpTrail-.6);else hpTrail=hp;}
   if(state==='title'){if(press.album){albumOpen();return;}
-    if(press.up){sel=(sel+unl-1)%unl;sfx('blip');}
-    if(press.down){sel=(sel+1)%unl;sfx('blip');}
+    if(press.up){sel=(sel+unl-1)%unl;sfx('blip');try{song=LEVELS[sel].song;step=0;}catch(e){}}
+    if(press.down){sel=(sel+1)%unl;sfx('blip');try{song=LEVELS[sel].song;step=0;}catch(e){}}
     if(press.left){diffSet(diff-1);sfx('blip');}
     if(press.right){diffSet(diff+1);sfx('blip');}
     if(press.start||press.atk||press.jump){audioInit();startChapter(sel,false);}}
@@ -3543,7 +3674,7 @@ function drawTitle(){
   ctx.strokeStyle=df.col;ctx.lineWidth=1.2;ctx.strokeRect(222.5,201.5,239,16);
   txt('◄ DIFICULTAD: '+df.name+' ►',342,204,df.col,6,'center');
   txt(df.desc,342,212,'#b0a2b8',4,'center');
-  if(tick%60<40)txt(coarse?'TOCÁ PARA JUGAR':'ENTER / ESPACIO PARA JUGAR',342,223,'#fff',7.5,'center');
+  const curS=SONGS[LEVELS[sel]?.song]||SONGS[song];if(curS&&curS.name)txt('♫ 16-BIT: '+curS.name,342,220,'#f2b632',5,'center');if(tick%60<40)txt(coarse?'TOCÁ PARA JUGAR':'ENTER / ESPACIO PARA JUGAR',342,228,'#fff',7,'center');
   txt('▲/▼: CAPÍTULO · ◄/►: DIFICULTAD · '+(sel<unl?LEVELS[sel].place:'BLOQUEADO'),342,233,'#9b8aa3',4,'center');
   txt(coarse?'BOTÓN ÁLBUM: TUS FIGURITAS':'G: ÁLBUM · DOBLE TOQUE: CORRER',342,241,'#f2b632',4,'center');
   txt('FAN GAME · PARODIA · SIN FINES DE LUCRO',342,248,'#7a6a80',4.5,'center');
@@ -3556,7 +3687,7 @@ function drawCard(){ctx.fillStyle='#0b0910';ctx.fillRect(0,0,W,H);
   portrait(LV.skin,px,py,psz);
   txt(LV.chap,98,28,'#e2462c',7);
   txt(LV.title,98,40,'#f2b632',14);
-  txt(LV.place,98,58,'#efe4d2',6.5);
+  txt(LV.place,98,58,'#efe4d2',6.5);const cS=SONGS[LV.song];if(cS&&cS.name)txt('♫ 16-BIT: '+cS.name,98,72,'#f2b632',6);
   ctx.fillStyle='rgba(226,70,44,.55)';ctx.fillRect(22,96,W-44,1.5);
   ctx.fillStyle='rgba(242,182,50,.35)';ctx.fillRect(22,97.5,80,1);
   let y=104;
@@ -4002,7 +4133,7 @@ resetWorld(0);monstruoInsert();alvearInit();render();
 let acc=0,lt=performance.now();const DT=1000/60;
 function frame(t){acc+=Math.min(100,t-lt);lt=t;let u=0;while(acc>=DT){update();acc-=DT;u=1;}if(u)render();requestAnimationFrame(frame);}
 requestAnimationFrame(frame);
-window.__game={truck(){cam.x=LW-W;player.x=LW-200;startTruck();},rec(ms){return new Promise(res=>{const d=AC.createMediaStreamDestination();master.connect(d);const r=new MediaRecorder(d.stream),ch=[];r.ondataavailable=e=>ch.push(e.data);r.onstop=()=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.readAsDataURL(new Blob(ch));};r.start();setTimeout(()=>r.stop(),ms);});},get audio(){return {st:AC&&AC.state,drum:!!drumG,lead:!!gLead,t:AC&&AC.currentTime};},get state(){return state;},get player(){return player;},get ents(){return ents;},get cam(){return cam;},get boss(){return boss;},get lockIdx(){return lockIdx;},get lvl(){return lvl;},get score(){return score;},set meter(v){meter=v;},get hazard(){return hazard;},
+window.__game={get songs(){return SONGS;},get song(){return song;},truck(){cam.x=LW-W;player.x=LW-200;startTruck();},rec(ms){return new Promise(res=>{const d=AC.createMediaStreamDestination();master.connect(d);const r=new MediaRecorder(d.stream),ch=[];r.ondataavailable=e=>ch.push(e.data);r.onstop=()=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.readAsDataURL(new Blob(ch));};r.start();setTimeout(()=>r.stop(),ms);});},get audio(){return {st:AC&&AC.state,drum:!!drumG,lead:!!gLead,t:AC&&AC.currentTime};},get state(){return state;},get player(){return player;},get ents(){return ents;},get cam(){return cam;},get boss(){return boss;},get lockIdx(){return lockIdx;},get lvl(){return lvl;},get score(){return score;},set meter(v){meter=v;},get hazard(){return hazard;},
   start(i){audioInit();startChapter(i,false);},skip(){if(state==='card')startIntro();},warp(i,x){ents.filter(e=>e.team===1).forEach(e=>e.gone=true);lock=null;lockIdx=i;cam.x=x-120;player.x=x;},unlockAll(){unl=LEVELS.length;},monster(){boss=mk('loteador',player.x+90,player.y);ents.push(boss);startMonsterCut();},killBoss(){boss.hp=0;},ending(){total={t:300,combo:20,hits:10};state='ending';endT=0;}};
 })();
 </script>
