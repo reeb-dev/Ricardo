@@ -260,7 +260,7 @@ function HELD(weapon,hx,hy,a2,f,st){
     if(weapon==='tomate'){for(const p of [0,1])Cc(hx,hy-3,3.2,'#d8322a',p);ctx.fillStyle='#4f8a3a';ctx.fillRect(hx-1,hy-7,2,2);}
     if(weapon==='papel'||weapon==='contrato'){ctx.fillStyle=OUT;ctx.fillRect(hx-5,hy-8,10,9);ctx.fillStyle='#ece8e0';ctx.fillRect(hx-4,hy-7,8,7);ctx.fillStyle='#8a8a92';ctx.fillRect(hx-3,hy-5,6,1);ctx.fillRect(hx-3,hy-3,5,1);}
     if(weapon==='patacon'){ctx.fillStyle=OUT;ctx.fillRect(hx-6,hy-6,12,7);ctx.fillStyle='#a8c08a';ctx.fillRect(hx-5,hy-5,10,5);ctx.fillStyle='#5a7a4a';ctx.fillRect(hx-1,hy-4,3,3);}
-    if(weapon==='bersa'||weapon==='escopeta')drawGunHeld(weapon,hx,hy,a2,f);
+    if(weapon==='bersa'||weapon==='escopeta'||weapon==='boleadora'||weapon==='damajuana')drawGunHeld(weapon,hx,hy,a2,f);
     if(weapon==='mate'){for(const p of [0,1])Cc(hx+1,hy-3,3.4,'#5c3a1e',p);ctx.strokeStyle='#c9c9cf';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(hx+1,hy-5);ctx.lineTo(hx+3,hy-10);ctx.stroke();}}
 function drawTruck(x,y,riding){
   ctx.save();ctx.translate(Math.round(x),Math.round(y));
@@ -1431,7 +1431,13 @@ const NEWLEVELS={
   LEVELS.length=0;SCENES.length=0;
   order.forEach((k,i)=>{const L=typeof k==='number'?oldL[k]:NEWLEVELS[k],S=typeof k==='number'?oldS[k]:SCENES2[k];L.chap='CAPÍTULO '+(i+1);LEVELS.push(L);SCENES.push(S);});
   for(const L of LEVELS){const b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;}
-  LEVELS[9].guns=[[900,'escopeta'],[1600,'bersa']];LEVELS[7].guns=[[1500,'escopeta']];LEVELS[4].guns=[[1500,'bersa']];
+  LEVELS[9].guns=[[900,'escopeta'],[1600,'damajuana']];
+  LEVELS[7].guns=[[800,'damajuana'],[1500,'escopeta']];
+  LEVELS[4].guns=[[1500,'bersa']];
+  LEVELS[8].guns=[[800,'boleadora'],[1700,'boleadora']];
+  LEVELS[10].guns=[[700,'boleadora'],[1400,'damajuana'],[1900,'escopeta']];
+  LEVELS[2].guns=[[1200,'bersa']];
+  LEVELS[3].guns=[[1400,'bersa']];
 })();
 
 
@@ -1718,22 +1724,32 @@ function updNPC(n){if(n.ally){updAlly(n);return;}
 
 // v9: armas de fuego de dibujito (escopeta y Bersa), ataque con títulos de sus discos, peligros nuevos
 Object.assign(MOVES,{gun:{dmg:16,kd:1,h:40},buck:{dmg:12,kd:1.4,h:40},frase:{dmg:14,kd:1.1,h:40}});
-const GUNS={bersa:{name:'SIFÓN',ammo:12,dur:10,col:'#9fd0ff'},escopeta:{name:'CAJÓN DE PAPAS',ammo:6,dur:20,col:'#d8a24a'}};
+const GUNS={
+  bersa:{name:'SIFÓN DE SODA',ammo:12,dur:10,col:'#9fd0ff'},
+  escopeta:{name:'CAJÓN DE PAPAS',ammo:6,dur:20,col:'#d8a24a'},
+  boleadora:{name:'BOLEADORAS CRIOLLAS',ammo:5,dur:18,col:'#d8a060'},
+  damajuana:{name:'DAMAJUANA DE TINTO',ammo:4,dur:16,col:'#9c27b0'}
+};
 function fireGun(f){f.state='shoot';f.t=0;}
 function gunTick(f){const G=GUNS[f.hold];f.t++;if(!G){f.state='idle';return;}
   if(f.t===3){const z=34*f.st.scale,x=f.x+f.face*22;
-    if(f.hold==='bersa'){shots.push({x,y:f.y,z,vx:f.face*7,owner:f,t:0,k:'soda',back:true,mv:MOVES.gun,life:46});sfx('gun');}
-    else{for(const dy of [-6,0,6])shots.push({x,y:f.y+dy,z:z+dy*.5,vx:f.face*6.5,owner:f,t:0,k:'papa',back:true,mv:MOVES.buck,life:44});sfx('escopeta');shake=Math.max(shake,2);}
-    parts.push({k:'wave',x,y:f.y,t:0,max:8,col:'255,220,120'});floatTxt(x,f.y-z-16,f.hold==='bersa'?'¡PSSSHH!':'¡TOMÁ PAPAS!','#ffe08a');
+    if(f.hold==='bersa'){shots.push({x,y:f.y,z,vx:f.face*7,owner:f,t:0,k:'soda',back:true,mv:MOVES.gun,life:46});sfx('gun');parts.push({k:'wave',x,y:f.y,t:0,max:8,col:'160,220,255'});floatTxt(x,f.y-z-16,'¡PSSSHH!','#9fd0ff');}
+    else if(f.hold==='boleadora'){shots.push({x,y:f.y,z:z+2,vx:f.face*7.5,owner:f,t:0,k:'boleadora',back:true,mv:MOVES.buck,life:50});sfx('whoosh');floatTxt(x,f.y-z-16,'¡A LAS PATAS!','#d8a060');shake=Math.max(shake,1);}
+    else if(f.hold==='damajuana'){shots.push({x,y:f.y,z:z+4,vx:f.face*6,vz:1.2,owner:f,t:0,k:'damajuana',back:true,mv:MOVES.buck,life:48});sfx('whoosh');floatTxt(x,f.y-z-16,'¡DESCORCHE!','#d880d8');}
+    else{for(const dy of [-6,0,6])shots.push({x,y:f.y+dy,z:z+dy*.5,vx:f.face*6.5,owner:f,t:0,k:'papa',back:true,mv:MOVES.buck,life:44});sfx('escopeta');shake=Math.max(shake,2);parts.push({k:'wave',x,y:f.y,t:0,max:8,col:'255,220,120'});floatTxt(x,f.y-z-16,'¡TOMÁ PAPAS!','#ffe08a');}
     f.ammo--;if(f.ammo<=0){floatTxt(f.x,f.y-80,'SIN BALAS','#ff5a3a');f.hold=null;}}
   if(f.t>=G.dur)f.state='idle';}
 function pickGun(f,it){f.hold=it.kind;f.ammo=it.ammo||GUNS[it.kind].ammo;it.gone=true;sfx('pickup');floatTxt(f.x,f.y-80,GUNS[it.kind].name+'!',GUNS[it.kind].col);}
 function drawGunItem(k,X,y){const R=(a,b,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(a,b,w,h);};
   if(k==='bersa'){R(X-5,y-20,10,20,OUT);R(X-4,y-19,8,18,'#5aa0c8');R(X-3,y-18,2,16,'rgba(255,255,255,.35)');R(X-3,y-24,6,5,'#9aa0a8');R(X+2,y-23,5,2,'#9aa0a8');}
+  else if(k==='boleadora'){ctx.strokeStyle=OUT;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(X-6,y-14,4,0,7);ctx.arc(X+6,y-14,4,0,7);ctx.arc(X,y-6,4,0,7);ctx.stroke();ctx.fillStyle='#5a3a1e';ctx.fill();ctx.strokeStyle='#b88a4a';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(X-6,y-14);ctx.lineTo(X,y-10);ctx.lineTo(X+6,y-14);ctx.moveTo(X,y-10);ctx.lineTo(X,y-6);ctx.stroke();}
+  else if(k==='damajuana'){R(X-6,y-20,12,18,OUT);R(X-5,y-19,10,16,'#7a5a3a');R(X-3,y-24,6,6,'#4a245a');R(X-2,y-25,4,2,'#d8c29a');for(let i=0;i<3;i++)R(X-5,y-17+i*5,10,1,'#4a3420');}
   else{R(X-12,y-14,24,14,OUT);R(X-11,y-13,22,12,'#a8783a');R(X-11,y-9,22,1,'#6a4426');R(X-11,y-5,22,1,'#6a4426');for(let k=0;k<4;k++){ctx.fillStyle='#c89a5a';ctx.beginPath();ctx.ellipse(X-7+k*5,y-15,2.6,2,0,0,7);ctx.fill();}}
   if(tick%40<20){ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.3;ctx.drawImage(glow('#ffe9a8'),X-14,y-20,28,28);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';}}
 function drawGunHeld(k,hx,hy,a2,f){const dx=Math.sin(a2),dy=Math.cos(a2);
   if(k==='bersa'){for(const p of [0,1])L(hx-dy*4,hy+dx*4,hx+dy*6,hy-dx*6,5.4,'#5aa0c8',p);L(hx+dy*6,hy-dx*6,hx+dy*6+dx*5,hy-dx*6+dy*5,2,'#9aa0a8',1);}
+  else if(k==='boleadora'){ctx.strokeStyle=OUT;ctx.lineWidth=2;ctx.beginPath();ctx.arc(hx+dx*12,hy+dy*12,4,0,7);ctx.arc(hx-dy*8,hy+dx*8,3.5,0,7);ctx.stroke();ctx.fillStyle='#5a3a1e';ctx.fill();ctx.strokeStyle='#b88a4a';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(hx,hy);ctx.lineTo(hx+dx*12,hy+dy*12);ctx.moveTo(hx,hy);ctx.lineTo(hx-dy*8,hy+dx*8);ctx.stroke();}
+  else if(k==='damajuana'){ctx.fillStyle=OUT;ctx.fillRect(hx-5,hy-12,10,14);ctx.fillStyle='#7a5a3a';ctx.fillRect(hx-4,hy-11,8,12);ctx.fillStyle='#4a245a';ctx.fillRect(hx-2,hy-16,4,5);}
   else{ctx.fillStyle=OUT;ctx.fillRect(hx-7,hy-9,14,10);ctx.fillStyle='#a8783a';ctx.fillRect(hx-6,hy-8,12,8);ctx.fillStyle='#c89a5a';ctx.fillRect(hx-5,hy-10,4,3);ctx.fillRect(hx+1,hy-10,4,3);}
   if(f&&f.state==='shoot'&&f.t>=3&&f.t<7&&false){const mx=hx+dx*(k==='bersa'?9:20),my=hy+dy*(k==='bersa'?9:20);ctx.fillStyle='#fff2a8';ctx.beginPath();ctx.arc(mx,my,k==='bersa'?3:5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ff8a2a';ctx.beginPath();ctx.arc(mx+dx*2,my+dy*2,k==='bersa'?2:3.4,0,Math.PI*2);ctx.fill();}}
 // títulos de discos por época: el ataque especial los larga por el aire
@@ -3591,7 +3607,23 @@ function drawShot(s){const X=Math.round(s.x-cam.x),Y=Math.round(s.y-s.z);ctx.fil
     ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,14,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(0,0,4,0,Math.PI*2);ctx.fill();
   } else if(k==='baba'){const gl=ctx.createRadialGradient(0,0,1,0,0,16);gl.addColorStop(0,'rgba(220,255,240,.95)');gl.addColorStop(.35,s.back?'rgba(255,210,120,.7)':'rgba(120,230,200,.6)');gl.addColorStop(1,'rgba(80,200,180,0)');ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,16,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f4fff8';ctx.beginPath();ctx.arc(0,0,4,0,Math.PI*2);ctx.fill();}
-  else if(k==='patacon'){ctx.fillStyle=OUT;ctx.fillRect(-7,-4,14,8);ctx.fillStyle=s.back?'#ffd27a':'#a8c08a';ctx.fillRect(-6,-3,12,6);ctx.fillStyle='#5a7a4a';ctx.fillRect(-2,-2,4,4);}
+  else if(k==='boleadora'){
+    ctx.rotate(s.t*.6);
+    ctx.strokeStyle=OUT;ctx.lineWidth=2;
+    for(let a=0;a<3;a++){
+      const ang=a*Math.PI*2/3;
+      const bx=Math.cos(ang)*11,by=Math.sin(ang)*11;
+      ctx.beginPath();ctx.arc(bx,by,3.5,0,7);ctx.stroke();
+      ctx.fillStyle='#5a3a20';ctx.fill();
+      ctx.strokeStyle='#d8a060';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(bx,by);ctx.stroke();
+    }
+  } else if(k==='damajuana'){
+    ctx.rotate(s.t*.3);
+    ctx.fillStyle=OUT;ctx.fillRect(-6,-7,12,14);
+    ctx.fillStyle='#7a5a3a';ctx.fillRect(-5,-6,10,12);
+    ctx.fillStyle='#4a205a';ctx.fillRect(-2,-10,4,4);
+  } else if(k==='patacon'){ctx.fillStyle=OUT;ctx.fillRect(-7,-4,14,8);ctx.fillStyle=s.back?'#ffd27a':'#a8c08a';ctx.fillRect(-6,-3,12,6);ctx.fillStyle='#5a7a4a';ctx.fillRect(-2,-2,4,4);}
   else{ctx.fillStyle=OUT;ctx.fillRect(-4,-6,8,12);ctx.fillStyle=s.back?'#ffd27a':'#9fd0ff';ctx.fillRect(-3,-5,6,10);}
   ctx.restore();}
 function drawZorra(){ctx.fillStyle=OUT;ctx.fillRect(-24,-26,48,22);ctx.fillStyle='#6a4426';ctx.fillRect(-23,-25,46,20);for(let k=0;k<3;k++){ctx.fillStyle='#8a6a42';ctx.fillRect(-21+k*15,-38,13,14);ctx.fillStyle='#6a4a2a';ctx.fillRect(-19+k*15,-34,9,2);}
