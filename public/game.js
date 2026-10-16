@@ -1796,74 +1796,229 @@ function updTruck(){const T=truck;T.t++;if(banner&&--banner.t<=0)banner=null;
 function drawTruckL(X){ctx.save();ctx.translate(Math.round(X),224);ctx.scale(-1.5,1.5);drawTruck(0,0,true);ctx.restore();
   for(let k=0;k<3;k++){ctx.fillStyle=OUT;ctx.fillRect(Math.round(X)-14-k*20,164,19,15);ctx.fillStyle='#8a6a42';ctx.fillRect(Math.round(X)-13-k*20,165,17,13);ctx.fillStyle='#c8a26a';for(let d=0;d<3;d++){ctx.beginPath();ctx.arc(Math.round(X)-9-k*20+d*5,164,2.4,0,7);ctx.fill();}}}
 
-// v10: tu propia música. Los temas se eligen desde tu compu y suenan solo en tu navegador: no se suben a ningún lado.
-const LM={askOff:1,retro:true,tracks:[],cur:null,want:null,el:null,label:null,labT:0,era:-1};
-const ERA_KEYS=[['v8','luchando','paso mas','inicuos','destruccion'],['hermetica','acido','vaciamiento','interpretes','oeste'],
-  ['almafuerte','guanaco','entorno','fondo blanco','piedra libre','ultimando','toro','pampa','trillando','peso argento','iorio','flavio','pelusa','tierra adentro']];
-function lmNorm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
-function lmEraOf(t){const n=lmNorm(t.path);for(let e=0;e<3;e++)if(ERA_KEYS[e].some(k=>n.includes(k)))return e;return -1;}
+// v24: Banda sonora 16-bits de Ricardo Iorio (V8, Hermética, Almafuerte, Solista) integrada directamente en el proyecto
+const BUILTIN_TRACKS = [
+  { era: 0, key: 'c0', name: 'Momento de luchar (V8)', url: 'audio/c0.mp3' },
+  { era: 0, key: 'c1', name: 'Brigadas metálicas (V8)', url: 'audio/c1.mp3' },
+  { era: 0, key: 'c2', name: 'Destrucción (V8)', url: 'audio/c2.mp3' },
+  { era: 0, key: 'b0', name: 'Cautivos del sistema (V8)', url: 'audio/b0.mp3' },
+  { era: 1, key: 'c3', name: 'Tú eres su seguridad (Hermética)', url: 'audio/c3.mp3' },
+  { era: 1, key: 'c4', name: 'Memoria de siglos (Hermética)', url: 'audio/c4.mp3' },
+  { era: 1, key: 'c5', name: 'Gil trabajador (Hermética)', url: 'audio/c5.mp3' },
+  { era: 1, key: 'b1', name: 'Olvídalo y volverá por más (Hermética)', url: 'audio/b1.mp3' },
+  { era: 2, key: 'c6', name: 'El amasijo de un gran sueño (Almafuerte)', url: 'audio/c6.mp3' },
+  { era: 2, key: 'c7', name: 'Sé vos (Almafuerte)', url: 'audio/c7.mp3' },
+  { era: 2, key: 'c8', name: 'Toro y pampa (Almafuerte)', url: 'audio/c8.mp3' },
+  { era: 2, key: 'c10', name: 'A vos amigo (Almafuerte)', url: 'audio/c10.mp3' },
+  { era: 2, key: 'b2', name: 'Triunfo (Almafuerte)', url: 'audio/b2.mp3' },
+  { era: 2, key: 'intro', name: 'Tierra adentro (Iorio - Flavio)', url: 'audio/intro.mp3' }
+];
+
+const LM = { askOff: 1, retro: true, tracks: [], userTracks: [], cur: null, want: null, el: null, label: null, labT: 0, era: -1 };
+const ERA_KEYS = [
+  ['v8', 'luchando', 'paso mas', 'inicuos', 'destruccion', 'brigadas', 'cautivo', 'luchar'],
+  ['hermetica', 'acido', 'vaciamiento', 'interpretes', 'oeste', 'seguridad', 'siglos', 'gil', 'olvidalo'],
+  ['almafuerte', 'guanaco', 'entorno', 'fondo blanco', 'piedra libre', 'ultimando', 'toro', 'pampa', 'trillando', 'peso argento', 'iorio', 'flavio', 'pelusa', 'tierra adentro', 'vos amigo', 'amasijo', 'triunfo', 'se vos']
+];
+
+function lmNorm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+function lmEraOf(t){const n=lmNorm(t.path||t.name||'');for(let e=0;e<3;e++)if(ERA_KEYS[e].some(k=>n.includes(k)))return e;return -1;}
 function lmChapterEra(){return lvl<=2?0:lvl<=5?1:2;}
-function lmPick(){const n=LM.tracks.length;if(!n)return null;if(LV&&LV.lmKey&&!(state==='play'&&boss&&!boss.gone)){const t=LM.tracks.find(t=>lmNorm(t.path).includes(LV.lmKey));if(t)return t;}const era=lmChapterEra(),pool=LM.tracks.filter(t=>t.era===era),list=pool.length?pool:LM.tracks;
-  const fight=state==='play'&&boss&&!boss.gone?1:0;return list[(lvl*3+fight+(LM.skip||0))%list.length];}
+
+function lmPick(){
+  const pool = LM.userTracks.length ? LM.userTracks : LM.tracks;
+  if(!pool.length) return null;
+  const isBoss = state==='play' && boss && !boss.gone;
+  if(LV && !LM.userTracks.length){
+    const targetKey = isBoss ? LV.bossSong : LV.song;
+    if(targetKey){
+      const match = pool.find(t=>t.key===targetKey);
+      if(match) return match;
+    }
+    if(LV.lmKey && !isBoss){
+      const matchK = pool.find(t=>lmNorm(t.name).includes(LV.lmKey) || lmNorm(t.key||'').includes(LV.lmKey));
+      if(matchK) return matchK;
+    }
+  }
+  const era = lmChapterEra();
+  const byEra = pool.filter(t=>t.era===era);
+  const list = byEra.length ? byEra : pool;
+  const fight = isBoss ? 1 : 0;
+  return list[(lvl*3 + fight + (LM.skip||0)) % list.length];
+}
+
 function lmDB(){return new Promise((res,rej)=>{try{const q=indexedDB.open('ricardio-musica',1);q.onupgradeneeded=()=>q.result.createObjectStore('t');q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);}catch(e){rej(e);}});}
 function lmSave(files){lmDB().then(db=>{const tx=db.transaction('t','readwrite');tx.objectStore('t').put(files.map(f=>({name:f.name,path:f.webkitRelativePath||f.name,blob:f})),'lista');}).catch(()=>{});}
-function lmRestore(){lmDB().then(db=>{const q=db.transaction('t').objectStore('t').get('lista');q.onsuccess=()=>{const L=q.result;if(L&&L.length&&!LM.tracks.length){lmLoad(L.map(o=>{const f=o.blob;try{Object.defineProperty(f,'webkitRelativePath',{value:o.path});}catch(e){}return f;}),true);LM.label=LM.tracks.length+' TEMAS GUARDADOS · 16 BITS';LM.labT=220;}};}).catch(()=>{});}
-function lmLoad(files,restored){const audio=[...files].filter(f=>/\.(mp3|m4a|aac|wav|ogg|flac|opus)$/i.test(f.name)||(f.type||'').startsWith('audio/'));
+function lmRestore(){
+  lmDB().then(db=>{
+    const q=db.transaction('t').objectStore('t').get('lista');
+    q.onsuccess=()=>{
+      const L=q.result;
+      if(L && L.length){
+        lmLoad(L.map(o=>{const f=o.blob;try{Object.defineProperty(f,'webkitRelativePath',{value:o.path});}catch(e){}return f;}),true);
+      }
+    };
+  }).catch(()=>{});
+}
+
+function lmLoad(files,restored){
+  const audio=[...files].filter(f=>/\.(mp3|m4a|aac|wav|ogg|flac|opus)$/i.test(f.name)||(f.type||'').startsWith('audio/'));
   if(!audio.length){LM.label='NO ENCONTRÉ TEMAS DE AUDIO';LM.labT=200;return;}
-  for(const t of LM.tracks)URL.revokeObjectURL(t.url);
-  LM.tracks=audio.sort((a,b)=>(a.webkitRelativePath||a.name).localeCompare(b.webkitRelativePath||b.name)).map(f=>{const t={name:f.name.replace(/\.[^.]+$/,'').replace(/^\d+[\s._-]*/,''),path:f.webkitRelativePath||f.name,url:URL.createObjectURL(f)};t.era=lmEraOf(t);return t;});
-  LM.cur=null;LM.label=LM.tracks.length+' TEMAS CARGADOS · 16 BITS';LM.labT=200;if(!restored)lmSave(audio);}
-function lmSetup(){try{const stage=document.getElementById('stage');
-  const mk=(id,txt,css)=>{const b=document.createElement('button');b.id=id;b.type='button';b.textContent=txt;b.style.cssText='position:absolute;z-index:5;font:7px var(--font-pixel,monospace);padding:6px 8px;border-radius:6px;border:2px solid #e2462c;background:rgba(18,14,22,.85);color:#f2b632;cursor:pointer;'+css;stage.appendChild(b);return b;};
-  const inDir=document.createElement('input');inDir.type='file';inDir.multiple=true;inDir.accept='audio/*';inDir.setAttribute('webkitdirectory','');inDir.style.display='none';stage.appendChild(inDir);
-  const inFiles=document.createElement('input');inFiles.type='file';inFiles.multiple=true;inFiles.accept='audio/*';inFiles.style.display='none';stage.appendChild(inFiles);
-  const bar=document.createElement('div');bar.style.cssText='position:absolute;z-index:5;left:6px;top:6px;right:52px;display:flex;flex-wrap:wrap;gap:4px;pointer-events:none;';stage.appendChild(bar);
-  const mk2=(id,txt)=>{const b=mk(id,txt,'position:static;pointer-events:auto;');bar.appendChild(b);return b;};
-  const b1=mk2('bMusInfo','♫ 16-BIT IORIO: ON');b1.style.borderColor='#f2b632';b1.addEventListener('click',()=>{musicOn=!musicOn;b1.textContent=musicOn?'♫ 16-BIT IORIO: ON':'♫ 16-BIT IORIO: OFF';sfx('blip');});const b2=mk2('bMusFiles','CARGAR MP3 (OPCIONAL)');const b3=mk2('bMusRetro','FILTRO RETRO: SÍ');
-  const bDiff=mk2('bDiff','DIFICULTAD: '+DIFFS[diff].name);bDiff.style.borderColor=DIFFS[diff].col;bDiff.style.color=DIFFS[diff].col;
-  bDiff.addEventListener('click',()=>{diffSet(diff+1);sfx('blip');});
-  const bMenu=mk2('bMenu','VOLVER AL MENÚ');bMenu.style.borderColor='#ff4a3a';bMenu.style.color='#ff6a5a';
-  bMenu.addEventListener('click',()=>{toTitleMenu();});
-  // cartel grande al inicio: los temas de Iorio los pone el jugador desde su equipo (no van dentro del juego)
-  const ov=document.createElement('div');ov.id='lmAsk';ov.style.cssText='position:absolute;z-index:6;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92%,420px);padding:14px;border:3px solid #e2462c;border-radius:10px;background:rgba(12,9,14,.94);color:#f2e6c8;font:8px/1.9 var(--font-pixel,monospace);text-align:center;display:none;';
-  ov.innerHTML='<div style="color:#f2b632;font-size:10px;margin-bottom:6px">PONÉ LOS TEMAS DE IORIO</div><div>Elegí tus MP3 de V8, Hermética y Almafuerte. Suenan en 16 bits, según la época de cada capítulo, y quedan guardados para la próxima.</div>';
-  const big=(txt,fn,main)=>{const b=document.createElement('button');b.type='button';b.textContent=txt;b.style.cssText='display:block;width:100%;margin-top:8px;font:9px var(--font-pixel,monospace);padding:10px;border-radius:8px;cursor:pointer;border:2px solid '+(main?'#e2462c;background:#e2462c;color:#120e10':'#5a5060;background:transparent;color:#bdb2a0');b.addEventListener('click',e=>{e.stopPropagation();fn();});ov.appendChild(b);return b;};
-  big('ELEGIR TEMAS',()=>{audioInit();inFiles.click();},true);big('ELEGIR CARPETA',()=>{audioInit();inDir.click();},true);
-  big('AHORA NO',()=>{LM.askOff=1;ov.style.display='none';},false);stage.appendChild(ov);LM.ov=ov;b3.addEventListener('click',()=>{LM.retro=!LM.retro;b3.textContent='MODO 16 BITS: '+(LM.retro?'SÍ':'NO');lmGraph();});
-  b1.title='Elegí la carpeta con tus discos de V8, Hermética y Almafuerte';b2.title='Elegí temas sueltos';
-  b1.addEventListener('click',()=>{audioInit();inDir.click();});b2.addEventListener('click',()=>{audioInit();inFiles.click();});
-  inDir.addEventListener('change',()=>lmLoad(inDir.files));inFiles.addEventListener('change',()=>lmLoad(inFiles.files));
-  LM.btns=[b1,b2,b3,bDiff,bMenu];LM.el=new Audio();LM.el.volume=.75;LM.el.addEventListener('ended',()=>{LM.skip=(LM.skip||0)+1;LM.cur=null;});
-}catch(e){}}
-// modo juego: filtro que se abre en las peleas, retro opcional (bits reducidos) y cámara lenta al caer un jefe
-// modo 16 bits: re-muestreo a ~16 kHz con retención (como un chip de consola), cuantizado, filtro de cartucho y eco de sala
-function lmGraph(){if(!AC||!LM.el)return;try{if(!LM.src){LM.src=AC.createMediaElementSource(LM.el);LM.lp=AC.createBiquadFilter();LM.lp.type='lowpass';LM.lp.frequency.value=20000;LM.lp.Q.value=.8;
-    LM.chip=AC.createScriptProcessor(2048,2,2);let hl=0,hr=0,ph=0;
-    LM.chip.onaudioprocess=e=>{const a=e.inputBuffer,b=e.outputBuffer,L=a.getChannelData(0),R=a.numberOfChannels>1?a.getChannelData(1):L,oL=b.getChannelData(0),oR=b.getChannelData(1);
-      if(!LM.retro){oL.set(L);oR.set(R);return;}const step=AC.sampleRate/11025,q=30;
-      for(let i=0;i<L.length;i++){ph+=1;if(ph>=step){ph-=step;const m=(L[i]+R[i])*.5,sd=(L[i]-R[i])*.25;const sq=x=>{const v=Math.tanh(x*2.2);return Math.round(v*q)/q;};hl=sq(m+sd*.6);hr=sq(m-sd*.6);}oL[i]=hl;oR[i]=hr;}};
-    LM.cart=AC.createBiquadFilter();LM.cart.type='lowpass';LM.cart.frequency.value=20000;LM.cart.Q.value=.5;
-    LM.echo=AC.createDelay(.5);LM.echo.delayTime.value=.19;LM.fb=AC.createGain();LM.fb.gain.value=0;LM.wet=AC.createGain();LM.wet.gain.value=0;
-    LM.g=AC.createGain();LM.g.gain.value=1;LM.src.connect(LM.lp);LM.lp.connect(LM.chip);LM.chip.connect(LM.cart);LM.cart.connect(LM.g);
-    LM.cart.connect(LM.echo);LM.echo.connect(LM.fb);LM.fb.connect(LM.echo);LM.echo.connect(LM.wet);LM.wet.connect(LM.g);LM.g.connect(master);}
-  const r=!!LM.retro,t=AC.currentTime;LM.cart.frequency.setTargetAtTime(r?5200:20000,t,.05);LM.fb.gain.setTargetAtTime(r?.32:0,t,.05);LM.wet.gain.setTargetAtTime(r?.22:0,t,.05);}catch(e){}}
-function lmOn(){return LM.tracks.length>0;}
-function lmTick(){if(!LM.el)return;if(LM.labT>0)LM.labT--;
+  for(const t of LM.userTracks)URL.revokeObjectURL(t.url);
+  LM.userTracks=audio.sort((a,b)=>(a.webkitRelativePath||a.name).localeCompare(b.webkitRelativePath||b.name)).map(f=>{
+    const t={name:f.name.replace(/\.[^.]+$/,'').replace(/^\d+[\s._-]*/,''),path:f.webkitRelativePath||f.name,url:URL.createObjectURL(f)};
+    t.era=lmEraOf(t);
+    return t;
+  });
+  LM.cur=null;
+  LM.label=LM.userTracks.length+' TEMAS EXTERNOS CARGADOS · 16 BITS';
+  LM.labT=200;
+  if(!restored)lmSave(audio);
+}
+
+function lmInitBuiltin(){
+  LM.tracks = BUILTIN_TRACKS.map(t=>({
+    name: t.name,
+    path: t.url,
+    url: t.url,
+    era: t.era,
+    key: t.key
+  }));
+}
+
+function lmSetup(){
+  try{
+    lmInitBuiltin();
+    const stage=document.getElementById('stage');
+    const mk=(id,txt,css)=>{
+      const b=document.createElement('button');
+      b.id=id;b.type='button';b.textContent=txt;
+      b.style.cssText='position:absolute;z-index:5;font:7px var(--font-pixel,monospace);padding:6px 8px;border-radius:6px;border:2px solid #e2462c;background:rgba(18,14,22,.85);color:#f2b632;cursor:pointer;'+css;
+      stage.appendChild(b);
+      return b;
+    };
+    const inDir=document.createElement('input');inDir.type='file';inDir.multiple=true;inDir.accept='audio/*';inDir.setAttribute('webkitdirectory','');inDir.style.display='none';stage.appendChild(inDir);
+    const inFiles=document.createElement('input');inFiles.type='file';inFiles.multiple=true;inFiles.accept='audio/*';inFiles.style.display='none';stage.appendChild(inFiles);
+    const bar=document.createElement('div');bar.style.cssText='position:absolute;z-index:5;left:6px;top:6px;right:52px;display:flex;flex-wrap:wrap;gap:4px;pointer-events:none;';stage.appendChild(bar);
+    const mk2=(id,txt)=>{const b=mk(id,txt,'position:static;pointer-events:auto;');bar.appendChild(b);return b;};
+    const b1=mk2('bMusInfo','♫ 16-BIT IORIO: ON');b1.style.borderColor='#f2b632';
+    b1.addEventListener('click',()=>{
+      musicOn=!musicOn;
+      b1.textContent=musicOn?'♫ 16-BIT IORIO: ON':'♫ 16-BIT IORIO: OFF';
+      sfx('blip');
+    });
+    const b2=mk2('bMusFiles','CARGAR MP3 (OPCIONAL)');
+    const b3=mk2('bMusRetro','FILTRO RETRO: SÍ');
+    const bDiff=mk2('bDiff','DIFICULTAD: '+DIFFS[diff].name);
+    bDiff.style.borderColor=DIFFS[diff].col;bDiff.style.color=DIFFS[diff].col;
+    bDiff.addEventListener('click',()=>{diffSet(diff+1);sfx('blip');});
+    const bMenu=mk2('bMenu','VOLVER AL MENÚ');bMenu.style.borderColor='#ff4a3a';bMenu.style.color='#ff6a5a';
+    bMenu.addEventListener('click',()=>{toTitleMenu();});
+
+    b2.addEventListener('click',()=>{audioInit();inFiles.click();});
+    b3.addEventListener('click',()=>{LM.retro=!LM.retro;b3.textContent='FILTRO RETRO: '+(LM.retro?'SÍ':'NO');lmGraph();sfx('blip');});
+    inDir.addEventListener('change',()=>lmLoad(inDir.files));
+    inFiles.addEventListener('change',()=>lmLoad(inFiles.files));
+
+    LM.btns=[b1,b2,b3,bDiff,bMenu];
+    LM.el=new Audio();
+    LM.el.volume=.75;
+    LM.el.preload='auto';
+    LM.el.addEventListener('ended',()=>{LM.skip=(LM.skip||0)+1;LM.cur=null;});
+    LM.el.addEventListener('error',()=>{
+      console.warn('Audio local fallback');
+    });
+  }catch(e){console.error(e);}
+}
+
+function lmGraph(){
+  if(!AC||!LM.el)return;
+  try{
+    if(!LM.src){
+      LM.src=AC.createMediaElementSource(LM.el);
+      LM.lp=AC.createBiquadFilter();LM.lp.type='lowpass';LM.lp.frequency.value=20000;LM.lp.Q.value=.8;
+      LM.chip=AC.createScriptProcessor(2048,2,2);let hl=0,hr=0,ph=0;
+      LM.chip.onaudioprocess=e=>{
+        const a=e.inputBuffer,b=e.outputBuffer,L=a.getChannelData(0),R=a.numberOfChannels>1?a.getChannelData(1):L,oL=b.getChannelData(0),oR=b.getChannelData(1);
+        if(!LM.retro){oL.set(L);oR.set(R);return;}
+        const step=AC.sampleRate/11025,q=30;
+        for(let i=0;i<L.length;i++){
+          ph+=1;
+          if(ph>=step){
+            ph-=step;
+            const m=(L[i]+R[i])*.5,sd=(L[i]-R[i])*.25;
+            const sq=x=>{const v=Math.tanh(x*2.2);return Math.round(v*q)/q;};
+            hl=sq(m+sd*.6);hr=sq(m-sd*.6);
+          }
+          oL[i]=hl;oR[i]=hr;
+        }
+      };
+      LM.cart=AC.createBiquadFilter();LM.cart.type='lowpass';LM.cart.frequency.value=20000;LM.cart.Q.value=.5;
+      LM.echo=AC.createDelay(.5);LM.echo.delayTime.value=.19;
+      LM.fb=AC.createGain();LM.fb.gain.value=0;
+      LM.wet=AC.createGain();LM.wet.gain.value=0;
+      LM.g=AC.createGain();LM.g.gain.value=1;
+
+      LM.src.connect(LM.lp);LM.lp.connect(LM.chip);LM.chip.connect(LM.cart);LM.cart.connect(LM.g);
+      LM.cart.connect(LM.echo);LM.echo.connect(LM.fb);LM.fb.connect(LM.echo);LM.echo.connect(LM.wet);LM.wet.connect(LM.g);
+      LM.g.connect(master);
+    }
+    const r=!!LM.retro,t=AC.currentTime;
+    LM.cart.frequency.setTargetAtTime(r?5200:20000,t,.05);
+    LM.fb.gain.setTargetAtTime(r?.32:0,t,.05);
+    LM.wet.gain.setTargetAtTime(r?.22:0,t,.05);
+  }catch(e){}
+}
+
+function lmOn(){return (LM.tracks.length>0 || LM.userTracks.length>0);}
+
+function lmTick(){
+  if(!LM.el)return;
+  if(LM.labT>0)LM.labT--;
   for(const b of LM.btns||[]){
     if(b.id==='bMenu')b.style.display=(state==='pause'||state==='gameover')?'block':'none';
     else b.style.display=(state==='title'||state==='pause')?'block':'none';
   }
   if(LM.ov)LM.ov.style.display='none';
   const want=musicOn&&lmOn()&&state!=='gameover';
-  if(!want){if(!LM.el.paused)LM.el.pause();return;}
-  const t=lmPick();if(t&&t!==LM.cur){LM.cur=t;LM.el.src=t.url;LM.el.play().catch(()=>{});LM.label='SUENA: '+t.name.toUpperCase();LM.labT=240;}
-  else if(LM.el.paused&&LM.cur)LM.el.play().catch(()=>{});
+  if(!want){
+    if(!LM.el.paused)LM.el.pause();
+    return;
+  }
+  const t=lmPick();
+  if(t&&t!==LM.cur){
+    LM.cur=t;
+    LM.el.src=t.url;
+    LM.el.play().catch(()=>{});
+    LM.label='♫ 16-BIT: '+t.name.toUpperCase();
+    LM.labT=240;
+  } else if(LM.el.paused&&LM.cur){
+    LM.el.play().catch(()=>{});
+  }
   if(AC&&!LM.src)lmGraph();
-  if(LM.lp){const calm=state==='title'||state==='card'||state==='pause'||state==='results'||(state==='play'&&!combatMix);LM.lp.frequency.setTargetAtTime(calm?1100:20000,AC.currentTime,.25);}
-  const slow=state==='play'&&slowT>0;LM.el.preservesPitch=!slow;LM.el.playbackRate=slow?.62:1;
-  LM.el.volume=state==='pause'?.25:.8;}
-function lmDraw(){if(LM.labT>0&&LM.label){ctx.globalAlpha=Math.min(1,LM.labT/30);const w=Math.min(300,U(LM.label).length*5+16);ctx.fillStyle='rgba(8,6,11,.8)';ctx.fillRect(W/2-w/2,H-20,w,13);txt(LM.label.slice(0,56),W/2,H-17,'#f2b632',5,'center');ctx.globalAlpha=1;}}
-lmSetup();lmRestore();
+  if(LM.lp){
+    const calm=state==='title'||state==='card'||state==='pause'||state==='results'||(state==='play'&&!combatMix);
+    LM.lp.frequency.setTargetAtTime(calm?1400:20000,AC.currentTime,.25);
+  }
+  const slow=state==='play'&&slowT>0;
+  LM.el.preservesPitch=!slow;
+  LM.el.playbackRate=slow?.62:1;
+  LM.el.volume=state==='pause'?.25:.8;
+}
+
+function lmDraw(){
+  if(LM.labT>0&&LM.label){
+    ctx.globalAlpha=Math.min(1,LM.labT/30);
+    const w=Math.min(320,U(LM.label).length*5+18);
+    ctx.fillStyle='rgba(8,6,11,.85)';
+    ctx.fillRect(W/2-w/2,H-20,w,13);
+    txt(LM.label.slice(0,56),W/2,H-17,'#f2b632',5,'center');
+    ctx.globalAlpha=1;
+  }
+}
+
+lmSetup();
+lmRestore();
 
 // v10: retratos más realistas (cinemáticas, título y HUD): cara con volumen, ojos, nariz, boca, pelo en mechones
 function faceSpec(st){const I=st.ior;
