@@ -3337,7 +3337,7 @@ function drawTitle(){
   ctx.save();ctx.beginPath();ctx.rect(14,40,190,214);ctx.clip();drawFaceFront(st,10,46,200);ctx.restore();
   ctx.strokeStyle='#e2462c';ctx.lineWidth=2;ctx.strokeRect(14,40,190,214);
   txt(L5.place.split('·').pop().trim(),109,240,'#f2b632',8,'center');
-  ctx.save();ctx.translate(342,30);ctx.rotate(-.05);txt('RICARDIO',3,3,'#7a1a14',26,'center');txt('RICARDIO',0,0,'#f2b632',26,'center');ctx.restore();
+  ctx.save();ctx.translate(342,30);ctx.rotate(-.05);txt('RICARDO IORIO',3,3,'#7a1a14',18,'center');txt('RICARDO IORIO',0,0,'#f2b632',18,'center');ctx.restore();
   ctx.fillStyle='#e2462c';ctx.save();ctx.translate(342,66);ctx.rotate(-.05);ctx.fillRect(-112,-8,224,18);txt('UNA VIDA DE METAL',0,-3,'#fff',9,'center');ctx.restore();
   LEVELS.forEach((L,i)=>{const y=82+i*11.2,open=i<unl,on=i===sel;
     if(on){ctx.fillStyle='rgba(226,70,44,.28)';ctx.fillRect(222,y-2,240,11);ctx.fillStyle='#f2b632';ctx.fillRect(222,y-2,3,11);}
