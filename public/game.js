@@ -260,7 +260,7 @@ function HELD(weapon,hx,hy,a2,f,st){
     if(weapon==='tomate'){for(const p of [0,1])Cc(hx,hy-3,3.2,'#d8322a',p);ctx.fillStyle='#4f8a3a';ctx.fillRect(hx-1,hy-7,2,2);}
     if(weapon==='papel'||weapon==='contrato'){ctx.fillStyle=OUT;ctx.fillRect(hx-5,hy-8,10,9);ctx.fillStyle='#ece8e0';ctx.fillRect(hx-4,hy-7,8,7);ctx.fillStyle='#8a8a92';ctx.fillRect(hx-3,hy-5,6,1);ctx.fillRect(hx-3,hy-3,5,1);}
     if(weapon==='patacon'){ctx.fillStyle=OUT;ctx.fillRect(hx-6,hy-6,12,7);ctx.fillStyle='#a8c08a';ctx.fillRect(hx-5,hy-5,10,5);ctx.fillStyle='#5a7a4a';ctx.fillRect(hx-1,hy-4,3,3);}
-    if(weapon==='bersa'||weapon==='escopeta'||weapon==='boleadora'||weapon==='damajuana')drawGunHeld(weapon,hx,hy,a2,f);
+    if(weapon==='bersa'||weapon==='escopeta'||weapon==='cajon'||weapon==='boleadora'||weapon==='damajuana')drawGunHeld(weapon,hx,hy,a2,f);
     if(weapon==='mate'){for(const p of [0,1])Cc(hx+1,hy-3,3.4,'#5c3a1e',p);ctx.strokeStyle='#c9c9cf';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(hx+1,hy-5);ctx.lineTo(hx+3,hy-10);ctx.stroke();}}
 function drawTruck(x,y,riding){
   ctx.save();ctx.translate(Math.round(x),Math.round(y));
@@ -1009,8 +1009,8 @@ function sfx(n){if(!AC)return;const t=AC.currentTime;switch(n){
   case 'moto':{const o=osc('sawtooth',42,t,2.4,.2,master,0,.1);o.frequency.linearRampToValueAtTime(70,t+1.0);o.frequency.linearRampToValueAtTime(32,t+2.4);nz(t,2.2,.12,'lowpass',300);break;}
   case 'win':[0,4,7,12,16,19,24].forEach((s,i)=>{osc('square',mf(64+s),t+i*.09,.18,.08,master);});break;
   case 'go':osc('square',880,t,.08,.08,master);osc('square',1175,t+.1,.12,.08,master);break;
-  case 'gun':nz(t,.22,.45,'highpass',3500,master);nz(t,.08,.3,'bandpass',1800,master,1);break;
-  case 'escopeta':nz(t,.1,.5,'lowpass',900,master);osc('triangle',140,t,.08,.25,master);break;
+  case 'gun':{nz(t,.12,.6,'highpass',2800,master);nz(t,.06,.45,'bandpass',1600,master,1.2);osc('sine',190,t,.07,.35,master);break;}
+  case 'escopeta':{nz(t,.28,.85,'lowpass',1100,master);nz(t,.08,.55,'bandpass',2200,master);const o=osc('sawtooth',130,t,.24,.65,master);o.frequency.exponentialRampToValueAtTime(36,t+.24);break;}
   case 'truck':{const o=osc('sawtooth',55,t,2.2,.22,master,0,.1);o.frequency.linearRampToValueAtTime(48,t+2.2);nz(t,2,.16,'lowpass',260);osc('square',233,t+.1,.5,.06,master);osc('square',294,t+.1,.5,.06,master);break;}
   case 'toro':{const o=osc('sawtooth',120,t,.9,.2,master,0,.05);o.frequency.linearRampToValueAtTime(70,t+.9);nz(t,1.6,.2,'lowpass',200);break;}
   case 'blip':osc('square',660,t,.03,.04,master);break;}}
@@ -1431,13 +1431,12 @@ const NEWLEVELS={
   LEVELS.length=0;SCENES.length=0;
   order.forEach((k,i)=>{const L=typeof k==='number'?oldL[k]:NEWLEVELS[k],S=typeof k==='number'?oldS[k]:SCENES2[k];L.chap='CAPÍTULO '+(i+1);LEVELS.push(L);SCENES.push(S);});
   for(const L of LEVELS){const b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;}
-  LEVELS[9].guns=[[900,'escopeta'],[1600,'damajuana']];
-  LEVELS[7].guns=[[800,'damajuana'],[1500,'escopeta']];
-  LEVELS[4].guns=[[1500,'bersa']];
-  LEVELS[8].guns=[[800,'boleadora'],[1700,'boleadora']];
-  LEVELS[10].guns=[[700,'boleadora'],[1400,'damajuana'],[1900,'escopeta']];
-  LEVELS[2].guns=[[1200,'bersa']];
-  LEVELS[3].guns=[[1400,'bersa']];
+  if(LEVELS[9])LEVELS[9].guns=[[900,'escopeta'],[1600,'damajuana']];
+  if(LEVELS[8])LEVELS[8].guns=[[800,'boleadora'],[1700,'boleadora']];
+  if(LEVELS[7])LEVELS[7].guns=[[800,'damajuana'],[1500,'escopeta']];
+  if(LEVELS[4])LEVELS[4].guns=[[1500,'bersa']];
+  if(LEVELS[2])LEVELS[2].guns=[[1200,'bersa']];
+  if(LEVELS[3])LEVELS[3].guns=[[1400,'bersa']];
 })();
 
 
@@ -1722,36 +1721,95 @@ function updNPC(n){if(n.ally){updAlly(n);return;}
   if(n.state==='runoff'){if(n.kind==='reporter'){n.face=1;n.x+=2.4;}else{n.face=-1;n.x-=2.2;}n.walkPh+=.3;if(n.x<cam.x-30||n.x>cam.x+W+30)n.gone=true;}
   if(n.state==='runin'){n.face=-1;if(n.x>n.tx){n.x-=2.4;n.walkPh+=.3;}else n.state='idle';}}
 
-// v9: armas de fuego de dibujito (escopeta y Bersa), ataque con títulos de sus discos, peligros nuevos
-Object.assign(MOVES,{gun:{dmg:16,kd:1,h:40},buck:{dmg:12,kd:1.4,h:40},frase:{dmg:14,kd:1.1,h:40}});
+// Armas: Escopeta recortada calibre 12, pistola Bersa Thunder 9mm, cajón de papas, boleadoras y damajuana
+Object.assign(MOVES,{gun:{dmg:18,kd:1.2,h:40},buck:{dmg:14,kd:1.6,h:44},frase:{dmg:14,kd:1.1,h:40}});
 const GUNS={
-  bersa:{name:'SIFÓN DE SODA',ammo:12,dur:10,col:'#9fd0ff'},
-  escopeta:{name:'CAJÓN DE PAPAS',ammo:6,dur:20,col:'#d8a24a'},
+  escopeta:{name:'ESCOPETA RECORTADA',ammo:8,dur:22,col:'#ff5a36'},
+  bersa:{name:'BERSA THUNDER 9MM',ammo:15,dur:12,col:'#72c6ff'},
+  cajon:{name:'CAJÓN DE PAPAS',ammo:6,dur:20,col:'#d8a24a'},
   boleadora:{name:'BOLEADORAS CRIOLLAS',ammo:5,dur:18,col:'#d8a060'},
   damajuana:{name:'DAMAJUANA DE TINTO',ammo:4,dur:16,col:'#9c27b0'}
 };
 function fireGun(f){f.state='shoot';f.t=0;}
 function gunTick(f){const G=GUNS[f.hold];f.t++;if(!G){f.state='idle';return;}
   if(f.t===3){const z=34*f.st.scale,x=f.x+f.face*22;
-    if(f.hold==='bersa'){shots.push({x,y:f.y,z,vx:f.face*7,owner:f,t:0,k:'soda',back:true,mv:MOVES.gun,life:46});sfx('gun');parts.push({k:'wave',x,y:f.y,t:0,max:8,col:'160,220,255'});floatTxt(x,f.y-z-16,'¡PSSSHH!','#9fd0ff');}
-    else if(f.hold==='boleadora'){shots.push({x,y:f.y,z:z+2,vx:f.face*7.5,owner:f,t:0,k:'boleadora',back:true,mv:MOVES.buck,life:50});sfx('whoosh');floatTxt(x,f.y-z-16,'¡A LAS PATAS!','#d8a060');shake=Math.max(shake,1);}
-    else if(f.hold==='damajuana'){shots.push({x,y:f.y,z:z+4,vx:f.face*6,vz:1.2,owner:f,t:0,k:'damajuana',back:true,mv:MOVES.buck,life:48});sfx('whoosh');floatTxt(x,f.y-z-16,'¡DESCORCHE!','#d880d8');}
-    else{for(const dy of [-6,0,6])shots.push({x,y:f.y+dy,z:z+dy*.5,vx:f.face*6.5,owner:f,t:0,k:'papa',back:true,mv:MOVES.buck,life:44});sfx('escopeta');shake=Math.max(shake,2);parts.push({k:'wave',x,y:f.y,t:0,max:8,col:'255,220,120'});floatTxt(x,f.y-z-16,'¡TOMÁ PAPAS!','#ffe08a');}
+    if(f.hold==='escopeta'){
+      for(const [dy,vz] of [[-8,-.5],[-4,-.2],[0,0],[4,.2],[8,.5]]){
+        shots.push({x,y:f.y+dy,z:z+vz*8,vx:f.face*8.5,vz,owner:f,t:0,k:'perdigon',back:true,mv:MOVES.buck,life:36});
+      }
+      sfx('escopeta');shake=Math.max(shake,6);
+      parts.push({k:'wave',x,y:f.y,t:0,max:10,col:'255,170,70'});
+      for(let p=0;p<5;p++)parts.push({k:'deb',x:x+f.face*14,y:f.y-z,vx:f.face*rnd(2,5),vy:rnd(-2.5,1.5),t:0,max:18,c:rnd(0,1)>.5?'#f29c32':'#e8e8ea',w:2,h:2});
+      floatTxt(x,f.y-z-16,pick(['¡PLOMO!','¡FOGONAZO!','¡BOOOM!','¡ESCOPETAZO!']),'#ff6a3a');
+    }
+    else if(f.hold==='bersa'){
+      shots.push({x,y:f.y,z,vx:f.face*11,owner:f,t:0,k:'bala',back:true,mv:MOVES.gun,life:42});
+      sfx('gun');shake=Math.max(shake,2);
+      parts.push({k:'wave',x,y:f.y,t:0,max:6,col:'255,230,140'});
+      floatTxt(x,f.y-z-16,pick(['¡BANG!','¡PLOMO!','¡TAC!']),'#8fd2ff');
+    }
+    else if(f.hold==='cajon'){
+      for(const dy of [-6,0,6])shots.push({x,y:f.y+dy,z:z+dy*.5,vx:f.face*6.5,owner:f,t:0,k:'papa',back:true,mv:MOVES.buck,life:44});
+      sfx('whoosh');shake=Math.max(shake,2);parts.push({k:'wave',x,y:f.y,t:0,max:8,col:'255,220,120'});floatTxt(x,f.y-z-16,'¡TOMÁ PAPAS!','#ffe08a');
+    }
+    else if(f.hold==='boleadora'){
+      shots.push({x,y:f.y,z:z+2,vx:f.face*7.5,owner:f,t:0,k:'boleadora',back:true,mv:MOVES.buck,life:50});
+      sfx('whoosh');floatTxt(x,f.y-z-16,'¡A LAS PATAS!','#d8a060');shake=Math.max(shake,1);
+    }
+    else if(f.hold==='damajuana'){
+      shots.push({x,y:f.y,z:z+4,vx:f.face*6,vz:1.2,owner:f,t:0,k:'damajuana',back:true,mv:MOVES.buck,life:48});
+      sfx('whoosh');floatTxt(x,f.y-z-16,'¡DESCORCHE!','#d880d8');
+    }
     f.ammo--;if(f.ammo<=0){floatTxt(f.x,f.y-80,'SIN BALAS','#ff5a3a');f.hold=null;}}
   if(f.t>=G.dur)f.state='idle';}
 function pickGun(f,it){f.hold=it.kind;f.ammo=it.ammo||GUNS[it.kind].ammo;it.gone=true;sfx('pickup');floatTxt(f.x,f.y-80,GUNS[it.kind].name+'!',GUNS[it.kind].col);}
 function drawGunItem(k,X,y){const R=(a,b,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(a,b,w,h);};
-  if(k==='bersa'){R(X-5,y-20,10,20,OUT);R(X-4,y-19,8,18,'#5aa0c8');R(X-3,y-18,2,16,'rgba(255,255,255,.35)');R(X-3,y-24,6,5,'#9aa0a8');R(X+2,y-23,5,2,'#9aa0a8');}
+  if(k==='escopeta'){
+    R(X-13,y-13,6,6,OUT);R(X-12,y-12,5,4,'#6a3a1e');
+    R(X-7,y-14,6,6,OUT);R(X-6,y-13,5,4,'#3e424c');
+    R(X-1,y-14,14,3,OUT);R(X-1,y-13,13,2,'#7c8494');
+    R(X-1,y-11,14,3,OUT);R(X-1,y-10,13,2,'#525866');
+    R(X-4,y-10,6,3,'#7a4a28');
+    R(X+12,y-13,2,2,'#181a20');R(X+12,y-10,2,2,'#181a20');
+  }
+  else if(k==='bersa'){
+    R(X-6,y-15,14,6,OUT);R(X-5,y-14,12,4,'#2a2c34');
+    R(X-3,y-14,4,1,'#8a94a6');
+    R(X-5,y-10,5,8,OUT);R(X-4,y-9,4,6,'#181a20');
+    R(X,y-10,2,3,'#4a4e58');
+  }
+  else if(k==='cajon'){
+    R(X-12,y-14,24,14,OUT);R(X-11,y-13,22,12,'#a8783a');R(X-11,y-9,22,1,'#6a4426');R(X-11,y-5,22,1,'#6a4426');
+    for(let k=0;k<4;k++){ctx.fillStyle='#c89a5a';ctx.beginPath();ctx.ellipse(X-7+k*5,y-15,2.6,2,0,0,7);ctx.fill();}
+  }
   else if(k==='boleadora'){ctx.strokeStyle=OUT;ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(X-6,y-14,4,0,7);ctx.arc(X+6,y-14,4,0,7);ctx.arc(X,y-6,4,0,7);ctx.stroke();ctx.fillStyle='#5a3a1e';ctx.fill();ctx.strokeStyle='#b88a4a';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(X-6,y-14);ctx.lineTo(X,y-10);ctx.lineTo(X+6,y-14);ctx.moveTo(X,y-10);ctx.lineTo(X,y-6);ctx.stroke();}
   else if(k==='damajuana'){R(X-6,y-20,12,18,OUT);R(X-5,y-19,10,16,'#7a5a3a');R(X-3,y-24,6,6,'#4a245a');R(X-2,y-25,4,2,'#d8c29a');for(let i=0;i<3;i++)R(X-5,y-17+i*5,10,1,'#4a3420');}
-  else{R(X-12,y-14,24,14,OUT);R(X-11,y-13,22,12,'#a8783a');R(X-11,y-9,22,1,'#6a4426');R(X-11,y-5,22,1,'#6a4426');for(let k=0;k<4;k++){ctx.fillStyle='#c89a5a';ctx.beginPath();ctx.ellipse(X-7+k*5,y-15,2.6,2,0,0,7);ctx.fill();}}
   if(tick%40<20){ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.3;ctx.drawImage(glow('#ffe9a8'),X-14,y-20,28,28);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';}}
-function drawGunHeld(k,hx,hy,a2,f){const dx=Math.sin(a2),dy=Math.cos(a2);
-  if(k==='bersa'){for(const p of [0,1])L(hx-dy*4,hy+dx*4,hx+dy*6,hy-dx*6,5.4,'#5aa0c8',p);L(hx+dy*6,hy-dx*6,hx+dy*6+dx*5,hy-dx*6+dy*5,2,'#9aa0a8',1);}
+function drawGunHeld(k,hx,hy,a2,f){const dx=Math.sin(a2),dy=Math.cos(a2),nx=-dy,ny=dx;
+  if(k==='escopeta'){
+    for(const p of [0,1])L(hx-dx*8,hy-dy*8,hx,hy,4.5,'#6a3a1e',p);
+    L(hx,hy,hx+dx*6,hy+dy*6,4.5,'#3a3e48',1);
+    L(hx+dx*6+nx*1.2,hy+dy*6+ny*1.2,hx+dx*20+nx*1.2,hy+dy*20+ny*1.2,2.2,'#7c8494',1);
+    L(hx+dx*6-nx*1.2,hy+dy*6-ny*1.2,hx+dx*20-nx*1.2,hy+dy*20-ny*1.2,2.2,'#525866',1);
+    L(hx+dx*5,hy+dy*5,hx+dx*11,hy+dy*11,3.2,'#7a4a28',1);
+  }
+  else if(k==='bersa'){
+    for(const p of [0,1])L(hx,hy,hx+dx*10,hy+dy*10,3.6,'#2e323c',p);
+    L(hx-dx*2-nx*2,hy-dy*2-ny*2,hx+dx*2,hy+dy*2,3.5,'#181a20',1);
+    L(hx+dx*2,hy+dy*2,hx+dx*10,hy+dy*10,2,'#8a94a6',1);
+  }
+  else if(k==='cajon'){ctx.fillStyle=OUT;ctx.fillRect(hx-7,hy-9,14,10);ctx.fillStyle='#a8783a';ctx.fillRect(hx-6,hy-8,12,8);ctx.fillStyle='#c89a5a';ctx.fillRect(hx-5,hy-10,4,3);ctx.fillRect(hx+1,hy-10,4,3);}
   else if(k==='boleadora'){ctx.strokeStyle=OUT;ctx.lineWidth=2;ctx.beginPath();ctx.arc(hx+dx*12,hy+dy*12,4,0,7);ctx.arc(hx-dy*8,hy+dx*8,3.5,0,7);ctx.stroke();ctx.fillStyle='#5a3a1e';ctx.fill();ctx.strokeStyle='#b88a4a';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(hx,hy);ctx.lineTo(hx+dx*12,hy+dy*12);ctx.moveTo(hx,hy);ctx.lineTo(hx-dy*8,hy+dx*8);ctx.stroke();}
   else if(k==='damajuana'){ctx.fillStyle=OUT;ctx.fillRect(hx-5,hy-12,10,14);ctx.fillStyle='#7a5a3a';ctx.fillRect(hx-4,hy-11,8,12);ctx.fillStyle='#4a245a';ctx.fillRect(hx-2,hy-16,4,5);}
-  else{ctx.fillStyle=OUT;ctx.fillRect(hx-7,hy-9,14,10);ctx.fillStyle='#a8783a';ctx.fillRect(hx-6,hy-8,12,8);ctx.fillStyle='#c89a5a';ctx.fillRect(hx-5,hy-10,4,3);ctx.fillRect(hx+1,hy-10,4,3);}
-  if(f&&f.state==='shoot'&&f.t>=3&&f.t<7&&false){const mx=hx+dx*(k==='bersa'?9:20),my=hy+dy*(k==='bersa'?9:20);ctx.fillStyle='#fff2a8';ctx.beginPath();ctx.arc(mx,my,k==='bersa'?3:5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ff8a2a';ctx.beginPath();ctx.arc(mx+dx*2,my+dy*2,k==='bersa'?2:3.4,0,Math.PI*2);ctx.fill();}}
+  if(f&&f.state==='shoot'&&f.t>=2&&f.t<=6){
+    const dist=k==='escopeta'?22:k==='bersa'?11:0;
+    if(dist>0){
+      const mx=hx+dx*dist,my=hy+dy*dist,sz=k==='escopeta'?8:4;
+      ctx.fillStyle='#fffce0';ctx.beginPath();ctx.arc(mx,my,sz*.5,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#f2a032';ctx.beginPath();ctx.arc(mx+dx*3,my+dy*3,sz*.8,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#d83218';ctx.beginPath();ctx.arc(mx+dx*6,my+dy*6,sz*.4,0,Math.PI*2);ctx.fill();
+    }
+  }}
 // títulos de discos por época: el ataque especial los larga por el aire
 const SONGT=[['LUCHANDO POR EL METAL','UN PASO MÁS EN LA BATALLA','EL FIN DE LOS INICUOS'],['HERMÉTICA','ÁCIDO ARGENTINO','VÍCTIMAS DEL VACIAMIENTO','INTÉRPRETES'],
   ['MUNDO GUANACO','DEL ENTORNO','A FONDO BLANCO','PIEDRA LIBRE','ULTIMANDO','TORO Y PAMPA','TRILLANDO LA FINA']];
@@ -2690,6 +2748,7 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   DATOS.splice(9,0,['"Trillando la fina" (2012) fue el último disco de estudio de Almafuerte.','"Muere monstruo muere" tiene letra de Iorio y música de Claudio Marciello.','La figura del comerciante informador aparece en "El amasijo de un gran sueño" (Mundo guanaco, 1995): el periodismo que lucra con rumores y rupturas.','Beto Casella, su amigo, lo entrevistó varias veces en televisión.']);
   MODS.splice(9,0,'');
   rutaInsert();
+  if(LEVELS[10])LEVELS[10].guns=[[700,'boleadora'],[1400,'damajuana'],[1900,'escopeta']];
   DATOS[0].unshift('En 1972 recibió su primera guitarra y en 1978 su primer bajo, un Faim que le compraron sus padres.');
   AFICHES[4].push([1300,'BLACK SABBATH','OBRAS 1992','ABRE HERMÉTICA','#7a5a9a']);AFICHES[5].push([1700,'MONSTERS OF ROCK','KISS Y SABBATH','RIVER 3/9/94','#c8a060']);
   AFICHES[6].push([1500,'ALMAFUERTE','VERSIONA A','LARRALDE','#a87a4a']);AFICHES[10].push([1400,'JOSÉ LARRALDE','VERSIONADO','POR ALMAFUERTE','#a87a4a']);
