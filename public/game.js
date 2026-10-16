@@ -1862,8 +1862,7 @@ function lmTick(){if(!LM.el)return;if(LM.labT>0)LM.labT--;
   if(LM.lp){const calm=state==='title'||state==='card'||state==='pause'||state==='results'||(state==='play'&&!combatMix);LM.lp.frequency.setTargetAtTime(calm?1100:20000,AC.currentTime,.25);}
   const slow=state==='play'&&slowT>0;LM.el.preservesPitch=!slow;LM.el.playbackRate=slow?.62:1;
   LM.el.volume=state==='pause'?.25:.8;}
-function lmDraw(){if(LM.labT>0&&LM.label){ctx.globalAlpha=Math.min(1,LM.labT/30);const w=Math.min(300,U(LM.label).length*5+16);ctx.fillStyle='rgba(8,6,11,.8)';ctx.fillRect(W/2-w/2,H-20,w,13);txt(LM.label.slice(0,56),W/2,H-17,'#f2b632',5,'center');ctx.globalAlpha=1;}
-  if(state==='title'){const curS=SONGS[LEVELS[sel]?.song]||SONGS[song];txt('♫ BANDA SONORA NATIVA 16-BITS: '+(curS?curS.name:'RICARDO IORIO'),342,238,'#f2b632',5,'center');}}
+function lmDraw(){if(LM.labT>0&&LM.label){ctx.globalAlpha=Math.min(1,LM.labT/30);const w=Math.min(300,U(LM.label).length*5+16);ctx.fillStyle='rgba(8,6,11,.8)';ctx.fillRect(W/2-w/2,H-20,w,13);txt(LM.label.slice(0,56),W/2,H-17,'#f2b632',5,'center');ctx.globalAlpha=1;}}
 lmSetup();lmRestore();
 
 // v10: retratos más realistas (cinemáticas, título y HUD): cara con volumen, ojos, nariz, boca, pelo en mechones
@@ -3415,11 +3414,11 @@ function drawTitle(){
   ctx.strokeStyle=df.col;ctx.lineWidth=1.2;ctx.strokeRect(222.5,201.5,239,16);
   txt('◄ DIFICULTAD: '+df.name+' ►',342,204,df.col,6,'center');
   txt(df.desc,342,212,'#b0a2b8',4,'center');
-  const curS=SONGS[LEVELS[sel]?.song]||SONGS[song];if(curS&&curS.name)txt('♫ 16-BIT: '+curS.name,342,220,'#f2b632',5,'center');if(tick%60<40)txt(coarse?'TOCÁ PARA JUGAR':'ENTER / ESPACIO PARA JUGAR',342,228,'#fff',7,'center');
-  txt('▲/▼: CAPÍTULO · ◄/►: DIFICULTAD · '+(sel<unl?LEVELS[sel].place:'BLOQUEADO'),342,233,'#9b8aa3',4,'center');
-  txt(coarse?'BOTÓN ÁLBUM: TUS FIGURITAS':'G: ÁLBUM · DOBLE TOQUE: CORRER',342,241,'#f2b632',4,'center');
-  txt('FAN GAME · PARODIA · SIN FINES DE LUCRO',342,248,'#7a6a80',4.5,'center');
-  if(hiscore)txt('RÉCORD '+String(hiscore).padStart(7,'0'),342,256,'#f2b632',5,'center');}
+  const curS=SONGS[LEVELS[sel]?.song]||SONGS[song];if(curS&&curS.name)txt('♫ 16-BIT: '+curS.name,342,219,'#f2b632',5,'center');if(tick%60<40)txt(coarse?'TOCÁ PARA JUGAR':'ENTER / ESPACIO PARA JUGAR',342,227.5,'#fff',7,'center');
+  txt('▲/▼: CAPÍTULO · ◄/►: DIFICULTAD · '+(sel<unl?LEVELS[sel].place:'BLOQUEADO'),342,237.5,'#9b8aa3',4,'center');
+  txt(coarse?'BOTÓN ÁLBUM: TUS FIGURITAS':'G: ÁLBUM · DOBLE TOQUE: CORRER',342,243.5,'#f2b632',4,'center');
+  txt('FAN GAME · PARODIA · SIN FINES DE LUCRO',342,249.5,'#7a6a80',4.5,'center');
+  if(hiscore)txt('RÉCORD '+String(hiscore).padStart(7,'0'),342,256.5,'#f2b632',5,'center');}
 function drawCard(){ctx.fillStyle='#0b0910';ctx.fillRect(0,0,W,H);
   const k=Math.min(1,cardT/30);ctx.globalAlpha=k;
   if(FAR)ctx.drawImage(FAR,0,0,W*RS,190*RS,0,0,W,190);
