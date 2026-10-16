@@ -147,7 +147,7 @@ const STY={
   agrimensor:{scale:1.02,skin:'#d8a07c',hair:'cap',hairC:'#1a1a1e',capC:'#e8e2d0',top:'#e07a1a',shirt:'#e07a1a',pants:'#3a4a5a',boots:'#1a1410',torsoW:10.5},
   loteador:{scale:1.32,skin:'#d79a74',hair:'cap',hairC:'#1b1612',capC:'#e8c83a',stache:'#1b1612',top:'#e07a1a',shirt:'#e07a1a',pants:'#3a4a5a',boots:'#1a0f08',torsoW:13.5,belly:true}
 };
-const NAMES={ric1:'RICARDO',ric2:'RICARDIO',ric3:'RICARDIO',ric4:'RICARDIO',ric5:'RICARDIO',viejo:'EL VIEJO',chofa:'EL CHOFA',carpo:'EL CARPO',heavy:'UN HEAVY',vecina:'DOÑA NÉLIDA',tornero:'EL TORNERO',
+const NAMES={ric1:'RICARDO',ric2:'RICARDO',ric3:'RICARDO',ric4:'RICARDO',ric5:'RICARDO',viejo:'EL VIEJO',chofa:'EL CHOFA',carpo:'EL CARPO',heavy:'UN HEAVY',vecina:'DOÑA NÉLIDA',tornero:'EL TORNERO',
   jubilado:'DON TITO',camionero:'EL CAMIONERO',anselmo:'DON ANSELMO',peon:'EL PEÓN',movilero:'EL MOVILERO',capanga:'EL CAPANGA',productor:'EL PRODUCTOR',vaciador:'EL VACIADOR',banquero:'EL BANQUERO',loteador:'EL LOTEADOR',reptil:'LOBIZÓN',reptilazo:'MANDINGA'};
 
 // v9: más épocas de Ricardio (10 capítulos) y los villanos nuevos
@@ -193,7 +193,7 @@ Object.assign(STY,{
   newage:{scale:.98,skin:'#e8b890',hair:'long',hairC:'#c8a060',band:'#a83aa8',top:'#e8e2d0',shirt:'#e8e2d0',pants:'#a87a4a',boots:'#6a4a2a',torsoW:9.5,flowers:true},
   intendente:{scale:1.32,skin:'#e8b894',hair:'slick',hairC:'#3a2e24',top:'#2a2a3a',shirt:'#e8e8ea',tie:'#6aa0d8',pants:'#2a2a3a',boots:'#0b0b0d',torsoW:13.5,belly:true}
 });
-Object.assign(NAMES,{ricV:'RICARDIO',ricH:'RICARDIO',ricM:'RICARDIO',ricA:'RICARDIO',ricT:'RICARDIO',violero:'EL VIOLERO',pelusa:'EL PELUSA',pibe:'UN PIBE HEAVY',
+Object.assign(NAMES,{ricV:'RICARDO',ricH:'RICARDO',ricM:'RICARDO',ricA:'RICARDO',ricT:'RICARDO',violero:'EL VIOLERO',pelusa:'EL PELUSA',pibe:'UN PIBE HEAVY',
   cana:'LA CANA',cana2:'LA CANA',buchon:'EL BUCHÓN',comisario:'EL COMISARIO',cheto:'CHETO',cheto2:'CHETO',critico:'EL CRÍTICO',curador:'EL CURADOR',
   revendedor:'REVENDEDOR',seguridad:'SEGURIDAD',empresario:'EL EMPRESARIO',barra:'BARRA',inspector:'INSPECTOR',clausurador:'EL CLAUSURADOR',
   cazador:'CAZADOR FURTIVO',newage:'HIPPIE NEW AGE',intendente:'EL INTENDENTE'});
@@ -1365,10 +1365,10 @@ const LEVELS=[
    {boss:true,groups:[]}],
   rescue:{kind:'heavy',x:1420,y:192},
   props:[[400,'tacho','chori'],[800,'tacho','mate'],[1500,'ampli','chori'],[1900,'ampli','mate'],[2050,'ampli','chori']],pipe:[1460,240],
-  intro:[{w:'ric2',s:'En la gala del Hotel Alvear nos metieron en cana por llevar campera de cuero y tachas.'},{w:'carpo',s:'Tranquilo, Ricardio. Ya les dije a los organizadores: si no toca V8, Riff tampoco toca.'},
+  intro:[{w:'ric2',s:'En la gala del Hotel Alvear nos metieron en cana por llevar campera de cuero y tachas.'},{w:'carpo',s:'Tranquilo, Ricardo. Ya les dije a los organizadores: si no toca V8, Riff tampoco toca.'},
    {w:'ric2',s:'Afuera está lleno de hippies pidiendo paz y amor mientras nos tiran cascotes y naranjas.'},
    {w:'carpo',s:'Ustedes suban, enchufen todo al taco y demuestren que las Brigadas Metálicas llegaron para quedarse.'}],
-  rescueLines:[{w:'heavy',s:'¡Ricardio! Entre los patovicas y los chetos del festival me querían arrancar las tachas.'},{w:'ric2',s:'Cálmense, pibes, no rompan el lugar, que si no dicen que los pesados somos salvajes.'},
+  rescueLines:[{w:'heavy',s:'¡Ricardo! Entre los patovicas y los chetos del festival me querían arrancar las tachas.'},{w:'ric2',s:'Cálmense, pibes, no rompan el lugar, que si no dicen que los pesados somos salvajes.'},
    {w:'heavy',s:'¡El productor del festival quiere cortarles el sonido! Dice que el heavy metal asusta a los sponsors.'},{w:'ric2',s:'A los falsos profetas del acusticazo se les terminó el recreo. Vamos al escenario.'}],
   boss:'productor',summons:[['disco','hippie2'],['patovica','hippie']],
   bossLines:[{w:'productor',s:'Mirá, pibe: acá mandan las radios y la paz hippie. Si no bajan los amplificadores y cantan algo suave, les corto los cables.'},
@@ -1444,7 +1444,7 @@ const LEVELS=[
   rescueLines:[{w:'peon',s:'¡Don Ricardo! Me maniataron junto al molino porque no los dejé cortar el alambrado con la topadora.'},{w:'ric5',s:'Nadie es patrón de la naturaleza, compañero. Desátese que vamos juntos.'},
    {w:'peon',s:'El Loteador tiene ojos raros, don Ricardo... cuando habla huele a azufre quemado.'},{w:'ric5',s:'Ya me parecía que atrás de tanta codicia estaba el mismísimo Mandinga.'}],
   boss:'loteador',summons:[['agrimensor','reptil'],['camara','influ']],
-  bossLines:[{w:'loteador',s:'¡Iorio! Vendeme estas hectáreas y te pongo un monumento de plástico en la entrada del country!' },
+  bossLines:[{w:'loteador',s:'¡Iorio! ¡Vendeme estas hectáreas y te pongo un monumento de plástico en la entrada del country!'},
    {w:'ric5',s:'Acá no llega el delivery ni el asfalto, y así queremos que siga. El horizonte no tiene dueño.'},
    {w:'loteador',s:'¡Por las buenas o bajo las orugas! ¡Arranquen la topadora!'}],
   monsterLines:[{w:'loteador',s:'¡Basta de este traje de ingeniero! ¡Conocé mi verdadera cara, cantor criollo!'},{w:'ric5',s:'Mandinga tenía que ser. Siempre escondido detrás del que compra y vende voluntades.'},
@@ -1564,9 +1564,9 @@ const NEWLEVELS={
    [[['cheto2','R'],['cheto','L'],['critico','R']],[['patovica','L'],['critico','R'],['cheto','R']]],[[['cheto','L'],['patovica','R'],['critico','R']],[['cheto2','R'],['cheto','L'],['critico','R'],['patovica','L']]]),
   rescue:{kind:'pibe',x:1420,y:192},
   props:[[400,'tacho','empanada'],[800,'tacho','mate'],[1500,'ampli','empanada'],[1900,'cajon','mate'],[2050,'ampli','empanada']],pipe:[1460,240],
-  intro:[{w:'heavy',s:'Ricardio, los críticos de arte de Recoleta nos miran con asco porque vinimos en tren desde San Martín.'},{w:'ricH',s:'Que miren. Venimos a cantar verdades que en sus salones perfumados nunca se nombran.'},
+  intro:[{w:'heavy',s:'Ricardo, los críticos de arte de Recoleta nos miran con asco porque vinimos en tren desde San Martín.'},{w:'ricH',s:'Que miren. Venimos a cantar verdades que en sus salones perfumados nunca se nombran.'},
    {w:'heavy',s:'Mañana debutamos en Helloween de San Martín, pero hoy el Curador quiere cerrarnos el patio.'},{w:'ricH',s:'Hermética está cerrada a la hipocresía, pero abierta de par en par para el pueblo.'}],
-  rescueLines:[{w:'pibe',s:'¡Ricardio! Los de seguridad de la galería me echaron por tener las zapatillas gastadas y la tacha en el cinto.'},{w:'ricH',s:'Acá nadie vale por la marca de la ropa. Vení a la primera fila, hermano.'},
+  rescueLines:[{w:'pibe',s:'¡Ricardo! Los de seguridad de la galería me echaron por tener las zapatillas gastadas y la tacha en el cinto.'},{w:'ricH',s:'Acá nadie vale por la marca de la ropa. Vení a la primera fila, hermano.'},
    {w:'pibe',s:'El Curador dice que el metal pesado es ruido de bárbaros y que hoy sólo entra gente VIP.'},{w:'ricH',s:'Vamos a enseñarle qué es la cultura popular.'}],
   boss:'curador',summons:[['cheto','cheto2'],['critico','patovica']],
   bossLines:[{w:'curador',s:'Disculpe, joven: esto es alta cultura subvencionada. Su ruido suburbano contamina nuestra estética.'},{w:'ricH',s:'La cultura nace del que sufre y trabaja, no del que toma champagne hablando en difícil.'},{w:'curador',s:'¡Críticos, custodios! ¡Desalojen a esta tribu del conurbano!'}],
@@ -1579,7 +1579,7 @@ const NEWLEVELS={
    [[['transa','R'],['revendedor','L'],['seguridad','R']],[['seguridad','L'],['revendedor','R'],['transa','R']]],[[['revendedor','L'],['seguridad','R'],['transa','R']],[['revendedor','R'],['revendedor','L'],['seguridad','R'],['transa','L']]]),
   rescue:{kind:'pibe',x:1420,y:192},
   props:[[400,'tacho','chori'],[800,'tacho','mate'],[1500,'ampli','chori'],[1900,'ampli','mate'],[2050,'ampli','chori']],pipe:[1460,240],
-  intro:[{w:'heavy',s:'¡Ricardio, mirá las banderas del Oeste en todo River! Pero en los molinetes los de seguridad les están pegando a los pibes.'},{w:'ricM',s:'Como dice la canción: "Tú eres su seguridad". Le cuidan el bolsillo al empresario verdugueando a su propio hermano.'},
+  intro:[{w:'heavy',s:'¡Ricardo, mirá las banderas del Oeste en todo River! Pero en los molinetes los de seguridad les están pegando a los pibes.'},{w:'ricM',s:'Como dice la canción: "Tú eres su seguridad". Le cuidan el bolsillo al empresario verdugueando a su propio hermano.'},
    {w:'heavy',s:'Encima el promotor quiere acortar el show de Hermética y quedarse con la plata de las entradas populares.'},{w:'ricM',s:'En River tocamos completo y a los pibes se los respeta.'}],
   rescueLines:[{w:'pibe',s:'¡Gracias, Ricardo! Junté monedas todo el mes en la obra y en la valla me fajaron entre tres patovicas.'},{w:'ricM',s:'Vení conmigo al campo, pibe: vos sos la razón por la que estamos arriba de ese escenario.'},
    {w:'pibe',s:'El Empresario está atrás de las torres de sonido cerrando el negocio con los revendedores.'},{w:'ricM',s:'Se le terminó el negocio con la pasión de la gente.'}],
@@ -2760,7 +2760,7 @@ const RECUERDOS=['En el 72 los Reyes me dejaron una criolla. Y este año mi viej
   'Soy un hombre de tierra adentro, no un costero. Acá el silencio te enseña a escucharte.',
   'Tengo setecientos pajaritos en el campo: los miro mientras fumo y escucho a Larralde en la radio.',
   'No se debe ser más de lo que uno es, ni menos de lo que uno vale.'];
-const GUINO2={4:'Abrir para Black Sabbath en Obras. Quién lo hubiera dicho en el Abasto.',5:'Hoy River es nuestro, y después tocan Kiss y Sabbath.',
+const GUINO2={4:'Abrir para Black Sabbath en Obras... ¡quién lo hubiera dicho en el Abasto!',5:'Hoy River es nuestro, y después tocan Kiss y Sabbath.',
   6:'Un tema de Larralde también es metal, si se toca con el alma.',10:'Poné a Larralde en la radio, que los pajaritos lo escuchan.'};
 
 // v25-v27: capítulo 1. Ricardo no puede seguir hasta que el viejo le trae su primer bajo (un Faim, 1978).
@@ -3058,7 +3058,7 @@ function ambTick(){if(AMB.length&&AMB[0].lv!==lvl)AMB=AMB.filter(a=>a.lv===lvl);
 function discoTick(){const bp=document.getElementById('bPap'),t=lvl>=2?'DISCO':'PAPA';if(bp&&bp.textContent!==t)bp.textContent=t;
   if(AMBDONE.p!==player){AMBDONE.p=player;for(const k in AMBDONE)if(k!=='p'&&k.startsWith(lvl+':'))delete AMBDONE[k];AMB=[];}
   if(state!=='play')return;ambTick();
-  if(lvl===2&&datoT>200)ambient('papas','Estoy podrido de las papas. Desde ahora revoleo discos.',170);
+  if(lvl===2&&datoT>200)ambient('papas','¡Estoy podrido de las papas! Desde ahora revoleo discos.',170);
   if(datoT>330&&RECUERDOS[lvl])ambient('rec',RECUERDOS[lvl],230);}
 // la moto pasa cuando no hay pelea, y el texto del dato aparece justo cuando la mira
 function guiTick(){if(state!=='play')return;
@@ -3100,7 +3100,7 @@ const SHOWS=[
  {v:'CLUB ALL BOYS · MONTE CASTRO',d:'JUNIO DE 2013',b:'ALMAFUERTE',L:[['Ricardo Iorio','voz y bajo','me'],['Claudio Marciello','guitarra','violero'],['Bin Valencia','batería','heavy'],['Beto Zamarbide','invitado: temas de V8','heavy']],set:['Muere monstruo muere','Mamuil Mapu','Temas de V8 con Zamarbide'],
   r:['El espanto del pueblo ya no asusta a nadie.','Primer estadio: unas 25 mil personas.','Vuelve a agarrar el bajo y Zamarbide canta los de V8.'],f:['ALMAFUERTE','TRILLANDO LA FINA']},
  {v:'GIRA UNAS ESTROFAS MÁS · TRELEW',d:'9 DE SEPTIEMBRE DE 2023',b:'RICARDO IORIO Y CHEWELCHE',L:[['Ricardo Iorio','voz','me'],['Juanchy Basualto','guitarra','violero'],['Ariel Basualto','bajo','heavy'],['Sebastián Figueroa','batería','heavy']],set:['Temas de V8, Hermética y Almafuerte','De sus discos solistas: Tangos y milongas, Atesorando en los cielos'],
-  r:['Como solista grabó covers, tangos y milongas.','Larralde y Rubén Patagonia, sus referentes criollos.','Su gente lo sigue cantando.'],f:['RICARDIO','TIERRA ADENTRO']}];
+  r:['Como solista grabó covers, tangos y milongas.','Larralde y Rubén Patagonia, sus referentes criollos.','Su gente lo sigue cantando.'],f:['RICARDO IORIO','TIERRA ADENTRO']}];
 let SHOW=null;
 function showStart(){const S=SHOWS[lvl];if(!S){showEnd();return;}SHOW={S,t:0,i:0,ch:0};state='show';try{song=LV.song;}catch(e){}sfx('win');}
 function showEnd(){SHOW=null;if(lvl<LEVELS.length-1)startChapter(lvl+1,true);else{state='ending';endT=0;song='l5';}}
@@ -3229,12 +3229,12 @@ function dedupe(){const D=DATOS;
     [9,/último disco/],[9,/muchos pájaros/],[10,/Beto Casella/],[10,/covers de Black Sabbath/]];
   for(const [i,re] of X)del(D[i],re);
   // el recital recuerda lo que pasó en el nivel
-  show(3,2,'El curador anotó a Hermética en el catálogo.');
+  show(3,2,'El Curador anotó a Hermética en el catálogo.');
   show(4,1,'Los muchachos de la metalúrgica, en primera fila.');show(4,2,'En octubre del 92, abren para Motörhead.');
-  show(5,1,'El pibe de la entrada trucha, adentro.');show(5,2,'El empresario se fue sin la recaudación.');
-  show(6,0,'Sin sobre y sin faja: el clausurador habilitó.');show(6,1,'Al equipo del violero no lo tocó nadie.');
+  show(5,1,'El pibe de la entrada trucha, adentro.');show(5,2,'El Empresario se fue sin la recaudación.');
+  show(6,0,'Sin sobre y sin faja: el Clausurador habilitó.');show(6,1,'Al equipo del violero no lo tocó nadie.');
   show(7,2,'Los abuelos recuperan lo suyo.');show(8,1,'Asado para todos después del show.');show(8,2,'Sin cazadores ni country en la sierra.');
-  show(10,2,'Ni el loteador ni Mandinga: el campo sigue libre.');
+  show(10,2,'Ni El Loteador ni Mandinga: el campo sigue libre.');
   try{delete GUINO2[10];}catch(e){}
   try{if(ALB&&ALB.got){const canon='En 1978 tuvo su primer bajo, un Faim de cuatro cuerdas. Lo contaba como su segundo regalo más importante, después de la guitarra criolla que le dejaron los Reyes en 1972.';const hadFaim=Object.keys(ALB.got).some(k=>/[Ff]aim|primer bajo/.test(k));let chg=false;for(const k in ALB.got)if(k!==canon&&/[Ff]aim|primer bajo/.test(k)){delete ALB.got[k];chg=true;}if(hadFaim&&!(canon in ALB.got)){ALB.got[canon]=0;chg=true;}if(chg)albumSave();}}catch(e){}
 }
