@@ -1641,7 +1641,7 @@ function updHazard(){
     if((h.dir>0&&h.x>cam.x+W+120)||(h.dir<0&&h.x<cam.x-120))hazard=null;}}
 function updShots(){for(const s of shots){s.t++;s.x+=s.vx;if(s.vy)s.y+=s.vy;if(s.vz!=null){s.z=Math.max(4,s.z+s.vz);s.vz-=.06;}if(s.t>(s.life||150))s.gone=true;
   if(!s.back&&player.state==='atk'&&player.move&&player.t>=player.move.a0&&player.t<=player.move.a1+2&&Math.sign(s.x-player.x)===player.face&&Math.abs(s.x-player.x)<34&&Math.abs(s.y-player.y)<10){s.back=true;s.vx=-s.vx*1.4;spark(s.x,s.y-s.z,false);sfx('punch');floatTxt(s.x,s.y-70,'¡DEVUELTO!','#9fd0ff');score+=50;}
-  if(s.back){for(const e of ents){if(e.team!==1||!hittable(e)||(s.hit&&s.hit.has(e)))continue;const fr=s.k==='frase',pp=s.k==='papa';if(Math.abs(e.y-s.y)<(fr?16:pp?14:10)&&Math.abs(e.x-s.x)<(fr?30:pp?18:12)*e.st.scale){const tg=pp&&e.papeT>0;applyHit(player,e,tg?MOVES.buck:(s.mv||MOVES.phone2),Math.sign(s.vx));if(tg){e.papeT=0;score+=500;papas=Math.min(8,papas+1);shake=Math.max(shake,5);floatTxt(e.x,e.y-90,(lvl>=2?'¡DISCAZO AL QUE DIJO PAPERO! +500':'¡PAPAZO AL QUE DIJO PAPERO! +500'),'#ffe08a');say(player,pick(['¡Tomá, papa!','¿Papero? ¡Con orgullo!','¡Esta es de las buenas!']),80);}if(s.hit)s.hit.add(e);else s.gone=true;if(s.k==='tomate')splat(s.x,s.y-s.z);if(s.k==='bala'||s.k==='perdigon')spark(s.x,s.y-s.z,false);if(s.k==='piedra'&&Math.random()<.3)floatTxt(e.x,e.y-70,'¡PIEDRAZO!','#9fd0ff');break;}}}
+  if(s.back){for(const e of ents){if(e.team!==1||!hittable(e)||(s.hit&&s.hit.has(e)))continue;const fr=s.k==='frase',pp=s.k==='papa';if(Math.abs(e.y-s.y)<(fr?16:pp?14:10)&&Math.abs(e.x-s.x)<(fr?30:pp?18:12)*e.st.scale){const tg=pp&&e.papeT>0;applyHit(player,e,tg?MOVES.buck:(s.mv||MOVES.phone2),Math.sign(s.vx));if(pp&&!e.D.boss){e.discoHits=(e.discoHits||0)+1;if(e.discoHits>=3&&!e.ally){convertToMetal(e);}else if(!e.ally&&!tg){floatTxt(e.x,e.y-80,(lvl>=2?'♫ DISCO ':'PAPA ')+e.discoHits+'/3','#f2b632');}}if(tg){e.papeT=0;score+=500;papas=Math.min(8,papas+1);shake=Math.max(shake,5);floatTxt(e.x,e.y-90,(lvl>=2?'¡DISCAZO AL QUE DIJO PAPERO! +500':'¡PAPAZO AL QUE DIJO PAPERO! +500'),'#ffe08a');say(player,pick(['¡Tomá, papa!','¿Papero? ¡Con orgullo!','¡Esta es de las buenas!']),80);}if(s.hit)s.hit.add(e);else s.gone=true;if(s.k==='tomate')splat(s.x,s.y-s.z);if(s.k==='bala'||s.k==='perdigon')spark(s.x,s.y-s.z,false);if(s.k==='piedra'&&Math.random()<.3)floatTxt(e.x,e.y-70,'¡PIEDRAZO!','#9fd0ff');break;}}}
   else if(hittable(player)&&player.z<30&&Math.abs(player.y-s.y)<8&&Math.abs(player.x-s.x)<10){applyHit(s.owner,player,MOVES.phone,Math.sign(s.vx));s.gone=true;if(s.k==='tomate')splat(s.x,s.y-s.z);}}
   shots=shots.filter(s=>!s.gone);}
 function splat(x,y){for(let i=0;i<6;i++)parts.push({k:'deb',x,y,vx:rnd(-2,2),vy:rnd(-3,-.5),t:0,max:30,c:'#d8322a',w:3,h:3});}
@@ -1844,9 +1844,31 @@ Object.assign(BARKS,{cana:['¡Documentos contra el capot!','¡A la comisaría a 
   inspector:['¡Habilitación suspendida!','¡Falta el formulario y falta la atención!'],cazador:['¡Ese guanaco vale buena plata!','¡Correte de la mira, paisano!'],newage:['¡Respirá luz violeta y entregá el campo!','¡Tu vibración telúrica me desalinea el chakra!']});
 Object.assign(DIEQ,{cana:'El pelo largo y la guitarra no son delito.',cana2:'La calle es del que va a trabajar.',buchon:'Al alcahuete ni el patrón lo respeta.',cheto:'Menos champagne y más respeto por el que labura.',cheto2:'Con apellido no se compra el sentimiento.',critico:'Escribís de música y nunca subiste a un escenario.',
   revendedor:'Con la ilusión de los pibes no se trafica.',seguridad:'"Tú eres su seguridad": le pegás a tu propio hermano por dos monedas.',barra:'La vereda es del pueblo, no de los matones.',inspector:'Las coimas pedíselas a los corruptos.',cazador:'Al animal del monte no se lo mata por deporte.',newage:'Andá a meditar a Palermo, chanta.'});
-// Pelusa, el amigo de "Pa Pelusa": pelea al lado, tira pizzas y comparte el mate
-function updAlly(n){if(state!=='play'){n.state='idle';return;}const p=player,tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4);
+// Conversión al metal: 3 o 4 impactos de discos de vinilo evangelizan al enemigo en un aliado metalero
+function convertToMetal(e){
+  e.team=2;e.ally=true;e.kind='heavy';e.st=STY.heavy;e.hp=85;e.max=85;
+  e.state='idle';e.flyT=0;e.vz=0;e.vx=0;e.z=0;e.t=0;e.inv=60;e.allyTimer=600;e.cd=15;e.heck=0;e.yelled=1;
+  papas=Math.min(10,papas+2);
+  flashT=12;shake=Math.max(shake,5);sfx('win');spark(e.x,e.y-30,true);
+  for(let i=0;i<20;i++)parts.push({k:'deb',x:e.x+rnd(-12,12),y:e.y-rnd(10,50),vx:rnd(-3.5,3.5),vy:rnd(-4.5,-1),t:0,max:35,c:i%2?'#f2b632':'#e22834',w:3,h:3});
+  floatTxt(e.x,e.y-95,'¡CONVERTIDO AL METAL! 🤘','#f2b632');
+  say(e,pick(['¡AGUANTE RICARDO!','¡V8 NO MURIÓ!','¡A ESTOS CARETA LOS LIMPIO YO!','¡BRIGADAS METÁLICAS!']),100);
+  if(comebackOK())say(player,pick(['¡Bienvenido a las brigadas!','¡Sentí el poder del metal!','¡Así me gusta, carajo!']),90);
+}
+// Pelusa y aliados metaleros convertidos
+function updAlly(n){if(state!=='play'){n.state='idle';return;}
+  if(n.allyTimer){n.allyTimer--;if(n.allyTimer<=0){n.ally=false;n.state='runoff';floatTxt(n.x,n.y-80,'¡AGUANTE EL METAL! 🤘','#f2b632');say(n,pick(['¡Nos vemos en Cemento, Ricardo!','¡Aguante Almafuerte!','¡Hasta la próxima, Ricardo!']),90);return;}}
+  const p=player;
   let tgt=null,d=1e9;for(const e of ents){if(e.team!==1||!hittable(e))continue;const dd=Math.abs(e.x-n.x)+Math.abs(e.y-n.y)*2;if(dd<d){d=dd;tgt=e;}}
+  if(n.kind==='heavy'){
+    if(n.state==='atk'){n.t++;if(n.t===6&&tgt&&Math.abs(tgt.x-n.x)<36&&Math.abs(tgt.y-n.y)<14){applyHit(n,tgt,MOVES.buck,Math.sign(tgt.x-n.x)||n.face);sfx('punch');spark(tgt.x,tgt.y-30,false);shake=Math.max(shake,2);floatTxt(tgt.x,tgt.y-70,pick(['¡GOLPE METALERO!','¡CABEZAZO!','¡POR RICARDO!']),'#f2b632');}if(n.t>=16)n.state='idle';return;}
+    if(tgt){n.face=tgt.x>n.x?1:-1;const dx=tgt.x-n.x,dy=tgt.y-n.y;
+      if(Math.abs(dx)>30||Math.abs(dy)>8){n.x+=clamp(dx,-2.5,2.5);n.y+=clamp(dy,-1.3,1.3);n.walkPh+=.34;n.state='walk';}
+      else{n.state='idle';if(--n.cd<=0){n.cd=38+rnd(0,20);n.state='atk';n.t=0;if(Math.random()<.35)say(n,pick(['¡Tomá, careta!','¡Sentí el metal!','¡Por Iorio!','¡Al suelo!']),70);}}}
+    else{const tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4),dx=tx-n.x,dy=ty-n.y;if(Math.abs(dx)>8||Math.abs(dy)>4){n.x+=clamp(dx,-2.2,2.2);n.y+=clamp(dy,-1.2,1.2);n.walkPh+=.3;n.state='walk';}else n.state='idle';n.face=p.face;}
+    return;
+  }
+  const tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4);
   if(n.state==='kick'){n.t++;if(n.t===10){shots.push({x:n.x+n.face*10,y:n.y,z:36,vx:n.face*6,owner:n,t:0,k:'pizza',back:true,mv:MOVES.gun,life:80});sfx('whoosh');}if(n.t>=20)n.state='idle';return;}
   const dx=tx-n.x,dy=ty-n.y;if(Math.abs(dx)>6||Math.abs(dy)>3){n.x+=clamp(dx,-2.2,2.2);n.y+=clamp(dy,-1.2,1.2);n.walkPh+=.3;n.state='walk';}else n.state='idle';
   n.mateT=(n.mateT||0)+1;if(n.mateT>1500&&p.hp<p.max*.6){n.mateT=0;items.push({kind:'mate',x:n.x+n.face*14,y:n.y,z:20,vz:2,t:0});say(n,'¡Tomá, un whisky, hermano!',90);}
