@@ -1143,10 +1143,10 @@ const DEFS={
   viejo:N('viejo'),chofa:N('chofa'),carpo:N('carpo'),heavy:N('heavy'),vecina:N('vecina'),tornero:N('tornero'),jubilado:N('jubilado'),
   camionero:N('camionero'),anselmo:N('anselmo'),peon:N('peon'),reporter:N('movilero')
 };
-// Los cinco capítulos de su vida. Los hechos de las tarjetas salen de su biografía; los diálogos son ficción de fan.
+// Los capítulos de su vida. Los hechos de las tarjetas salen de su biografía y entrevistas; los diálogos homenajean sus canciones y dichos reales.
 const LEVELS=[
- {LW:2600,skin:'ric1',song:'l1',bossSong:'bossRock',food:'mila',chap:'CAPÍTULO 1',truck:true,villains:'Patoteros, hippies, chorros, estibadores y El Capanga del Abasto',title:'EL PAPERO',place:'CASEROS · 1978',hazard:'zorra',
-  card:['Ricardo creció en Caseros, en el oeste del Gran Buenos Aires.','Ayudaba en la verdulería de su viejo: por eso le decían "el papero".','Al final de los 70 tuvo su primer bajo y conoció a un violero con el que armaría V8.'],
+ {LW:2600,skin:'ric1',song:'l1',bossSong:'bossRock',food:'mila',chap:'CAPÍTULO 1',truck:true,villains:'Patoteros, hippies caretas, chorros, estibadores y El Capanga del Abasto',title:'EL PAPERO',place:'CASEROS · 1978',hazard:'zorra',
+  card:['Ricardo nació en Ciudadela (1962) y se crió en Caseros, hijo de Alfredo Iorio y Elda Pedraza (de sangre tehuelche).','Desde pibe acompañaba a su viejo a las 4 de la mañana en el camión Ford F-100 a cargar bolsas de papas al Mercado de Abasto.','En el barrio le gritaban "el papero". En julio de 1978, viendo la película de Led Zeppelin en el Cine Ocean, conoció al Chofa Moreno.'],
   npcs:[{kind:'viejo',x:250,y:198,face:1,hold:'mate'}],
   locks:[{trig:120,L:0,groups:[[['patotero','R'],['patotero','R']],[['patotero2','R'],['chorro','L']]]},
    {trig:640,L:560,groups:[[['patotero','R'],['hippie2','L'],['chorro','R']],[['estibador','R'],['hippie2','L']]]},
@@ -1154,22 +1154,22 @@ const LEVELS=[
    {trig:1820,L:1740,hazard:true,groups:[[['patotero','L'],['estibador','R'],['patotero2','R']],[['chorro','R'],['hippie','L'],['patotero','R'],['patotero2','L']]]},
    {boss:true,groups:[]}],
   rescue:{kind:'chofa',x:1420,y:192,hold:'gtr'},guns:[[700,'escopeta'],[1950,'escopeta']],
-  props:[[380,'cajon','mila'],[470,'cajon','fruta'],[860,'tacho','mate'],[1500,'tacho','mila'],[1900,'cajon','fruta'],[2050,'cajon','mate']],pipe:[1460,240],
-  intro:[{w:'viejo',s:'Ricardo, levantate que el camión no espera. Hay que ir al Abasto a buscar las papas.'},
-   {w:'ric1',s:'Ya voy, viejo. Algún día voy a tener un bajo de verdad.'},
-   {w:'viejo',s:'Primero el laburo. Y ojo con la patota de la otra cuadra: le andan cobrando peaje a los puesteros.'},
-   {w:'ric1',s:'Que vengan. Al que labura no se lo apura.'}],
-  rescueLines:[{w:'chofa',s:'¡Gracias, loco! Me querían cortar el pelo por metalero. Venía de ver la de Led Zeppelin en el cine.'},{w:'ric1',s:'El pelo largo no se negocia.'},
-   {w:'chofa',s:'¿Vos sos el pibe que toca el bajo? Yo toco la viola. Armemos una banda pesada, pero en castellano.'},{w:'ric1',s:'Primero las papas. Después hacemos ruido.'}],
+  props:[[380,'cajon','mila'],[470,'cajon','fruta'],[860,'tacho','mate'],[1500,'tacho','mila'],[1900,'cajon','fruta'],[2050,'tacho','mate']],pipe:[1460,240],
+  intro:[{w:'viejo',s:'Ricardo, levantate que son las cuatro y el camión no espera. Hay que ir al Abasto a cargar las papas.'},
+   {w:'ric1',s:'Ya voy, viejo. Mirá mis manos: de cargar cajones van a salir los callos para tocar el bajo.'},
+   {w:'viejo',s:'Primero el lomo, hijo. Y cuidate del Capanga de la feria: les cobra peaje a los puesteros que vienen del Oeste.'},
+   {w:'ric1',s:'Al que madruga para laburar no lo pisa ningún matón. Vamos con el camión.'}],
+  rescueLines:[{w:'chofa',s:'¡Gracias, loco! Salía del Cine Ocean de ver la película de Led Zeppelin y estos caretas me rodearon.'},{w:'ric1',s:'¿Vos también escuchás a Zeppelin y Black Sabbath? La guitarra criolla no se escucha arriba del ruido de un motor.'},
+   {w:'chofa',s:'Soy el Chofa Moreno, toco la eléctrica. Armemos una banda pesada y rabiosa, pero cantando en nuestro idioma.'},{w:'ric1',s:'Termino de descargar con mi viejo y armamos V8. En castellano y bien al frente.'}],
   boss:'capanga',summons:[['patotero','patotero2'],['estibador','chorro']],
-  bossLines:[{w:'capanga',s:'¿Así que vos sos el hijo del verdulero? Acá en el Abasto se paga peaje, pibe.'},
-   {w:'ric1',s:'Mi viejo se levanta a las cuatro de la mañana. No te va a dar ni una papa.'},
-   {w:'capanga',s:'¡Muchachos! ¡Enséñenle al papero cómo es el negocio!'}],
-  winLines:[{w:'capanga',s:'¡Bueno, bueno! Que tu viejo cargue tranquilo...'},{w:'ric1',s:'Y vos, si querés plata, laburá.'},{w:'viejo',s:'Los pibes del mercado cargan cajones cuatro meses para comprarse una campera de cuero. Vos también, eh.'},{w:'ric1',s:'Cuatro meses de cajones. Y después, la campera y el escenario.'},{w:'ric1',s:'Ahora me voy a ensayar. Tengo una banda que armar.'}],
-  winSay:'¡A ENSAYAR!',
-  quips:['¿Papero? ¡Tomá, papa!','La criolla no se escucha arriba de un motor.','El laburo no mata, pibe.','Madrugar también es de metalero.','Una papa no se regala: se gana.','En el barrio se aprende a pararse.']},
- {LW:2600,skin:'ric2',song:'l2',bossSong:'bossRock',food:'chori',chap:'CAPÍTULO 2',villains:'Hippies, travoltas, patovicas y El Productor que quiere un V8 comercial',title:'V8',place:'OBRAS · BA ROCK 1982',hazard:null,
-  card:['Con V8 tocó heavy metal crudo, rápido y en castellano.','En noviembre de 1982, antes del BA Rock, la policía los demoró en una gala en el Hotel Alvear. En el festival los recibieron con silbidos.','Pappo, "El Carpo", fue su padrino en el rock pesado.'],
+  bossLines:[{w:'capanga',s:'¿Así que vos sos el hijo de Alfredo, el papero de Caseros? Acá en el Abasto mandamos nosotros: o pagás peaje o no descargás.'},
+   {w:'ric1',s:'Mi viejo se rompe el lomo desde la madrugada. No te voy a dar ni una papa podrida, parásito.'},
+   {w:'capanga',s:'¡Muchachos! ¡Enséñenle al paperito quién manda en los galpones!'}],
+  winLines:[{w:'capanga',s:'¡Pará, pibe, tenés la mano pesada! ¡Que tu viejo descargue tranquilo!'},{w:'ric1',s:'La pobreza no es no tener plata: es no superarse y vivir de apretar al que trabaja.'},{w:'viejo',s:'Bien parado, hijo. Los pibes del mercado cargan bolsas cuatro meses para comprarse una campera de cuero.'},{w:'ric1',s:'Ahora sí, viejo: con el Faim en el hombro me voy a Ciudadela a ensayar con el Chofa.'}],
+  winSay:'¡ORGULLO DE LABURANTE!',
+  quips:['¿Papero? ¡A mucha honra!','La criolla no se escucha arriba de un motor.','No se debe ser más de lo que uno es, ni menos de lo que uno vale.','Madrugar en el Abasto te enseña quién es quién.','Una papa no se regala: se transpira.','En Caseros se aprende a no agachar la cabeza.']},
+ {LW:2600,skin:'ric2',song:'l2',bossSong:'bossRock',food:'chori',chap:'CAPÍTULO 2',villains:'Hippies pacifistas falsos, travoltas de boliche, patovicas y El Productor',title:'LUCHANDO POR EL METAL',place:'OBRAS · BA ROCK 1982',hazard:null,
+  card:['En noviembre de 1982, Pappo exigió que V8 tocara en el festival BA Rock IV: si no iban ellos, Riff no tocaba.','En la conferencia previa en el Hotel Alvear la policía se llevó detenidos a los V8 por su aspecto; un abogado los sacó a tiempo.','En las canchas de Obras, los hippies les tiraron naranjas y silbaron; V8 respondió con "Destrucción" a todo volumen.'],
   npcs:[{kind:'carpo',x:250,y:200,face:1}],
   locks:[{trig:120,L:0,groups:[[['hippie2','R'],['hippie2','R']],[['hippie','R'],['disco','L']]]},
    {trig:640,L:560,groups:[[['hippie','R'],['hippie2','L'],['disco','R']],[['patovica','R'],['hippie2','L'],['hippie','R']]]},
@@ -1178,20 +1178,20 @@ const LEVELS=[
    {boss:true,groups:[]}],
   rescue:{kind:'heavy',x:1420,y:192},
   props:[[400,'tacho','chori'],[800,'tacho','mate'],[1500,'ampli','chori'],[1900,'ampli','mate'],[2050,'ampli','chori']],pipe:[1460,240],
-  intro:[{w:'ric2',s:'En la gala del Hotel Alvear nos cayó la cana y nos llevaron a todos. Lindo arranque.'},{w:'carpo',s:'Ya está, pibe. Hoy les toca en el BA Rock. Afuera está lleno de hippies que no quieren saber nada con el heavy.'},
-   {w:'ric2',s:'Que silben. Nosotros vinimos a tocar fuerte y en castellano.'},
-   {w:'carpo',s:'Así me gusta. Subí y tocá como si fuera la última vez.'}],
-  rescueLines:[{w:'heavy',s:'¡Ricardio! Me quisieron sacar la campera de tachas.'},{w:'ric2',s:'La campera se gana en la calle. No se entrega.'},
-   {w:'heavy',s:'¡Adentro está el productor! Dice que si no bajan el volumen, no tocan.'},{w:'ric2',s:'Ya vamos a ver quién baja qué.'}],
+  intro:[{w:'ric2',s:'En la gala del Hotel Alvear nos metieron en cana por llevar campera de cuero y tachas.'},{w:'carpo',s:'Tranquilo, Ricardio. Ya les dije a los organizadores: si no toca V8, Riff tampoco toca.'},
+   {w:'ric2',s:'Afuera está lleno de hippies pidiendo paz y amor mientras nos tiran cascotes y naranjas.'},
+   {w:'carpo',s:'Ustedes suban, enchufen todo al taco y demuestren que las Brigadas Metálicas llegaron para quedarse.'}],
+  rescueLines:[{w:'heavy',s:'¡Ricardio! Entre los patovicas y los chetos del festival me querían arrancar las tachas.'},{w:'ric2',s:'Cálmense, pibes, no rompan el lugar, que si no dicen que los pesados somos salvajes.'},
+   {w:'heavy',s:'¡El productor del festival quiere cortarles el sonido! Dice que el heavy metal asusta a los sponsors.'},{w:'ric2',s:'A los falsos profetas del acusticazo se les terminó el recreo. Vamos al escenario.'}],
   boss:'productor',summons:[['disco','hippie2'],['patovica','hippie']],
-  bossLines:[{w:'productor',s:'Ricardio, querido. Bajale un cambio al ruido y cortate el pelo, que te pongo en la radio.'},
-   {w:'ric2',s:'Nosotros no tocamos para vender. Tocamos lo que somos.'},
-   {w:'productor',s:'¡Seguridad! ¡Saquen a estos melenudos del escenario!'}],
-  winLines:[{w:'productor',s:'Está bien, está bien... toquen lo que quieran.'},{w:'ric2',s:'Siempre lo hicimos, maestro.'}],
-  winSay:'¡METAL EN CASTELLANO!',
-  quips:['Fuerte y en castellano.','El heavy no se negocia.','Silben nomás. La distorsión tapa todo.','Del escenario no me baja nadie.']},
- {LW:2700,skin:'ric3',song:'l3',bossSong:'bossThrash',food:'pizza',chap:'CAPÍTULO 3',villains:'Caretas, vendepatrias, transas, políticos, un lobizón suelto y El Vaciador',title:'HERMÉTICA',place:'EL OESTE · 1991',hazard:'moto',
-  card:['Con Hermética le cantó al laburante, al barrio y a la bronca de los 90.','En 1990 salió "Ácido argentino", que en 1993 fue disco de oro.','En 1992 abrieron en Obras para Black Sabbath y Motörhead.'],
+  bossLines:[{w:'productor',s:'Mirá, pibe: acá mandan las radios y la paz hippie. Si no bajan los amplificadores y cantan algo suave, les corto los cables.'},
+   {w:'ric2',s:'No vinimos a pedir permiso ni a disfrazarnos de buenitos. Venimos del Oeste y tocamos metal en criollo.'},
+   {w:'productor',s:'¡Seguridad! ¡Saquen a estos enfermos del metal antes de que rompan el festival!'}],
+  winLines:[{w:'productor',s:'¡Pará, loco! ¡Dejen los equipos prendidos, toquen lo que quieran!'},{w:'ric2',s:'Así se habla. Que se escuche desde Libertador hasta Caseros: ¡Luchando por el metal!'}],
+  winSay:'¡BRIGADAS METÁLICAS!',
+  quips:['¡Llegaron las Brigadas Metálicas!','Cálmense, no rompan nada, pero no se callen.','Fuerte, crudo y en castellano.','Gracias al Carpo hoy nos escuchan todos.']},
+ {LW:2700,skin:'ric3',song:'l3',bossSong:'bossThrash',food:'pizza',chap:'CAPÍTULO 3',villains:'Caretas privatizadores, Doctores de la Ley, tasadores, transas y El Vaciador',title:'ÁCIDO ARGENTINO',place:'EL OESTE · 1991',hazard:'moto',
+  card:['Con Hermética puso en letras la realidad del obrero, el conurbano y el desguace industrial de los años 90.','En 1991 editaron "Ácido argentino" (disco de oro), con himnos como "Gil trabajador", "Memoria de siglos" y "Olvídalo y volverá por más".','En 1992 abrieron para Black Sabbath y para Motörhead en Obras Sanitarias.'],
   npcs:[{kind:'vecina',x:250,y:198,face:1}],
   locks:[{trig:120,L:0,groups:[[['careta','R'],['careta','R']],[['movilero','R'],['careta2','L']]]},
    {trig:660,L:580,hazard:true,groups:[[['careta','R'],['careta2','L'],['careta','R']],[['tasador','R'],['patovica','L'],['cipayo','R']]]},
@@ -1200,23 +1200,23 @@ const LEVELS=[
    {boss:true,groups:[]}],
   rescue:{kind:'tornero',x:1320,y:192},
   props:[[380,'tacho','pizza'],[860,'tacho','mate'],[1560,'tacho','pizza'],[1980,'cajon','mate'],[2140,'cajon','pizza']],pipe:[1360,240],
-  intro:[{w:'vecina',s:'Ricardo, cerraron la metalúrgica. La compró un tal Vaciador y la quiere rematar entera.'},
-   {w:'ric3',s:'Venden en un día lo que al barrio le costó una vida levantar.'},
-   {w:'vecina',s:'Los muchachos están en la puerta, sin laburo. Y llueve.'},
-   {w:'ric3',s:'Voy para allá. Esto también es una canción.'}],
-  rescueLines:[{w:'tornero',s:'¡Ricardo! Nos echaron a todos. Treinta años en el torno, y ahora soy un número.'},
-   {w:'ric3',s:'El que labura no es ningún gil. Que no te lo hagan creer.'},
-   {w:'tornero',s:'El Vaciador está en el galpón, rematando las máquinas.'},{w:'ric3',s:'Entonces vamos a interrumpir el remate.'}],
+  intro:[{w:'vecina',s:'Ricardo, vaciaron la fábrica metalúrgica de la avenida. Vinieron los doctores de la ley a rematar los tornos.'},
+   {w:'ric3',s:'Al que madruga en el taller lo llaman "gil trabajador", mientras ellos firman el vaciamiento de guante blanco.'},
+   {w:'vecina',s:'Los obreros están bajo la lluvia cuidando las máquinas. Y andan punteros prometiendo bolsones.'},
+   {w:'ric3',s:'Olvídalo y volverá por más si nos quedamos cruzados de brazos. Vamos para el galpón.'}],
+  rescueLines:[{w:'tornero',s:'¡Ricardo! Treinta años frente al torno y este síndico me trató de descartable por defender el taller.'},
+   {w:'ric3',s:'Miente el patrón y miente el diario: sin tus manos el país no arranca, hermano.'},
+   {w:'tornero',s:'Adentro está El Vaciador, el Doctor de la Ley, con el martillo listo para vender todo por monedas.'},{w:'ric3',s:'Hoy el martillo se lo va a guardar en el portafolio.'}],
   boss:'vaciador',summons:[['cipayo','careta'],['politico','tasador']],
-  bossLines:[{w:'vaciador',s:'¡Lote catorce: un torno con treinta años de historia! ¿Quién da más?'},
-   {w:'ric3',s:'Eso no es tuyo. Es el laburo de un barrio entero.'},
-   {w:'vaciador',s:'Todo tiene precio, melenudo. ¡Hasta tu barrio!'},
-   {w:'ric3',s:'Lo que no tiene precio es la dignidad.'}],
-  winLines:[{w:'vaciador',s:'¡Remate suspendido! ¡Remate suspendido!'},{w:'ric3',s:'Las máquinas se quedan. Y los muchachos también.'}],
-  winSay:'¡EL OESTE NO SE REMATA!',
-  quips:['El que labura no es ningún gil.','Lo que se vacía, se vuelve a llenar.','El barrio no está en venta.','Ácido argentino, hermano.']},
- {LW:2800,skin:'ric4',song:'l4',bossSong:'bossFolk',food:'empanada',chap:'CAPÍTULO 4',villains:'Políticos, bancarios, cuatreros, lobizones y El Banquero del corralito',title:'ALMAFUERTE',place:'RUTAS DEL INTERIOR · 2001',hazard:'camion',
-  card:['Con Almafuerte salió a tocar por todo el país, pueblo por pueblo.','Le cantó a la tierra, al gaucho y al trabajo: "Mundo guanaco", "Piedra libre".','En 2001 el país estalló: corralito, cacerolas y bronca.'],
+  bossLines:[{w:'vaciador',s:'Soy un Doctor de la Ley, honrado de hoy y de ayer. ¡Esta fábrica se cierra, se lotea y se vende al exterior!'},
+   {w:'ric3',s:'Vos sos la máscara respetable del robo. Vaciás el esfuerzo de generaciones enteras.'},
+   {w:'vaciador',s:'¡El obrero ya fue, melenudo! ¡Tasadores, ejecuten el desalojo!'},
+   {w:'ric3',s:'La dignidad del laburante no entra en ningún remate.'}],
+  winLines:[{w:'vaciador',s:'¡Basta, suspendo la subasta! ¡Dejo las escrituras en la mesa!'},{w:'ric3',s:'Que prendan los motores de nuevo. Y esta noche los espero a todos en Obras.'}],
+  winSay:'¡MEMORIA DE SIGLOS!',
+  quips:['El que labura no es ningún gil trabajador.','Olvídalo y volverá por más.','Doctor de la ley, disfrazado de señor.','Ácido argentino en las venas.']},
+ {LW:2800,skin:'ric4',song:'l4',bossSong:'bossFolk',food:'empanada',chap:'CAPÍTULO 4',villains:'Políticos en campaña, bancarios del corralito, cuatreros y El Banquero',title:'PIEDRA LIBRE',place:'RUTAS DEL INTERIOR · 2001',hazard:'camion',
+  card:['Con Almafuerte recorrió las rutas del país profundo junto a Claudio "Tano" Marciello y Bin Valencia.','Fusionó el metal pesado con la milonga, el tango y la poesía de Pedro B. Palacios y José Larralde.','En diciembre de 2001, en pleno estallido y corralito bancario, editó "Piedra libre" y llenó Obras.'],
   npcs:[{kind:'jubilado',x:250,y:198,face:1,hold:'cacerola'}],
   locks:[{trig:120,L:0,groups:[[['bancario','R'],['cuatrero','R']],[['politico','R'],['bancario','L'],['cuatrero','L']]]},
    {trig:660,L:580,groups:[[['cuatrero','R'],['patovica','L'],['bancario','R']],[['cuatrero','R'],['cuatrero','L'],['bancario','R']]]},
@@ -1225,21 +1225,21 @@ const LEVELS=[
    {boss:true,groups:[]}],
   rescue:{kind:'camionero',x:1440,y:192},
   props:[[400,'tacho','empanada'],[820,'cajon','mate'],[1520,'tacho','empanada'],[2000,'cajon','empanada'],[2160,'cajon','mate']],pipe:[1480,240],
-  intro:[{w:'jubilado',s:'¿Usted es el de Almafuerte? Mire: el banco se quedó con mis ahorros. Corralito, le dicen.'},
-   {w:'ric4',s:'Toda la vida laburando, para que te lo encierren en un banco.'},
-   {w:'jubilado',s:'Esta noche tocan en el festival de la ruta, ¿no? Cuídese, que los del banco cobran hasta el aire.'},
-   {w:'ric4',s:'Nosotros venimos a cantarle a la tierra. Y la tierra no se embarga.'}],
-  rescueLines:[{w:'camionero',s:'¡Me pararon el camión con la cosecha! Dicen que es garantía de un préstamo.'},
-   {w:'ric4',s:'La cosecha es del que la sembró.'},{w:'camionero',s:'¡Gracias, hermano! El festival es más adelante, pasando el Gauchito.'}],
+  intro:[{w:'jubilado',s:'¡Don Ricardo! Cerraron las persianas del banco y se quedaron con la jubilación de toda mi vida.'},
+   {w:'ric4',s:'A los de abajo les dan bonos de papel pintado, mientras ellos fugan los camiones de caudales.'},
+   {w:'jubilado',s:'Encima en la ruta los del banco quieren embargar los camiones de cereal y el club donde toca Almafuerte.'},
+   {w:'ric4',s:'Las aguas turbias suben esta vez, abuelo, pero al pueblo no lo van a dejar de rodillas.'}],
+  rescueLines:[{w:'camionero',s:'¡Gracias, Ricardo! Me habían trabado el acoplado en la balanza con una orden judicial del banco.'},
+   {w:'ric4',s:'El que mueve la ruta de sol a sol es el verdadero dueño de lo que produce.'},{w:'camionero',s:'El Banquero está en la sucursal de la rotonda contando dólares antes de escaparse en helicóptero.'}],
   boss:'banquero',summons:[['politico','bancario'],['patovica','politico']],
-  bossLines:[{w:'banquero',s:'Señor Ricardio, la entrada al festival se paga en dólares. Ah, pero usted tiene patacones.'},
-   {w:'ric4',s:'Vos te quedaste con la plata de los abuelos.'},
-   {w:'banquero',s:'Es el mercado, querido. ¡Que nadie salga de la fila!'}],
-  winLines:[{w:'banquero',s:'¡Abran el corralito! ¡Abran todo!'},{w:'ric4',s:'Devolvé lo de la gente. Y dejá tocar a la banda.'}],
-  winSay:'¡LA TIERRA NO SE EMBARGA!',
-  quips:['La tierra no se embarga.','Pueblo por pueblo, ruta por ruta.','El gaucho no se arrodilla.','Mundo guanaco, pero de pie.']},
- {LW:2800,skin:'ric5',song:'l5',bossSong:'bossFolk',food:'asado',chap:'CAPÍTULO 5',villains:'La tele, influencers, hippies new age, lobizones y El Loteador... o lo que tiene debajo del traje',final:true,title:'EL CAMPO',place:'CORONEL SUÁREZ · 2023',hazard:'toro',ride:true,
-  card:['Dejó la ciudad y se fue a vivir al campo, en el sur bonaerense.','Desde una entrevista en la tele de 2012, los medios no dejaron de buscarlo.','En 2023 salió de gira por todo el país: "Unas estrofas más".'],
+  bossLines:[{w:'banquero',s:'Señor Iorio, sus ahorros y la recaudación del club ahora son bonos serie Z. ¡Agradezca que le damos patacones!'},
+   {w:'ric4',s:'Ustedes son usureros de traje: roban con una firma más que cien ladrones con revólver.'},
+   {w:'banquero',s:'¡Custodios! ¡Repriman a la fila de ahorristas y cierren el tesoro!'}],
+  winLines:[{w:'banquero',s:'¡No pegue más! ¡Ahí abro la bóveda y devuelvo peso por peso!'},{w:'ric4',s:'Devolvé lo de los viejos y abrí paso, que esta noche Almafuerte toca para todo el interior.'}],
+  winSay:'¡PIEDRA LIBRE AL PUEBLO!',
+  quips:['La tierra y el sudor no se embargan.','Pueblo por pueblo, ruta por ruta.','Las aguas turbias suben esta vez.','Sé vos, hermano: no te dejes comprar.']},
+ {LW:2800,skin:'ric5',song:'l5',bossSong:'bossFolk',food:'asado',chap:'CAPÍTULO 5',villains:'Movileros amarillistas, influencers, agrimensores y El Loteador... o Mandinga',final:true,title:'TIERRA ADENTRO',place:'CORONEL SUÁREZ · 2023',hazard:'toro',ride:true,
+  card:['Instalado tierra adentro en la pampa bonaerense, lejos del cemento, donde no llegan ni el delivery ni el correo.','Defendió siempre la amistad real cara a cara, la palabra empeñada y las raíces criollas y tehuelches.','En 2023 recorrió la Argentina con su gira despedida "Unas estrofas más" junto a Chewelche.'],
   npcs:[{kind:'anselmo',x:214,y:198,face:-1,hold:'mate'},{kind:'reporter',x:560,y:232,face:-1,hold:'mic',hidden:true}],
   locks:[{trig:120,L:0,groups:[[['movilero','R'],['agrimensor','R']],[['influ','R'],['agrimensor','L']]]},
    {trig:660,L:580,hazard:true,groups:[[['agrimensor','R'],['cuatrero','L'],['movilero','R']],[['influ','R'],['patovica','L'],['agrimensor','R']]]},
@@ -1248,24 +1248,24 @@ const LEVELS=[
    {boss:true,groups:[]}],
   rescue:{kind:'peon',x:1440,y:192},
   props:[[380,'fardo','asado'],[860,'fardo','mate'],[1500,'fardo','asado'],[1990,'fardo','mate'],[2150,'fardo','asado']],pipe:[1480,240],
-  intro:[{w:'anselmo',s:'Ricardio, desde que saliste en la tele no paran de venir. Movileros, influencers, de todo.'},
-   {w:'ric5',s:'Yo vine al campo por el silencio, padrino.'},
-   {w:'movilero',s:'¡Ricardio! ¡Estamos en vivo! ¿Qué es lo más importante de la vida?',fx:'reporter'},
-   {w:'ric5',s:'Decirle a los tuyos que los querés mientras están. Después es tarde, pibe.'},
-   {w:'anselmo',s:'Y ahora apareció uno con una topadora. Quiere lotear todo y hacer un barrio cerrado.'},
-   {w:'ric5',s:'Esta tierra no se lotea. Cebá uno, que ya vuelvo.'}],
-  rescueLines:[{w:'peon',s:'¡Patrón! Me ataron porque no quise firmar el loteo.'},{w:'ric5',s:'Patrón no. Compañero.'},
-   {w:'peon',s:'El loteador ya pasó la tranquera. Viene con la máquina.'}],
+  intro:[{w:'anselmo',s:'Ricardo, se llenó el camino de ripio de camionetas de televisión, influencers con telefonito y agrimensores.'},
+   {w:'ric5',s:'Yo me vine a vivir tierra adentro para escuchar a los pájaros y la radio AM, no para hacer circo.'},
+   {w:'movilero',s:'¡Ricardo! ¡Estamos en directo! ¿Qué consejo le dejás a los pibes que te miran?',fx:'reporter'},
+   {w:'ric5',s:'Que estudien, que trabajen y que abracen a sus padres hoy: porque el abrazo que no se dio, se llora.'},
+   {w:'anselmo',s:'Y atrás viene El Loteador con una topadora: quiere desmontar el monte para hacer un country VIP.'},
+   {w:'ric5',s:'Yo no soy un ídolo, soy un trabajador de la música. Pero mi pampa no la toca nadie.'}],
+  rescueLines:[{w:'peon',s:'¡Don Ricardo! Me maniataron junto al molino porque no los dejé cortar el alambrado con la topadora.'},{w:'ric5',s:'Nadie es patrón de la naturaleza, compañero. Desátese que vamos juntos.'},
+   {w:'peon',s:'El Loteador tiene ojos raros, don Ricardo... cuando habla huele a azufre quemado.'},{w:'ric5',s:'Ya me parecía que atrás de tanta codicia estaba el mismísimo Mandinga.'}],
   boss:'loteador',summons:[['agrimensor','reptil'],['camara','influ']],
-  bossLines:[{w:'loteador',s:'¡Ricardio! Firmá acá y te hago un country con tu nombre: "Barrio Cerrado El Papero".'},
-   {w:'ric5',s:'Lo que encerrás con alambre, lo perdés para siempre.'},
-   {w:'loteador',s:'¡Dale, muchachos! ¡Prendan la topadora!'}],
-  monsterLines:[{w:'loteador',s:'¡Está bien, Ricardio! ¡Me cansé de este disfraz!'},{w:'ric5',s:'¿Olor a azufre? Ya sé quién sos.'},
-   {w:'reptilazo',s:'Soy Mandinga, metalero. Firmá acá y te doy fama, plata y tele.'},{w:'ric5',s:'El alma no se vende. Ni a vos ni a ningún productor.'}],
-  winLines:[{w:'ric5',s:'Volvete a la salamanca, Mandinga. Acá no firmo nada.'},{w:'ric5',s:'Acá se planta, no se tapa con cemento. Y el alma no se le vende a nadie.'},
-   {w:'ric5',s:'Ahora sí: a juntar a los muchachos. Nos espera una gira por todo el país.'}],
+  bossLines:[{w:'loteador',s:'¡Iorio! Vendeme estas hectáreas y te pongo un monumento de plástico en la entrada del country!' },
+   {w:'ric5',s:'Acá no llega el delivery ni el asfalto, y así queremos que siga. El horizonte no tiene dueño.'},
+   {w:'loteador',s:'¡Por las buenas o bajo las orugas! ¡Arranquen la topadora!'}],
+  monsterLines:[{w:'loteador',s:'¡Basta de este traje de ingeniero! ¡Conocé mi verdadera cara, cantor criollo!'},{w:'ric5',s:'Mandinga tenía que ser. Siempre escondido detrás del que compra y vende voluntades.'},
+   {w:'reptilazo',s:'¡Entregame tu voz y tu nombre, Ricardo, y te hago rey de todas las pantallas del mundo!'},{w:'ric5',s:'Yo ya atesoré en los cielos y en el corazón de mi gente. ¡Volvete al pozo, demonio!'}],
+  winLines:[{w:'ric5',s:'Se fue Mandinga con la cola entre las patas. Ni el oro ni el rating compran un alma libre.'},{w:'ric5',s:'Sé vos, nomás, y al mundo salvarás. Nunca se olviden de dónde vienen.'},
+   {w:'ric5',s:'Prendan el fogón y preparen los equipos: nos quedan unas estrofas más por cantar en cada rincón de la Patria.'}],
   winSay:'¡UNAS ESTROFAS MÁS!',
-  quips:['Yo soy protagonista de mi vida.','Hay que perseverar, pibe. Siempre.','Nunca chateé con nadie. Tengo amigos.','Uno es lo que aprende, no lo que junta.']}
+  quips:['El abrazo que no se dio, se llora.','Sé vos, nomás, y al mundo salvarás.','Yo no soy un ídolo: soy un trabajador de la música.','La pobreza no es no tener plata, es no superarse.']}
 ];
 for(const LV of LEVELS){const b=LV.locks[LV.locks.length-1];b.L=LV.LW-W;b.trig=b.L+80;}
 
@@ -1280,7 +1280,7 @@ function mk(kind,x,y){const D=DEFS[kind];return {kind,D,st:STY[D.sty],x,y,z:0,vx
 
 // v14: un tema propio por capítulo y un primer nivel más intenso (más oleadas, enemigos más encima)
 
-// v15: villanos de lo que él bardeaba (sin apuntar a nadie por origen, religión ni nada de eso)
+// v15: villanos de lo que él criticaba en canciones y reportajes
 function v15Villains(){if(v15Villains.done)return;v15Villains.done=1;
   Object.assign(STY,{
     soho:{scale:.97,skin:'#ecc4a0',hair:'cap',capC:'#c86a3a',beard:true,beardC:'#6a4a2a',glasses:true,top:'#6a8a6a',shirt:'#d8ccb0',pants:'#2a3a5a',boots:'#e8e2d0',torsoW:9},
@@ -1290,24 +1290,24 @@ function v15Villains(){if(v15Villains.done)return;v15Villains.done=1;
     lagarto:{scale:1.02,skin:'#5e8e3e',hair:'bald',lizard:true,top:'#a8b0b8',shirt:'#d8dce0',pants:'#a8b0b8',boots:'#5a6068',torsoW:10.5},
     puntero:{scale:1.06,skin:'#d8a07a',hair:'short',hairC:'#2a1a10',stache:'#2a1a10',top:'#3a5a8a',shirt:'#e8e8ea',pants:'#2a2a30',boots:'#1a1a1e',torsoW:12,belly:true}});
   Object.assign(DEFS,{
-    soho:E('soho',26,1.05,'MODERNO DE PALERMO SOHO',140,{wind:13}),
-    poser:E('poser',30,1.1,'POSER',150,{wind:12,hold:'phone'}),
-    faran:E('faran',30,1.4,'FARANDULERO DE LA TELE',170,{punch:'mpunch',wind:9,reach:30,ai:'hitrun',hold:'mic'}),
-    vendido:E('vendido',28,1.0,'METALERO VENDIDO',150,{wind:12}),
-    lagarto:E('lagarto',32,1.15,'REPTILOIDE ESPACIAL',230,{ai:'ranged',shot:'baba'}),
-    puntero:E('puntero',40,.9,'PUNTERO POLÍTICO',200,{ai:'ranged',shot:'promesa'})});
-  Object.assign(NAMES,{soho:'MODERNO DE PALERMO SOHO',poser:'POSER',faran:'FARANDULERO',vendido:'METALERO VENDIDO',puntero:'PUNTERO POLÍTICO',lagarto:'REPTILOIDE ESPACIAL'});
-  Object.assign(BARKS,{soho:['¡El campo es re vintage!','¿Tenés leche de almendras?','¡Esto es re auténtico, boludo!'],
-    poser:['¡Yo los escucho desde el primer disco!','¿Hermética? Sí, re... ¿cuál era?','¡Sacame una foto con la remera!'],
-    faran:['¡Contanos algo picante!','¡Polémica en vivo!','¡Mirá a cámara, Ricardio!'],
-    vendido:['¡Me pasé al pop, hay más plata!','¡El metal no vende, loco!','¡Ponele un estribillo pegadizo!'],
-    lagarto:['¡Venimosss de Ganímedesss!','¡Llevame a tu asssador!','¡Ssse nos rompió el plato volador!','¿Esssto es Sssierra de la Ventana?'],
-    puntero:['¡Vení al acto que hay chori!','¡Votá al de la foto!','¡Te consigo un puesto, metalero!']});
-  Object.assign(DIEQ,{soho:'Andá a vivir tierra adentro un mes, después hablamos.',poser:'El heavy no es un disfraz.',faran:'Lo que digo, lo digo en la cara. No en un panel.',
-    vendido:'Lo que somos no se vende.',puntero:'El voto no se cambia por un choripán.',lagarto:'Volvete a tu planeta, lagartija.'});
+    soho:E('soho',26,1.05,'TURISTA DE PALERMO SOHO',140,{wind:13}),
+    poser:E('poser',30,1.1,'CARETA CON REMERA NUEVA',150,{wind:12,hold:'phone'}),
+    faran:E('faran',30,1.4,'PANELISTA DE CHIMENTOS',170,{punch:'mpunch',wind:9,reach:30,ai:'hitrun',hold:'mic'}),
+    vendido:E('vendido',28,1.0,'MÚSICO TRANSERO DE LA INDUSTRIA',150,{wind:12}),
+    lagarto:E('lagarto',32,1.15,'REPTILOIDE DE LAS SIERRAS',230,{ai:'ranged',shot:'baba'}),
+    puntero:E('puntero',40,.9,'PUNTERO DEL COMITÉ',200,{ai:'ranged',shot:'promesa'})});
+  Object.assign(NAMES,{soho:'MODERNO DE PALERMO SOHO',poser:'POSER DE MODA',faran:'PANELISTA FARANDULERO',vendido:'MÚSICO VENDIDO',puntero:'PUNTERO POLÍTICO',lagarto:'REPTILOIDE ESPACIAL'});
+  Object.assign(BARKS,{soho:['¡El campo es re aesthetic, gordo!','¿Tenés flat white con leche de almendras?','¡Qué vintage tu molino, boludo!'],
+    poser:['¡Compré la remera en el shopping!','¿V8? ¿No es un motor de camioneta?','¡Sacame una selfie haciendo cuernitos!'],
+    faran:['¡Decí algo polémico para el graph!','¡Necesito veinte puntos de rating!','¡Recortale esa frase que es viral!'],
+    vendido:['¡El heavy ya fue, ahora rinde el pop!','¡Firmá con la multinacional y hacé playback!','¡Si no sonás en el boliche no existís!'],
+    lagarto:['¡Venimosss de Ganímedesss!','¡Entregá las vacasss, terrícola!','¡Ssse nos cayó el plato en el cerro!','¡Sssomos el nuevo orden!'],
+    puntero:['¡Subí al micro que pasan lista!','¡Votá la boleta entera y te doy una chapa!','¡Después de las elecciones vemos!']});
+  Object.assign(DIEQ,{soho:'Andá a carpir la tierra en invierno y después hablamos.',poser:'El sentimiento pesado se lleva adentro, no en una etiqueta.',faran:'Con la honra de la gente no se hace rating.',
+    vendido:'Prefiero comer pan duro antes que traicionar mi canción.',puntero:'Al pueblo se le da trabajo digno, no limosna.',lagarto:'En la pampa no mandan los bichos de otro planeta.'});
   const add=(i,k)=>{const L=LEVELS[i];if(!L)return;L.locks.forEach((l,j)=>{if(l.groups&&l.groups.length)l.groups[j%l.groups.length].push([k,j%2?'L':'R']);});};
   add(2,'vendido');add(3,'poser');add(4,'puntero');add(5,'poser');add(6,'vendido');add(7,'puntero');add(8,'soho');add(9,'faran');add(9,'soho');add(8,'lagarto');add(9,'lagarto');
-  const vs=['','','Metaleros vendidos, ','Posers, ','Punteros políticos, ','Posers, ','Metaleros vendidos, ','Punteros políticos, ','Reptiloides del espacio, modernos de Palermo Soho, ','La farándula, reptiloides del espacio, modernos de Palermo Soho, '];
+  const vs=['','','Músicos vendidos, ','Posers, ','Punteros políticos, ','Posers, ','Músicos vendidos, ','Punteros políticos, ','Reptiloides de las sierras, modernos de Palermo Soho, ','Panelistas faranduleros, reptiloides, modernos de Palermo Soho, '];
   LEVELS.forEach((L,i)=>{if(vs[i])L.villains=vs[i]+L.villains.charAt(0).toLowerCase()+L.villains.slice(1);});}
 function v14Levels(){v15Villains();if(v14Levels.done)return;v14Levels.done=1;LEVELS.forEach((L,i)=>{L.song='c'+i;L.bossSong=['b0','b0','b0','b2','b1','b1','b2','b1','b2','b2'][i];});
 LEVELS[0].locks.forEach((l,i)=>{if(l.groups&&l.groups.length)l.groups.push(i%2?[['patotero','R'],['chorro','L'],['patotero2','R'],['estibador','L']]:[['chorro','R'],['patotero2','L'],['patotero','R']]);});}
@@ -1322,102 +1322,101 @@ function resetWorld(i,keep){v14Levels();lvl=i;truckDone=false;truck=null;modRese
   items.push({kind:'pipe',x:LV.pipe[0],y:LV.pipe[1],z:0,vz:0,t:0});guiReset();GUI.motoDone=0;if(LV.dyn==='campo')items.push({kind:'lombriz',x:1150,y:232,z:0,vz:0,t:0});for(const [gx,gk] of (LV.guns||[]))items.push({kind:gk,x:gx,y:226,z:0,vz:0,t:0});
 }
 
-// v9: los cinco capítulos nuevos, intercalados en orden cronológico (10 en total)
+// v9: los cinco capítulos nuevos, intercalados en orden cronológico
 Object.assign(DEFS,{
-  cana:E('cana',32,1.0,'LA CANA',150,{wind:12}),cana2:E('cana2',40,.9,'LA CANA',200,{punch:'ppunch',wind:18,reach:30}),
-  buchon:E('buchon',24,1.1,'EL BUCHÓN',160,{ai:'ranged',shot:'papel',hold:'papel'}),
-  comisario:E('comisario',330,.9,'EL COMISARIO',5000,{boss:1,bthrow:'papel'}),
-  cheto:E('cheto',26,1.0,'CHETO',110,{wind:13}),cheto2:E('cheto2',28,1.05,'CHETO',130,{wind:12}),
-  critico:E('critico',24,1.05,'EL CRÍTICO',170,{ai:'ranged',shot:'papel',hold:'papel'}),
-  curador:E('curador',340,.92,'EL CURADOR',5500,{boss:1,bthrow:'papel'}),
-  revendedor:E('revendedor',26,1.6,'REVENDEDOR',150,{punch:'mpunch',wind:9,reach:30,ai:'hitrun'}),
-  seguridad:E('seguridad',76,.72,'SEGURIDAD',380,{punch:'ppunch',wind:22,reach:31,heavy:1}),
-  empresario:E('empresario',360,.9,'EL EMPRESARIO',6000,{boss:1,bthrow:'contrato'}),
-  barra:E('barra',32,1.5,'BARRA',160,{punch:'mpunch',wind:9,reach:30,ai:'hitrun'}),
-  inspector:E('inspector',28,1.05,'INSPECTOR',170,{ai:'ranged',shot:'papel',hold:'papel'}),
-  clausurador:E('clausurador',360,.9,'EL CLAUSURADOR',6000,{boss:1,bthrow:'papel',hold:'gavel'}),
-  cazador:E('cazador',36,1.05,'CAZADOR FURTIVO',190,{wind:11}),newage:E('newage',24,1.05,'HIPPIE NEW AGE',150,{ai:'ranged',shot:'tomate',hold:'tomate'}),
-  intendente:E('intendente',380,.9,'EL INTENDENTE',7000,{boss:1,bthrow:'promesa'}),
+  cana:E('cana',32,1.0,'AGENTE DE LA RAZZIA',150,{wind:12}),cana2:E('cana2',40,.9,'CABO DE CALLE',200,{punch:'ppunch',wind:18,reach:30}),
+  buchon:E('buchon',24,1.1,'BUCHÓN DE COMISARÍA',160,{ai:'ranged',shot:'papel',hold:'papel'}),
+  comisario:E('comisario',330,.9,'EL COMISARIO DE LA RAZZIA',5000,{boss:1,bthrow:'papel'}),
+  cheto:E('cheto',26,1.0,'SNOB DE GALERÍA',110,{wind:13}),cheto2:E('cheto2',28,1.05,'CHETO DE RECOLETA',130,{wind:12}),
+  critico:E('critico',24,1.05,'CRÍTICO ELITISTA',170,{ai:'ranged',shot:'papel',hold:'papel'}),
+  curador:E('curador',340,.92,'EL CURADOR DE LA ÉLITE',5500,{boss:1,bthrow:'papel'}),
+  revendedor:E('revendedor',26,1.6,'REVENDEDOR DE ENTRADAS',150,{punch:'mpunch',wind:9,reach:30,ai:'hitrun'}),
+  seguridad:E('seguridad',76,.72,'PATOVICA ("TÚ ERES SU SEGURIDAD")',380,{punch:'ppunch',wind:22,reach:31,heavy:1}),
+  empresario:E('empresario',360,.9,'EL EMPRESARIO DEL VACIAMIENTO',6000,{boss:1,bthrow:'contrato'}),
+  barra:E('barra',32,1.5,'PUNTERO DE LA ESQUINA',160,{punch:'mpunch',wind:9,reach:30,ai:'hitrun'}),
+  inspector:E('inspector',28,1.05,'INSPECTOR COIMERO',170,{ai:'ranged',shot:'papel',hold:'papel'}),
+  clausurador:E('clausurador',360,.9,'EL CLAUSURADOR MUNICIPAL',6000,{boss:1,bthrow:'papel',hold:'gavel'}),
+  cazador:E('cazador',36,1.05,'CAZADOR FURTIVO',190,{wind:11}),newage:E('newage',24,1.05,'FALSO GURÚ NEW AGE',150,{ai:'ranged',shot:'tomate',hold:'tomate'}),
+  intendente:E('intendente',380,.9,'EL INTENDENTE ESPECULADOR',7000,{boss:1,bthrow:'promesa'}),
   violero:N('violero'),pelusa:N('pelusa'),pibe:N('pibe')
 });
 const L_STD=(g1,g2,g3,g4)=>[{trig:120,L:0,groups:g1},{trig:640,L:560,groups:g2},{trig:1180,L:1100,groups:g3,after:'rescue'},{trig:1820,L:1740,hazard:true,groups:g4},{boss:true,groups:[]}];
 const NEWLEVELS={
- caseros79:{LW:2600,skin:'ricV',song:'l2',bossSong:'bossRock',food:'chori',villains:'La cana de la razzia, buchones y El Comisario que odia el pelo largo',title:'NACE V8',place:'CIUDADELA · CASEROS 1979',hazard:'patrullero',
-  card:['Nació en 1962 en Ciudadela y creció en Caseros, en el oeste del conurbano.','En 1979 armó V8, de las primeras bandas de heavy metal en castellano.','Eran años de dictadura: por tener pelo largo te podían llevar a la comisaría.'],
+ caseros79:{LW:2600,skin:'ricV',song:'l2',bossSong:'bossRock',food:'chori',villains:'La cana de la razzia, buchones de esquina y El Comisario que persigue el pelo largo',title:'NACE V8',place:'CIUDADELA · CASEROS 1979',hazard:'patrullero',
+  card:['En 1979, tras pasar por Alarma y Comunión Humana, fundó V8 junto a su amigo Ricardo "Chofa" Moreno.','El nombre homenajeaba a los motores V8 y a los que fabricaban la riqueza en las fábricas del conurbano.','En plena dictadura, ser joven de barrio, usar pelo largo o cargar un instrumento era motivo de razzia policial.'],
   npcs:[{kind:'vecina',x:250,y:198,face:1}],
   locks:L_STD([[['cana','R'],['cana','R']],[['buchon','R'],['cana','L']]],[[['cana','R'],['buchon','L'],['cana2','R']],[['cana2','R'],['cana','L']]],
    [[['cana','R'],['cana','L'],['buchon','R']],[['cana2','L'],['buchon','R'],['cana','R']]],[[['cana','L'],['cana2','R'],['buchon','R']],[['cana','R'],['cana','L'],['cana2','R'],['buchon','L']]]),
   rescue:{kind:'violero',x:1420,y:192,hold:'gtr'},
   props:[[380,'tacho','chori'],[860,'tacho','mate'],[1500,'tacho','chori'],[1900,'cajon','fruta'],[2050,'tacho','mate']],pipe:[1460,240],
-  intro:[{w:'vecina',s:'¡Ricardo! Esta noche hay razzia. Ya se llevaron a dos pibes por el pelo largo.'},{w:'ricV',s:'Doña, hoy ensayamos igual. Tenemos una banda nueva: V8.'},
-   {w:'vecina',s:'Andá por los techos, nene. Y bajale al ruido que te escuchan desde Ciudadela.'},{w:'ricV',s:'Que escuchen. Para eso lo hacemos.'},],
-  rescueLines:[{w:'violero',s:'¡Ricardo! Me querían llevar porque tenía la viola en la mano.'},{w:'ricV',s:'Tocar no es delito. Vamos al garaje.'},
-   {w:'violero',s:'El comisario dice que te busca a vos. Que sos el cabecilla de los melenudos.'},{w:'ricV',s:'Que me encuentre, entonces.'}],
+  intro:[{w:'vecina',s:'¡Ricardo! Escondé el bajo que anda el Falcon y el celular haciendo razzia en la estación.'},{w:'ricV',s:'No robamos ni le debemos nada a nadie, doña Nélida. Vamos a ensayar con V8.'},
+   {w:'vecina',s:'Los buchones del barrio andan marcando en qué garaje se juntan los pibes de pelo largo.'},{w:'ricV',s:'Aunque nos persigan en cada esquina, este motor de ocho cilindros ya arrancó.'}],
+  rescueLines:[{w:'violero',s:'¡Ricardo! Me pararon en la vía y me querían secuestrar la guitarra por "averiguación de antecedentes".'},{w:'ricV',s:'Para ellos un pibe de barrio con una viola es más peligroso que un ladrón de guante blanco.'},
+   {w:'violero',s:'El Comisario bloqueó la cuadra con los patrulleros. Dice que nos va a rapar a todos en el calabozo.'},{w:'ricV',s:'Las ideas no se cortan con tijera. Vamos a abrir paso.'}],
   boss:'comisario',summons:[['cana','cana'],['cana2','buchon']],
-  bossLines:[{w:'comisario',s:'Así que vos sos el del ruido. Documentos, y después a la peluquería.'},{w:'ricV',s:'El pelo es mío y el ruido también, comisario.'},{w:'comisario',s:'¡Muchachos! ¡Al calabozo con este rulitos!'}],
-  winLines:[{w:'comisario',s:'Bueno, bueno... seguí ensayando, pero bajito.'},{w:'ricV',s:'Bajito no sabemos. Va a ser heavy y en castellano.'}],
-  winSay:'¡V8 VIVE!',quips:['El pelo largo no es delito.','En el garaje se hace la historia.','Fuerte y en castellano.','Al barrio no lo calla nadie.']},
- recoleta88:{LW:2600,skin:'ricH',song:'l3',bossSong:'bossThrash',food:'empanada',villains:'Chetos, críticos de arte y El Curador que dice que el metal no es cultura',title:'HERMÉTICA',place:'RECOLETA · 1988',hazard:'auto',
-  card:['V8 se separó en 1987 y ese mismo año armó Hermética.','Debutaron en mayo de 1988: él contaba que fue en Recoleta.','En 1989 salió el primer disco, que llevaba el nombre de la banda.'],
+  bossLines:[{w:'comisario',s:'¡Contra la pared, melenudo! Acá se terminó el ruidito: documentos, al celular y a pasar por la peluquería.'},{w:'ricV',s:'Nosotros trabajamos todo el día y de noche hacemos música. El miedo no nos va a callar.'},{w:'comisario',s:'¡Agentes! ¡Abran la celda y metan a este revoltoso!'}],
+  winLines:[{w:'comisario',s:'¡Retírense, agentes! ¡Dejen pasar a los de la banda!'},{w:'ricV',s:'Esto recién empieza: muy pronto van a escuchar rugir a V8 en todo el país.'}],
+  winSay:'¡V8 NO SE CALLA!',quips:['El pelo largo no es delito.','En los garajes del Oeste nace la historia.','Fuerte, rápido y en nuestro idioma.','Aunque nos lleven mil veces, vamos a seguir tocando.']},
+ recoleta88:{LW:2600,skin:'ricH',song:'l3',bossSong:'bossThrash',food:'empanada',villains:'Chetos elitistas, críticos de suplemento y El Curador que desprecia al conurbano',title:'HERMÉTICA',place:'RECOLETA · SAN MARTÍN 1988',hazard:'auto',
+  card:['Tras el fin de V8, en 1987 formó Hermética junto a Claudio O\'Connor, Antonio "Tano" Romano y Fabián Spataro.','El 6 de mayo de 1988 tocaron gratis al aire libre en el Centro Cultural Recoleta, y al día siguiente debutaron en Helloween (San Martín).','Frente al rock de plástico de las radios, Hermética trajo el thrash metal crudo con poesía social argentina.'],
   npcs:[{kind:'heavy',x:250,y:200,face:1}],
   locks:L_STD([[['cheto','R'],['cheto2','R']],[['critico','R'],['cheto','L']]],[[['cheto','R'],['critico','L'],['cheto2','R']],[['patovica','R'],['cheto','L']]],
    [[['cheto2','R'],['cheto','L'],['critico','R']],[['patovica','L'],['critico','R'],['cheto','R']]],[[['cheto','L'],['patovica','R'],['critico','R']],[['cheto2','R'],['cheto','L'],['critico','R'],['patovica','L']]]),
   rescue:{kind:'pibe',x:1420,y:192},
   props:[[400,'tacho','empanada'],[800,'tacho','mate'],[1500,'ampli','empanada'],[1900,'cajon','mate'],[2050,'ampli','empanada']],pipe:[1460,240],
-  intro:[{w:'heavy',s:'Ricardio, ¿tocar en Recoleta? Acá los mozos nos miran como si fuéramos marcianos.'},{w:'ricH',s:'Mejor. Que el barrio de los chetos escuche lo que pasa en el oeste.'},
-   {w:'heavy',s:'¿Y cómo se llama la banda nueva?'},{w:'ricH',s:'Hermética. Cerrada a lo que no sirve.'}],
-  rescueLines:[{w:'pibe',s:'¡Me sacaron de la fila por tener la remera de V8!'},{w:'ricH',s:'Esa remera se gana. Vení que adentro hay lugar.'},
-   {w:'pibe',s:'El curador de la muestra no quiere que toquen. Dice que van a romper los cuadros.'},{w:'ricH',s:'No rompemos cuadros. Rompemos el silencio.'}],
+  intro:[{w:'heavy',s:'Ricardio, los críticos de arte de Recoleta nos miran con asco porque vinimos en tren desde San Martín.'},{w:'ricH',s:'Que miren. Venimos a cantar verdades que en sus salones perfumados nunca se nombran.'},
+   {w:'heavy',s:'Mañana debutamos en Helloween de San Martín, pero hoy el Curador quiere cerrarnos el patio.'},{w:'ricH',s:'Hermética está cerrada a la hipocresía, pero abierta de par en par para el pueblo.'}],
+  rescueLines:[{w:'pibe',s:'¡Ricardio! Los de seguridad de la galería me echaron por tener las zapatillas gastadas y la tacha en el cinto.'},{w:'ricH',s:'Acá nadie vale por la marca de la ropa. Vení a la primera fila, hermano.'},
+   {w:'pibe',s:'El Curador dice que el metal pesado es ruido de bárbaros y que hoy sólo entra gente VIP.'},{w:'ricH',s:'Vamos a enseñarle qué es la cultura popular.'}],
   boss:'curador',summons:[['cheto','cheto2'],['critico','patovica']],
-  bossLines:[{w:'curador',s:'Esto es un espacio de arte, señor. El heavy metal no es cultura.'},{w:'ricH',s:'La cultura es lo que vive el pueblo, no lo que se cuelga en una pared.'},{w:'curador',s:'¡Seguridad! ¡Saquen a este señor de mi muestra!'}],
-  winLines:[{w:'curador',s:'Bueno... quizás sea una performance muy intensa.'},{w:'ricH',s:'Es Hermética, maestro. Anotalo en el catálogo.'}],
-  winSay:'¡HERMÉTICA!',quips:['Esto también es cultura.','Del oeste a Recoleta.','La banda se llama Hermética.','Menos copa, más pogo.']},
- monumental94:{LW:2600,skin:'ricM',song:'l3',bossSong:'bossThrash',food:'chori',villains:'Revendedores, seguridad patotera y El Empresario que vacía todo',title:'VÍCTIMAS DEL VACIAMIENTO',place:'MONUMENTAL · 1994',hazard:'carrito',
-  card:['En 1994 Hermética tocó en el Monsters of Rock, en el estadio Monumental.','Ese año sacaron "Víctimas del vaciamiento" y en noviembre les dieron el disco de oro en Obras.','El 18 de diciembre tocaron por última vez, en Go! de Mar del Plata.'],
+  bossLines:[{w:'curador',s:'Disculpe, joven: esto es alta cultura subvencionada. Su ruido suburbano contamina nuestra estética.'},{w:'ricH',s:'La cultura nace del que sufre y trabaja, no del que toma champagne hablando en difícil.'},{w:'curador',s:'¡Críticos, custodios! ¡Desalojen a esta tribu del conurbano!'}],
+  winLines:[{w:'curador',s:'¡Por favor, no toque mi foulard! ¡Tienen el escenario habilitado!'},{w:'ricH',s:'Hoy suena en Recoleta y mañana en San Martín: ¡somos Hermética!'}],
+  winSay:'¡SOMOS HERMÉTICA!',quips:['Del conurbano al centro sin cambiar la cara.','Menos pose de galería y más verdad.','La cultura no es propiedad de cuatro snobs.','Desde el Oeste llega el vendaval.']},
+ monumental94:{LW:2600,skin:'ricM',song:'l3',bossSong:'bossThrash',food:'chori',villains:'Revendedores, matones de valla ("Tú eres su seguridad") y El Empresario',title:'VÍCTIMAS DEL VACIAMIENTO',place:'MONUMENTAL · 1994',hazard:'carrito',
+  card:['En 1994 Hermética alcanzó la masividad con "Víctimas del vaciamiento", denunciando la corrupción, el olvido del hospital público y los abusos de poder.','En "Tú eres su seguridad" retrató a los que golpean a los pibes en los recitales por unas monedas del patrón.','El 3 de septiembre de 1994 coparon el estadio de River en el Monsters of Rock junto a Black Sabbath y Kiss.'],
   npcs:[{kind:'heavy',x:250,y:200,face:1}],guns:[[1500,'bersa']],
   locks:L_STD([[['revendedor','R'],['revendedor','R']],[['seguridad','R'],['revendedor','L']]],[[['revendedor','R'],['seguridad','L'],['transa','R']],[['seguridad','R'],['revendedor','L']]],
    [[['transa','R'],['revendedor','L'],['seguridad','R']],[['seguridad','L'],['revendedor','R'],['transa','R']]],[[['revendedor','L'],['seguridad','R'],['transa','R']],[['revendedor','R'],['revendedor','L'],['seguridad','R'],['transa','L']]]),
   rescue:{kind:'pibe',x:1420,y:192},
   props:[[400,'tacho','chori'],[800,'tacho','mate'],[1500,'ampli','chori'],[1900,'ampli','mate'],[2050,'ampli','chori']],pipe:[1460,240],
-  intro:[{w:'heavy',s:'¡Ricardio! ¡River lleno! Y los revendedores cobran la entrada como un auto.'},{w:'ricM',s:'La música es del pueblo. Al que lucra con el pibe, lo saco del medio.'},
-   {w:'heavy',s:'Y el empresario quiere que toquen menos para meter más publicidad.'},{w:'ricM',s:'Vamos a ver quién vacía a quién.'}],
-  rescueLines:[{w:'pibe',s:'¡Gracias! Me vendieron una entrada trucha.'},{w:'ricM',s:'Pasá con nosotros. Hoy entra el que vino a escuchar.'},
-   {w:'pibe',s:'El empresario se quiere llevar la recaudación en un camión.'},{w:'ricM',s:'Que lo intente.'}],
+  intro:[{w:'heavy',s:'¡Ricardio, mirá las banderas del Oeste en todo River! Pero en los molinetes los de seguridad les están pegando a los pibes.'},{w:'ricM',s:'Como dice la canción: "Tú eres su seguridad". Le cuidan el bolsillo al empresario verdugueando a su propio hermano.'},
+   {w:'heavy',s:'Encima el promotor quiere acortar el show de Hermética y quedarse con la plata de las entradas populares.'},{w:'ricM',s:'En River tocamos completo y a los pibes se los respeta.'}],
+  rescueLines:[{w:'pibe',s:'¡Gracias, Ricardo! Junté monedas todo el mes en la obra y en la valla me fajaron entre tres patovicas.'},{w:'ricM',s:'Vení conmigo al campo, pibe: vos sos la razón por la que estamos arriba de ese escenario.'},
+   {w:'pibe',s:'El Empresario está atrás de las torres de sonido cerrando el negocio con los revendedores.'},{w:'ricM',s:'Se le terminó el negocio con la pasión de la gente.'}],
   boss:'empresario',summons:[['seguridad','revendedor'],['revendedor','transa']],
-  bossLines:[{w:'empresario',s:'Ricardio, el negocio es el negocio. Firmá acá y tocás en todos los estadios.'},{w:'ricM',s:'No se firma lo que no se siente. Y a los pibes no se los exprime.'},{w:'empresario',s:'¡Seguridad! ¡Este no toca más!'}],
-  winLines:[{w:'empresario',s:'¡Está bien! ¡La entrada a precio justo!'},{w:'ricM',s:'Así se hace. Y ahora, a tocar como si fuera la última.'},{w:'heavy',s:'En noviembre les dan el disco de oro en Obras, ¿no?'},{w:'ricM',s:'Sí. Y en diciembre, Mar del Plata. Después, cada uno por su camino.'}],
-  winSay:'¡AGUANTE EL PIBE!',quips:['La música es del pueblo.','Que no te vacíen la cabeza.','El estadio es de los pibes.','No se firma lo que no se siente.']},
- cemento95:{LW:2600,skin:'ricA',song:'l4',bossSong:'bossFolk',food:'pizza',villains:'Barras, transas, inspectores coimeros y El Clausurador',title:'MUNDO GUANACO',place:'CEMENTO · CONSTITUCIÓN 1995',hazard:'colectivo',
-  card:['En 1995 formó Almafuerte y grabó "Mundo guanaco".','Los primeros shows fueron en la Biblioteca Popular de Olivos y en Arpegios. Después, Cemento, en Constitución.','Con Almafuerte mezcló el heavy con el folclore y letras de la tierra.'],
+  bossLines:[{w:'empresario',s:'Escuchame, Iorio: acá el dueño del circo soy yo. Tocás veinte minutos, hacés buena letra y firmás la exclusividad.'},{w:'ricM',s:'Vos ves billetes donde nosotros vemos almas. A la gente que vino caminando desde el Oeste no la estafa nadie.'},{w:'empresario',s:'¡Seguridad! ¡Saquen a este indio rebelde de mi estadio!'}],
+  winLines:[{w:'empresario',s:'¡Pará, pará! ¡Abran los portones y que toquen todo el repertorio!'},{w:'ricM',s:'Que tiemble el Monumental. Y aunque pronto los caminos se separen, estas canciones quedan para siempre.'}],
+  winSay:'¡AGUANTE LA HINCHADA METALERA!',quips:['"Tú eres su seguridad": no seas verdugo de tu hermano.','Que no te vacíen el bolsillo ni el alma.','El estadio lo llenan los trabajadores.','Jamás firmamos la rendición.']},
+ cemento95:{LW:2600,skin:'ricA',song:'l4',bossSong:'bossFolk',food:'pizza',villains:'Punteros de esquina, inspectores coimeros y El Clausurador municipal',title:'MUNDO GUANACO',place:'CEMENTO · CONSTITUCIÓN 1995',hazard:'colectivo',
+  card:['Tras la disolución de Hermética a fines del 94, Ricardo armó Almafuerte en 1995 junto al virtuoso guitarrista Claudio "Tano" Marciello.','Su disco debut, "Mundo guanaco", incluyó "El amasijo de un gran sueño", "Desencuentro", "Como los bueyes" y "Zamba de resurrección".','Homenajeando al poeta Pedro B. Palacios ("Almafuerte"), empezó de cero tocando en Olivos, Arpegios y Cemento.'],
   npcs:[{kind:'heavy',x:250,y:200,face:1}],guns:[[1500,'bersa']],
   locks:L_STD([[['barra','R'],['transa','R']],[['inspector','R'],['barra','L']]],[[['barra','R'],['inspector','L'],['transa','R']],[['patovica','R'],['barra','L']]],
    [[['transa','R'],['barra','L'],['inspector','R']],[['patovica','L'],['inspector','R'],['barra','R']]],[[['barra','L'],['patovica','R'],['inspector','R']],[['transa','R'],['barra','L'],['inspector','R'],['reptil','L']]]),
   rescue:{kind:'violero',x:1420,y:192,hold:'gtr'},
   props:[[400,'tacho','pizza'],[800,'tacho','mate'],[1500,'cajon','pizza'],[1900,'tacho','mate'],[2050,'cajon','pizza']],pipe:[1460,240],
-  intro:[{w:'heavy',s:'Llueve en Constitución y la fila de Cemento da la vuelta a la manzana.'},{w:'ricA',s:'Banda nueva, nombre nuevo: Almafuerte. Arrancamos en la biblioteca de Olivos, y ahora Cemento.'},
-   {w:'heavy',s:'Cuidado que anda un inspector que quiere clausurar si no le pasan un sobre.'},{w:'ricA',s:'Acá no se coimea a nadie. Se toca.'},
-   {w:'pibe',s:'¡Ricardo! Hay fila hasta la esquina para verte.'},{w:'ricA',s:'Que entren todos, pibe. Hoy no se clausura nada.'}],
-  rescueLines:[{w:'violero',s:'¡Me quisieron sacar el equipo en la parada del bondi!'},{w:'ricA',s:'El fierro del músico no se toca. Vamos, que entramos.'},
-   {w:'violero',s:'El clausurador está en la puerta con una faja. Dice que esto es un peligro.'},{w:'ricA',s:'El peligro es el que vive de la coima.'}],
+  intro:[{w:'heavy',s:'Ricardo, algunos decían que después de Hermética estabas terminado, y mirá la cola que hay bajo la lluvia en Constitución.'},{w:'ricA',s:'Del amasijo de un gran sueño nace otro más fuerte. Por eso nos llamamos Almafuerte, como el poeta.'},
+   {w:'heavy',s:'Ojo que cayó el Clausurador municipal con sus inspectores: pide coima para levantar la faja de Cemento.'},{w:'ricA',s:'Con nosotros no hay sobre ni arreglo por atrás. Vamos a abrir esa puerta.'}],
+  rescueLines:[{w:'violero',s:'¡Ricardo! Soy el Tano Marciello: los inspectores y los barras me querían retener la viola y los equipos en la esquina.'},{w:'ricA',s:'Quedate tranquilo, Tano: con lo que vos tocás vamos a unir el metal pesado con la milonga y el folclore.'},
+   {w:'violero',s:'El Clausurador está pegando la faja en el portón de Cemento.'},{w:'ricA',s:'Esa faja le va a quedar de bufanda.'}],
   boss:'clausurador',summons:[['inspector','barra'],['transa','inspector']],
-  bossLines:[{w:'clausurador',s:'Faltan sellos, falta un formulario y falta mi sobre. Clausurado.'},{w:'ricA',s:'Papeles le traigo. El sobre, nunca.'},{w:'clausurador',s:'¡Inspectores! ¡Fajen todo!'}],
-  winLines:[{w:'clausurador',s:'Está bien... habilitado.'},{w:'ricA',s:'El metal no se clausura.'}],
-  winSay:'¡ALMAFUERTE!',quips:['Pesado y criollo.','El sobre no se pasa.','Mundo guanaco, corazón de fierro.','El que coimea, cobra.']},
- sierras06:{LW:2600,skin:'ricT',song:'l5',bossSong:'bossFolk',food:'asado',villains:'Cazadores furtivos, hippies new age, lobizones y El Intendente',title:'TORO Y PAMPA',place:'SIERRA DE LA VENTANA · 2006',hazard:'jabali',
-  card:['En 2006 salió "Toro y pampa", con canciones del campo, el asado y los amigos.','Cansado de la ciudad, se fue a vivir a las sierras del sur bonaerense.','Decía que vivir lejos de todo era su manera de ser libre.'],
+  bossLines:[{w:'clausurador',s:'Señor Iorio: el matafuegos está vencido, el volumen excede el código y todavía no vi ningún sobre arriba de mi carpeta.'},{w:'ricA',s:'El único código que conocemos es dar la cara frente a los pibes que pagaron su entrada.'},{w:'clausurador',s:'¡Inspectores! ¡Clausura definitiva y secuestro de instrumentos!'}],
+  winLines:[{w:'clausurador',s:'¡Sello aprobado! ¡Adentro, adentro, que ya está habilitado!'},{w:'ricA',s:'Entrá, Tano, y pelá esos solos criollos. ¡Bienvenidos al Mundo Guanaco!'}],
+  winSay:'¡MUNDO GUANACO!',quips:['Del amasijo de un gran sueño salimos de pie.','Con el Tano Marciello, pesado y bien criollo.','Al que vive de la coima no se le baja la cabeza.','Como decía Almafuerte: no te des por vencido ni aun vencido.']},
+ sierras06:{LW:2600,skin:'ricT',song:'l5',bossSong:'bossFolk',food:'asado',villains:'Cazadores furtivos, falsos gurúes new age, lobizones y El Intendente',title:'TORO Y PAMPA',place:'SIERRA DE LA VENTANA · 2006',hazard:'jabali',
+  card:['En 2006 Almafuerte lanzó "Toro y pampa", celebrando la vida campera, las rutas bonaerenses y la memoria de los amigos.','Le dedicó canciones entrañables a sus afectos reales, como "Pa\' Pelusa" y el homenaje a su perro en "Toro y pampa".','Radicado lejos de la histeria urbana, reivindicó al hombre de campo y su sangre criolla e indígena.'],
   npcs:[{kind:'peon',x:250,y:198,face:1,hold:'mate'}],guns:[[700,'escopeta'],[1700,'escopeta']],
   locks:L_STD([[['cazador','R'],['newage','R']],[['agrimensor','R'],['cazador','L']]],[[['newage','R'],['cazador','L'],['reptil','R']],[['cazador','R'],['newage','L']]],
    [[['reptil','R'],['cazador','L'],['newage','R']],[['agrimensor','L'],['reptil','R'],['cazador','R']]],[[['cazador','L'],['reptil','R'],['newage','R']],[['reptil','R'],['cazador','L'],['newage','R'],['agrimensor','L']]]),
   rescue:{kind:'jubilado',x:1420,y:192},
   props:[[400,'fardo','asado'],[800,'fardo','mate'],[1500,'fardo','asado'],[1900,'fardo','mate'],[2050,'fardo','asado']],pipe:[1460,240],
-  intro:[{w:'peon',s:'Don Ricardo, andan cazadores en el cerro. Ya mataron dos guanacos.'},{w:'ricT',s:'Acá se vino a vivir en paz, no a ver cómo arrasan con todo.'},
-   {w:'peon',s:'Y el intendente quiere hacer un country arriba del arroyo.'},{w:'ricT',s:'Prendé el fuego, que después del laburo hay asado.'},{w:'pelusa',s:'Y yo traje el vino. Vamos juntos, hermano.'}],pelusa:true,
-  rescueLines:[{w:'jubilado',s:'¡Me ataron al alambre! Querían que firmara la venta del campo.'},{w:'ricT',s:'La tierra no se firma, se trabaja. Venga, que lo acompaño.'},
-   {w:'jubilado',s:'El intendente está en el galpón con los papeles.'},{w:'ricT',s:'Vamos a charlar con el intendente.'}],
+  intro:[{w:'peon',s:'Don Ricardo, se metieron cazadores furtivos en la sierra y el Intendente quiere alambrar el arroyo para un loteo privado.'},{w:'ricT',s:'Se llenan la boca hablando de ecología y progreso, y vienen a destruir el monte.'},
+   {w:'pelusa',s:'¡Acá llegó el Pelusa para darte una mano, hermano! Después armamos el asado bajo los eucaliptos.'},{w:'ricT',s:'Grande, Pelusa: la amistad verdadera vale más que todo el oro del mundo. Vamos.'}],pelusa:true,
+  rescueLines:[{w:'jubilado',s:'¡Gracias, Ricardo! Los matones del municipio me ataron al poste porque no quise vender la servidumbre de paso del arroyo.'},{w:'ricT',s:'El agua y la sierra son de la tierra, don Tito, no de una inmobiliaria.'},
+   {w:'jubilado',s:'El Intendente está en el galpón firmando la excepción municipal con los cazadores.'},{w:'ricT',s:'Vamos a vetarle esa ordenanza a mano limpia.'}],
   boss:'intendente',summons:[['cazador','newage'],['reptil','cazador']],
-  bossLines:[{w:'intendente',s:'Ricardo, vecino. Un country trae progreso. Y votos.'},{w:'ricT',s:'El progreso es que el pibe del pueblo tenga laburo, no que el arroyo tenga candado.'},{w:'intendente',s:'¡Muchachos! ¡Que no llegue a la sesión!'}],
-  winLines:[{w:'intendente',s:'¡Está bien! ¡El arroyo queda para todos!'},{w:'ricT',s:'Así me gusta. Ahora venga a comer un asado, que acá no se le niega a nadie.'}],
-  winSay:'¡TORO Y PAMPA!',quips:['La tierra no se firma.','Lejos de todo, cerca de lo mío.','Un asado arregla más que un discurso.','Acá el reloj lo marca el sol.']}
+  bossLines:[{w:'intendente',s:'¡Pero Iorio, pensá en el negocio turístico! Un barrio náutico privado en el arroyo nos deja millones a todos.'},{w:'ricT',s:'El que vende el lugar donde nació su gente no merece pisar esta pampa.'},{w:'intendente',s:'¡Cazadores, custodios! ¡Saquen a este gaucho metido del expediente!'}],
+  winLines:[{w:'intendente',s:'¡Rompo el decreto, Ricardo! ¡El arroyo y el cerro quedan libres para el pueblo!'},{w:'ricT',s:'Ahora sí, muchachos: descorchen el tinto y pongan la carne al asador. ¡Toro y pampa!'}],
+  winSay:'¡TORO Y PAMPA!',quips:['Toro y pampa, firme en mi huella.','Con amigos como el Pelusa no hace falta nada más.','Mi madre tenía sangre tehuelche y la llevo con orgullo.','Lejos del cemento se escucha la voz del alma.']}
 };
 (function(){
   const order=[0,'caseros79',1,'recoleta88',2,'monumental94','cemento95',3,'sierras06',4];
@@ -1608,14 +1607,14 @@ function bossDefeated(){slowT=110;flashT=10;sfx('heavy');score+=boss.D.pts;for(c
 function spawnEnemy(kind,side){const L=lock?lock.L:cam.x,x=side==='R'?L+W+22:L-22,e=mk(kind,x,rnd(GT+4,GB-4));e.face=side==='R'?-1:1;e.hp=e.max=Math.round(e.hp*(1+lvl*.05));e.spdK=1+lvl*.035;e.cd=rnd(40,90)*(1-lvl*.03);e.barkT=rnd(30,160)|0;e.slot=ents.length;ents.push(e);return e;}
 const pick=a=>a[Math.random()*a.length|0];
 const BARKS={
-  patotero:['¡Eh, papero!','¡Eh, melenudo!','¡Pagá el peaje, pibe!','¡Esta cuadra es nuestra!'],patotero2:['¡Volvé a la feria, papero!','¡Melena de escoba!','¡Volvé a cargar cajones!'],chorro:['¡Dame la billetera!','¡Rajá de acá!'],estibador:['¡Te cargo como a una bolsa!'],
-  hippie:['¡Paz y amor... y tomates!','¡Fuera el heavy!','¡Bajen el volumen!'],hippie2:['¡Eso no es música!','¡Silbá, hermano!'],disco:['¡A la pista, nene!','¡Viva la música disco!'],patovica:['¡Acá no pasás!'],
-  careta:['¡Firmá la indemnización!','¡Es el mercado, viejo!'],careta2:['¡Esto ahora es privado!','¡Modernizate!'],tasador:['¡Se remata todo!','¡A la una, a las dos!'],
-  movilero:['¿Una nota, Ricardio?','¡Una palabrita para la tele!','¡Mire a cámara!'],
-  cuatrero:['¡Esta vaca es mía!','¡Afuera, forastero!'],bancario:['¡Su plata está segura... con nosotros!','¡Le pago en patacones!','¡Vuelva el lunes!'],
-  reptil:['¡Auuuuu!','¡Noche de luna llena, metalero!','¡Séptimo hijo varón, y mirá cómo salí!'],politico:['¡Vótenme y les arreglo todo!','¡Esta vez sí cumplo!','¡Una foto con el metalero!'],cipayo:['¡Remato todo lo nacional!','¡Lo de afuera siempre es mejor!'],transa:['¿Querés algo, pibe?','¡Esto te hace olvidar todo!'],
-  influ:['¡Esto va directo a las redes!','¡Dale like!','¡Viral, viral!'],camara:['¡Grabando!'],agrimensor:['¡Acá va la pileta del country!','¡Correte del lote!']};
-const DIEQ={influ:'La tecnología no es evolución.',camara:'Apagá eso. Las cosas se dicen cara a cara.',hippie:'Los tomates, a la ensalada.',bancario:'Andá a devolver los ahorros.',tasador:'Tasá esto.',politico:'Te metiste en política para robar.',cipayo:'La patria no se remata.',transa:'La droga te hace esclavo.',reptil:'Andá a aullarle a la luna.'};
+  patotero:['¡Eh, papero de Caseros!','¡Melenudo, largá los cajones!','¡Acá en el Abasto se paga peaje!','¡Esta vereda tiene dueño, pibe!'],patotero2:['¡Volvé a la verdulería, papero!','¡Cortate esa porra, sucio!','¡A descargar bolsas, gil!'],chorro:['¡Largá la recaudación del camión!','¡Dejá el bajo y rajá!'],estibador:['¡Te revoleo como bolsa de papa!'],
+  hippie:['¡Paz y amor... tomá este naranjazo!','¡Fuera los pesados del BA Rock!','¡Canten bajito y con flauta!'],hippie2:['¡El metal es ruido de salvajes!','¡Silben a esos camperas negras!'],disco:['¡El rock ya fue, aguante el boliche!','¡Ponete brillantina, nene!'],patovica:['¡De acá no pasás con tachas!'],
+  careta:['¡Sos un gil trabajador!','¡Firmá el retiro voluntario!'],careta2:['¡Privatizamos hasta el aire!','¡Achicamos el taller, viejo!'],tasador:['¡Lote uno: el torno del abuelo!','¡Remato la fábrica por monedas!'],
+  movilero:['¡Danos un título escandaloso, Ricardo!','¡Contate un chisme para el prime time!','¡Mirá a cámara y enojate!'],
+  cuatrero:['¡Cortamos el alambre y arriamos todo!','¡En esta ruta mandamos nosotros!'],bancario:['¡Sus ahorros quedaron en el corralito!','¡Acá tiene patacones, abuelo!','¡Golpee la persiana todo lo que quiera!'],
+  reptil:['¡Auuuuu!','¡Noche de séptimo hijo varón!','¡El lobizón anda suelto en el monte!'],politico:['¡Soy el doctor de la ley, votame!','¡Prometo asfalto y trabajo para todos!','¡Olvídalo y volveré por más!'],cipayo:['¡Lo nacional no sirve para nada!','¡Vendamos la tierra en dólares!'],transa:['¡Probá esto y olvidate de luchar!','¡Te vendo el viaje más corto, pibe!'],
+  influ:['¡Hacé un bailecito para las redes!','¡Todo por un millón de views!','¡No existís si no estás en tendencia!'],camara:['¡Zoom a la cara, que esto mide!'],agrimensor:['¡Acá tiramos abajo el monte para el country!','¡Correte que pasa la topadora!']};
+const DIEQ={influ:'Yo nunca chateé con nadie: yo tengo amigos de verdad.',camara:'Apagá esa cámara y hablá mirando a los ojos.',hippie:'Pedían paz y amor y nos tiraban cascotes.',bancario:'Devolvele el sudor de toda la vida a los jubilados.',tasador:'El trabajo de un barrio no entra en tu carpeta.',politico:'Doctor de la ley: olvídalo y volverá por más.',cipayo:'Al que reniega de su tierra ni el viento lo respeta.',transa:'La falopa vino a estupidizar al pibe que piensa.',reptil:'Volvete al monte, bicho de la noche.'};
 function quip(){if(!quipDeck.length)quipDeck=LV.quips.slice().sort(()=>Math.random()-.5);return quipDeck.pop();}
 const HZ={moto:{spd:7,w:22,warn:'¡MOTOCHORRO!',snd:'moto'},zorra:{spd:5,w:22,warn:'¡CARRO DE PAPAS!',snd:'moto'},camion:{spd:6.5,w:56,warn:'¡CAMIÓN EN LA RUTA!',snd:'truck'},toro:{spd:5.5,w:26,warn:'¡SE ESCAPÓ EL TORO!',snd:'toro'}};
 function updHazard(){
@@ -1731,12 +1730,12 @@ const HZD={
     ctx.fillStyle='#3a2a20';ctx.beginPath();ctx.moveTo(10,-21);ctx.lineTo(24,-14);ctx.lineTo(10,-9);ctx.fill();R(22,-15,3,3,'#6a4a3a');ctx.fillStyle='#e8e2d0';ctx.beginPath();ctx.moveTo(18,-12);ctx.lineTo(21,-18);ctx.lineTo(20,-11);ctx.fill();
     R(15,-18,2,2,'#ff3a2a');for(let k=0;k<6;k++)R(-12+k*4,-24,2,3,'#1a1210');}
 };
-Object.assign(BARKS,{cana:['¡Documentos!','¡Cortate ese pelo!','¡Circulando, melenudo!'],cana2:['¡Al patrullero!','¡Vos, el del bajo!'],buchon:['¡Comisario, es ese!','¡Yo lo vi ensayando!'],
-  cheto:['¡Qué grasa, por favor!','¡Llamen a seguridad!'],cheto2:['¡Esto no es Recoleta!','¡Volvé al oeste!'],critico:['¡Le falta concepto!','¡Esto no es arte!'],
-  revendedor:['¡Entradas, entradas!','¡Te la dejo al doble!'],seguridad:['¡Atrás de la valla!','¡Sin remera no pasás!'],barra:['¡Esta es nuestra esquina!','¡Pasá la gorra!'],
-  inspector:['¡Falta un sello!','¡Clausura preventiva!'],cazador:['¡Esa liebre es mía!','¡Fuera de mi coto!'],newage:['¡Bajá la vibra, hermano!','¡Tu aura está muy pesada!']});
-Object.assign(DIEQ,{cana:'El pelo largo no es delito.',cana2:'Al calabozo andá vos.',buchon:'Al buchón no lo quiere nadie.',cheto:'Menos copa y más barrio.',cheto2:'Con plata no se compra el aguante.',critico:'Criticá menos y escuchá más.',
-  revendedor:'La música no se revende.',seguridad:'El estadio es de los pibes.',barra:'La esquina es de todos.',inspector:'Andá a inspeccionar a tu jefe.',cazador:'Al monte se lo respeta.',newage:'Mi aura es de metal.'});
+Object.assign(BARKS,{cana:['¡Documentos contra el capot!','¡A la comisaría a cortarse esos rulos!','¡Averiguación de antecedentes, melenudo!'],cana2:['¡Subilo al celular!','¡Ese del bajo es el cabecilla!'],buchon:['¡Comisario, ensayan en aquel garaje!','¡Yo anoté la patente del camión!'],
+  cheto:['¡Qué grasa el conurbano, por favor!','¡Guardia, este tipo no está en la lista!'],cheto2:['¡Esto es Recoleta, no San Martín!','¡Qué horror ese ruido metálico!'],critico:['¡Carece de posmodernidad estética!','¡Le pongo media estrella en el suplemento!'],
+  revendedor:['¡Campo agotado, te la cobro en dólares!','¡Si no me comprás a mí te quedás afuera!'],seguridad:['¡Atrás de la valla, pibe!','¡Acá mando yo porque tengo el chaleco!'],barra:['¡Pagá el peaje de la esquina!','¡Sin arreglo acá no descarga nadie!'],
+  inspector:['¡Habilitación suspendida!','¡Falta el formulario y falta la atención!'],cazador:['¡Ese guanaco vale buena plata!','¡Correte de la mira, paisano!'],newage:['¡Respirá luz violeta y entregá el campo!','¡Tu vibración telúrica me desalinea el chakra!']});
+Object.assign(DIEQ,{cana:'El pelo largo y la guitarra no son delito.',cana2:'La calle es del que va a trabajar.',buchon:'Al alcahuete ni el patrón lo respeta.',cheto:'Menos champagne y más respeto por el que labura.',cheto2:'Con apellido no se compra el sentimiento.',critico:'Escribís de música y nunca subiste a un escenario.',
+  revendedor:'Con la ilusión de los pibes no se trafica.',seguridad:'"Tú eres su seguridad": le pegás a tu propio hermano por dos monedas.',barra:'La vereda es del pueblo, no de los matones.',inspector:'Las coimas pedíselas a los corruptos.',cazador:'Al animal del monte no se lo mata por deporte.',newage:'Andá a meditar a Palermo, chanta.'});
 // Pelusa, el amigo de "Pa Pelusa": pelea al lado, tira piedrazos y comparte el mate
 function updAlly(n){if(state!=='play'){n.state='idle';return;}const p=player,tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4);
   let tgt=null,d=1e9;for(const e of ents){if(e.team!==1||!hittable(e))continue;const dd=Math.abs(e.x-n.x)+Math.abs(e.y-n.y)*2;if(dd<d){d=dd;tgt=e;}}
@@ -1964,15 +1963,15 @@ const PSK=1.12; // los personajes se ven un poco más grandes en pantalla
 // Almafuerte de pelo corto y remera, 2006 rapado al costado, 2022-23 canoso peinado para atrás, guardapolvo oscuro y bastón.
 (function(){const A=(k,o)=>{if(STY[k])Object.assign(STY[k],o);};
   A('ric1',{ior:{hair:'long',hairC:'#1c130d',hi:'#4a3626',len:9,beard:'none',brow:'#1c130d'},top:'#18171b',shirt:'#18171b',bareFore:true,apron:null,pants:'#2e3a52',boots:'#d8d2c2',sneak:true});
-  A('ricV',{ior:{hair:'long',curly:true,hairC:'#1a120c',hi:'#4a3624',len:13,beard:'none',brow:'#1a120c'},top:'#141317',shirt:'#2a2a2e',boots:'#e2dccb',sneak:true,pants:'#2e3a52'});
-  A('ric2',{ior:{hair:'long',curly:true,hairC:'#150e09',hi:'#43301f',len:18,beard:'none',brow:'#150e09'},boots:'#e4ded0',sneak:true,pants:'#3a5482',shirt:'#2a2a2e',leather:true,wrist:'#141216'});
-  A('ricH',{pants:'#1c1b20',ior:{hair:'long',hairC:'#130c08',hi:'#3e2c1e',len:19,beard:'none',brow:'#130c08'},shirt:'#1e1e22',leather:true,pants:'#2c3446'});
-  A('ric3',{pants:'#1c1b20',ior:{hair:'long',hairC:'#140e0a',hi:'#3e2e22',len:23,beard:'none',brow:'#140e0a',stub:.3},tattoo:true});
-  A('ricM',{pants:'#1c1b20',ior:{hair:'long',hairC:'#140e0a',hi:'#3e2e22',len:23,beard:'none',brow:'#140e0a',stub:.35},wrist:'#141216'});
-  A('ricA',{pants:'#1c1b20',ior:{hair:'buzz',hairC:'#18110c',hi:'#3c2c20',len:0,beard:'none',brow:'#18110c',jaw:.4,stub:.3},torsoW:15,scarf:null,wrist:'#141216'});
-  A('ric4',{ior:{hair:'short',hairC:'#1a130e',hi:'#46362a',len:0,beard:'none',brow:'#1a130e',jaw:.5,stub:.35},top:'#141317',shirt:'#141317',torsoW:15,vest:null,scarf:null,wrist:'#141216',pants:'#2c3040'});
-  A('ricT',{pants:'#1c1b20',ior:{hair:'crest',hairC:'#2a2420',hi:'#6a625a',len:0,beard:'none',brow:'#2a2420',gray:.3,jaw:.7,stub:.4},top:'#121114',shirt:'#1e1d22',buttons:true,jacket:false,bareFore:false,scarf:null,torsoW:15});
-  A('ric5',{ior:{hair:'swept',hairC:'#9e998f',hi:'#dcd8d0',len:4,beard:'none',brow:'#8a857c',gray:1,jaw:1,stub:.3,stubC:'#9a948a'},top:'#1f1e23',shirt:'#1f1e23',coat:true,overall:null,pants:'#26252b',boots:'#121114',bareFore:false,scarf:null,staff:true,torsoW:15.5});
+  A('ricV',{ior:{hair:'long',curly:true,hairC:'#1a120c',hi:'#4a3624',len:13,beard:'none',brow:'#1a120c'},top:'#141317',shirt:'#222228',boots:'#e2dccb',sneak:true,pants:'#2e3a52',wrist:'#141216',studs:true});
+  A('ric2',{ior:{hair:'long',curly:true,hairC:'#150e09',hi:'#43301f',len:18,beard:'none',brow:'#150e09'},boots:'#e4ded0',sneak:true,pants:'#3a5482',shirt:'#222228',leather:true,studs:true,wrist:'#141216'});
+  A('ricH',{pants:'#1c1b20',ior:{hair:'long',hairC:'#130c08',hi:'#3e2c1e',len:19,beard:'none',brow:'#130c08'},shirt:'#18181c',leather:true,logo:'H',wrist:'#141216'});
+  A('ric3',{pants:'#1c1b20',ior:{hair:'long',hairC:'#140e0a',hi:'#3e2e22',len:23,beard:'none',brow:'#140e0a',stub:.3},tattoo:true,logo:'H',wrist:'#141216'});
+  A('ricM',{pants:'#1c1b20',ior:{hair:'long',hairC:'#140e0a',hi:'#3e2e22',len:23,beard:'none',brow:'#140e0a',stub:.35},wrist:'#141216',logo:'H',tattoo:true});
+  A('ricA',{pants:'#1c1b20',ior:{hair:'buzz',hairC:'#18110c',hi:'#3c2c20',len:0,beard:'none',brow:'#18110c',jaw:.45,stub:.35},torsoW:15,scarf:null,wrist:'#141216',logo:'pampa',tattoo:true});
+  A('ric4',{ior:{hair:'short',hairC:'#1a130e',hi:'#46362a',len:0,beard:'none',brow:'#1a130e',jaw:.55,stub:.38},top:'#141317',shirt:'#141317',torsoW:15,vest:null,scarf:null,wrist:'#141216',pants:'#2c3040',logo:'pampa'});
+  A('ricT',{pants:'#1c1b20',ior:{hair:'crest',hairC:'#2a2420',hi:'#6a625a',len:0,beard:'none',brow:'#2a2420',gray:.35,jaw:.75,stub:.42},top:'#121114',shirt:'#1e1d22',buttons:true,rastra:true,jacket:false,bareFore:false,scarf:null,torsoW:15});
+  A('ric5',{ior:{hair:'swept',hairC:'#b8b3a8',hi:'#ece8e0',len:5,beard:'none',brow:'#5a554e',gray:1,jaw:1,stub:.38,stubC:'#b0aaa0'},top:'#1b1a20',shirt:'#141318',coat:true,rastra:true,overall:null,pants:'#222128',boots:'#121114',bareFore:false,scarf:null,staff:true,torsoW:15.5});
   // físico por época (de las fotos): flaco de pibe, se ensancha en los 90, panza y espalda ancha de grande
   const BODY={ric1:[10.5,.84,0],ricV:[11,.87,0],ric2:[12,.93,0],ricH:[12.8,.98,0],ric3:[13.6,1.03,0],ricM:[14.2,1.06,.15],ricA:[14.8,1.1,.3],ric4:[15.4,1.13,.5],ricT:[16,1.15,.75],ric5:[16.6,1.14,1.05]};
   for(const k in BODY){const [w,b,p]=BODY[k];A(k,{torsoW:w,bulk:b,belly:p});}
@@ -2009,17 +2008,30 @@ function TORSO2(st,f,fl){const w=st.torsoW,h=w/2,bel=(+st.belly||0)*h*.55,c=st.t
   const S=(c2,w2,pp)=>{ctx.strokeStyle=c2;ctx.lineWidth=w2;ctx.beginPath();ctx.moveTo(pp[0],pp[1]);for(let i=2;i<pp.length;i+=4)ctx.quadraticCurveTo(pp[i],pp[i+1],pp[i+2],pp[i+3]);ctx.stroke();};
   if(st.camo){const cc=['#3e3c26','#7a7452','#2c2a1c','#6a5a3a'];for(let k=0;k<18;k++){ctx.fillStyle=cc[k%4];ctx.beginPath();ctx.ellipse(-h+((k*7.3)%(w+bel)),-24+((k*5.7)%25),2.2,1.2,k,0,7);ctx.fill();}}
   if(st.overall){ctx.fillStyle=st.overall;ctx.fillRect(-h*1.2,-14,w*1.3+bel,18);ctx.strokeStyle=st.overall;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-h*.5,-14);ctx.lineTo(-h*.4,-24);ctx.moveTo(h*.6,-14);ctx.lineTo(h*.5,-24);ctx.stroke();ctx.fillStyle=shade(st.overall,.7);ctx.fillRect(h*.1,-11,4,3);}
-  if(st.coat){ // guardapolvo de trabajo: botonera, cuello, parche con el nombre y bolsillos
+  if(st.coat){ // guardapolvo de trabajo campera de campo: botonera, cuello, bolsillos
     ctx.strokeStyle=shade(c,.55);ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(h*.62,-24);ctx.quadraticCurveTo(h*.8,-12,h*.7+bel*.6,3);ctx.stroke();
-    ctx.fillStyle=shade(c,.45);for(let k=0;k<4;k++){ctx.beginPath();ctx.arc(h*.8+bel*(k/4)*.5,-21+k*6,.6,0,7);ctx.fill();}
+    ctx.fillStyle='#5a5862';for(let k=0;k<4;k++){ctx.beginPath();ctx.arc(h*.76+bel*(k/4)*.5,-21+k*5.5,.65,0,7);ctx.fill();}
     ctx.fillStyle=shade(c,1.35);ctx.beginPath();ctx.moveTo(-1.4,-25.4);ctx.lineTo(3.6,-25.2);ctx.lineTo(h*.9,-21.6);ctx.lineTo(1.4,-22.6);ctx.closePath();ctx.fill();
-    ctx.fillStyle='#e8e2d6';ctx.fillRect(h*.05,-19.6,3.6,1.8);ctx.fillStyle='#b8322a';ctx.fillRect(h*.05+.4,-19.2,1.4,1);
+    ctx.strokeStyle=shade(c,1.3);ctx.lineWidth=.5;ctx.strokeRect(h*.05,-19.8,4,3.4);ctx.fillStyle='#c8c2b4';ctx.fillRect(h*.22,-18.8,.7,.7);
     S(shade(c,.6),.5,[-h*.3,-8,h*.2,-8.6,h*.6,-8]);}
-  if(st.jacket&&!st.coat){ // campera abierta: se ve la remera, solapa, cierre cruzado
+  if(st.buttons&&!st.coat){ // camisa negra campera abotonada (2006 / 2012)
+    ctx.strokeStyle='rgba(0,0,0,.55)';ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(h*.58,-24);ctx.lineTo(h*.66+bel*.5,2);ctx.stroke();
+    ctx.fillStyle='#6a6872';for(let k=0;k<4;k++){ctx.beginPath();ctx.arc(h*.6+bel*(k/4)*.4,-21+k*5,.55,0,7);ctx.fill();}
+    ctx.fillStyle=shade(c,1.38);ctx.beginPath();ctx.moveTo(-1,-25.4);ctx.lineTo(3.4,-25);ctx.lineTo(h*.75,-21.8);ctx.lineTo(1,-22.6);ctx.closePath();ctx.fill();
+    ctx.strokeStyle=shade(c,1.35);ctx.lineWidth=.45;ctx.strokeRect(h*.06,-19.4,3.8,3.4);}
+  if(st.jacket&&!st.coat){ // campera abierta: se ve la remera, solapa, cierre cruzado y tachas
     ctx.fillStyle=st.shirt||'#ccc';ctx.beginPath();ctx.moveTo(h*.25,-25);ctx.lineTo(h*.95,-23);ctx.quadraticCurveTo(h*1.2+bel*.4,-12,h+bel*.9,2);ctx.lineTo(h*.55,2);ctx.quadraticCurveTo(h*.65,-12,h*.25,-25);ctx.fill();
-    ctx.fillStyle=shade(c,1.4);ctx.beginPath();ctx.moveTo(-1,-25.4);ctx.lineTo(h*.3,-25);ctx.lineTo(h*.75,-18);ctx.lineTo(h*.1,-21);ctx.closePath();ctx.fill();
-    if(st.leather||st.studs){S('#b8bcc4',.45,[h*.5,-21,h*.62,-10,h*.58,1]);S('rgba(255,255,255,.22)',1.1,[-h*.6,-20,-h*.2,-14,-h*.5,-5]);ctx.fillStyle='#c9ccd2';ctx.fillRect(h*.1,-12,2.2,.5);}
-    if(st.studs){ctx.fillStyle='#d8dbe2';for(let k=0;k<5;k++){ctx.beginPath();ctx.arc(-h*.6+k*1.6,-23.4+k*.4,.42,0,7);ctx.fill();}}}
+    ctx.fillStyle=shade(c,1.45);ctx.beginPath();ctx.moveTo(-1,-25.4);ctx.lineTo(h*.35,-25);ctx.lineTo(h*.82,-17.5);ctx.lineTo(h*.08,-20.5);ctx.closePath();ctx.fill();
+    if(st.leather||st.studs){S('#d0d4dc',.55,[h*.48,-21,h*.62,-10,h*.58,1]);S('rgba(255,255,255,.26)',1.1,[-h*.6,-20,-h*.2,-14,-h*.5,-5]);ctx.fillStyle='#d8dce4';ctx.fillRect(h*.08,-12,2.5,.6);ctx.fillRect(h*.15,-7,2.2,.6);}
+    if(st.studs){ctx.fillStyle='#e4e8f0';for(let k=0;k<5;k++){ctx.beginPath();ctx.arc(-h*.6+k*1.6,-23.4+k*.4,.48,0,7);ctx.fill();}
+      ctx.beginPath();ctx.arc(h*.28,-22.5,.5,0,7);ctx.arc(h*.52,-19.5,.5,0,7);ctx.fill();}}
+  if(st.logo==='H'){ // logo de Hermética en el pecho y cadenita
+    const lx=h*.45,ly=-16.5;ctx.strokeStyle='#c8c4bc';ctx.lineWidth=.4;ctx.beginPath();ctx.arc(1.2,-24.2,2.6,.1,Math.PI*.9);ctx.stroke();
+    ctx.strokeStyle='#f2b632';ctx.lineWidth=.55;ctx.beginPath();ctx.arc(lx,ly,2.7,0,7);ctx.stroke();
+    ctx.fillStyle='#f2b632';ctx.fillRect(lx-1.5,ly-1.7,.7,3.4);ctx.fillRect(lx+.8,ly-1.7,.7,3.4);ctx.fillRect(lx-1.5,ly-.35,3,.7);}
+  if(st.logo==='pampa'){ // Cruz Pampa de Almafuerte en el pecho
+    const lx=h*.45,ly=-16.2;ctx.fillStyle='#e2b638';ctx.fillRect(lx-.7,ly-2.4,1.4,4.8);ctx.fillRect(lx-2.4,ly-.7,4.8,1.4);ctx.fillRect(lx-1.5,ly-1.5,3,3);
+    ctx.fillStyle='#b82e24';ctx.fillRect(lx-.6,ly-.6,1.2,1.2);}
   if(!st.jacket&&!st.coat&&!st.overall){ // remera o camisa
     ctx.strokeStyle=shade(c,.55);ctx.lineWidth=.8;ctx.beginPath();ctx.arc(.6,-25.2,2.8,.15,Math.PI*.95);ctx.stroke();
     S(shade(c,.72),.45,[-h*.7,-19,-h*.1,-15,h*.3,-16]);S(shade(c,.72),.45,[-h*.6,-10,0,-7.5,h*.7,-9]);
@@ -2031,7 +2043,9 @@ function TORSO2(st,f,fl){const w=st.torsoW,h=w/2,bel=(+st.belly||0)*h*.55,c=st.t
   if(st.vest){ctx.fillStyle=st.vest;ctx.beginPath();ctx.moveTo(-h*1.1,-23);ctx.lineTo(h*.4,-24.6);ctx.lineTo(h*.6,-4);ctx.lineTo(-h*1.1,0);ctx.closePath();ctx.fill();}
   if(st.apron){ctx.fillStyle=st.apron;ctx.beginPath();ctx.moveTo(h*.1,-17);ctx.lineTo(h*1.05+bel,-15);ctx.lineTo(h*1.2+bel,4);ctx.lineTo(h*.1,4);ctx.closePath();ctx.fill();ctx.strokeStyle=shade(st.apron,.7);ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(h*.2,-17);ctx.lineTo(0,-25);ctx.stroke();}
   if(!st.coat&&!st.overall&&(st.bareFore||st.jacket)&&!st.tie){ctx.restore();const hm=P2([[-h*1.02,-2],[h*.98+bel*.7,-2.4],[h*1.04+bel*.75,2.4],[h*.3,3.4,-h*.4,2.6],[-h*1.06,3]]);INK([hm],LG(0,-2,0,3.4,c,1.1,.62),.7);ctx.strokeStyle=shade(c,.55);ctx.lineWidth=.35;ctx.beginPath();ctx.moveTo(-h*.3,-1);ctx.quadraticCurveTo(-h*.1,1.4,-h*.4,2.8);ctx.moveTo(h*.5,-1.4);ctx.quadraticCurveTo(h*.6,1,h*.4,3);ctx.stroke();return;}
-  if(st.belt!==false&&!st.coat&&!st.overall){ctx.fillStyle=st.belt||'#141216';ctx.fillRect(-h*1.2,-1.6,w*1.3+bel,2.2);ctx.fillStyle='#c9c2a8';ctx.fillRect(h*.55+bel*.8,-1.6,1.6,2.2);}
+  if(st.belt!==false&&!st.coat&&!st.overall){ctx.fillStyle=st.belt||'#141216';ctx.fillRect(-h*1.2,-1.6,w*1.3+bel,2.2);
+    if(st.rastra){const rx=h*.52+bel*.75;ctx.fillStyle='#dcd8ce';ctx.beginPath();ctx.ellipse(rx,-.5,2.2,1.5,0,0,7);ctx.fill();ctx.fillStyle='#f4f0e6';ctx.beginPath();ctx.arc(rx-2.8,-.5,.7,0,7);ctx.arc(rx+2.4,-.5,.7,0,7);ctx.fill();}
+    else{ctx.fillStyle='#c9c2a8';ctx.fillRect(h*.55+bel*.8,-1.6,1.6,2.2);}}
   if(st.scarf){ctx.fillStyle=st.scarf;ctx.beginPath();ctx.moveTo(-2.4,-25.8);ctx.lineTo(4,-25.4);ctx.lineTo(h*.9,-20);ctx.lineTo(1,-22);ctx.closePath();ctx.fill();}
   if(st.hair==='boina'&&!st.ior){ctx.fillStyle='rgba(91,32,22,.85)';ctx.fillRect(-h*1.2,-25,w*1.3,3);}
   ctx.restore();}
@@ -2065,8 +2079,9 @@ function drawPuppet(f,X,Y){
       if(!fl&&!bare)DEF(()=>{ctx.fillStyle=shade(col,.5);const cx=ex+(hx-ex)*.82,cy=ey+(hy-ey)*.82;ctx.beginPath();ctx.arc(cx,cy,2.4,0,7);ctx.fill();});
       if(!(weapon||st.staff&&back))HAND(hx,hy,a2,skin,fl);});
     if(!fl&&!bare){ctx.strokeStyle=shade(col,.52);ctx.lineWidth=.4;for(let k=0;k<3;k++){const t=.72+k*.1,px=x0+(ex-x0)*t,py=sy+(ey-sy)*t;ctx.beginPath();ctx.moveTo(px-1.8,py-.6);ctx.quadraticCurveTo(px,py+.8,px+1.6,py-.4);ctx.stroke();}}
-    if(!fl&&st.wrist){const wx=ex+(hx-ex)*.78,wy=ey+(hy-ey)*.78;LIMB(ex+(hx-ex)*.66,ey+(hy-ey)*.66,wx,wy,5,4.6,st.wrist,false,1);}
-    if(st.tattoo&&bare&&!fl&&!back){ctx.fillStyle='rgba(30,44,78,.6)';ctx.beginPath();ctx.ellipse((ex+hx)/2,(ey+hy)/2,1.5,1,a2,0,7);ctx.fill();}
+    if(!fl&&st.wrist){const wx=ex+(hx-ex)*.78,wy=ey+(hy-ey)*.78;LIMB(ex+(hx-ex)*.66,ey+(hy-ey)*.66,wx,wy,5,4.6,st.wrist,false,1);
+      if(st.studs){ctx.fillStyle='#e0e4ec';ctx.beginPath();ctx.arc(wx-1.2,wy-.8,.4,0,7);ctx.arc(wx+1.2,wy+.6,.4,0,7);ctx.fill();}}
+    if(st.tattoo&&bare&&!fl&&!back){ctx.fillStyle='rgba(28,44,72,.68)';ctx.beginPath();ctx.ellipse((ex+hx)/2,(ey+hy)/2,1.7,1.1,a2,0,7);ctx.fill();}
     if(weapon||st.staff&&back)HAND(hx,hy,a2,skin,fl);
     if(st.staff&&!weapon&&back&&(f.state==='idle'||f.state==='walk'||f.state==='stand')&&!fl){ // el bastón de madera de los últimos shows
       ctx.strokeStyle=OUTP;ctx.lineWidth=2.6;ctx.beginPath();ctx.moveTo(hx+3,hy-30);ctx.quadraticCurveTo(hx+1,hy-10,hx+2.6,-1);ctx.stroke();ctx.strokeStyle='#7a5a36';ctx.lineWidth=1.7;ctx.stroke();
@@ -2076,7 +2091,7 @@ function drawPuppet(f,X,Y){
   arm(P.ba1,P.ba2,-1.5,topB,skB,f.holdBack,true);
   leg(P.bt1,P.bt2,-1.5,pantB,bootB);
   const hx=nx+Math.sin(P.lean+P.tilt*.5)*6.4,hy=ny-Math.cos(P.lean+P.tilt*.5)*6.4;
-  LIMB(nx+.6,ny+2,hx-Math.sin(P.lean)*.4,hy+3,(st.ior&&st.ior.jaw?5.6:4.8)*BK,4.2*BK,D(st.skin,.86),fl,1);
+  LIMB(nx+.6,ny+2,hx-Math.sin(P.lean)*.4,hy+3,(st.ior&&st.ior.jaw?5.8:4.8)*BK,4.3*BK,D(st.skin,.86),fl,1);
   const br=(f.state==='idle'||f.state==='stand')?Math.sin(tick*.07+(f.x||0)*.1)*.018:0;
   ctx.save();ctx.translate(0,hipY);ctx.rotate(P.lean);ctx.scale(1+br*.5,1+br);TORSO2(st,f,fl);ctx.restore();
   leg(P.ft1,P.ft2,1.5,st.pants,st.boots);
@@ -2086,45 +2101,70 @@ function drawPuppet(f,X,Y){
   arm(P.fa1,P.fa2,1.5,st.top,st.skin,f.state==='spec'?'bass':f.hold,false);
   ctx.restore();
 }
-// cabeza de perfil 3/4 con rasgos: cráneo, mandíbula, oreja, nariz, ojo, labios; pelo con volumen y mechones
-function headSpec(st){const I=st.ior;if(I)return Object.assign({},I,{hair:I.hair||'long'});
+// cabeza de perfil 3/4 con rasgos reales de Ricardo Iorio por época: nariz aguileña con caballete, cejas espesas y bajas,
+// mirada hundida, pómulos marcados y mejillas hundidas de joven, mandíbula ancha y papada de grande, melena/rapado/cresta/pelo blanco.
+function headSpec(st){const I=st.ior;if(I)return Object.assign({},I,{hair:I.hair||'long',isIor:1});
   const h=st.hair||'short',old=['#d8d2c6','#c8c2b8','#8a8278','#7a746c','#6a625a'].includes(st.hairC);
   return {hair:h,hairC:st.hairC||'#1a1410',hi:shade(st.hairC||'#1a1410',1.7),len:h==='long'?13:0,beard:st.beard?'full':(st.stache?'stache':'none'),stacheC:st.stache,beardC:st.beardC||st.hairC,brow:shade(st.hairC||'#2a2018',.9),gray:old?1:0,age:old,jaw:st.belly?.6:0,stub:st.belly?.25:.1};}
-function drawHead2(hx,hy,a,st,fl,sw){sw=sw||0;const H=headSpec(st),sk=fl?'#fff':st.skin,hc=fl?'#fff':H.hairC,hi=H.hi||shade(hc,1.6),jw=H.jaw||0,len=H.len||0,cur=H.curly;
-  ctx.save();ctx.translate(hx,hy);ctx.rotate(a);ctx.scale(.84,.84);
+function drawHead2(hx,hy,a,st,fl,sw){sw=sw||0;const H=headSpec(st),sk=fl?'#fff':st.skin,hc=fl?'#fff':H.hairC,hi=H.hi||shade(hc,1.6),jw=H.jaw||0,len=H.len||0,cur=H.curly,ior=H.isIor,thin=H.thin||0,fat=H.fat||0;
+  ctx.save();ctx.translate(hx,hy);ctx.rotate(a);ctx.scale(.86,.86);
   const S=(c,w,pp)=>{ctx.strokeStyle=c;ctx.lineWidth=w;ctx.beginPath();ctx.moveTo(pp[0],pp[1]);for(let i=2;i<pp.length;i+=4)ctx.quadraticCurveTo(pp[i],pp[i+1],pp[i+2],pp[i+3]);ctx.stroke();};
   const wave=(x1,y1,x2,y2,n,amp)=>{const out=[];for(let k=1;k<=n;k++){const t=k/n,px=x1+(x2-x1)*t,py=y1+(y2-y1)*t,mx=x1+(x2-x1)*(t-.5/n),my=y1+(y2-y1)*(t-.5/n)+amp;out.push([mx,my,px,py]);}return out;};
   // pelo de atrás (melena)
-  if(H.hair==='long'){const back=P2([[-1,-9.4],[-7.6,-8.6,-8.8,-2],[-9.8+(cur?-1.6:0)-sw*.4,len*.5,-9.2+(cur?-1.4:0)-sw,len],...wave(-9.2+(cur?-1.4:0)-sw,len,-.6-sw*.6,len-.8,cur?5:3,cur?2:1.4),[1.2,4],[1,-4]]);
-    INK([back],fl?'#fff':LG(-9,-4,0,len,hc,1.3,.6),1);
-    if(!fl)for(let k=0;k<6;k++)S(k%2?hi:shade(hc,.6),.45,[-2-k*1.2,-8,-8-k*.3+(cur?Math.sin(k)*1.5:0),len*.4,-7.6+k*1.1,len-1.5]);}
-  if(H.hair==='swept'){const back=P2([[-2,-8],[-8.6,-6,-8.4,0],[-8.6,4,-6.6,6],[-4,5.6],[-2,3]]);INK([back],fl?'#fff':shade(hc,.8),1);}
-  // cráneo y cara
-  const j=jw*1.2;
-  const skull=new Path2D();skull.ellipse(-.4,-1.6,6.8,7,0,0,7);
-  const face=P2([[2,-7.4],[5.6,-6.6,6.8,-3.4],[7.6,-2.2],[7.9,-1],[9.8,2.6],[9.6,3.3],[8.2,3.6],[8.5,4.6],[7.9,5.2],[8.3,6.1],[7.9,6.9],[8.1,8.8+j*.4,6.6,9.6+j*.5],[4,10.4+j*.8,1.6,9.4+j],[-1.4-j,8+j*.6,-2.6-j,4.6],[-3.6,1],[-3,-4]]);
+  if(H.hair==='long'){const back=P2([[-1,-9.6],[-8,-8.8,-9.2,-2],[-10.2+(cur?-1.8:0)-sw*.4,len*.5,-9.6+(cur?-1.6:0)-sw,len+.6],...wave(-9.6+(cur?-1.6:0)-sw,len+.6,-.4-sw*.6,len-.6,cur?5:3,cur?2.1:1.5),[1.4,4],[1,-4]]);
+    INK([back],fl?'#fff':LG(-9,-4,0,len,hc,1.3,.58),1);
+    if(!fl)for(let k=0;k<6;k++)S(k%2?hi:shade(hc,.58),.45,[-2-k*1.2,-8,-8-k*.3+(cur?Math.sin(k)*1.6:0),len*.4,-7.6+k*1.1,len-1.2]);}
+  if(H.hair==='swept'){const back=P2([[-1.8,-8.6],[-9,-6.4,-9,.4],[-9.2,4.6,-7,6.8],[-3.8,6.2],[-1.8,3.2]]);INK([back],fl?'#fff':shade(hc,.86),1);}
+  // cráneo y cara (con caballete nasal y mandíbula/papada de Iorio cuando isIor=1)
+  const j=jw*1.25+fat*.8-thin*.35;
+  const skull=new Path2D();skull.ellipse(-.4,-1.6,6.8+fat*.4,7,0,0,7);
+  const face=ior
+    ?P2([[2,-7.6],[5.8,-6.8,7.1,-3.3],[7.8,-2.1],[7.7,-1.1],[9.2,.6],[10.5,2.4],[10.2,3.4],[8.5,3.7],[8.6,4.7],[8.0,5.3],[8.4,6.1],[7.9,7.0],[8.3,8.9+j*.35,6.8,9.8+j*.45],[4.2,10.7+j*.85,1.2,9.8+j*1.05],[-1.8-j,8.4+j*.7,-3-j,4.6],[-3.8,1],[-3,-4]])
+    :P2([[2,-7.4],[5.6,-6.6,6.8,-3.4],[7.6,-2.2],[7.9,-1],[9.8,2.6],[9.6,3.3],[8.2,3.6],[8.5,4.6],[7.9,5.2],[8.3,6.1],[7.9,6.9],[8.1,8.8+j*.4,6.6,9.6+j*.5],[4,10.4+j*.8,1.6,9.4+j],[-1.4-j,8+j*.6,-2.6-j,4.6],[-3.6,1],[-3,-4]]);
   if(fl)INK([skull,face],'#fff');
-  else{const g=ctx.createRadialGradient(5,-1,.5,1,1,11);g.addColorStop(0,shade(sk,1.06));g.addColorStop(.45,sk);g.addColorStop(.62,shade(sk,.9));g.addColorStop(1,shade(sk,.72));INK([skull,face],g);
+  else{const g=ctx.createRadialGradient(5,-1,.5,1,1,11.5);g.addColorStop(0,shade(sk,1.08));g.addColorStop(.45,sk);g.addColorStop(.64,shade(sk,.88));g.addColorStop(1,shade(sk,.7));INK([skull,face],g);
     ctx.save();ctx.clip(face);
-    if(H.stub){ctx.fillStyle=H.stubC?'rgba(150,145,138,'+(H.stub*.55)+')':'rgba(40,30,28,'+(H.stub*.5)+')';ctx.beginPath();ctx.moveTo(9,4.4);ctx.lineTo(8.6,10);ctx.lineTo(-3,9);ctx.lineTo(-2.6,3.6);ctx.quadraticCurveTo(2,6,6.6,4.2);ctx.closePath();ctx.fill();}
-    ctx.fillStyle='rgba(150,50,40,.14)';ctx.beginPath();ctx.ellipse(4.6,3.4,2.2,2.4,0,0,7);ctx.ellipse(8.6,2.4,1,.8,0,0,7);ctx.fill();ctx.fillStyle='rgba(60,30,20,.16)';ctx.beginPath();ctx.ellipse(1.6,-2,2.6,4,0,0,7);ctx.fill();                       // mejilla
-    ctx.fillStyle='rgba(255,236,214,.22)';ctx.beginPath();ctx.ellipse(5.4,1.6,1.8,1,-.3,0,7);ctx.fill();                      // pómulo
-    ctx.fillStyle='rgba(40,18,12,.25)';ctx.beginPath();ctx.ellipse(1,9.6+j,6,2,0,0,7);ctx.fill();                             // sombra mandíbula
+    if(H.stub){ctx.fillStyle=H.stubC?'rgba(165,160,152,'+(H.stub*.6)+')':'rgba(36,26,24,'+(H.stub*.52)+')';ctx.beginPath();ctx.moveTo(9.2,4.2);ctx.lineTo(8.8,10.8);ctx.lineTo(-3.4,9.6);ctx.lineTo(-2.6,3.4);ctx.quadraticCurveTo(2.2,6,6.8,4.1);ctx.closePath();ctx.fill();}
+    if(ior&&thin>.3){ // mejilla hundida y pómulo saliente de pibe (1978-1994)
+      ctx.fillStyle='rgba(55,22,14,'+(.22+thin*.18)+')';ctx.beginPath();ctx.ellipse(3.6,4.2,2.4,3.1,.2,0,7);ctx.fill();
+      ctx.fillStyle='rgba(255,236,214,.28)';ctx.beginPath();ctx.ellipse(5.5,1.4,2.1,1.1,-.25,0,7);ctx.fill();
+    }else{
+      ctx.fillStyle='rgba(150,50,40,.14)';ctx.beginPath();ctx.ellipse(4.6,3.4,2.2,2.4,0,0,7);ctx.ellipse(8.6,2.4,1,.8,0,0,7);ctx.fill();
+      ctx.fillStyle='rgba(60,30,20,.16)';ctx.beginPath();ctx.ellipse(1.6,-2,2.6,4,0,0,7);ctx.fill();
+      ctx.fillStyle='rgba(255,236,214,.22)';ctx.beginPath();ctx.ellipse(5.4,1.6,1.8,1,-.3,0,7);ctx.fill();
+    }
+    if(ior&&fat>.25){ // surco nasogeniano, cachete caído y papada de grande (1998-2023)
+      S(shade(sk,.55),.45,[7.4,3.6,5.8,5.8,6.2,8.2]);
+      ctx.fillStyle='rgba(45,18,12,'+(.22+fat*.16)+')';ctx.beginPath();ctx.ellipse(1.2,9.8+j,6.4,2.4,0,0,7);ctx.fill();
+    }else{
+      ctx.fillStyle='rgba(40,18,12,.25)';ctx.beginPath();ctx.ellipse(1,9.6+j,6,2,0,0,7);ctx.fill();
+    }
     ctx.restore();
     // oreja
     if(!(H.hair==='long')){const e=new Path2D();e.ellipse(-.8,1.4,1.6,2.4,.1,0,7);INK([e],shade(sk,.86),.7);S(shade(sk,.6),.35,[-.4,0,-1.4,1.4,-.4,2.6]);}
-    // ojo
-    ctx.fillStyle='rgba(50,24,16,.28)';ctx.beginPath();ctx.ellipse(5.6,-.9,2.3,1.4,0,0,7);ctx.fill();
+    // ojo profundo bajo ceja pesada
+    ctx.fillStyle=ior?'rgba(42,18,12,.38)':'rgba(50,24,16,.28)';ctx.beginPath();ctx.ellipse(5.6,-.9,2.4,1.5,0,0,7);ctx.fill();
     ctx.fillStyle='#e9dfd2';ctx.beginPath();ctx.moveTo(4.3,-.6);ctx.quadraticCurveTo(5.5,-1.5,6.7,-.8);ctx.quadraticCurveTo(5.6,-.1,4.3,-.6);ctx.fill();
-    ctx.fillStyle='#2a1a10';ctx.beginPath();ctx.arc(5.9,-.75,.55,0,7);ctx.fill();ctx.fillStyle='rgba(255,255,255,.7)';ctx.fillRect(6,-1.1,.3,.3);
-    S('#1a100c',.5,[4.1,-.7,5.4,-1.8,6.8,-.9]);
-    if(H.age||H.gray>=1){S(shade(sk,.6),.3,[4.6,.3,5.6,.8,6.6,.2]);S(shade(sk,.6),.3,[7.4,3.9,6.8,5.2,7,6.6]);S(shade(sk,.66),.3,[3,-4.4,5,-4.8,6.6,-4.2]);}
-    // ceja
-    ctx.fillStyle=fl?'#fff':(H.brow||hc);ctx.beginPath();ctx.moveTo(3.8,-2.2);ctx.quadraticCurveTo(5.4,-3.4,7.4,-2.6);ctx.lineTo(7.2,-1.9);ctx.quadraticCurveTo(5.4,-2.5,3.9,-1.4);ctx.closePath();ctx.fill();
-    // nariz y boca
-    S(shade(sk,.66),.5,[7.4,-.4,8.2,1.8,8.4,3.2]);ctx.fillStyle=shade(sk,.5);ctx.beginPath();ctx.ellipse(8.4,3.2,.7,.4,.3,0,7);ctx.fill();
-    ctx.fillStyle='rgba(255,240,226,.35)';ctx.beginPath();ctx.ellipse(9,2.1,.6,.5,0,0,7);ctx.fill();
-    S(shade(sk,.48),.55,[8,5.4,7.2,5.7,6.3,5.4]);ctx.fillStyle='rgba(150,70,60,.45)';ctx.beginPath();ctx.ellipse(7.5,6.1,.9,.45,0,0,7);ctx.fill();}
+    ctx.fillStyle='#26160c';ctx.beginPath();ctx.arc(5.9,-.75,.55,0,7);ctx.fill();ctx.fillStyle='rgba(255,255,255,.75)';ctx.fillRect(6,-1.1,.32,.32);
+    S('#160c08',.55,[4.1,-.7,5.4,-1.8,6.8,-.9]);
+    if(ior||H.age||H.gray>=1){S(shade(sk,.58),.35,[4.5,.35,5.6,.9,6.7,.25]);}
+    if(H.age||H.gray>=1||fat>.4){S(shade(sk,.58),.35,[7.4,3.8,6.7,5.3,6.9,6.8]);S(shade(sk,.64),.32,[3,-4.4,5,-4.8,6.6,-4.2]);}
+    // ceja (en Iorio: gruesa, recta, baja y con entrecejo fruncido)
+    ctx.fillStyle=fl?'#fff':(H.brow||hc);
+    if(ior){ctx.beginPath();ctx.moveTo(3.4,-2.1);ctx.quadraticCurveTo(5.4,-3.3,7.7,-2.4);ctx.lineTo(7.5,-1.4);ctx.quadraticCurveTo(5.4,-2.1,3.5,-1.2);ctx.closePath();ctx.fill();
+      S(shade(sk,.55),.4,[7.1,-3.1,7.3,-1.8,7.4,-1.2]);}
+    else{ctx.beginPath();ctx.moveTo(3.8,-2.2);ctx.quadraticCurveTo(5.4,-3.4,7.4,-2.6);ctx.lineTo(7.2,-1.9);ctx.quadraticCurveTo(5.4,-2.5,3.9,-1.4);ctx.closePath();ctx.fill();}
+    // nariz (con caballete marcado en Iorio) y boca firme
+    if(ior){
+      S(shade(sk,.62),.55,[7.4,-.6,8.6,1.6,8.7,3.3]);S('rgba(255,238,215,.45)',.45,[7.7,-.8,9.1,.8,9.8,2.5]);
+      ctx.fillStyle=shade(sk,.48);ctx.beginPath();ctx.ellipse(8.6,3.3,.78,.44,.3,0,7);ctx.fill();
+      ctx.fillStyle='rgba(255,240,226,.38)';ctx.beginPath();ctx.ellipse(9.5,2.3,.65,.52,0,0,7);ctx.fill();
+      S(shade(sk,.44),.6,[8.2,5.4,7.1,5.6,5.9,5.6]);ctx.fillStyle='rgba(140,65,55,.45)';ctx.beginPath();ctx.ellipse(7.4,6.1,.95,.42,0,0,7);ctx.fill();
+    }else{
+      S(shade(sk,.66),.5,[7.4,-.4,8.2,1.8,8.4,3.2]);ctx.fillStyle=shade(sk,.5);ctx.beginPath();ctx.ellipse(8.4,3.2,.7,.4,.3,0,7);ctx.fill();
+      ctx.fillStyle='rgba(255,240,226,.35)';ctx.beginPath();ctx.ellipse(9,2.1,.6,.5,0,0,7);ctx.fill();
+      S(shade(sk,.48),.55,[8,5.4,7.2,5.7,6.3,5.4]);ctx.fillStyle='rgba(150,70,60,.45)';ctx.beginPath();ctx.ellipse(7.5,6.1,.9,.45,0,0,7);ctx.fill();
+    }}
   // barba y bigote
   const bc=fl?'#fff':(H.beardC||hc),sc=fl?'#fff':(H.stacheC||hc);
   if(H.beard==='full'||H.beard==='long'){const by=H.beard==='long'?17:11.4;const b=P2([[-2.6,3.4],[-1.4,8.4,2,by-1],[5.4,by+.6,8,by-2.4],[8.6,7.6],[8.2,6.2],[7,6.6,6.4,5.6],[3,6],[-.6,4.4]]);INK([b],bc,.8);
@@ -2133,24 +2173,24 @@ function drawHead2(hx,hy,a,st,fl,sw){sw=sw||0;const H=headSpec(st),sk=fl?'#fff':
   if(H.beard&&H.beard!=='none'){const m=P2([[6,3.9],[8.6,3.6],[8.9,4.7],[8.2,5.2],[7.2,4.9],[6.6,5.6],[6.4,7.2],[5.7,7],[5.6,5]]);INK([m],sc,.6);}
   // pelo de adelante
   const HP=(p,c2)=>INK([p],fl?'#fff':c2,.9);
-  if(H.hair==='long'){const cap=P2([[2,-9.6],[-4.6,-9.8,-7.4,-5],[-8,0,-6.8,4],[-3,4],[-2.4,-2],[0,-6]]);HP(cap,LG(0,-10,-6,4,hc,1.25,.6));
-    const side=P2([[1.4,-9.6],[5.6,-8.6,6.4,-5.4],[4.6,-6,3.6,-4.6],[3,-2,2.6,2],[2.6+(cur?.8:0)-sw*.3,len*.6,2.2-sw*.7,len-1.6],...wave(2.2-sw*.7,len-1.6,-3-sw,len-.6,cur?3:2,cur?1.6:1),[-3,3],[-3.6,-4],[-2,-8]]);
+  if(H.hair==='long'){const cap=P2([[2.2,-9.8],[-4.8,-10,-7.6,-5],[-8.2,0,-7,4],[-3,4],[-2.4,-2],[0,-6.2]]);HP(cap,LG(0,-10,-6,4,hc,1.25,.6));
+    const side=P2([[1.6,-9.8],[5.8,-8.8,6.6,-5.4],[4.6,-6,3.4,-4.4],[2.8,-1.8,2.4,2.2],[2.5+(cur?.9:0)-sw*.3,len*.6,2.1-sw*.7,len-1.4],...wave(2.1-sw*.7,len-1.4,-3.2-sw,len-.4,cur?3:2,cur?1.7:1.1),[-3.2,3],[-3.8,-4],[-2,-8]]);
     HP(side,fl?'#fff':LG(4,-8,-3,len,hc,1.35,.62));
-    if(!fl){for(let k=0;k<5;k++)S(k%2?hi:shade(hc,.55),.42,[1.6-k*.5,-9,3.6-k*.9,-2,1.6-k*1.1,len-2]);S(shade(hc,.5),.4,[1.6,-9.6,2.6,-7.4,4.4,-6.6]);
-      if(cur){ctx.lineWidth=.4;for(let k=0;k<22;k++){ctx.strokeStyle=k%3?shade(hc,1.5):shade(hc,.55);const cx=-8.6+(k%5)*2.4+Math.sin(k*2.3)*.8,cy=-6+((k/5)|0)*(len+5)/5;ctx.beginPath();ctx.arc(cx,cy,.9,k,k+3.6);ctx.stroke();}}
+    if(!fl){for(let k=0;k<5;k++)S(k%2?hi:shade(hc,.55),.44,[1.6-k*.5,-9,3.6-k*.9,-2,1.6-k*1.1,len-1.8]);S(shade(hc,.5),.4,[1.6,-9.6,2.6,-7.4,4.4,-6.6]);
+      if(cur){ctx.lineWidth=.42;for(let k=0;k<24;k++){ctx.strokeStyle=k%3?shade(hc,1.55):shade(hc,.55);const cx=-8.8+(k%5)*2.4+Math.sin(k*2.3)*.8,cy=-6+((k/5)|0)*(len+5)/5;ctx.beginPath();ctx.arc(cx,cy,.95,k,k+3.6);ctx.stroke();}}
       if(H.gray){ctx.globalAlpha=Math.min(1,H.gray);for(let k=0;k<4;k++)S('#d8d4cc',.35,[1-k*.8,-9,3-k,-2,1.2-k,len-3]);ctx.globalAlpha=1;}}}
   else if(H.hair==='short'||H.hair==='slick'){const p=P2([[6,-6],[4.4,-9.4,-.8,-9.2],[-6.6,-8.6,-7.4,-3.4],[-7.6,1.6,-5.8,3.2],[-3,2.8],[-1.6,-.6],[.4,-1],[1.6,-4.4],[4,-5]]);
     HP(p,LG(2,-9,-5,2,hc,1.35,.7));if(!fl){if(H.hair==='slick')for(let k=0;k<5;k++)S(hi,.35,[4.6-k*.4,-7.8+k*.6,0,-8.6+k*.9,-6-k*.2,-5+k]);else for(let k=0;k<9;k++)S(k%2?shade(hc,1.5):shade(hc,.6),.3,[4-k*1.2,-8.2+k*.3,1-k*1.3,-9+k*.6,-2.6-k*.6,-7.6+k*1.1]);
       ctx.fillStyle=hc;ctx.fillRect(.2,-1.2,1.2,3.2);}}
-  else if(H.hair==='buzz'){const p=P2([[5.6,-5.8],[3.6,-9.4,-1,-9.4],[-6.8,-8.8,-7.4,-3.4],[-7.4,1.4,-5.6,2.8],[-3,2.6],[-1.4,-.4],[.6,-1],[1.8,-4.2]]);INK([p],fl?'#fff':'rgba(30,22,18,.62)',.5);
-    if(!fl){ctx.fillStyle='rgba(20,14,10,.5)';for(let k=0;k<26;k++)ctx.fillRect(-6.4+(k*2.7)%11.4,-8.6+((k*1.9)%10),.45,.45);}}
+  else if(H.hair==='buzz'){const p=P2([[5.6,-5.8],[3.6,-9.4,-1,-9.4],[-6.8,-8.8,-7.4,-3.4],[-7.4,1.4,-5.6,2.8],[-3,2.6],[-1.4,-.4],[.6,-1],[1.8,-4.2]]);INK([p],fl?'#fff':'rgba(28,20,16,.68)',.5);
+    if(!fl){ctx.fillStyle='rgba(18,12,8,.55)';for(let k=0;k<28;k++)ctx.fillRect(-6.4+(k*2.7)%11.4,-8.6+((k*1.9)%10),.45,.45);}}
   else if(H.hair==='crest'){const sides=P2([[5.4,-5.6],[3,-8.8,-1,-8.8],[-6.6,-8.4,-7.4,-3.4],[-7.4,1.4,-5.6,2.8],[-3,2.6],[-1.4,-.4],[.6,-1],[1.6,-4]]);
-    INK([sides],fl?'#fff':'rgba('+(H.gray?'110,104,98':'40,32,28')+',.55)',.4);
-    const top=P2([[5.6,-6],[4.6,-10.6,-.4,-10.8],[-5.4,-10.6,-7,-6.6],[-5.4,-6.2],[-1,-8.2],[3.4,-7.4]]);HP(top,LG(0,-11,0,-6,hc,1.4,.7));
-    if(!fl)for(let k=0;k<6;k++)S(k%2?hi:shade(hc,.6),.35,[4.6-k*1.6,-7,3.6-k*1.8,-10.4,2-k*1.8,-9.6]);}
-  else if(H.hair==='swept'){const p=P2([[4.4,-6.8],[3.6,-10.4,-1.4,-10.2],[-6.6,-9.6,-8.4,-4.8],[-8.8,.4,-7.6,3.6],[-5.6,4.4],[-3.2,2.6],[-1.6,-.6],[.4,-1.4],[.6,-4],[2.6,-5.6]]);
-    HP(p,LG(2,-10,-6,4,hc,1.18,.62));
-    if(!fl){for(let k=0;k<7;k++)S(k%2?shade(hc,1.15):shade(hc,.75),.3,[4.2-k*.3,-7.4+k*.6,-1-k*.4,-10+k*1.2,-7.4+k*.1,-4+k*1.2]);ctx.fillStyle=shade(hc,.75);ctx.fillRect(-.2,-1.4,1,2.6);}}
+    INK([sides],fl?'#fff':'rgba('+(H.gray?'125,120,112':'40,32,28')+',.62)',.4);
+    const top=P2([[5.8,-5.8],[4.8,-10.8,-.4,-11],[-5.6,-10.8,-7.2,-6.4],[-5.4,-6.0],[-1,-8.0],[3.6,-7.2]]);HP(top,LG(0,-11,0,-6,hc,1.4,.7));
+    if(!fl)for(let k=0;k<6;k++)S(k%2?hi:shade(hc,.6),.38,[4.6-k*1.6,-7,3.6-k*1.8,-10.6,2-k*1.8,-9.6]);}
+  else if(H.hair==='swept'){const p=P2([[4.6,-6.8],[3.8,-10.6,-1.4,-10.4],[-6.8,-9.8,-8.6,-4.8],[-9.0,.6,-7.8,4.0],[-5.6,4.8],[-3.2,2.8],[-1.6,-.6],[.4,-1.4],[.6,-4],[2.8,-5.6]]);
+    HP(p,LG(2,-10,-6,4,hc,1.22,.68));
+    if(!fl){for(let k=0;k<8;k++)S(k%2?'#f4f0e8':shade(hc,.72),.34,[4.4-k*.3,-7.4+k*.55,-1-k*.4,-10.2+k*1.15,-7.6+k*.1,-4+k*1.15]);ctx.fillStyle=shade(hc,.82);ctx.fillRect(-.3,-1.4,1.2,3.2);}}
   else if(H.hair==='cap'){const p=P2([[7.2,-5],[6,-10.4,-1,-10.2],[-7.2,-9.6,-7.4,-4.2],[-6,-3.6],[7,-3.4]]);HP(p,LG(0,-10,0,-3,st.capC||'#333',1.3,.7));
     const v=P2([[5.6,-4.6],[11.6,-4.2],[11.4,-3],[5.2,-3.2]]);HP(v,shade(st.capC||'#333',.6));
     if(!fl){ctx.fillStyle=hc;ctx.fillRect(-6.6,-3.6,4,4.6);}}
@@ -2210,40 +2250,42 @@ const MOTOST={scale:.95,skin:'#e6b48e',hair:'long',hairC:'#2a1a10',top:'#151418'
 function guiTick(){if(state!=='play')return;if(lvl===0&&!GUI.moto&&!GUI.motoDone&&datoT===260){GUI.moto={x:cam.x-60};GUI.motoDone=1;sfx('truck');}
   const M=GUI.moto;if(M){M.x+=2.3;if(M.x>player.x-20&&!M.said){M.said=1;say(player,'¡Yo quiero ser eso!',230);}if(M.x>cam.x+W+80)GUI.moto=null;}}
 
-// v20: nivel "Muere monstruo muere" (Trillando la fina, 2012). Un pueblo de campo de madrugada, Sábado Santo:
-// aparece un espanto y el almacenero buchón anota a todos. Villano: el comerciante informador.
+// v20: nivel "Muere monstruo muere" (Trillando la fina, 2012) + entrevista histórica con Beto Casella +
+// "El Comerciante Informador" (de "El amasijo de un gran sueño": el mercader del rumor y la prensa amarilla que lucra y deshonra).
 Object.assign(STY,{
-  informador:{scale:1.0,skin:'#e2b08c',hair:'slick',hairC:'#2a2018',stache:'#2a2018',top:'#c8bca4',shirt:'#e8e2d0',apron:'#ece6d6',pants:'#4a4440',boots:'#1a1410',torsoW:11,belly:true},
-  comerciante:{scale:1.34,skin:'#e6b490',hair:'slick',hairC:'#1e1612',stache:'#1e1612',glasses:true,top:'#6a5a44',shirt:'#e8e2d0',apron:'#ece6d6',vest:'#4a3a2a',pants:'#3a3430',boots:'#120e0c',torsoW:15,belly:1.3},
+  beto:{scale:1.03,skin:'#e4b28a',hair:'slick',hairC:'#161218',glasses:true,top:'#1a1820',shirt:'#e8e2d0',tie:'#c8322a',pants:'#24222c',boots:'#0b0b0d',torsoW:10.5,jacket:true},
+  informador:{scale:1.0,skin:'#e2b08c',hair:'slick',hairC:'#2a2018',stache:'#2a2018',glasses:true,top:'#b89638',shirt:'#e8e2d0',tie:'#1a1418',pants:'#3a3632',boots:'#1a1410',torsoW:10.5,jacket:true},
+  comerciante:{scale:1.34,skin:'#e6b490',hair:'slick',hairC:'#1e1612',stache:'#1e1612',glasses:true,top:'#4a2438',shirt:'#f2e6c8',tie:'#e2c24a',vest:'#2a1622',pants:'#2a2228',boots:'#120e0c',torsoW:15,belly:1.3,cigar:true},
   espanto:Object.assign({},STY.reptil,{skin:'#3e3a44',top:'#24202a',shirt:'#3a3440',pants:'#1e1a22',boots:'#2a2430',scale:1.12})
 });
 Object.assign(DEFS,{
-  informador:E('informador',30,1.0,'COMERCIANTE INFORMADOR',190,{ai:'ranged',shot:'papel',hold:'papel'}),
+  beto:N('beto'),
+  informador:E('informador',30,1.0,'OPERADOR DEL CHISME',190,{ai:'ranged',shot:'papel',hold:'papel'}),
   espanto:Object.assign({},DEFS.reptil,{sty:'espanto',name:'ESPANTO DE MADRUGADA',hp:40}),
-  comerciante:E('comerciante',420,.9,'EL COMERCIANTE INFORMADOR',8000,{boss:1,bthrow:'papel'})
+  comerciante:E('comerciante',420,.9,'EL COMERCIANTE INFORMADOR',8000,{boss:1,bthrow:'papel',hold:'mic'})
 });
-Object.assign(NAMES,{informador:'EL BUCHÓN DEL ALMACÉN',comerciante:'EL COMERCIANTE INFORMADOR',espanto:'EL ESPANTO'});
-Object.assign(BARKS,{informador:['¡Te anoté en la libreta!','¡Ya le paso tu nombre al que manda!','¿Quién salió anoche? ¡Yo sé!','¡Hoy no se fía!'],
-  espanto:['¡Uuuuhhh!','¡Grrrr!','¡Sábado Santo es mío!'],comerciante:['¡Fiado no hay!','¡Te anoto en la libreta!']});
-Object.assign(DIEQ,{informador:'Lo que se anota a escondidas se paga de frente.',espanto:'¡Fuera de acá, espanto!',comerciante:'El buchón no tiene patria ni pueblo.'});
+Object.assign(NAMES,{beto:'BETO CASELLA',informador:'OPERADOR AMARILLISTA',comerciante:'EL COMERCIANTE INFORMADOR',espanto:'EL ESPANTO'});
+Object.assign(BARKS,{informador:['¡Comerciante informador: vendo el rumor al mejor postor!','¡Recortale esa frase que hacemos tapa!','¡Si hay pelea en la banda vendemos el doble!','¡Un título venenoso vale oro!'],
+  espanto:['¡Uuuuhhh!','¡Grrrr!','¡Sábado Santo es mío!'],comerciante:['¡Yo rumoreo y deshonro por contrato!','¡Todo escándalo cotiza en mi mostrador!']});
+Object.assign(DIEQ,{informador:'Como canté en "El amasijo de un gran sueño": comerciante informador que rumorea y deshonra.',espanto:'¡Fuera de acá, espanto! Que el pueblo duerma en paz.',comerciante:'El que comercia con la honra ajena termina masticando su propio veneno.'});
 
 function monstruoLevel(){
   const L=L_STD([[['informador','R'],['espanto','R']],[['informador','L'],['buchon','R']]],[[['espanto','R'],['informador','L'],['buchon','R']],[['informador','R'],['espanto','L']]],
     [[['espanto','R'],['informador','L'],['espanto','R']],[['buchon','L'],['informador','R'],['espanto','R']]],[[['informador','L'],['espanto','R'],['informador','R']],[['espanto','R'],['informador','L'],['espanto','R'],['buchon','L']]]);
   return {LW:2600,skin:'ricT',song:'c8',bossSong:'b2',food:'asado',lmKey:'monstruo',
-    villains:'Buchones del almacén, espantos de la madrugada y El Comerciante Informador',title:'MUERE MONSTRUO MUERE',place:'UN PUEBLO DE CAMPO · 2012',hazard:'jabali',
-    card:['En 2012 salió "Trillando la fina", el último disco de Almafuerte. Abre con "Muere monstruo muere".','La canción cuenta de un espanto que aparece de madrugada en un pueblo, y del que se hace cargo para que los vecinos vuelvan a dormir.','Sábado Santo. Y el almacenero anota todo para vendérselo al que manda.'],
-    npcs:[{kind:'peon',x:250,y:198,face:1}],guns:[[700,'escopeta'],[1700,'escopeta']],locks:L,
-    rescue:{kind:'jubilado',x:1420,y:192},
+    villains:'Operadores de prensa amarilla, espantos de Sábado Santo y El Comerciante Informador',title:'MUERE MONSTRUO MUERE',place:'UN PUEBLO DE CAMPO · 2012',hazard:'jabali',
+    card:['En 2012 Almafuerte editó su último álbum de estudio, "Trillando la fina", que abre con "Muere monstruo muere" (letra de Iorio, música de Marciello).','Ese mismo año le dio sus históricas entrevistas a su amigo Beto Casella, contando de sus setecientos pajaritos, la radio AM y la vida tierra adentro.','Pero detrás de las notas sinceras siempre merodea "El Comerciante Informador" (de "El amasijo de un gran sueño"), que lucra con el chisme y el espanto.'],
+    npcs:[{kind:'beto',x:250,y:198,face:1,hold:'mic'}],guns:[[700,'escopeta'],[1700,'escopeta']],locks:L,
+    rescue:{kind:'peon',x:1420,y:192},
     props:[[420,'fardo','asado'],[820,'tacho','asado'],[1520,'fardo','asado'],[1940,'tacho','asado'],[2080,'fardo','asado']],pipe:[1460,240],
-    intro:[{w:'peon',s:'Don Ricardo, anoche apareció un espanto en el pueblo. Nadie pegó un ojo.'},{w:'ricT',s:'Tranquilo. Los espantos se van por donde vinieron.'},
-      {w:'peon',s:'Y el del almacén anda anotando quién sale de noche, para pasarle la lista al que manda.'},{w:'ricT',s:'Ese es peor que cualquier espanto. Vamos.'}],
-    rescueLines:[{w:'jubilado',s:'¡El almacenero me ató! Dice que le debo la libreta desde el invierno.'},{w:'ricT',s:'Las deudas se arreglan de frente, no atando a un viejo.'},
-      {w:'jubilado',s:'Está en el almacén. Y tiene al espanto encerrado en el galpón, para asustar al que no le compra.'},{w:'ricT',s:'Primero el buchón. Al bicho lo llevo lejos yo.'}],
+    intro:[{w:'beto',s:'Querido Ricardo, vine hasta el campo para charlar como amigos de tus canciones y tus setecientos pajaritos.'},{w:'ricT',s:'Beto querido, con vos hablo de corazón porque venís de frente. El problema son los buitres que nos siguieron por la ruta.'},
+      {w:'beto',s:'Vino "El Comerciante Informador" con sus pasquines amarillos, y encima de madrugada apareció el espanto de Sábado Santo.'},{w:'ricT',s:'Al comerciante informador que rumorea y deshonra lo saco carpiendo, y del monstruo me encargo yo para que el pueblo duerma en paz.'}],
+    rescueLines:[{w:'peon',s:'¡Don Ricardo! Los pasquineros del Comerciante Informador me ataron para inventar que en su campo pasan cosas raras.'},{w:'ricT',s:'Viven del amasijo de los sueños ajenos: mienten en los diarios para vender papel y dividir amigos.'},
+      {w:'peon',s:'Además soltaron al espanto del galpón para sacarle fotos y asustar a los vecinos en Sábado Santo.'},{w:'ricT',s:'Primero le cierro el quiosco al informador, y al bicho lo llevo lejos y lo encomiendo a Dios.'}],
     boss:'comerciante',summons:[['informador','espanto'],['espanto','informador']],
-    bossLines:[{w:'comerciante',s:'Yo anoto, yo vendo, yo informo. En este pueblo todo pasa por mi mostrador.'},{w:'ricT',s:'Lo único que pasa por tu mostrador es la vergüenza.'},{w:'comerciante',s:'¡Muchachos! ¡Suelten al espanto!'}],
-    winLines:[{w:'comerciante',s:'¡Basta! ¡Rompo la libreta!'},{w:'ricT',s:'Ahora agarro al bicho, lo llevo bien lejos y que Dios lo cuide. Acá no vuelve más.'}],
-    winSay:'¡MUERE MONSTRUO MUERE!',quips:['El buchón no tiene patria.','Lo que se anota se paga.','Sábado Santo y a laburar.','Al espanto se lo despide; al buchón, se lo saca.']};
+    bossLines:[{w:'comerciante',s:'¡Soy El Comerciante Informador! Yo invento internas, vendo rumores y convierto tu vida en espectáculo de feria.'},{w:'ricT',s:'Ya te retraté en "El amasijo de un gran sueño": comerciante informador que rumorea y deshonra.'},{w:'comerciante',s:'¡Paparazzis, pasquineros! ¡Suelten al espanto y saquen la foto de tapa!'}],
+    winLines:[{w:'comerciante',s:'¡No me rompas los diarios! ¡Me vuelvo a las redacciones de la capital!'},{w:'ricT',s:'Rajá con tus chismes. Y al monstruo me lo llevo atado tierra adentro y que Dios se apiade: acá en el pueblo no asusta más.'}],
+    winSay:'¡MUERE MONSTRUO MUERE!',quips:['Comerciante informador, que rumorea y deshonra.','Tengo setecientos pajaritos y escucho la radio AM.','Sábado Santo de madrugada: ¡muere monstruo muere!','Con mi amigo Beto hablo de frente; a los amarillistas ni cabida.']};
 }
 const MONSTRUO_SCENE={weather:'mist',light:'#b09aa6',
   lamps:[{x:520,y:70,r:110,c:'255,200,140'},{x:1180,y:70,r:110,c:'255,200,140',flick:true},{x:1880,y:70,r:110,c:'255,200,140'}],signs:[],
@@ -2265,12 +2307,12 @@ const MONSTRUO_SCENE={weather:'mist',light:'#b09aa6',
     poster(380,140,36,26,'#e8e2d0',[['SÁBADO','#5a3a8a',4],['SANTO','#5a3a8a',4],['MISA 8 HS','#c8322a',3]]);
     // casas bajas
     houses(440,820,61,['#d8c8a8','#c8a888','#b8b0a0'],{low:true,shutters:'#3a5a4a',white:true,notank:true});
-    // el almacén de ramos generales del informador
+    // el puesto del Comerciante Informador: agencia de rumores, pasquines y ramos generales
     R(860,92,420,84,'#d8b878');R(860,92,420,6,'#8a6a3a');R(852,84,436,10,'#a8885a');
-    R(900,100,340,20,'#2a3a2a');T('ALMACÉN Y RAMOS GENERALES',1070,106,'#e8d8a8',6,'center');
+    R(900,100,340,20,'#2a1a28');T('EL COMERCIANTE INFORMADOR · PRENSA Y RUMORES',1070,106,'#f2c84a',5,'center');
     for(let k=0;k<4;k++){const dx=880+k*100;R(dx,128,46,48,'#3a2a1e');R(dx+3,131,40,45,'#5a4430');R(dx+22,131,2,45,'#3a2a1e');}
-    R(890,142,30,22,'#1a1418');R(892,144,26,18,'#2a3a2a');T('HOY NO',905,146,'#e8e2d0',3,'center');T('SE FÍA',905,151,'#e8e2d0',3,'center');T('MAÑANA SÍ',905,156,'#f2b632',3,'center');
-    R(1110,140,40,30,'#e8e2d0');T('LIBRETA',1130,143,'#141218',3,'center');for(let k=0;k<4;k++)R(1114,150+k*4,32,1,'#8a8a92');
+    R(890,142,30,22,'#1a1418');R(892,144,26,18,'#3a1a28');T('RUMORES',905,146,'#f2b632',3,'center');T('CHISMES',905,151,'#e8e2d0',3,'center');T('EXCLUSIVO',905,156,'#e2462c',3,'center');
+    R(1110,140,40,30,'#e8e2d0');T('PASQUÍN',1130,143,'#c8322a',3,'center');for(let k=0;k<4;k++)R(1114,150+k*4,32,1,'#8a8a92');
     for(let k=0;k<3;k++){R(1176+k*16,160,12,16,'#8a6a3a');R(1176+k*16,158,12,3,'#6a4a2a');}
     // galpón de chapa con el espanto adentro (ojos en la oscuridad)
     R(1520,100,170,76,'#8a8a92');for(let x=1520;x<1690;x+=6)R(x,100,2,76,'#6e6e78');g.fillStyle='#7a7a84';g.beginPath();g.moveTo(1512,102);g.lineTo(1605,74);g.lineTo(1698,102);g.fill();
@@ -2288,7 +2330,7 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   LEVELS.splice(9,0,L);SCENES.splice(9,0,MONSTRUO_SCENE);
   DISCOS.splice(9,0,{t:'MUERE MONSTRUO MUERE',c:'#7a5a8a',s:'"Muere monstruo muere" abre "Trillando la fina" (2012): letra de Iorio y música de Claudio Marciello.'});
   AFICHES.splice(9,0,[[640,'ALMAFUERTE','TRILLANDO','LA FINA','#6a8a3a'],[2260,'SE VENDE','GALPÓN','CON ESPANTO','#e8e2d0']]);
-  DATOS.splice(9,0,['"Trillando la fina" (2012) fue el último disco de estudio de Almafuerte.','"Muere monstruo muere" tiene letra de Iorio y música de Claudio Marciello.','La figura del comerciante informador aparece en "Amasijo de un gran sueño", de Almafuerte.','En 2012, en el programa de su amigo Beto Casella, contó que en el campo tenía muchos pájaros y que los miraba mientras escuchaba la radio.']);
+  DATOS.splice(9,0,['"Trillando la fina" (2012) fue el último disco de estudio de Almafuerte.','"Muere monstruo muere" tiene letra de Iorio y música de Claudio Marciello.','La figura del comerciante informador aparece en "El amasijo de un gran sueño" (Mundo guanaco, 1995): el periodismo que lucra con rumores y rupturas.','En 2012, en las charlas con su amigo Beto Casella, contó que en el campo tenía setecientos pajaritos y que los miraba mientras escuchaba la radio.']);
   MODS.splice(9,0,'');
   DATOS[0].unshift('En 1978 recibió su primer bajo, un Faim de cuatro cuerdas: el segundo regalo más importante de su vida, después de la guitarra criolla que le dejaron los Reyes en 1972.');
   AFICHES[4].push([1300,'BLACK SABBATH','OBRAS 1992','ABRE HERMÉTICA','#7a5a9a']);AFICHES[5].push([1700,'MONSTERS OF ROCK','KISS Y SABBATH','RIVER 3/9/94','#c8a060']);
@@ -2310,7 +2352,7 @@ function loroTick(){if(!loroOn()){LORO.on=false;return;}const p=player,s=(p.st.s
   const tx=perch?p.x-p.face*4.5*s:p.x+Math.sin(tick*.06)*22,ty=perch?p.y-p.z-55*s:p.y-p.z-96*s+Math.cos(tick*.09)*6;
   if(!LORO.on){LORO.on=true;LORO.x=tx-80;LORO.y=ty-60;}
   const dx=tx-LORO.x,dy=ty-LORO.y;LORO.fly=perch&&Math.hypot(dx,dy)<2?0:1;LORO.x+=dx*(perch?.22:.08);LORO.y+=dy*(perch?.22:.08);LORO.face=LORO.fly?(dx>0?1:-1):p.face;
-  if(state==='play'&&--LORO.sayT<=0){LORO.sayT=1800+(Math.random()*900|0);const P=['¡RICARDO!','¡RRRICARDIO!','¡METAL!','¡PRENDÉ LA RADIO!','¡TIERRA ADENTRO!','¡PAPERO!','¡FUERA BUCHÓN!'];
+  if(state==='play'&&--LORO.sayT<=0){LORO.sayT=1800+(Math.random()*900|0);const P=['¡RICARDO!','¡RRRICARDIO!','¡METAL!','¡PRENDÉ LA RADIO!','¡TIERRA ADENTRO!','¡SÉ VOS!','¡FUERA BUCHÓN!'];
     floatTxt(LORO.x,LORO.y-8,P[Math.random()*P.length|0],'#a8e070');}}
 function drawLoro(cx){if(!LORO.on)return;const X=LORO.x-cx,Y=LORO.y;ctx.save();ctx.translate(Math.round(X),Math.round(Y));ctx.scale((LORO.face||1)*1.5,1.5);
   const fl=LORO.fly?Math.sin(tick*.8):0,o=OUTP||'#141016';
@@ -2354,11 +2396,29 @@ function landmarkBG(cv,i){const g=cv.getContext('2d');g.save();g.setTransform(RS
   if(i===0){g.clearRect(1600,0,1000,26); // Mercado de Abasto: fachada art déco ocre con cinco bóvedas vidriadas y pilares escalonados
     R(1600,26,1000,128,'#cfac74');R(1600,26,1000,3,'#a8844e');
     const piers=[1600,1800,2000,2200,2400,2560];
-    for(let k=0;k<5;k++){const x0=piers[k]+40,w=(k===4?2560:piers[k+1])-x0;R(x0,40,w,114,'#c49e66');glass(x0+8,44,w-16,110);R(x0+4,150,w-8,4,'#8a6a3e');}
+    for(let k=0;k<5;k++){const x0=piers[k]+40,w=(k===4?2560:piers[k+1])-x0;R(x0,40,w,114,'#c49e66');glass(x0+8,44,w-16,110);
+      // luces colgantes del mercado y pilas de cajones adentro de las bóvedas
+      for(let lx=x0+26;lx<x0+w-20;lx+=36){R(lx,52,1,18,'#2a241e');g.fillStyle='rgba(255,228,150,.55)';g.beginPath();g.arc(lx+.5,72,5,0,7);g.fill();}
+      for(let cx=x0+18;cx<x0+w-30;cx+=28){R(cx,132,20,16,'#8a5e34');R(cx+2,122,18,10,'#9e7040');R(cx,137,20,1,'#5a3a1e');}
+      R(x0+4,150,w-8,4,'#8a6a3e');}
     for(const px of piers){R(px,16,40,138,'#d8b880');R(px+6,8,28,10,'#d8b880');R(px+12,0,16,10,'#d8b880');
       for(let k=0;k<4;k++)R(px+7+k*8,20,2,130,'#b8945c');R(px,16,40,2,'#e8cc98');R(px+6,8,28,2,'#e8cc98');R(px+12,0,16,2,'#e8cc98');R(px+38,16,2,138,'#a8844e');}
-    R(1960,22,280,16,'#5a4630');T('MERCADO DE ABASTO',2100,27,'#ecd8a8',7,'center');
-    {const x=2180;R(x,114,90,46,'#3f6a86');R(x+90,126,32,34,'#e6dcc2');R(x+96,130,20,12,'#24323e');for(const wx of [x+20,x+104]){g.fillStyle='#111';g.beginPath();g.arc(wx,166,10,0,7);g.fill();}T('PAPAS DEL SUR',x+45,128,'#e8e2d0',5,'center');}}
+    R(1960,22,280,16,'#5a4630');T('MERCADO DE ABASTO · PROVEEDOR',2100,27,'#ecd8a8',6,'center');
+    // bolsas de arpillera apiladas en la vereda del Abasto
+    for(let sx=1660;sx<2100;sx+=140){for(let b=0;b<3;b++){g.fillStyle=b%2?'#b08c58':'#9c7846';g.beginPath();g.ellipse(sx+b*9,162-(b===2?7:0),10,6,0,0,7);g.fill();}}
+    {const x=2180;R(x,114,90,46,'#3f6a86');R(x+90,126,32,34,'#e6dcc2');R(x+96,130,20,12,'#24323e');for(const wx of [x+20,x+104]){g.fillStyle='#111';g.beginPath();g.arc(wx,166,10,0,7);g.fill();}T('PAPAS DEL SUR · DON ALFREDO',x+45,128,'#e8e2d0',4,'center');}}
+  if(i===1){ // Cine Ocean de Ciudadela (donde conoció al Chofa viendo La canción es la misma) y garaje de ensayo de V8
+    const cx=540;R(cx,48,220,128,'#2c2434');R(cx+6,54,208,120,'#3a2e42');R(cx-8,76,236,24,'#e8dcc2');R(cx-6,78,232,20,'#16121a');
+    for(let lx=cx-4;lx<cx+224;lx+=8){R(lx,77,3,2,'#f2b632');R(lx,97,3,2,'#f2b632');}
+    T('CINE OCEAN · CIUDADELA',cx+110,60,'#f2b632',6,'center');
+    T('HOY: LED ZEPPELIN · LA CANCIÓN ES LA MISMA',cx+110,84,'#f8e6a0',5,'center');
+    for(let k=0;k<3;k++){R(cx+26+k*60,118,46,56,'#1a1420');R(cx+30+k*60,122,38,48,'#4a2828');}
+    poster(cx+10,118,22,32,'#141218',[['LED','#f2b632',4],['ZEP','#c8322a',4],['1979','#e8e2d0',4]]);
+    // garaje de ensayo de V8 con persiana entreabierta y torres Marshall
+    const gx=1480;R(gx,78,190,98,'#544842');R(gx+14,96,162,80,'#141216');
+    for(let y=96;y<128;y+=4)R(gx+14,y,162,2,'#6e7278');
+    for(const mx of [gx+30,gx+134]){R(mx,132,26,42,'#1c1a1e');R(mx+2,134,22,16,'#2a282e');R(mx+2,152,22,20,'#2a282e');T('MARSHALL',mx+13,136,'#e8d8a8',3,'center');}
+    T('V8',gx+95,104,'#c8322a',10,'center');T('SALA DE ENSAYO · NO ENTRAR',gx+95,84,'#e8e2d0',4,'center');}
   if(i===3){ // Centro Cultural Recoleta (ex convento, rojo colonial con blanco) y la torre blanca de la Basílica del Pilar
     R(1180,58,720,118,'#a8503a');R(1180,58,720,6,'#ece6d8');R(1180,106,720,4,'#ece6d8');R(1180,170,720,6,'#ece6d8');
     for(let x=1180;x<1900;x+=60){R(x,58,6,118,'#ece6d8');}
@@ -2369,16 +2429,26 @@ function landmarkBG(cv,i){const g=cv.getContext('2d');g.save();g.setTransform(RS
     R(1100,40,80,136,'#f0ece2');R(1100,40,80,4,'#d8d0c0');R(1112,22,56,20,'#f0ece2');arch(1128,24,24,18,'#3a3a44');R(1139,24,2,18,'#f0ece2');
     g.fillStyle='#e8e2d4';g.beginPath();g.arc(1140,22,16,Math.PI,0);g.fill();R(1139,0,2,8,'#3a3440');R(1136,2,8,2,'#3a3440');
     for(const yy of [60,100,140]){arch(1124,yy,32,26,'#d8d0c0');arch(1128,yy+3,24,23,'#3a3a44');}
-    poster(1290,128,40,40,'#141218',[['HERMÉTICA','#e8e2d0',5],['DEBUT','#c8322a',6],['1988','#f2b632',6]]);poster(1680,128,40,40,'#e8e2d0',[['MUESTRA','#1a1a1a'],['DE ARTE','#1a1a1a'],['MODERNO','#c8322a']]);}
-  if(i===5){ // el Monumental: tribunas blancas de hormigón con la banda roja y las torres de luz
+    poster(1290,128,40,40,'#141218',[['HERMÉTICA','#e8e2d0',5],['DEBUT','#c8322a',6],['1988','#f2b632',6]]);poster(1680,128,40,40,'#e8e2d0',[['MUESTRA','#1a1a1a'],['DE ARTE','#1a1a1a'],['MODERNO','#c8322a']]);
+    // Pub Helloween de San Martín (debut oficial del 7/5/1988)
+    const hx=2100;R(hx,70,220,106,'#1c1622');R(hx+6,76,208,24,'#2a1a28');T('PUB HELLOWEEN · SAN MARTÍN',hx+110,83,'#f2b632',5,'center');
+    T('7 DE MAYO 1988 · DEBUT DE HERMÉTICA',hx+110,104,'#e8e2d0',4,'center');arch(hx+86,120,48,56,'#0e0a12');}
+  if(i===4){ // Talleres cerrados del conurbano, pintadas de la H y afiches de Obras 1992 (Black Sabbath / Motörhead)
+    for(const sx of [520,1380,2140]){
+      g.strokeStyle='#f2b632';g.lineWidth=2;g.beginPath();g.arc(sx,132,14,0,7);g.stroke();
+      T('H',sx,125,'#f2b632',11,'center');T('LA H NO ES MUDA',sx,150,'#e8e2d0',4,'center');
+    }
+    poster(860,116,58,46,'#141218',[['OBRAS 92','#f2b632',5],['SABBATH','#c8322a',5],['HERMÉTICA','#e8e2d0',4]]);
+    poster(1720,116,58,46,'#141218',[['ÁCIDO','#f2b632',5],['ARGENTINO','#c8322a',4],['ORO 1993','#e8e2d0',4]]);}
+  if(i===5){ // el Monumental: tribunas blancas de hormigón con la banda roja, escenario Monsters of Rock y torres de luz
     R(0,20,1100,78,'#d8d6d0');for(let y=24;y<96;y+=6)R(0,y,1100,1,'#b8b6b0');
     g.fillStyle='#c8322a';g.beginPath();g.moveTo(0,52);g.lineTo(1100,30);g.lineTo(1100,44);g.lineTo(0,66);g.fill();
     for(let x=0;x<1100;x+=24)R(x,20,3,78,'#a8a6a0');R(0,94,1100,4,'#8a8882');
     for(const tx of [160,560,960]){R(tx,0,6,98,'#6a6a72');R(tx-22,0,50,16,'#3a3a44');for(let k=0;k<5;k++)for(let j=0;j<2;j++)R(tx-19+k*9,2+j*7,7,5,'#f8f2c8');}
-    T('RIVER PLATE',560,72,'#c8322a',9,'center');
+    T('ESTADIO RIVER PLATE · MONSTERS OF ROCK 1994',560,72,'#c8322a',7,'center');
     // banderas de la hinchada metalera colgadas de la tribuna
-    for(const [bx,t1,c1,c2] of [[230,'AGUANTE EL METAL PESADO','#141218','#f2b632'],[690,'LOS DEL OESTE PRESENTES','#e8e2d0','#141218'],[880,'HERMÉTICA NO SE TOCA','#c8322a','#e8e2d0']]){R(bx,58,150,18,c1);R(bx,58,150,2,'rgba(0,0,0,.3)');T(t1,bx+75,63,c2,5,'center');}}
-  if(i===6){ // estación Constitución: fachada francesa de piedra, mansardas de pizarra y el reloj
+    for(const [bx,t1,c1,c2] of [[80,'SAN JUSTO ES DE LA H','#141218','#f2b632'],[260,'AGUANTE EL METAL PESADO','#141218','#f2b632'],[460,'CASEROS Y CIUDADELA','#c8322a','#e8e2d0'],[690,'LOS DEL OESTE PRESENTES','#e8e2d0','#141218'],[880,'HERMÉTICA NO SE TOCA','#c8322a','#e8e2d0']]){R(bx,58,150,18,c1);R(bx,58,150,2,'rgba(0,0,0,.3)');T(t1,bx+75,63,c2,4,'center');}}
+  if(i===6){ // estación Constitución: fachada francesa de piedra, mansardas de pizarra, el reloj y el templo de Cemento
     R(700,64,520,112,'#d8c8a6');for(let y=70;y<176;y+=8)R(700,y,520,1,'#c4b490');
     for(const px of [700,1120]){R(px,40,100,136,'#e0d2b2');g.fillStyle='#4a5260';g.beginPath();g.moveTo(px-4,42);g.lineTo(px+12,10);g.lineTo(px+88,10);g.lineTo(px+104,42);g.fill();
       g.fillStyle='#e0d2b2';g.beginPath();g.arc(px+50,28,7,0,7);g.fill();g.fillStyle='#2a2e36';g.beginPath();g.arc(px+50,28,4.5,0,7);g.fill();R(px+46,0,8,12,'#4a5260');}
@@ -2388,8 +2458,23 @@ function landmarkBG(cv,i){const g=cv.getContext('2d');g.save();g.setTransform(RS
     R(800,68,90,4,'#c4b490');R(1030,68,90,4,'#c4b490');
     for(let x=810;x<880;x+=24){arch(x,76,14,20,'#3a3a44');}for(let x=1040;x<1112;x+=24){arch(x,76,14,20,'#3a3a44');}for(const px of [712,1132])for(let x=px;x<px+80;x+=26)arch(x,54,14,20,'#3a3a44');
     for(let k=0;k<7;k++){const ax=716+k*72;arch(ax,104,50,72,'#2a2422');arch(ax+4,108,42,68,'#3a3230');}
-    R(880,84,160,14,'#5a3a22');T('ESTACIÓN CONSTITUCIÓN',960,87,'#f0e4c8',6,'center');T('F.C. ROCA',960,72,'#5a3a1a',5,'center');}
-  if(i===2){alvearBG(g,R,T,arch);for(const [bx,t1,c1,c2] of [[760,'BRIGADAS METÁLICAS','#141218','#e8e2d0'],[1830,'V8 · METAL PESADO','#c8322a','#e8e2d0']]){R(bx,96,140,16,c1);T(t1,bx+70,101,c2,5,'center');}}
+    R(880,84,160,14,'#5a3a22');T('ESTACIÓN CONSTITUCIÓN',960,87,'#f0e4c8',6,'center');T('F.C. ROCA',960,72,'#5a3a1a',5,'center');
+    // fachada de Cemento (Estados Unidos 1238) con afiches de Mundo Guanaco
+    const cm=1820;R(cm,66,240,110,'#242028');R(cm+10,74,220,22,'#141018');T('CEMENTO · ESTADOS UNIDOS 1238',cm+120,81,'#f2b632',5,'center');
+    T('HOY: ALMAFUERTE · MUNDO GUANACO',cm+120,104,'#c8322a',5,'center');
+    for(const dx of [cm+40,cm+160]){R(dx,120,40,56,'#121016');R(dx+4,124,32,48,'#2c2428');}}
+  if(i===7){ // Ruta 2001: santuario rutero del Gauchito Gil con banderas rojas y Club Social del Interior con guirnaldas
+    const gx=820;R(gx,136,38,38,'#a8241e');g.fillStyle='#c82e24';g.beginPath();g.moveTo(gx-6,136);g.lineTo(gx+19,118);g.lineTo(gx+44,136);g.fill();
+    R(gx+17,108,4,12,'#8a1c16');R(gx+13,112,12,4,'#8a1c16');T('GAUCHITO GIL',gx+19,140,'#f8e6a0',4,'center');
+    for(let k=0;k<6;k++){R(gx-28+k*18,124+(k%2)*6,3,18,'#d42820');R(gx+6+k*5,168,2,6,'#f8e6a0');}
+    const cl=1920;R(cl,74,260,102,'#6e5440');R(cl+8,82,244,20,'#3a281c');T('CLUB SOCIAL Y DEPORTIVO · HOY ALMAFUERTE',cl+130,88,'#f2b632',5,'center');
+    for(let lx=cl+14;lx<cl+246;lx+=18){g.fillStyle=lx%36===0?'#f2b632':'#e2462c';g.beginPath();g.arc(lx,110,2.5,0,7);g.fill();}}
+  if(i===2){alvearBG(g,R,T,arch);
+    // fachada de Obras Sanitarias ("El Templo del Rock") para el BA Rock IV
+    const ox=2080;R(ox,54,320,122,'#c8b692');R(ox+12,64,296,24,'#242028');T('ESTADIO OBRAS SANITARIAS · BA ROCK IV',ox+160,72,'#f2b632',5,'center');
+    T('NOVIEMBRE 1982 · RIFF · V8 · LOS VIOLADORES',ox+160,96,'#4a2018',5,'center');
+    for(let k=0;k<4;k++){arch(ox+28+k*70,114,44,62,'#2a2422');}
+    for(const [bx,t1,c1,c2] of [[760,'BRIGADAS METÁLICAS','#141218','#e8e2d0'],[1830,'V8 · METAL PESADO','#c8322a','#e8e2d0']]){R(bx,96,140,16,c1);T(t1,bx+70,101,c2,5,'center');}}
   baBG(g,R,T,arch,i);g.restore();}
 
 // v21: movimientos más naturales. Caminata con peso (balanceo de brazos, cadera que sube y baja, el torso que acompaña)
@@ -2415,18 +2500,18 @@ function discoTick(){const bp=document.getElementById('bPap'),t=lvl>=2?'DISCO':'
   if(state==='play'&&datoT===330&&RECUERDOS[lvl])say(player,RECUERDOS[lvl],230);
   if(state==='play'&&datoT===1400&&GUINO2[lvl])say(player,GUINO2[lvl],220);
   if(state==='play'&&(lvl===8||lvl===10)&&datoT===900)say(player,'Mi vieja tenía sangre tehuelche. Y yo la llevo con orgullo.',220);}
-// un recuerdo de su vida por capítulo (datos de entrevistas y biografías; la frase es nuestra)
-const RECUERDOS=['En el 72 los Reyes me trajeron una criolla. Y este año, mi primer bajo: un Faim de cuatro cuerdas.',
-  'Al Chofa lo conocí viendo la película de Led Zeppelin. Ahora armamos V8.',
-  'En la gala del Alvear nos llevaron en cana. Igual hoy tocamos.',
-  'Hermética nace en San Martín. Al principio se iba a llamar Helvética.',
-  'Yo tocaba el bajo nomás. Canto algunas porque las letras son mías.',
-  'Del Oeste a River. Quién lo hubiera dicho en el Abasto.',
-  'Hermética se terminó. Ahora es Almafuerte, como el poeta.',
-  'La mano me está jodiendo. Un día voy a tener que largar el bajo y cantar nomás.',
-  'Me vine lejos de todo. Acá la libertad tiene olor a campo.',
-  'Tengo setecientos pajaritos. Los miro mientras fumo y escucho la radio.',
-  'Acá no llega ni el correo. Tierra adentro se vive así.'];
+// un recuerdo de su vida por capítulo (datos de entrevistas y biografías)
+const RECUERDOS=['En el 72 los Reyes me dejaron una criolla. Y este año mi viejo me trajo el Faim de cuatro cuerdas.',
+  'Al Chofa Moreno lo conocí viendo la película de Led Zeppelin en el Cine Ocean. Ahí nació V8.',
+  'En la gala del Hotel Alvear nos llevaron presos por el cuero y las tachas. Igual llegamos a Obras.',
+  'Hermética nació en San Martín con O\'Connor y el Tano Romano. Al principio casi le ponemos Helvética.',
+  'Yo componía y tocaba el bajo; cantaba algunos temas como "En las calles de Liniers" o "De los pagos del tiempo".',
+  'De repartir papas en Caseros a llenar River con Kiss y Black Sabbath.',
+  'Cuando todo parecía roto, con el Tano Marciello levantamos Almafuerte desde abajo.',
+  'Por una lesión en la mano tuve que ir dejando el bajo para pararme al frente con el micrófono.',
+  'Soy un hombre de tierra adentro, no un costero. Acá el silencio te enseña a escucharte.',
+  'Tengo setecientos pajaritos en el campo: los miro mientras fumo y escucho a Larralde en la radio.',
+  'No se debe ser más de lo que uno es, ni menos de lo que uno vale.'];
 const GUINO2={4:'Abrir para Black Sabbath en Obras. Quién lo hubiera dicho en el Abasto.',5:'Hoy River es nuestro, y después tocan Kiss y Sabbath.',
   6:'Un tema de Larralde también es metal, si se toca con el alma.',10:'Poné a Larralde en la radio, que los pajaritos lo escuchan.'};
 
@@ -2448,10 +2533,10 @@ function bajoTick(){if(BGIFT.p!==player)BGIFT={p:player,done:false,on:false,v:nu
       // Ricardo se para: no puede estar tirado cuando llega el viejo
       player.state='idle';player.vx=0;if(player.hp<=0)player.hp=1;bubbles=[];
       CINE={P:[
-        ['scene','CASEROS · 1978','El viejo cruzó el barrio a pie para traerle el instrumento.'],
-        ['face','EL FAIM','Un Faim de cuatro cuerdas. Lo juntó con las papas de todo el año.'],
-        ['face','AHORA SÍ','Con esto no me para nadie.']
-      ],i:0,t:0,ch:0};
+        ['scene','CASEROS · 1978','Don Alfredo cruzó el barrio a pie con un estuche bajo el brazo para alcanzar a su hijo.'],
+        ['face','EL BAJO FAIM','Un Faim nacional de cuatro cuerdas, pagado cajón por cajón en la feria y el Abasto.'],
+        ['face','EL SEGUNDO GRAN REGALO','"Después de la criolla de los Reyes del 72, este bajo me cambió el destino para siempre."']
+      ],i:0,t:0,ch:0,gift:1};
       _cineOnEnd=()=>{state='play';BGIFT.done=true;MOMENT=0;v.hold=null;player.holdBack='bass';player.state='victory';BGIFT.show=tick+110;player.face=1;sfx('pickup');
         floatTxt(player.x,player.y-100,'¡EL FAIM DE TU VIEJO!','#f2b632');v.state='walkoff';
         banner={a:'¡TU PRIMER BAJO!',b:'EL FAIM QUE TE REGALÓ TU VIEJO · YA PODÉS SEGUIR',t:170};
@@ -2482,60 +2567,145 @@ function rideTick(p){if(p===player&&BGIFT.show&&tick<BGIFT.show){p.state='victor
   if(R.ph==='out'){R.x+=3;if(R.x>cam.x+W+120){RIDE.on=0;}return false;}
   return false;}
 
-// v26: cinemáticas antes de cada capítulo, álbum de figuritas, corrida con doble toque y la salida del Hotel Alvear (1982)
+// v26: cinemáticas antes de cada capítulo con escenas animadas de los protagonistas reales de su historia
 const CINES=[
- [['scene','CASEROS · 1978','El pibe ayuda en la verdulería del viejo, en el oeste del conurbano.'],['truck','DE MADRUGADA','En el camión, al Mercado de Abasto a buscar las papas.'],['face','EL PAPERO','En el barrio le dicen "el papero". Él sueña con tener un bajo.']],
- [['scene','CIUDADELA · 1979','Son años de dictadura: la cana levanta melenudos en la calle.'],['stage','NACE V8','Con el Chofa arman una banda pesada, rápida y en castellano.'],['face','EL BAJISTA','Ricardo canta y toca el bajo. No va a soltarlo nunca más.']],
- [['scene','NOVIEMBRE DE 1982','Gala en el Hotel Alvear, antes del BA Rock.'],['face','EN CANA','La policía demora a V8. Un abogado los saca.'],['stage','BA ROCK IV','En el festival, los hippies los reciben a silbidos. Igual tocan.']],
- [['scene','RECOLETA · 6/5/1988','Show al aire libre en el Centro Cultural Recoleta.'],['stage','SAN MARTÍN · 7/5/1988','Hermética debuta en el pub Helloween.'],['face','HERMÉTICA','Metal para el laburante y el barrio.']],
- [['scene','EL OESTE · 1991','Cierran fábricas y rematan lo que costó una vida levantar.'],['stage','OBRAS · 1992','Con Ácido argentino, Hermética abre para Black Sabbath.'],['face','LA BRONCA','Le canta a la bronca de los 90.']],
- [['stage','RIVER · 3/9/1994','Monsters of Rock, con Kiss y Black Sabbath.'],['scene','LA TRIBUNA','Las banderas del Oeste copan la cancha.'],['face','FIN DE UNA ETAPA','Ese mismo año, Hermética se separa.']],
- [['face','1995','Nace Almafuerte, con Claudio Marciello en la guitarra.'],['scene','CONSTITUCIÓN','Sale Mundo guanaco.'],['stage','TIERRA ADENTRO','Metal con folclore, tango y campo.']],
- [['road','DICIEMBRE DE 2001','Corralito y cacerolas. La banda sale a la ruta.'],['scene','EL INTERIOR','Almafuerte toca en cada pueblo del país.'],['face','FEDERAL','Lejos de la capital, cerca de su gente.']],
- [['campo','SIERRA DE LA VENTANA · 2006','Sale Toro y pampa.'],['face','EL CAMPO','Cada vez más lejos de la ciudad.'],['stage','ALMAFUERTE','La banda sigue a fondo.']],
- [['campo','UN PUEBLO · 2012','En Trillando la fina, un espanto azota un pueblo de campo.'],['face','MUERE MONSTRUO MUERE','Al monstruo se lo llevan y lo encomiendan a Dios.'],['scene','LO DE CASELLA','En la tele cuenta de sus setecientos pajaritos.']],
- [['campo','EL CAMPO · 2023','Tierra adentro, con los pajaritos y la radio.'],['face','UNAS ESTROFAS MÁS','Gira federal con Chewelche.'],['stage','EL PÚBLICO','Su gente lo sigue cantando.']]];
+ [['scene','CASEROS · 1978','Madrugada helada en el Oeste: Ricardo carga cajones con su padre Alfredo antes de salir para el Abasto.'],['truck','RUMBO AL ABASTO','En el camión Ford F-100 por Rivadavia: cuatro meses hombreando bolsas para comprarse la campera de cuero.'],['face','EL PAPERO Y EL SUEÑO','En la cuadra se burlan gritándole "el papero". Él mira pasar las motos y sueña con un bajo eléctrico y distorsión.']],
+ [['scene','CINE OCEAN · CIUDADELA 1979','A la salida de la película de Led Zeppelin conoce al Chofa Moreno, mientras los patrulleros hacen razzias en la calle.'],['stage','EL RUGIDO DE V8','En un garaje de Ciudadela enchufan los amplificadores: nace V8, heavy metal crudo, veloz y en castellano.'],['face','CONTRA LA CENSURA','"El pelo largo y el rock pesado no se negocian": un pibe de rulos que ruge frente al miedo de la época.']],
+ [['scene','HOTEL ALVEAR · NOVIEMBRE 1982','En la gala previa al BA Rock IV, la policía se lleva demorados a los V8; Pappo da la cara para que toquen.'],['face','BRIGADAS METÁLICAS','"Si no toca V8, Riff tampoco toca", planta bandera El Carpo. Un abogado los saca de la comisaría justo a tiempo.'],['stage','BA ROCK IV · OBRAS','Frente a una multitud hippie que les tira naranjas y pide paz, V8 sacude el escenario con "Destrucción".']],
+ [['scene','CENTRO CULTURAL RECOLETA · 6/5/1988','Entre galerías snobs y miradas de desprecio, cuatro pibes del conurbano arman sus equipos al aire libre.'],['stage','PUB HELLOWEEN · SAN MARTÍN 7/5/1988','Con Claudio O\'Connor y el Tano Romano debuta oficialmente Hermética: thrash argentino con conciencia obrera.'],['face','LA H NO ES MUDA','"Hermética: cerrada a la careteada, abierta de par en par para el pibe trabajador del barrio."']],
+ [['scene','EL CONURBANO · 1991','Persianas bajas, remates judiciales y despidos: la bronca del taller inspira las letras de "Ácido argentino".'],['stage','OBRAS SANITARIAS · 1992','El sueño del pibe del Abasto se vuelve realidad: Hermética llena Obras y abre para Black Sabbath y Motörhead.'],['face','GIL TRABAJADOR','"Miente el patrón y miente el diario: al que sostiene la patria con sus manos no lo van a quebrar."']],
+ [['stage','MONUMENTAL · 3/9/1994','Monsters of Rock en River Plate: decenas de miles de remeras negras del Oeste copan la cancha antes de Kiss y Sabbath.'],['scene','VÍCTIMAS DEL VACIAMIENTO','Afuera, los patovicas de "Tú eres su seguridad" y los empresarios quieren hacer negocio con la pasión popular.'],['face','DISCO DE ORO Y DESPEDIDA','En el pico más alto de convocatoria, las diferencias internas anuncian el final de Hermética a fines del 94.']],
+ [['face','EL AMASIJO DE UN GRAN SUEÑO · 1995','Tras el dolor de la ruptura y el veneno de la prensa, Ricardo toma la voz principal y funda Almafuerte.'],['scene','LLUVIA EN CONSTITUCIÓN','Junto al virtuoso Claudio "Tano" Marciello vuelven a empezar desde abajo: Olivos, Arpegios y el templo de Cemento.'],['stage','MUNDO GUANACO','El metal pesado abraza la milonga, el tango y los versos de José Larralde y Pedro Bonifacio Palacios.']],
+ [['road','RUTAS ARGENTINAS · DICIEMBRE 2001','Entre cacerolazos, corralito bancario y rutas cortadas, el micro de Almafuerte recorre cada provincia.'],['scene','PIEDRA LIBRE EN EL INTERIOR','Mientras los bancos se quedan con el ahorro de los abuelos, los clubes del interior laten con la banda.'],['face','PATRIA Y CAMINO','"Donde otros ven crisis y se fugan, nosotros salimos ruta por ruta a cantarle a nuestra gente."']],
+ [['campo','SIERRA DE LA VENTANA · 2006','Lejos del cemento y la histeria porteña, el cantor halla su refugio entre cerros, molinos y eucaliptos.'],['face','TORO Y PAMPA','Con la cresta canosa y camisa campera, le canta a los amigos como el Pelusa y al orgullo de su sangre tehuelche.'],['stage','FOGÓN Y GUITARRA','Con el Tano Marciello, Beto Ceriotti y Bin Valencia, Almafuerte hace tronar el folclore pesado en todo el país.']],
+ [['campo','SÁBADO SANTO · PUEBLO DE CAMPO 2012','En "Trillando la fina", un espanto nocturno desvela a los vecinos mientras la prensa amarilla busca carroña.'],['face','MUERE MONSTRUO MUERE','"Al monstruo lo até, lo llevé lejos y lo encomendé a Dios; al comerciante informador lo saqué del pueblo."'],['scene','CHARLA CON BETO CASELLA','Mate y radio AM entre setecientos pajaritos: las reflexiones que quedaron grabadas en la memoria popular.']],
+ [['campo','CORONEL SUÁREZ · TIERRA ADENTRO 2023','Donde no llegan ni el delivery ni el correo: pelo blanco peinado hacia atrás, guardapolvo de trabajo y bastón.'],['face','SÉ VOS, NOMÁS','"El abrazo que no se dio, se llora. Yo no soy un ídolo: soy un trabajador de la música."'],['stage','UNAS ESTROFAS MÁS','Una última gira federal junto a su gente para quedar inmortalizado en el corazón del metal argentino.']]];
 let CINE=null;
 function cineStart(){const P=CINES[lvl];if(!P)return false;CINE={P,i:0,t:0,ch:0};state='cine';return true;}
 function cineEnd(){CINE=null;if(_cineOnEnd){const cb=_cineOnEnd;_cineOnEnd=null;cb();}else{state='card';cardT=0;}}
 function cineUpd(){const C=CINE;if(!C){cineEnd();return;}C.t++;const cap=C.P[C.i][2];if(C.ch<cap.length){C.ch+=.9;if(tick%4===0)sfx('blip');}
   if(press.start){cineEnd();return;}
   if(press.atk||press.jump||C.t>300){if(C.ch<cap.length&&C.t<300){C.ch=cap.length;}else{C.i++;C.t=0;C.ch=0;if(C.i>=C.P.length)cineEnd();}}}
-function cineBG(kind,t){const g=ctx;
-  if(kind==='scene'){const sx=Math.min(1400-W,t*.35)*RS;g.drawImage(FAR,sx,0,W*RS,190*RS,-10-t*.03,0,W+20+t*.06,H);g.fillStyle='rgba(10,8,14,.35)';g.fillRect(0,0,W,H);return;}
+// dibuja un personaje animado en la cinemática sin alterar su escala global
+function cineActor(styKey,x,y,face,poseKey,hold,scMul,walkPh){
+  const st=STY[styKey]||STY.heavy;if(!st)return;
+  const base=walkPh!=null?walkPose(walkPh,PO[poseKey]||PO.stand):(PO[poseKey]||PO.stand);
+  const f={st,pose:Object.assign({},base),face:face||1,flash:0,state:walkPh!=null?'walk':'idle',x,kind:styKey,hold:hold||null,walkPh:walkPh||0,t:0};
+  const sv=st.scale;st.scale=sv*(scMul||1.35);try{drawPuppet(f,x,y);}catch(e){}st.scale=sv;
+}
+function cineBG(kind,t){const g=ctx,sk=LV?LV.skin:'ric1';
+  if(kind==='scene'){const sx=Math.min(1400-W,t*.35)*RS;g.drawImage(FAR,sx,0,W*RS,190*RS,-10-t*.03,0,W+20+t*.06,H);
+    if(BG)g.drawImage(BG,Math.min(LW-W,180+t*.4)*RS,0,W*RS,H*RS,0,0,W,H);
+    g.fillStyle='rgba(10,8,14,.25)';g.fillRect(0,0,W,H);
+    // haz de luz dramático sobre la escena
+    const sp=g.createRadialGradient(W*.5,170,12,W*.5,170,210);sp.addColorStop(0,'rgba(255,220,160,.16)');sp.addColorStop(1,'rgba(6,4,10,.45)');g.fillStyle=sp;g.fillRect(0,0,W,H);
+    const wy=204,ph=t*.16;
+    if(CINE&&CINE.gift){cineActor('viejo',W*.36+Math.min(40,t*.35),wy,1,'stand','bass',1.4,ph);cineActor('ric1',W*.58,wy,-1,'stand',null,1.4);}
+    else if(lvl===0){g.save();g.translate(W*.28,198);g.scale(1.3,1.3);drawTruck(0,0,false);g.restore();cineActor('viejo',W*.46,wy,1,'mate','mate',1.35);cineActor('ric1',W*.62,wy,-1,'stand',null,1.35);}
+    else if(lvl===1){cineActor('ricV',W*.38,wy,1,'stand','bass',1.4);cineActor('chofa',W*.58,wy,-1,'stand','gtr',1.4);cineActor('cana',W*.84-t*.12,wy,-1,'stand',null,1.3,ph);}
+    else if(lvl===2){cineActor('carpo',W*.32,wy,1,'stand',null,1.42);cineActor('ric2',W*.50,wy,1,'stand','bass',1.4);cineActor('cana',W*.72,wy,-1,'stand',null,1.35);}
+    else if(lvl===3){cineActor('ricH',W*.42,wy,1,'stand','bass',1.4);cineActor('violero',W*.58,wy,-1,'stand','gtr',1.38);cineActor('curador',W*.78,wy,-1,'stand','papel',1.3);}
+    else if(lvl===4){cineActor('tornero',W*.34,wy,1,'stand',null,1.38);cineActor('ric3',W*.52,wy,1,'stand','bass',1.4);cineActor('vaciador',W*.76,wy,-1,'stand','gavel',1.32);}
+    else if(lvl===5){cineActor('pibe',W*.32,wy,1,'victory',null,1.35);cineActor('ricM',W*.50,wy,1,'stand','bass',1.42);cineActor('seguridad',W*.74,wy,-1,'idle',null,1.35);}
+    else if(lvl===6){cineActor('ricA',W*.40,wy,1,'stand','bass',1.4);cineActor('violero',W*.60,wy,-1,'stand','gtr',1.4);}
+    else if(lvl===7){cineActor('jubilado',W*.32,wy,1,'stand','cacerola',1.35);cineActor('ric4',W*.52,wy,1,'stand','mic',1.4);cineActor('camionero',W*.70,wy,-1,'stand',null,1.35);}
+    else if(lvl===9){
+      // jaula de pajaritos en el patio, mesa con radio AM y charla con Beto Casella
+      g.fillStyle='#3a2a1a';g.fillRect(W*.48,136,2,54);g.fillRect(W*.55,136,2,54);g.fillStyle='#5a4a3a';g.fillRect(W*.47,132,42,4);
+      g.strokeStyle='rgba(220,220,200,.75)';g.lineWidth=.7;for(let k=0;k<8;k++){g.beginPath();g.moveTo(W*.475+k*5,136);g.lineTo(W*.475+k*5,160);g.stroke();}
+      for(let k=0;k<4;k++){g.fillStyle=['#f2d22a','#4fa04a','#e04a2a','#5aa0e8'][k];g.beginPath();g.arc(W*.485+k*8,148+(k%2)*5,2.2,0,7);g.fill();}
+      g.fillStyle='#4a3622';g.fillRect(W*.49,180,26,18);g.fillStyle='#221e24';g.fillRect(W*.50,172,14,8);g.fillStyle='#d8a848';g.fillRect(W*.505,174,8,3);
+      cineActor('ricT',W*.38,wy,1,'mate','mate',1.42);cineActor('beto',W*.64,wy,-1,'stand','mic',1.4);
+    }
+    else{cineActor(sk,W*.45,wy,1,'stand',null,1.4);}
+    return;}
   if(kind==='truck'||kind==='road'){const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,kind==='truck'?'#1a1830':'#0e0c1a');gr.addColorStop(.55,kind==='truck'?'#5a3a4a':'#2a1a2a');gr.addColorStop(.56,'#1a1a1e');gr.addColorStop(1,'#0c0c10');g.fillStyle=gr;g.fillRect(0,0,W,H);
     for(let k=0;k<30;k++){g.fillStyle='rgba(239,228,210,.5)';g.fillRect(hsh(k,7)*W,hsh(k,8)*120,1,1);}
+    // cartel rutero verde de Ruta Nacional
+    const rx=((360-t*2.4)%(W+120)+W+120)%(W+120)-60;
+    g.fillStyle='#787c82';g.fillRect(rx+10,124,2,34);g.fillRect(rx+48,124,2,34);g.fillStyle='#1e5a36';g.fillRect(rx,106,60,20);g.strokeStyle='#e8e2d0';g.lineWidth=1;g.strokeRect(rx+1.5,107.5,57,17);
+    txt(kind==='truck'?'AV. RIVADAVIA':'RN 3 · SUR',rx+30,113,'#e8e2d0',4,'center');
     g.fillStyle='#14121a';for(let k=0;k<8;k++){const x=((k*90-t*1.2)%(W+90)+W+90)%(W+90)-60;g.fillRect(x,108,40+hsh(k,3)*30,44);g.fillStyle='rgba(242,200,110,.5)';g.fillRect(x+8,118,4,5);g.fillRect(x+22,128,4,5);g.fillStyle='#14121a';}
     g.fillStyle='#e8e2d0';for(let k=0;k<10;k++){const x=((k*60-t*5)%(W+60)+W+60)%(W+60)-30;g.fillRect(x,210,26,3);}
-    if(kind==='truck'){g.save();g.translate(W*.55,200+Math.sin(t*.3)*.8);g.scale(2.2,2.2);drawTruck(0,0,true);g.restore();}
-    else{for(let k=0;k<2;k++){g.fillStyle='rgba(255,240,190,'+(.25+.1*Math.sin(t*.2))+')';g.beginPath();g.moveTo(W*.3+k*40,190);g.lineTo(W+20,150+k*30);g.lineTo(W+20,230+k*20);g.fill();}}
+    if(kind==='truck'){g.save();g.translate(W*.55,200+Math.sin(t*.3)*.8);g.scale(2.2,2.2);drawTruck(0,0,true);g.restore();cineActor('ric1',W*.45,152,1,'stand',null,1.15);}
+    else{g.save();g.translate(W*.42,196+Math.sin(t*.25)*.7);g.scale(1.35,1.35);drawCamion();g.restore();
+      for(let k=0;k<2;k++){g.fillStyle='rgba(255,240,190,'+(.25+.1*Math.sin(t*.2))+')';g.beginPath();g.moveTo(W*.52+k*20,184);g.lineTo(W+20,150+k*30);g.lineTo(W+20,224+k*20);g.fill();}}
     return;}
   if(kind==='campo'){const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#2a2048');gr.addColorStop(.45,'#c8603a');gr.addColorStop(.6,'#f2b264');gr.addColorStop(.61,'#3a3a1e');gr.addColorStop(1,'#1a1a10');g.fillStyle=gr;g.fillRect(0,0,W,H);
-    g.fillStyle='rgba(255,220,150,.9)';g.beginPath();g.arc(W*.7,160,22,0,7);g.fill();
-    const mx=W*.25,my=110;g.strokeStyle='#141016';g.lineWidth=2;g.beginPath();g.moveTo(mx-12,166);g.lineTo(mx,my);g.lineTo(mx+12,166);g.stroke();
+    // silueta de las sierras pampeanas al fondo
+    g.fillStyle='#241a2c';g.beginPath();g.moveTo(0,164);g.lineTo(90,126);g.lineTo(190,148);g.lineTo(310,118);g.lineTo(420,146);g.lineTo(W,132);g.lineTo(W,164);g.fill();
+    g.fillStyle='rgba(255,220,150,.9)';g.beginPath();g.arc(W*.7,154,22,0,7);g.fill();
+    const mx=W*.20,my=104;g.strokeStyle='#141016';g.lineWidth=2;g.beginPath();g.moveTo(mx-12,166);g.lineTo(mx,my);g.lineTo(mx+12,166);g.stroke();
     for(let k=0;k<8;k++){const a=t*.04+k*Math.PI/4;g.beginPath();g.moveTo(mx,my);g.lineTo(mx+Math.cos(a)*18,my+Math.sin(a)*18);g.stroke();}
+    // alambrado rural y tranquera de madera
+    g.strokeStyle='rgba(30,24,20,.75)';g.lineWidth=1;for(const wy of [154,159,163]){g.beginPath();g.moveTo(0,wy);g.lineTo(W,wy);g.stroke();}
+    for(let px=18;px<W;px+=42){g.fillStyle='#241c16';g.fillRect(px,148,2,18);}
     g.strokeStyle='rgba(20,16,22,.85)';g.lineWidth=1.2;for(let k=0;k<9;k++){const x=(k*40+t*.6)%(W+40)-20,y=50+hsh(k,2)*50+Math.sin(t*.05+k)*4,w=Math.sin(t*.3+k)*2.5;g.beginPath();g.moveTo(x-4,y-w);g.quadraticCurveTo(x-2,y-1,x,y);g.quadraticCurveTo(x+2,y-1,x+4,y-w);g.stroke();}
-    g.fillStyle='#141410';for(let x=0;x<W;x+=3)g.fillRect(x,164-hsh(x,5)*4,2,6);return;}
+    g.fillStyle='#141410';for(let x=0;x<W;x+=3)g.fillRect(x,164-hsh(x,5)*4,2,6);
+    // fogón criollo con pava y llamas animadas
+    const fx=W*.53,fy=196;
+    g.fillStyle='#3a2416';g.fillRect(fx-9,fy,18,3);g.fillRect(fx-7,fy-2,14,3);
+    for(let k=0;k<3;k++){g.fillStyle=k===0?'#e2462c':k===1?'#f29b2e':'#f8e27a';g.beginPath();g.arc(fx-3+k*3,fy-3-Math.abs(Math.sin(t*.25+k))*4,4-k*.8,0,7);g.fill();}
+    if(lvl===8){cineActor('ricT',W*.42,198,1,'mate','mate',1.4);cineActor('pelusa',W*.64,198,-1,'stand',null,1.38);}
+    else if(lvl===9){cineActor('ricT',W*.40,198,1,'stand',null,1.4);cineActor('espanto',W*.70,198,-1,'idle',null,1.35);}
+    else{cineActor('ric5',W*.42,198,1,'stand',null,1.42);cineActor('anselmo',W*.64,198,-1,'mate','mate',1.35);}
+    return;}
   if(kind==='stage'){g.fillStyle='#08060c';g.fillRect(0,0,W,H);
-    for(let k=0;k<4;k++){const a=Math.sin(t*.03+k*1.7)*.35,x=60+k*120;g.save();g.translate(x,0);g.rotate(a);const gr=g.createLinearGradient(0,0,0,220);gr.addColorStop(0,k%2?'rgba(226,70,44,.55)':'rgba(242,182,50,.45)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.beginPath();g.moveTo(-6,0);g.lineTo(6,0);g.lineTo(60,230);g.lineTo(-60,230);g.fill();g.restore();}
-    g.fillStyle='#1a1418';g.fillRect(0,150,W,10);
-    if(!SHOW){g.fillStyle='#000';const px=W/2,py=150;g.beginPath();g.ellipse(px,py-48,7,8,0,0,7);g.fill();g.fillRect(px-11,py-40,22,30);g.fillRect(px-9,py-12,7,12);g.fillRect(px+2,py-12,7,12);
-    g.beginPath();g.moveTo(px-8,py-50);g.quadraticCurveTo(px-13,py-30,px-10,py-26);g.lineTo(px-4,py-40);g.fill();g.beginPath();g.moveTo(px+8,py-50);g.quadraticCurveTo(px+13,py-30,px+10,py-26);g.lineTo(px+4,py-40);g.fill();
-    g.save();g.translate(px,py-24);g.rotate(-.35);g.fillRect(-14,-4,26,9);g.fillRect(8,-2,34,3);g.restore();}
+    // estructura metálica de luces (truss) y telón de fondo con emblema de cada banda
+    g.fillStyle='#1c1822';g.fillRect(20,24,W-40,5);for(let x=24;x<W-28;x+=14){g.strokeStyle='#342c3e';g.lineWidth=1;g.beginPath();g.moveTo(x,24);g.lineTo(x+7,29);g.lineTo(x+14,24);g.stroke();}
+    g.fillStyle='#120e18';g.fillRect(W*.26,34,W*.48,88);g.strokeStyle='#3a2c38';g.lineWidth=1.5;g.strokeRect(W*.26,34,W*.48,88);
+    const bName=lvl<=2?'V8':lvl<=5?'HERMÉTICA':lvl<=9?'ALMAFUERTE':'IORIO';
+    txt(bName,W*.5,50,lvl<=2?'#e2462c':'#f2b632',16,'center');
+    if(lvl>=3&&lvl<=5){g.strokeStyle='rgba(242,182,50,.45)';g.lineWidth=1.5;g.beginPath();g.arc(W*.5,88,16,0,7);g.stroke();txt('H',W*.5,80,'rgba(242,182,50,.55)',12,'center');}
+    else if(lvl>=6){g.fillStyle='rgba(242,182,50,.35)';g.fillRect(W*.5-14,84,28,4);g.fillRect(W*.5-2,74,4,24);}
+    // torres de amplificadores Marshall a ambos lados del escenario
+    for(const mx of [44,90,W-74,W-120]){
+      g.fillStyle='#16141a';g.fillRect(mx,96,28,54);g.fillStyle='#26222a';g.fillRect(mx+2,98,24,22);g.fillRect(mx+2,123,24,24);
+      g.fillStyle='#d8c498';g.fillRect(mx+7,102,14,2);g.fillRect(mx+7,127,14,2);
+    }
+    for(let k=0;k<4;k++){const a=Math.sin(t*.03+k*1.7)*.35,x=60+k*120;g.save();g.translate(x,26);g.rotate(a);const gr=g.createLinearGradient(0,0,0,200);gr.addColorStop(0,k%2?'rgba(226,70,44,.55)':'rgba(242,182,50,.45)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.beginPath();g.moveTo(-6,0);g.lineTo(6,0);g.lineTo(60,210);g.lineTo(-60,210);g.fill();g.restore();}
+    g.fillStyle='#1a1418';g.fillRect(0,150,W,12);g.fillStyle='#2e242a';g.fillRect(0,150,W,2);
+    if(!SHOW){
+      drawDrums(W*.5,152,t);
+      showMan(STY[sk]||STY.ric2,W*.36,158,lvl>=8&&lvl!==9?'mic':'bass',t,0,1,true);
+      showMan(STY[lvl<=1?'chofa':'violero']||STY.violero,W*.66,158,'gtr',t,1,-1,false);
+    }
+    // niebla sobre las tablas del escenario
+    g.fillStyle='rgba(210,195,220,.08)';for(let k=0;k<7;k++){g.beginPath();g.ellipse((k*75+t*.8)%(W+60)-30,156+Math.sin(t*.06+k)*3,36,7,0,0,7);g.fill();}
     for(let r=0;r<3;r++)for(let k=0;k<26;k++){const x=k*19+(r%2)*9-6,y=196+r*22+Math.abs(Math.sin(t*.15+k*.7+r))*-5;g.fillStyle=r===0?'#151018':r===1?'#1d1620':'#251c28';g.beginPath();g.ellipse(x,y,7,8,0,0,7);g.fill();g.fillRect(x-9,y+6,18,30);
       if((k+r)%4===0){g.fillRect(x+5,y-20+Math.sin(t*.2+k)*3,3,16);g.fillRect(x+4,y-23+Math.sin(t*.2+k)*3,5,5);}}
     return;}
-  // face
-  const gr=g.createRadialGradient(W*.32,H*.45,10,W*.32,H*.45,240);gr.addColorStop(0,'#3a1a1a');gr.addColorStop(1,'#08060c');g.fillStyle=gr;g.fillRect(0,0,W,H);}
+  // face: fondo atmosférico con viñeta escénica a la derecha del retrato de Ricardo
+  const gr=g.createRadialGradient(W*.28,H*.45,10,W*.28,H*.45,260);gr.addColorStop(0,'#421c1c');gr.addColorStop(.6,'#1a0e16');gr.addColorStop(1,'#08060c');g.fillStyle=gr;g.fillRect(0,0,W,H);}
 function drawCine(){const C=CINE;if(!C)return;const [kind,head,cap]=C.P[C.i],t=C.t,g=ctx;
   cineBG(kind,t);
-  if(kind==='face'){const sz=170+t*.12;g.save();g.beginPath();g.rect(0,24,W,H-48);g.clip();drawFaceFront(STY[LV.skin],W*.08-t*.04,40-t*.06,sz);g.restore();
-    const gr=g.createLinearGradient(W*.35,0,W*.7,0);gr.addColorStop(0,'rgba(8,6,12,0)');gr.addColorStop(1,'rgba(8,6,12,.85)');g.fillStyle=gr;g.fillRect(0,0,W,H);}
+  if(kind==='face'){
+    const sz=172+t*.12;g.save();g.beginPath();g.rect(0,24,W,H-48);g.clip();
+    // viñeta enmarcada a la derecha del retrato de Ricardo con la escena viva del capítulo
+    const vx=W*.54,vy=36,vw=W*.41,vh=164;
+    g.save();g.beginPath();g.rect(vx,vy,vw,vh);g.clip();
+    if(FAR)g.drawImage(FAR,Math.min(1200,t*.3)*RS,0,vw*RS,vh*RS,vx,vy,vw,vh);
+    if(BG)g.drawImage(BG,Math.min(LW-W,240+t*.35)*RS,20*RS,vw*RS,vh*RS,vx,vy,vw,vh);
+    g.fillStyle='rgba(12,8,16,.38)';g.fillRect(vx,vy,vw,vh);
+    const sk=LV?LV.skin:'ric1';
+    if(C.gift&&C.i===1){g.save();g.translate(vx+vw*.5,vy+vh*.54);g.scale(2.2,2.2);BASS(0,0,-.35,true);g.restore();}
+    else{
+      const ally=lvl===0?'viejo':lvl===1?'chofa':lvl===2?'carpo':lvl<=6?'violero':lvl===7?'jubilado':lvl===8?'pelusa':lvl===9?'beto':'anselmo';
+      cineActor(sk,vx+vw*.36,vy+vh-12,1,lvl>=8?'mate':'stand',lvl>=7&&lvl<8?'mic':lvl<7?'bass':'mate',1.15);
+      cineActor(ally,vx+vw*.70,vy+vh-12,-1,'stand',ally==='chofa'||ally==='violero'?'gtr':null,1.12);
+    }
+    g.restore();
+    g.strokeStyle='rgba(242,182,50,.45)';g.lineWidth=1.2;g.strokeRect(vx,vy,vw,vh);
+    const gr=g.createLinearGradient(W*.34,0,W*.62,0);gr.addColorStop(0,'rgba(8,6,12,0)');gr.addColorStop(1,'rgba(8,6,12,.55)');g.fillStyle=gr;g.fillRect(0,24,W,H-48);
+    // retrato en primer plano de Ricardo Iorio a la izquierda
+    drawFaceFront(STY[LV.skin],W*.06-t*.03,38-t*.05,sz);
+    g.restore();
+  }
   const vg=g.createRadialGradient(W/2,H/2,H*.3,W/2,H/2,H*.9);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.6)');g.fillStyle=vg;g.fillRect(0,0,W,H);
   g.fillStyle='#000';g.fillRect(0,0,W,24);g.fillRect(0,H-56,W,56);
   const fi=Math.min(1,t/16);g.globalAlpha=fi;txt(head,14,8,'#f2b632',8);
   txt(LV.chap,W-14,9,'#9b8aa3',6,'right');
-  wrap(cap.slice(0,Math.floor(C.ch)),50).forEach((l,k)=>txt(l,W/2,H-48+k*12,'#efe4d2',8,'center'));
+  wrap(cap.slice(0,Math.floor(C.ch)),52).forEach((l,k)=>txt(l,W/2,H-48+k*11,'#efe4d2',7,'center'));
   for(let k=0;k<C.P.length;k++){g.fillStyle=k===C.i?'#e2462c':'#4a3a4e';g.fillRect(W/2-C.P.length*7+k*14,H-12,10,3);}
   txt(coarse?'TOCÁ: SIGUE':'Z: SIGUE · ENTER: SALTEAR',W-10,H-14,'#6a5a6e',5,'right');g.globalAlpha=1;
   nostalgia(Math.max(.25,(CLIMA[lvl]||{}).sep||0));
@@ -2746,57 +2916,36 @@ function nostalgia(sepOverride){const C=CLIMA[lvl]||{},s=sepOverride!=null?sepOv
 // el nombre del clima aparece un momento al empezar, como el epígrafe de una foto vieja
 function climaLabel(){const C=CLIMA[lvl];if(!C||state!=='play'||datoT>260)return;const a=Math.min(1,datoT/30,(260-datoT)/30);ctx.globalAlpha=a;txt(C.lbl,W-10,H-16,'#e8dcc0',6,'right');ctx.globalAlpha=1;}
 
-// v30: correcciones de la auditoría. Fechas que no coincidían con la investigación, datos repetidos,
-// datos de años posteriores al capítulo y preguntas que quedaban sin respuesta al recortar diálogos.
+// v30: correcciones de la auditoría y preservación de las nuevas cinemáticas, placas y recuerdos biográficos.
 function auditFix(){const D=DATOS,mv=(from,to,re)=>{const i=(D[from]||[]).findIndex(s=>re.test(s));if(i>=0){const s=D[from].splice(i,1)[0];if(to!=null&&D[to]&&!D[to].includes(s))D[to].push(s);}};
   const rp=(arr,re,s)=>{if(!arr)return;const i=arr.findIndex(x=>re.test(typeof x==='string'?x:x.s));if(i>=0){if(typeof arr[i]==='string')arr[i]=s;else arr[i].s=s;}};
   rp(D[1],/Alarma/,'Antes de V8 pasó por las bandas Alarma y Comunión Humana.');
-  rp(LEVELS[4].card,/Ácido argentino/,'En 1991 salió "Ácido argentino", que en 1993 fue disco de oro.');
-  rp(LEVELS[4].card,/Motörhead/,'En 1992 abrieron para Black Sabbath en Obras y, en octubre, para Motörhead.');
   mv(4,5,/Olmos/);mv(5,null,/^El Monsters of Rock en River fue/);mv(6,7,/Peso argento/);mv(7,null,/^Almafuerte versionaba tangos/);
   mv(8,null,/^En 2012 contó en la tele/);mv(8,null,/Elda Pedraza/);mv(8,9,/En 2008 dijo/);
   try{const A=AFICHES[4],i=A.findIndex(a=>a[1]==='BLACK SABBATH');if(i>=0)A[i]=[1300,'ÁCIDO ARGENTINO','HERMÉTICA','YA SALIÓ','#7a5a9a'];}catch(e){}
   try{SHOWS[8].r[2]='Sin cazadores ni country: el arroyo queda para todos.';}catch(e){}
   dedupe();}
-// v31: cada cosa se cuenta una sola vez. La placa del capítulo cuenta la historia, la cinemática muestra,
-// los datos suman algo nuevo y el recital recuerda lo que pasó jugando. Se sacan las frases repetidas.
-function dedupe(){const D=DATOS,L=LEVELS;
+// v31: limpieza de datos duplicados en el álbum sin pisar las placas, cinemáticas ni recuerdos de cada capítulo.
+function dedupe(){const D=DATOS;
   const del=(arr,re)=>{if(!arr)return;for(let i=arr.length-1;i>=0;i--){const x=arr[i];if(re.test(typeof x==='string'?x:x.s))arr.splice(i,1);}};
-  const cine=(i,k,s)=>{try{CINES[i][k][2]=s;}catch(e){}},show=(i,k,s)=>{try{SHOWS[i].r[k]=s;}catch(e){}};
-  // frases sueltas que repetían una línea de la escena, otro capítulo o la réplica al voltear a un enemigo
-  const Q=[[0,/criolla no se escucha/],[1,/pelo largo no es delito/],[1,/castellano/],[2,/castellano/],[3,/se llama Hermética/],
-    [4,/ningún gil/],[4,/Ácido argentino/],[5,/música es del pueblo/],[5,/No se firma/],[5,/estadio es de los pibes/],
-    [6,/Mundo guanaco/],[7,/Mundo guanaco/],[7,/Pueblo por pueblo/],[8,/tierra no se firma/],[8,/Lejos de todo/],[9,/Sábado Santo/],[3,/Menos copa/],[9,/buchón/],[9,/se anota/]];
-  for(const [i,re] of Q)del(L[i].quips,re);
+  const show=(i,k,s)=>{try{SHOWS[i].r[k]=s;}catch(e){}};
   // datos que ya decía la placa, la cinemática, el regalo del bajo o el recital
   const X=[[0,/Faim/],[0,/Abasto/],[1,/Chofa/],[2,/Alvear/],[3,/Helvética/],[3,/Cubo de Recoleta/],[4,/Black Sabbath en Obras/],
     [5,/12 de noviembre/],[5,/Monsters of Rock de River/],[6,/primeros shows/],[7,/Larralde/],[8,/Toro y pampa/],[8,/Ceriotti/],
     [9,/último disco/],[9,/muchos pájaros/],[10,/Beto Casella/],[10,/covers de Black Sabbath/]];
   for(const [i,re] of X)del(D[i],re);
-  // recuerdos que repetían la escena o un dato: quedan solo los que cuentan algo distinto
-  for(const i of [0,1,2,3,6,7,8,9,10])RECUERDOS[i]=null;
-  // placas: sin repetir lo que muestra la cinemática de al lado
-  del(L[2].card,/Alvear/);del(L[4].card,/^En 1992 abrieron/);del(L[5].card,/Go! de Mar del Plata/);
-  try{L[5].card[1]='Ese año sacaron "Víctimas del vaciamiento".';L[7].card[1]='Le cantó a la tierra, al gaucho y al trabajo.';}catch(e){}
-  del(L[0].winLines,/^Cuatro meses de cajones/);
-  // cinemáticas que decían lo mismo que la placa o el recital
-  cine(5,0,'Kiss y Black Sabbath, el mismo día.');cine(5,1,'Miles de remeras negras en la tribuna.');
-  cine(6,1,'Bondis, lluvia y campera de cuero.');cine(7,1,'Clubes, rutas y canchas de pueblo.');
-  cine(8,0,'Las sierras, el viento y el silencio.');cine(8,1,'Guanacos en el cerro y el arroyo abierto.');
-  cine(10,0,'Tranquera, pájaros y silencio.');
-  // el recital recuerda lo que pasó en el nivel, no repite la cinemática
+  // el recital recuerda lo que pasó en el nivel
   show(3,2,'El curador anotó a Hermética en el catálogo.');
   show(4,1,'Los muchachos de la metalúrgica, en primera fila.');show(4,2,'En octubre del 92, abren para Motörhead.');
   show(5,1,'El pibe de la entrada trucha, adentro.');show(5,2,'El empresario se fue sin la recaudación.');
   show(6,0,'Sin sobre y sin faja: el clausurador habilitó.');show(6,1,'Al equipo del violero no lo tocó nadie.');
   show(7,2,'Los abuelos recuperan lo suyo.');show(8,1,'Asado para todos después del show.');show(8,2,'Sin cazadores ni country en la sierra.');
-  try{L[10].card[0]='Siguió en el campo, tierra adentro.';}catch(e){}
   show(10,2,'Ni el loteador ni Mandinga: el campo sigue libre.');
   try{delete GUINO2[10];}catch(e){}
   try{if(ALB&&ALB.got){const canon='En 1978 tuvo su primer bajo, un Faim de cuatro cuerdas. Lo contaba como su segundo regalo más importante, después de la guitarra criolla que le dejaron los Reyes en 1972.';const hadFaim=Object.keys(ALB.got).some(k=>/[Ff]aim|primer bajo/.test(k));let chg=false;for(const k in ALB.got)if(k!==canon&&/[Ff]aim|primer bajo/.test(k)){delete ALB.got[k];chg=true;}if(hadFaim&&!(canon in ALB.got)){ALB.got[canon]=0;chg=true;}if(chg)albumSave();}}catch(e){}
 }
-// recorte de diálogos: si la tercera línea es una pregunta, se deja también la respuesta
-function trimTalk(){for(const L of LEVELS)for(const k of ['intro','rescueLines'])if(L[k]&&L[k].length>3){let n=3;if(/\?\s*$/.test(L[k][2].s))n=4;const fx=L[k].filter((l,i)=>i>=n&&l.fx);L[k]=L[k].slice(0,n).concat(fx);}}
+// recorte de diálogos: mantiene los diálogos completos de hasta 6 líneas junto con sus efectos
+function trimTalk(){for(const L of LEVELS)for(const k of ['intro','rescueLines'])if(L[k]&&L[k].length>6){const n=6;const fx=L[k].filter((l,i)=>i>=n&&l.fx);L[k]=L[k].slice(0,n).concat(fx);}}
 // ayuda de controles al empezar el primer capítulo (solo un rato, abajo, sin tapar la pelea)
 function controlTip(){if(lvl!==0||state!=='play'||datoT>600)return;const a=Math.min(1,datoT/20,(600-datoT)/30);ctx.globalAlpha=a*.92;ctx.fillStyle='rgba(10,8,13,.8)';ctx.fillRect(0,H-22,W,22);
   txt(coarse?'GOLPE: PEGAR · SALTO · ESPEC: BAJAZO · ESQUI: ESQUIVAR · PAPA: TIRAR · DOBLE TOQUE: CORRER':'Z GOLPE · X SALTO · C BAJAZO · SHIFT ESQUIVA · B PAPA · DOBLE TOQUE ADELANTE: CORRER',W/2,H-15,'#efe4d2',5,'center');ctx.globalAlpha=1;}
@@ -2927,10 +3076,10 @@ function drawBubble2(b){const f=b.f;const X=Math.round(f.x-cam.x),Y0=Math.round(
   BUBR.a.push({x:bx,y:Y,w,h});ctx.fillStyle=OUT;ctx.fillRect(bx-1,Y-1,w+2,h+2);ctx.fillStyle='#f4efe4';ctx.fillRect(bx,Y,w,h);{const tx=clamp(X,bx+6,bx+w-6);ctx.beginPath();ctx.moveTo(tx-4,Y+h);ctx.lineTo(tx+4,Y+h);ctx.lineTo(tx,Y+h+5);ctx.fill();}
   ctx.fillStyle='#1a1418';ctx.textAlign='left';ctx.textBaseline='top';lines.forEach((l,i)=>ctx.fillText(l,bx+5,Y+3+i*8));}
 // a veces, al voltear a uno, Ricardio lo bardea
-const BARDO=['¡Andá a laburar, vago!','¡Levantate, gil!','¡Esto es metal, salame!','¡Volvé cuando aprendas, nabo!','¡Chupamedias!','¡Rajá de acá, careta!','¡Tomá, vendepatria!','¡Te falta calle, nene!','¡Y eso que no calenté!','¡Andá a quejarte al diario!','¡Para vos no hay bis!','¡Poser de cuarta!'];
+const BARDO=['¡Andá a laburar, vago!','¡Sé vos, nomás, careta!','¡Esto es metal pesado argentino!','¡No seas menos de lo que valés!','¡Chupamedias del patrón!','¡Rajá de acá, comerciante informador!','¡Tomá, entregador!','¡Te falta calle y galpón, nene!','¡La pobreza es no superarse!','¡Andá a quejarte al multimedio!','¡Yo soy un trabajador de la música!','¡Cipayo de cuarta!'];
 let bardoT=0;
 function bardo(t){if(MOMENT||!t||t.team!==1||!player||state!=='play'||tick-bardoT<900||Math.random()>.12)return;if(bubbles.some(b=>b.f===player))return;bardoT=tick;say(player,pick(BARDO),110);}
-const PAPERO_INS=['¡Papero y a mucha honra, gil!','¡Tomá, para la cabeza hueca!','¡Laburá vos, vago!','¡Con estas papas comés vos, salame!','¡Papero las pelotas!','¡Andá a pelar papas, nabo!'];
+const PAPERO_INS=['¡Papero del Abasto y a mucha honra, gil!','¡Con bolsas de papas me compré el bajo Faim!','¡Laburá vos, vago, que yo descargué el Bedford!','¡De repartir papas con mi viejo aprendí a no arrodillarme!','¡El trabajo dignifica, careta!','¡Andá a levantar un cajón al mercado, nabo!'];
 // los pájaros de su casa de campo (le contó a Casella que tenía setecientos) y la famosa lombriz doméstica
 function drawPajaros(cx){if(lvl<8)return;for(let f=0;f<2;f++){const T=(tick*.6+f*900)%(W+700)-300,by=40+f*26+Math.sin(tick*.01+f)*8;
   for(let k=0;k<7;k++){const r=k>>1,x=T+(k%2?1:-1)*r*9-r*2,y=by+r*5+Math.sin(tick*.08+k)*1.5,wf=Math.sin(tick*.35+k*1.3);ctx.strokeStyle='rgba(30,26,34,.85)';ctx.lineWidth=1.1;
@@ -3338,7 +3487,7 @@ function datoDraw(){if(!dato||state!=='play')return;if(banner){return;}const a=M
   const lines=wrapTxt(dato.s,46);const h=16+lines.length*10;ctx.fillStyle='rgba(10,8,14,.86)';ctx.fillRect(W/2-150,80,300,h);ctx.fillStyle='#f2b632';ctx.fillRect(W/2-150,80,3,h);
   txt('¿SABÍAS QUE...?',W/2-142,84,'#f2b632',6);lines.forEach((l,i)=>txt(l,W/2-142,95+i*10,'#efe4d2',6));ctx.globalAlpha=1;}
 function wrapTxt(s,n){const w=s.split(' '),out=[];let c='';for(const x of w){if((c+' '+x).trim().length>n){out.push(c.trim());c=x;}else c+=' '+x;}if(c.trim())out.push(c.trim());return out;}
-// el campo: jaulas con pájaros, pileta, parrilla y el camino de ripio
+// el campo: jaulas con pájaros, pileta, parrilla, fogón criollo, asado a la cruz y camino de ripio
 function extraBG(cv,i){if(i<8)return;const g=cv.getContext('2d');g.save();g.setTransform(RS,0,0,RS,0,0);const R=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x,y,w,h);};
   const xs=i===9?[640,1240,2050]:[560,1500];
   for(const x of xs){R(x,150,2,26,'#3a2a1a');R(x+30,150,2,26,'#3a2a1a');R(x-4,128,40,4,'#5a4a3a');g.strokeStyle='rgba(200,200,190,.8)';g.lineWidth=.5;
@@ -3347,6 +3496,15 @@ function extraBG(cv,i){if(i<8)return;const g=cv.getContext('2d');g.save();g.setT
   if(i===9){const x=1500;R(x,166,60,8,'#d8d2c6');R(x+2,167,56,5,'#4aa0c8');R(x+4,168,20,1,'rgba(255,255,255,.6)');
     R(x+80,146,26,22,'#8a4a32');for(let k=0;k<4;k++)R(x+80,146+k*6,26,1,'#6a3622');R(x+82,140,22,4,'#2a2a2e');for(let k=0;k<6;k++)R(x+83+k*3.6,138,1,3,'#5a5a62');
     g.fillStyle='rgba(200,200,210,.25)';for(let k=0;k<4;k++){g.beginPath();g.ellipse(x+93+k*2,128-k*8,4+k*2,3+k,0,0,7);g.fill();}}
+  // fogón criollo con asado a la cruz en Sierra de la Ventana / Coronel Suárez
+  const fx=i===10?1020:i===8?1120:860;
+  R(fx-12,174,24,4,'#2a1810');for(let k=0;k<5;k++){g.fillStyle=k%2?'#c84420':'#e88424';g.beginPath();g.arc(fx-8+k*4,171,3,0,7);g.fill();}
+  // cruz de hierro del asado
+  g.strokeStyle='#4a464c';g.lineWidth=1.5;g.beginPath();g.moveTo(fx,174);g.lineTo(fx+4,142);g.moveTo(fx-6,152);g.lineTo(fx+12,154);g.moveTo(fx-4,162);g.lineTo(fx+10,164);g.stroke();
+  g.fillStyle='#7a321e';g.beginPath();g.ellipse(fx+3,154,6,12,.1,0,7);g.fill();
+  // mástil con bandera argentina flameando en Coronel Suárez
+  if(i===10){const mx=1750;R(mx,68,2,106,'#a8b0b8');g.fillStyle='#75aadb';R(mx+2,70,24,6);R(mx+2,80,24,6);g.fillStyle='#f4f6f8';R(mx+2,76,24,5);
+    g.fillStyle='#f2b632';g.beginPath();g.arc(mx+14,78.5,2,0,7);g.fill();}
   {const ux=i===9?1950:1150,uy=34;const gl=g.createRadialGradient(ux,uy+8,2,ux,uy+40,46);gl.addColorStop(0,'rgba(160,255,200,.35)');gl.addColorStop(1,'rgba(160,255,200,0)');g.fillStyle=gl;g.beginPath();g.moveTo(ux-10,uy+6);g.lineTo(ux+10,uy+6);g.lineTo(ux+30,uy+70);g.lineTo(ux-30,uy+70);g.fill();
     g.fillStyle='#8a929a';g.beginPath();g.ellipse(ux,uy,26,6,0,0,7);g.fill();g.fillStyle='#c8d0d8';g.beginPath();g.ellipse(ux,uy-1,26,3,0,0,7);g.fill();g.fillStyle='rgba(160,230,255,.8)';g.beginPath();g.ellipse(ux,uy-5,10,6,0,Math.PI,0);g.fill();
     for(let k=0;k<5;k++){g.fillStyle=k%2?'#ffd27a':'#7aff9a';g.fillRect(ux-18+k*9,uy+1,2,2);}}
@@ -3474,25 +3632,32 @@ function drawIorioPortrait(st,x,y,sz){const I=st.ior,g=ctx,u=sz/40,sk=st.skin;g.
   const hair=I.hair||'long',hc=I.hairC||'#1a120c',hi=I.hi||shade(hc,1.8),age=I.gray>=1?2:I.gray?1:0,thin=I.thin||0,fat=I.fat||0,len=(I.len||0)*1.25,hd=shade(hc,.55);
   const dk=shade(sk,.7),dd=shade(sk,.52),lt=shade(sk,1.14);
   const W=9.4-thin*1.3+fat*1.9,CH=30.9+thin*1.3-fat*.3,JW=thin?3.4:4.6+fat*2.6; // media cara, mentón, ancho de mandíbula
-  // borde ondulado suave: curvas cuadráticas (P() entiende [cx,cy,ex,ey] como quadraticCurveTo)
   const wavy=(x1,y1,x2,y2,n,a,ph)=>{const o=[];const dx=x2-x1,dy=y2-y1,l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;for(let k=0;k<n;k++){const tc=(k+.5)/n,te=(k+1)/n;const wc=Math.sin((tc*n+ph)*Math.PI)*a,we=Math.sin((te*n+ph)*Math.PI)*a;o.push([x1+dx*tc+nx*wc,y1+dy*tc+ny*wc,x1+dx*te+nx*we,y1+dy*te+ny*we]);}return o;};
-  // hombros y ropa (siempre negra)
+  // hombros y ropa por época (remera negra, campera de cuero con tachas, musculosa con la H, remera Cruz Pampa o camisa/guardapolvo de campo)
   {const top=st.top||'#141317',gr=g.createLinearGradient(0,29,0,44);gr.addColorStop(0,shade(top,1.5));gr.addColorStop(1,shade(top,.8));const sh=fat*1.6;
    P([[-1,44],[1,37-sh*.4],[3,33-sh*.5,9,31.4-sh*.6],[15,29.6],[25,29.6],[31,31.4-sh*.6],[37,33-sh*.5,39,37-sh*.4],[41,44]],gr);
    P([[3,36],[8,32],[13,31],[9,34],[5,38]],'rgba(255,255,255,.07)');
-   if(st.leather||st.jacket){P([[5,44],[8.6,34.4],[15.6,30.6],[18.8,44]],shade(top,1.9));P([[35,44],[31.4,34.4],[24.4,30.6],[21.2,44]],shade(top,1.9));
-     S([[15.6,30.6],[17.4,37.5],[18.8,44]],'rgba(0,0,0,.6)',.5);S([[24.4,30.6],[22.6,37.5],[21.2,44]],'rgba(0,0,0,.6)',.5);S([[9,35],[13,33]],'rgba(255,255,255,.18)',.5);
-     S([[30.4,36],[28.6,41]],'rgba(220,220,230,.5)',.4);
-     if(st.studs){g.fillStyle='#e0e0e6';for(let k=0;k<5;k++){g.beginPath();g.arc(9.4+k*1.3,36.4+k*1.3,.4,0,7);g.arc(30.6-k*1.3,36.4+k*1.3,.4,0,7);g.fill();}}}
-   if(st.coat){P([[6,44],[10,33],[16,30.2],[19,44]],shade(top,1.3));P([[34,44],[30,33],[24,30.2],[21,44]],shade(top,1.3));Ell(13,40,1.6,1,'#5a5248');}
-   if(st.buttons){for(let k=0;k<3;k++)Ell(20,34+k*3.6,.45,.45,'#4a4a52');S([[20,31],[20,44]],'rgba(0,0,0,.5)',.4);}}
+   if(st.logo==='H'){S([[15.8,31.5],[20,36.2,24.2,31.5]],'#c8c4bc',.4);
+     g.strokeStyle='#f2b632';g.lineWidth=.55;g.beginPath();g.arc(20,39.5,3.2,0,7);g.stroke();
+     g.fillStyle='#f2b632';g.fillRect(18.2,37.5,.8,4);g.fillRect(21,37.5,.8,4);g.fillRect(18.2,39.1,3.6,.8);}
+   if(st.logo==='pampa'){const lx=20,ly=39.2;g.fillStyle='#e2b638';g.fillRect(lx-.9,ly-3,1.8,6);g.fillRect(lx-3,ly-.9,6,1.8);g.fillRect(lx-1.9,ly-1.9,3.8,3.8);g.fillStyle='#b82e24';g.fillRect(lx-.7,ly-.7,1.4,1.4);}
+   if(st.leather||st.jacket){P([[5,44],[8.6,34.4],[15.6,30.6],[18.8,44]],shade(top,1.95));P([[35,44],[31.4,34.4],[24.4,30.6],[21.2,44]],shade(top,1.95));
+     S([[15.6,30.6],[17.4,37.5],[18.8,44]],'rgba(0,0,0,.65)',.55);S([[24.4,30.6],[22.6,37.5],[21.2,44]],'rgba(0,0,0,.65)',.55);S([[9,35],[13,33]],'rgba(255,255,255,.22)',.55);
+     S([[30.4,36],[28.6,41]],'rgba(220,220,230,.55)',.45);
+     if(st.studs){g.fillStyle='#e4e6ec';for(let k=0;k<5;k++){g.beginPath();g.arc(9.4+k*1.3,36.4+k*1.3,.45,0,7);g.arc(30.6-k*1.3,36.4+k*1.3,.45,0,7);g.fill();}}}
+   if(st.coat){P([[6,44],[10,33],[16,30.2],[19,44]],shade(top,1.35));P([[34,44],[30,33],[24,30.2],[21,44]],shade(top,1.35));
+     S([[10,38],[15,38]],shade(top,1.6),.45);S([[25,38],[30,38]],shade(top,1.6),.45);for(let k=0;k<3;k++)Ell(20,34.5+k*3.4,.5,.5,'#6a6872');}
+   if(st.buttons){P([[11,33.5],[15.6,30.5],[18.5,35.5],[14,36.5]],shade(top,1.4));P([[29,33.5],[24.4,30.5],[21.5,35.5],[26,36.5]],shade(top,1.4));
+     for(let k=0;k<3;k++)Ell(20,34+k*3.6,.48,.48,'#5a5a64');S([[20,31],[20,44]],'rgba(0,0,0,.55)',.45);
+     S([[9.5,39.5],[15.5,39.5]],shade(top,1.55),.4);S([[24.5,39.5],[30.5,39.5]],shade(top,1.55),.4);}}
   // melena de atrás: masa oscura con borde ondulado, más ancha cuanto más volumen
   const longH=hair==='long',vol=I.vol||0,wv=I.wave||0;
   if(longH){const ox=W+3.2+vol*3.2,bot=10+len;const gr=g.createLinearGradient(0,3,0,bot);gr.addColorStop(0,shade(hc,1.1));gr.addColorStop(1,hd);
     P([[20,1.4],[20-W-1.6,2.4,20-ox+1,9],...wavy(20-ox+1,9,20-ox-vol*.6,bot,Math.round(4+len/5),.9+wv*.9,.3),...wavy(20-ox-vol*.6,bot,20+ox+vol*.6,bot+1,9,.8+wv*.7,0),...wavy(20+ox+vol*.6,bot,20+ox-1,9,Math.round(4+len/5),.9+wv*.9,.7),[20+W+1.6,2.4,20,1.4]],gr);}
-  // cuello: fino de pibe, grueso de grande
+  // cuello: fino con nuez marcada de pibe, grueso con trapecios fuertes de grande
   {const nw=4.6-thin*.6+fat*2.2;P([[20-nw,23],[20-nw-.6,30.8],[20,32.4],[20+nw+.6,30.8],[20+nw,23]],dk);
-   Ell(20,25.6,nw,2.6,'rgba(40,16,10,.4)');S([[20-nw+.6,27],[20-nw-.4,31]],'rgba(40,16,10,.3)',.6);if(thin>.5)S([[20.6,27.4],[21,31]],'rgba(40,16,10,.25)',.45);}
+   Ell(20,25.6,nw,2.6,'rgba(40,16,10,.42)');S([[20-nw+.6,27],[20-nw-.4,31]],'rgba(40,16,10,.32)',.6);S([[20+nw-.6,27],[20+nw+.4,31]],'rgba(40,16,10,.28)',.55);
+   if(thin>.4){Ell(20,27.8,1.1,1.3,'rgba(40,16,10,.22)');S([[20.6,27.4],[21,31]],'rgba(40,16,10,.25)',.45);}}
   // orejas (la melena las tapa)
   if(!longH)for(const sx of [-1,1]){const ex=20+sx*(W+.3);Ell(ex,18.6,1.7+fat*.2,3.1,sk,sx*.15);Ell(ex+sx*.2,18.6,.9,2,dk,sx*.15);}
   // cabeza: frente, pómulos altos, mejillas (hundidas o llenas), mandíbula y mentón
@@ -3500,53 +3665,52 @@ function drawIorioPortrait(st,x,y,sz){const I=st.ior,g=ctx,u=sz/40,sk=st.skin;g.
   const head=[[20,4.4],[20+W-1.2,6.4,20+W+.2,12.6],[20+cb,16.8],[20+mid,21.4,20+JW+1.8,26.4],[20+JW,29.6,20+2.4,CH-.4],[20,CH],[20-2.4,CH-.4],[20-JW,29.6,20-JW-1.8,26.4],[20-mid,21.4,20-cb,16.8],[20-W-.2,12.6],[20-W+1.2,6.4,20,4.4]];
   const headPath=()=>{g.beginPath();g.moveTo(head[0][0],head[0][1]);for(let i=1;i<head.length;i++){const p=head[i];if(p.length===4)g.quadraticCurveTo(p[0],p[1],p[2],p[3]);else g.lineTo(p[0],p[1]);}g.closePath();};
   // papada y cachetes caídos (de grande)
-  if(fat>.3){const a=Math.min(1,(fat-.3)/.6);Ell(20,CH+.6,4.2+fat*2,1.6+a*1.2,shade(sk,.86));S([[20-4-fat*1.6,CH+.2],[20,CH+1.6+a*1.1],[20+4+fat*1.6,CH+.2]],'rgba(60,24,14,.35)',.4);}
+  if(fat>.3){const a=Math.min(1,(fat-.3)/.6);Ell(20,CH+.6,4.2+fat*2,1.6+a*1.2,shade(sk,.86));S([[20-4-fat*1.6,CH+.2],[20,CH+1.6+a*1.1],[20+4+fat*1.6,CH+.2]],'rgba(60,24,14,.38)',.42);}
   {const gr=g.createRadialGradient(16.6,14,1,19,18,14.5);gr.addColorStop(0,lt);gr.addColorStop(.55,sk);gr.addColorStop(1,dk);g.fillStyle=gr;headPath();g.fill();}
   g.save();headPath();g.clip();
    P([[25.4,4],[31,4],[31,34],[22,34],[25.6,26],[27.4,19],[26.6,10]],'rgba(60,24,14,.24)');
    // pómulos marcados y mejilla hundida de pibe
-   if(thin){g.globalAlpha=.35+thin*.35;P([[20-W+.4,19.4],[20-5.2,20.6],[20-4.8,26.4],[20-W+1.2,25.6]],'rgba(70,28,16,.32)');P([[20+W-.4,19.4],[20+5.2,20.6],[20+4.8,26.4],[20+W-1.2,25.6]],'rgba(70,28,16,.42)');g.globalAlpha=1;
-     Ell(20-6.2,18.2,2.4,1.1,'rgba(255,214,186,.22)',-.2);Ell(20+6.2,18.2,2.2,1,'rgba(255,214,186,.12)',.2);}
+   if(thin){g.globalAlpha=.38+thin*.35;P([[20-W+.4,19.4],[20-5.2,20.6],[20-4.8,26.4],[20-W+1.2,25.6]],'rgba(70,28,16,.34)');P([[20+W-.4,19.4],[20+5.2,20.6],[20+4.8,26.4],[20+W-1.2,25.6]],'rgba(70,28,16,.44)');g.globalAlpha=1;
+     Ell(20-6.2,18.2,2.4,1.1,'rgba(255,214,186,.24)',-.2);Ell(20+6.2,18.2,2.2,1,'rgba(255,214,186,.14)',.2);}
    else{P([[11,20.4],[14.4,21.4],[15.6,25.6],[12.6,24.6]],'rgba(70,28,16,.18)');P([[29,20.4],[25.6,21.4],[24.4,25.6],[27.4,24.6]],'rgba(70,28,16,.26)');}
    // cachetes llenos y caídos
-   if(fat>.3){Ell(20-W+2.4,26.4,2.4,2.8,'rgba(60,24,14,.14)');Ell(20+W-2.4,26.4,2.4,2.8,'rgba(60,24,14,.2)');S([[20-W+1.6,24],[20-W+2.4,28.6],[20-3.6,CH-.6]],'rgba(60,24,14,.25)',.4);S([[20+W-1.6,24],[20+W-2.4,28.6],[20+3.6,CH-.6]],'rgba(60,24,14,.3)',.4);}
-   Ell(20,CH-1.2,3.6,1.3,'rgba(255,230,200,.12)');Ell(14.4,18.4,2.6,1.6,'rgba(255,190,160,.14)');
-   const stub=I.stub||0;if(stub){const sc=I.stubC||shade(hc,.9);g.globalAlpha=Math.min(.42,stub*.9);
+   if(fat>.3){Ell(20-W+2.4,26.4,2.4,2.8,'rgba(60,24,14,.16)');Ell(20+W-2.4,26.4,2.4,2.8,'rgba(60,24,14,.22)');S([[20-W+1.6,24],[20-W+2.4,28.6],[20-3.6,CH-.6]],'rgba(60,24,14,.28)',.42);S([[20+W-1.6,24],[20+W-2.4,28.6],[20+3.6,CH-.6]],'rgba(60,24,14,.32)',.42);}
+   Ell(20,CH-1.2,3.6,1.3,'rgba(255,230,200,.14)');Ell(20,CH-.5,1.2,.8,'rgba(60,24,14,.16)');Ell(14.4,18.4,2.6,1.6,'rgba(255,190,160,.14)');
+   const stub=I.stub||0;if(stub){const sc=I.stubC||shade(hc,.9);g.globalAlpha=Math.min(.44,stub*.92);
      P([[20-W+.4,20],[20-W+1.6,25.4],[17,CH-.4],[20,CH],[23,CH-.4],[20+W-1.6,25.4],[20+W-.4,20],[25,24.8],[23.4,23.4],[20,22.8],[16.6,23.4],[15,24.8]],sc);
-     g.globalAlpha=Math.min(.5,stub);for(let k=0;k<160;k++){const px=20+(hsh(k,11)-.5)*2*(W-1),py=21+hsh(k,12)*(CH-21.4);if(Math.abs(px-20)<3.4&&py<25&&py>23.6)continue;g.fillStyle=sc;g.fillRect(px,py,.16,.16);}g.globalAlpha=1;}
+     g.globalAlpha=Math.min(.52,stub);for(let k=0;k<170;k++){const px=20+(hsh(k,11)-.5)*2*(W-1),py=21+hsh(k,12)*(CH-21.4);if(Math.abs(px-20)<3.4&&py<25&&py>23.6)continue;g.fillStyle=sc;g.fillRect(px,py,.17,.17);}g.globalAlpha=1;}
   g.restore();
-  // arrugas
-  // arrugas: de grande domina la papada; no tapar la frente con rayas cuando hay mucha grasa
-  if(age||fat>.6){const wa=fat>.6?Math.max(.14,(.35-(fat-.6)*.6)):age>1?.52:.32;g.globalAlpha=wa;
-    if(fat<.45)for(const yy of [8.6,10,11.4])S([[14.6,yy+.3],[20,yy-.3],[25.4,yy+.3]],dd,.32);
-    S([[16.4,21.4],[15,24.8],[15.8,27.2]],dd,.45);S([[23.6,21.4],[25,24.8],[24.2,27.2]],dd,.45);
-    for(const sx of [-1,1]){S([[20+sx*7.3,15.6],[20+sx*8.6,15.1]],dd,.3);S([[20+sx*7.3,16.4],[20+sx*8.6,16.8]],dd,.3);}
-    if(age>1&&fat<.65){S([[17.6,10.6],[18.6,13]],dd,.3);S([[22.4,10.6],[21.4,13]],dd,.3);}g.globalAlpha=1;}
-  // ojos hundidos y chicos, cejas rectas y pesadas
+  // arrugas y surcos nasogenianos marcados
+  if(age||fat>.35){const wa=fat>.6?Math.max(.22,(.42-(fat-.6)*.4)):age>1?.55:.36;g.globalAlpha=wa;
+    if(fat<.55)for(const yy of [8.6,10,11.4])S([[14.6,yy+.3],[20,yy-.3],[25.4,yy+.3]],dd,.32);
+    S([[16.6,21.2],[14.8,24.8],[15.6,27.4]],dd,.48);S([[23.4,21.2],[25.2,24.8],[24.4,27.4]],dd,.48);
+    for(const sx of [-1,1]){S([[20+sx*7.3,15.6],[20+sx*8.6,15.1]],dd,.32);S([[20+sx*7.3,16.4],[20+sx*8.6,16.8]],dd,.32);}
+    if(age>1||fat>.45){S([[17.6,10.6],[18.6,13.2]],dd,.34);S([[22.4,10.6],[21.4,13.2]],dd,.34);}g.globalAlpha=1;}
+  // ojos hundidos y chicos, cejas rectas, tupidas y pesadas (mirada bien de Iorio)
   const eyS=fat>.5?.86:1;
   for(const sx of [-1,1]){const ex=20+sx*(4.2-thin*.2+fat*.3),ey=16.2;
-    Ell(ex,ey-.8,3.3,1.9,'rgba(50,20,14,.36)');
+    Ell(ex,ey-.8,3.4,2.0,'rgba(45,18,12,.4)');
     P([[ex-2.2*eyS,ey+.2],[ex,ey-1.1*eyS,ex+2.2*eyS,ey+.2],[ex,ey+1.1*eyS,ex-2.2*eyS,ey+.2]],'#ece2d6');
-    Ell(ex+sx*.1,ey+.1,1*eyS,1*eyS,'#3a2416');Ell(ex+sx*.1,ey+.1,.52,.52,'#0c0806');Ell(ex+sx*.1-.35,ey-.25,.24,.24,'#fff');
-    S([[ex-2.4*eyS,ey+.3],[ex,ey-1.3*eyS,ex+2.4*eyS,ey+.2]],'#1c120c',.62);S([[ex-1.8,ey+1.2],[ex,ey+1.7,ex+2,ey+1.1]],'rgba(60,26,16,.55)',.3);
-    if(age||fat>.5){S([[ex-1.8,ey+2.1],[ex,ey+2.9,ex+2,ey+2]],'rgba(60,26,16,.5)',.35);Ell(ex,ey+2.1,1.8,.7,'rgba(60,26,16,.12)');}
-    const bc=I.brow||hc;P([[ex-sx*2.6,ey-1.6],[ex-sx*2.8,ey-3],[ex-sx*.4,ey-3.8,ex+sx*2,ey-3.5],[ex+sx*3.4,ey-2.6],[ex+sx*2,ey-2.6,ex,ey-2.3],[ex-sx*1.4,ey-1.9]],bc);
-    for(let k=0;k<5;k++)S([[ex-sx*(2.2-k*1.1),ey-2],[ex-sx*(1.6-k*1.1),ey-3.2]],shade(bc,1.7),.16);}
-  S([[19.3,13.8],[19.5,15]],'rgba(60,24,14,.4)',.3);S([[20.7,13.8],[20.5,15]],'rgba(60,24,14,.4)',.3);
-  // nariz larga con caballete: puente angosto, joroba, punta grande que cae, aletas anchas
+    Ell(ex+sx*.1,ey+.1,1*eyS,1*eyS,'#362012');Ell(ex+sx*.1,ey+.1,.54,.54,'#0c0806');Ell(ex+sx*.1-.35,ey-.25,.25,.25,'#fff');
+    S([[ex-2.4*eyS,ey+.3],[ex,ey-1.3*eyS,ex+2.4*eyS,ey+.2]],'#1a100a',.65);S([[ex-1.8,ey+1.2],[ex,ey+1.7,ex+2,ey+1.1]],'rgba(60,26,16,.58)',.32);
+    if(age||fat>.4){S([[ex-1.8,ey+2.1],[ex,ey+2.9,ex+2,ey+2]],'rgba(60,26,16,.52)',.36);Ell(ex,ey+2.1,1.9,.75,'rgba(60,26,16,.14)');}
+    const bc=I.brow||hc;P([[ex-sx*2.7,ey-1.5],[ex-sx*2.9,ey-3.1],[ex-sx*.4,ey-3.9,ex+sx*2.1,ey-3.5],[ex+sx*3.5,ey-2.5],[ex+sx*2,ey-2.5,ex,ey-2.2],[ex-sx*1.4,ey-1.8]],bc);
+    for(let k=0;k<6;k++)S([[ex-sx*(2.3-k*.95),ey-1.9],[ex-sx*(1.7-k*.95),ey-3.2]],shade(bc,1.7),.17);}
+  S([[19.2,13.6],[19.5,15.1]],'rgba(55,20,12,.48)',.36);S([[20.8,13.6],[20.5,15.1]],'rgba(55,20,12,.48)',.36);
+  // nariz aguileña con caballete: puente firme, joroba dorsal, punta redondeada caída y aletas fuertes
   {const nl=1.3+thin*.6,ty=22.2+thin*.5,tw=2.3+fat*.5;
-   S([[21,14.8],[21.5,17.4],[21.9,18.4],[22,20.2],[23.2,ty-.4]],'rgba(60,24,14,.5)',.6);
-   S([[19.2,15],[19,17.2],[19.4,18.2],[19,20]],'rgba(255,232,206,.42)',.55);Ell(19.5,18,.55,.9,'rgba(255,240,220,.35)');
-   Ell(20,ty-1,tw,1.7*nl/1.4,lt);Ell(20.5,ty-.6,tw*.75,1.2,sk);Ell(19.3,ty-1.5,.75,.5,'rgba(255,240,220,.6)');
-   Ell(17.6,ty-.3,1.2,1,sk);Ell(22.4,ty-.3,1.2,1,dk);Ell(18.5,ty+.3,.66,.38,'#2a120c');Ell(21.5,ty+.3,.66,.38,'#2a120c');
-   S([[16.8,ty-.9],[17.2,ty+.4],[18.4,ty+.6]],'rgba(60,24,14,.5)',.3);S([[23.2,ty-.9],[22.8,ty+.4],[21.6,ty+.6]],'rgba(60,24,14,.6)',.3);
-   S([[20,ty+.9],[20,ty+2.2]],'rgba(60,24,14,.25)',.5);}
-  // boca: labios finos, comisuras apenas caídas
+   S([[21,14.8],[21.6,17.4],[22,18.4],[22.1,20.2],[23.2,ty-.4]],'rgba(60,24,14,.54)',.62);
+   S([[19.1,15],[18.9,17.2],[19.4,18.2],[19,20]],'rgba(255,232,206,.46)',.58);Ell(19.6,18,.6,.95,'rgba(255,240,220,.4)');
+   Ell(20,ty-1,tw,1.7*nl/1.4,lt);Ell(20.5,ty-.6,tw*.75,1.2,sk);Ell(19.3,ty-1.5,.78,.52,'rgba(255,240,220,.65)');
+   Ell(17.6,ty-.3,1.25,1,sk);Ell(22.4,ty-.3,1.25,1,dk);Ell(18.5,ty+.3,.68,.4,'#2a120c');Ell(21.5,ty+.3,.68,.4,'#2a120c');
+   S([[16.8,ty-.9],[17.2,ty+.4],[18.4,ty+.6]],'rgba(60,24,14,.52)',.32);S([[23.2,ty-.9],[22.8,ty+.4],[21.6,ty+.6]],'rgba(60,24,14,.62)',.32);
+   S([[20,ty+.9],[20,ty+2.2]],'rgba(60,24,14,.28)',.5);}
+  // boca firme, comisuras marcadas
   {const my=25.9+thin*.7,lw=3.3+fat*.5,th=thin>.4?.55:1;
-   P([[20-lw,my+.2],[18.4,my-.7],[20,my-.45],[21.6,my-.7],[20+lw,my+.2],[20,my+.25]],shade(sk,.62));
-   P([[20-lw+.4,my+.2],[20,my+.4],[20+lw-.4,my+.2],[21.8,my+1.5*th],[20,my+1.8*th],[18.2,my+1.5*th]],shade(sk,.8));Ell(20,my+1*th,1.5,.3,'rgba(255,230,210,.3)');
-   S([[20-lw-.2,my+.3],[20,my+.3],[20+lw+.2,my+.3]],'#3a160e',.42);S([[20-lw-.2,my+.3],[20-lw-.5,my+.9]],'rgba(60,24,14,.45)',.3);S([[20+lw+.2,my+.3],[20+lw+.5,my+.9]],'rgba(60,24,14,.45)',.3);
-   Ell(20,my+3.1,1.6,.55,'rgba(60,24,14,.18)');}
+   P([[20-lw,my+.2],[18.4,my-.7],[20,my-.45],[21.6,my-.7],[20+lw,my+.2],[20,my+.25]],shade(sk,.6));
+   P([[20-lw+.4,my+.2],[20,my+.4],[20+lw-.4,my+.2],[21.8,my+1.5*th],[20,my+1.8*th],[18.2,my+1.5*th]],shade(sk,.78));Ell(20,my+1*th,1.5,.32,'rgba(255,230,210,.32)');
+   S([[20-lw-.2,my+.3],[20,my+.3],[20+lw+.2,my+.3]],'#36140c',.45);S([[20-lw-.2,my+.3],[20-lw-.6,my+.95]],'rgba(60,24,14,.48)',.32);S([[20+lw+.2,my+.3],[20+lw+.6,my+.95]],'rgba(60,24,14,.48)',.32);
+   Ell(20,my+3.1,1.6,.55,'rgba(60,24,14,.2)');}
   // pelo de adelante
   const strand=(pts,c,w)=>S(pts,c,w);
   if(longH){const gr=g.createLinearGradient(8,0,32,0);gr.addColorStop(0,shade(hc,1.25));gr.addColorStop(.5,hc);gr.addColorStop(1,hd);
@@ -3554,25 +3718,23 @@ function drawIorioPortrait(st,x,y,sz){const I=st.ior,g=ctx,u=sz/40,sk=st.skin;g.
     for(const sx of [-1,1]){const X=v=>20+sx*v;
       const pts=[[20,2.4],[X(6),2.8,X(W-1),6.2],[X(W+.4),11],[X(W-.4),15.5],...wavy(X(W-.2),15.5,X(W+.6),bot,n,a*.6,0),...wavy(X(W+.6),bot,X(ow),bot-.6,2,a,.5),...wavy(X(ow),bot-.6,X(W+1.6+vol),8,n,a,.2),[X(W+.4),3.4,20,1.8]];
       P(pts,gr);
-      // ondas y mechones
       for(let k=0;k<7;k++){const t=k/6,x0=W-.2+t*(ow-W),c=k%2?hi:shade(hc,.6);
         const L=[[X(2+k*.9),2.8+k*.25]];for(let j=1;j<=5;j++){const yy=6+j*(bot-7)/5;L.push([X(x0+Math.sin(j*1.7+k)*a*(I.curly?1.1:.6)),yy]);}strand(L,c,I.curly?.32:.26);}
       if(I.curly)for(let k=0;k<16;k++){const cx=X(W+.6+hsh(k,31+sx)*(ow-W)),cy=9+hsh(k,33+sx)*(bot-9);g.strokeStyle=k%3?shade(hc,1.6):hi;g.lineWidth=.3;g.beginPath();g.arc(cx,cy,.7+hsh(k,35)*.5,sx>0?.4:2.6,(sx>0?.4:2.6)+3.4);g.stroke();}}
     S([[20,2.6],[20,5.4]],shade(sk,.85),.5);
-    // flequillo que cae a los costados de la raya: no tapa la frente
     if(I.curly){g.fillStyle=hc;for(const sx of [-1,1]){g.beginPath();g.moveTo(20,2.2);g.quadraticCurveTo(20+sx*4,1,20+sx*8,3.4);g.quadraticCurveTo(20+sx*4,3.4,20+sx*.6,4.6);g.fill();}}}
   else if(hair==='buzz'){g.save();P([[20-W-.2,13],[20-W+1,6.4,20,4.2],[20+W-1,6.4,20+W+.2,13],[20+W-1,10,20+W-3,9.4],[20,8.2],[20-W+3,9.4],[20-W+1,10,20-W-.2,13]],shade(hc,1.1));g.globalAlpha=.5;for(let k=0;k<70;k++){g.fillStyle=k%2?hd:hi;g.fillRect(20+(hsh(k,21)-.5)*2*W*.9,4.6+hsh(k,22)*5.6,.3,.3);}g.restore();}
   else if(hair==='short'){P([[20-W-.4,14],[20-W,5.6,20,3.4],[20+W,5.6,20+W+.4,14],[20+W-1.2,9.6,20+W-3.2,8.8],[22,8.4],[20,9.4],[16,8.4],[20-W+3.2,8.8],[20-W+1.2,9.6,20-W-.4,14]],hc);
     for(let k=0;k<8;k++)strand([[13+k*2,8.6],[14+k*2,5]],k%2?hi:hd,.25);}
-  else if(hair==='crest'){ // costados cortos con canas y arriba una cresta corta y redondeada (2006: más baja que alta)
-    g.save();g.globalAlpha=.7;P([[20-W-.2,13.4],[20-W+.6,6.8,20,4.8],[20+W-.6,6.8,20+W+.2,13.4],[20+W-1.6,9.6,20,8.8],[20-W+1.6,9.6,20-W-.2,13.4]],shade('#6e6862',1));g.restore();
-    g.save();g.globalAlpha=.45;for(let k=0;k<60;k++){g.fillStyle=k%2?'#9a948c':'#3a3430';g.fillRect(20+(hsh(k,41)-.5)*2*W*.9,6+hsh(k,42)*6,.3,.3);}g.restore();
-    P([[15.6,9.2],[16.4,6.4,18,4.2],[20,3.4],[22,4.2],[23.6,6.4,24.4,9.2],[22.4,8.2],[20,8.8],[17.6,8.2]],hc);
-    for(let k=0;k<7;k++)strand([[16.2+k*1.2,8.8],[16.8+k*1.0,5.8],[17.4+k*.8,4.2]],k%2?hi:hd,.28);}
+  else if(hair==='crest'){
+    g.save();g.globalAlpha=.72;P([[20-W-.2,13.4],[20-W+.6,6.8,20,4.8],[20+W-.6,6.8,20+W+.2,13.4],[20+W-1.6,9.6,20,8.8],[20-W+1.6,9.6,20-W-.2,13.4]],shade('#6e6862',1));g.restore();
+    g.save();g.globalAlpha=.48;for(let k=0;k<64;k++){g.fillStyle=k%2?'#a8a29a':'#3a3430';g.fillRect(20+(hsh(k,41)-.5)*2*W*.9,6+hsh(k,42)*6,.32,.32);}g.restore();
+    P([[15.6,9.2],[16.4,6.2,18,3.8],[20,3.0],[22,3.8],[23.6,6.2,24.4,9.2],[22.4,8.2],[20,8.8],[17.6,8.2]],hc);
+    for(let k=0;k<7;k++)strand([[16.2+k*1.2,8.8],[16.8+k*1.0,5.6],[17.4+k*.8,3.8]],k%2?hi:hd,.3);}
   else if(hair==='swept'){const gr=g.createLinearGradient(0,0,0,12);gr.addColorStop(0,hi);gr.addColorStop(1,hc);
     P([[20-W-.6,15],[20-W-1.2,6,15,1.6],[20,.8],[25,1.6],[20+W+1.2,6,20+W+.6,15],[20+W-1,9.6,20+W-2.6,8.4],[24,6.6],[20,6.2],[16,6.6],[20-W+2.6,8.4],[20-W+1,9.6,20-W-.6,15]],gr);
-    for(let k=0;k<9;k++)strand([[13+k*1.8,7],[14+k*1.6,2.6],[16+k*1.2,1.2]],k%2?'#f0ece4':shade(hc,.75),.28);
-    S([[20-W-.4,14],[20-W,19]],hc,1.2);S([[20+W+.4,14],[20+W,19]],hc,1.2);}
+    for(let k=0;k<10;k++)strand([[12.6+k*1.65,7.2],[13.6+k*1.5,2.6],[15.6+k*1.1,1.1]],k%2?'#f8f4ec':shade(hc,.72),.3);
+    S([[20-W-.4,14],[20-W,19.5]],hc,1.3);S([[20+W+.4,14],[20+W,19.5]],hc,1.3);}
   g.restore();}
 
 
