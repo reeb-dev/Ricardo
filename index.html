@@ -1086,6 +1086,7 @@ cv.addEventListener('pointerdown',e=>{audioInit();cv.focus();
   else if(state==='title'){
     const rect=cv.getBoundingClientRect(),cy=(e.clientY-rect.top)*(H/rect.height),cx=(e.clientX-rect.left)*(W/rect.width);
     if(cy>=198&&cy<=220&&cx>=216&&cx<=468){diffSet(diff+1);sfx('blip');return;}
+    if(cy>=78&&cy<=198&&cx>=218&&cx<=468){const row=Math.floor((cy-78)/11.2);if(row>=0&&row<LEVELS.length){sel=row;sfx('blip');return;}}
     one.start=1;}
   else if(state!=='play')one.start=1;});
 document.getElementById('touch').addEventListener('contextmenu',e=>e.preventDefault());
@@ -1278,7 +1279,7 @@ for(const LV of LEVELS){const b=LV.locks[LV.locks.length-1];b.L=LV.LW-W;b.trig=b
 /* ================= world state ================= */
 let lvl=0,LV=LEVELS[0],skin='ric1',state='title',tick=0,cam={x:0},lockIdx=0,lock=null,ents=[],items=[],props=[],parts=[],bubbles=[],player=null,boss=null,npcs={};
 let papas=8,papaT=0,stopT=0,shake=0,flashT=0,slowT=0,banner=null,goT=0,cut=null,introT=0,train=null,score=0,hiscore=0,lives=3,meter=0,combo=0,comboT=0,maxCombo=0,hitsTaken=0,timeF=0;
-let lastHit=null,hpTrail=120,results=null,gameoverT=0,shots=[],hazard=null,quipDeck=[],unl=1,sel=0,endT=0,cardT=0,total=null;
+let lastHit=null,hpTrail=120,results=null,gameoverT=0,shots=[],hazard=null,quipDeck=[],unl=11,sel=0,endT=0,cardT=0,total=null;
 const DIFFS=[
   {id:0,name:'FÁCIL',tag:'TRANQUI',sub:'PIBE DE BARRIO',col:'#64d872',desc:'-35% daño recibido, +35% pegada, enemigos calmos'},
   {id:1,name:'NORMAL',tag:'CLÁSICO',sub:'BRIGADA METÁLICA',col:'#f2b632',desc:'El equilibrio original y balanceado del juego'},
@@ -1287,7 +1288,7 @@ const DIFFS=[
 let diff=1;
 try{diff=parseInt(localStorage.getItem('ricardio-diff')||'1')||1;}catch(e){}
 function diffSet(d){diff=(d%3+3)%3;try{localStorage.setItem('ricardio-diff',diff);}catch(e){}const b=document.getElementById('bDiff');if(b){b.textContent='DIFICULTAD: '+DIFFS[diff].name;b.style.borderColor=DIFFS[diff].col;b.style.color=DIFFS[diff].col;}}
-try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');hiscore=sv.hi||0;unl=Math.max(1,Math.min(11,sv.unl||1));}catch(e){}
+try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');hiscore=sv.hi||0;unl=11;}catch(e){}
 function saveProg(){try{localStorage.setItem('ricardio-v9',JSON.stringify({hi:hiscore,unl}));}catch(e){}}
 function mk(kind,x,y){const D=DEFS[kind];
   const hpMul=diff===0?(D.boss?.8:.85):diff===2?(D.boss?1.25:1.15):1;
@@ -2632,7 +2633,7 @@ function cineActor(styKey,x,y,face,poseKey,hold,scMul,walkPh){
   const f={st,pose:Object.assign({},base),face:face||1,flash:0,state:walkPh!=null?'walk':'idle',x,kind:styKey,hold:hold||null,walkPh:walkPh||0,t:0};
   const sv=st.scale;st.scale=sv*(scMul||1.35);try{drawPuppet(f,x,y);}catch(e){}st.scale=sv;
 }
-function cineBG(kind,t){const g=ctx,sk=LV?LV.skin:'ric1';
+function cineBG(kind,t){const g=ctx,sk=LV?LV.skin:'ric1',R=(a,b,w,h,c)=>{g.fillStyle=c;g.fillRect(a,b,w,h);};
   if(kind==='scene'){const sx=Math.min(1400-W,t*.35)*RS;g.drawImage(FAR,sx,0,W*RS,190*RS,-10-t*.03,0,W+20+t*.06,H);
     if(BG)g.drawImage(BG,Math.min(LW-W,180+t*.4)*RS,0,W*RS,H*RS,0,0,W,H);
     g.fillStyle='rgba(10,8,14,.25)';g.fillRect(0,0,W,H);
