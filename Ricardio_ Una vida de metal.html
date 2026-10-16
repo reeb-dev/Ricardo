@@ -1107,7 +1107,7 @@ function pluck(m,t,v){const o=AC.createOscillator(),o2=AC.createOscillator(),f=A
   f.type='lowpass';f.frequency.setValueAtTime(3200,t);f.frequency.exponentialRampToValueAtTime(380,t+.35);env(g,t,.002,v,.7);o.connect(f);o2.connect(f);f.connect(g);g.connect(delayIn);o.start(t);o2.start(t);o.stop(t+.8);o2.stop(t+.8);}
 function bombo(t,v){const o=AC.createOscillator(),g=AC.createGain();o.frequency.setValueAtTime(105,t);o.frequency.exponentialRampToValueAtTime(62,t+.25);env(g,t,.003,v,.32);o.connect(g);g.connect(calmG);o.start(t);o.stop(t+.4);nz(t,.04,v*.5,'lowpass',400,calmG);}
 function musicTick(){if(!AC)return;const now=AC.currentTime;
-  const want=musicOn&&state!==pause&&state!==gameover&&!lmOn()?1:0;
+  const want=musicOn&&state!=='pause'&&state!=='gameover'&&!lmOn()?1:0;
   musicBus.gain.setTargetAtTime(want*.55,now,.15);
   // Música 16-bits completa continua en menú, cinemáticas y combate
   fightG.gain.setTargetAtTime(want?1:0,now,.15);
@@ -1118,7 +1118,7 @@ function musicTick(){if(!AC)return;const now=AC.currentTime;
     const fill=sec.fill&&bi===sec.bars-1&&s>=div/2;
     const v=sec.riff[s],md=sec.m[s];
     if(v!==null&&v!==undefined&&!(fill&&s>=div-2)){
-      const pm=md===p,d=pm?spb*.55:md===l?spb*3.6:spb*1.7;
+      const pm=md==='p',d=pm?spb*.55:md==='l'?spb*3.6:spb*1.7;
       gtr(root+v,t,d,pm?.045:.068,pm);
       bass(root+v-12,t,pm?spb*.75:d,pm?.15:.19);
     }
@@ -1127,15 +1127,15 @@ function musicTick(){if(!AC)return;const now=AC.currentTime;
       if(s%2===1)snare(t,.24,fightG);
       if(s===div-1)kick(t,.58,fightG);
     } else {
-      if(sec.k[s]===x)kick(t,sec.dk?.45:.62,fightG);
-      if(sec.s[s]===x){snare(t,.34,fightG);if(revIn)nz(t,.24,.18,bandpass,1700,revIn,.9);}
-      if(sec.h===8&&s%2===0)hat(t,s%4===0?.075:.048,fightG);
-      else if(sec.h===16)hat(t,s%2?.035:.065,fightG);
-      else if(sec.h===ride&&s%2===0)ride(t,.075,fightG);
-      else if(sec.h===sh&&s%3!==1)hat(t,s%3===0?.075:.042,fightG);
+      if(sec.k[s]==='x')kick(t,sec.dk?.45:.62,fightG);
+      if(sec.s[s]==='x'){snare(t,.34,fightG);if(revIn)nz(t,.24,.18,'bandpass',1700,revIn,.9);}
+      if(sec.h==='8'&&s%2===0)hat(t,s%4===0?.075:.048,fightG);
+      else if(sec.h==='16')hat(t,s%2?.035:.065,fightG);
+      else if(sec.h==='ride'&&s%2===0)ride(t,.075,fightG);
+      else if(sec.h==='sh'&&s%3!==1)hat(t,s%3===0?.075:.042,fightG);
     }
     if(bi===0&&s===0)crash(t,.22,fightG);
-    if(sec.bombo&&sec.bombo[s]===x)bombo(t,.5);
+    if(sec.bombo&&sec.bombo[s]==='x')bombo(t,.5);
     if(sec.lead){
       const lBars=sec.leadBars||sec.bars||4;
       const pos=(bi%lBars)*div+s;
@@ -1148,7 +1148,7 @@ function musicTick(){if(!AC)return;const now=AC.currentTime;
     }
     if(sec.ch){for(const [p,n] of sec.ch)if(p===s)pluck(root+24+n,t,.06);}
     if(S.pl)for(const [st,iv] of S.pl)if(st===s)pluck(root+24+iv,t,.09);
-    if(S.bo&&S.bo[s]===x)bombo(t,.4);
+    if(S.bo&&S.bo[s]==='x')bombo(t,.4);
     if(s===0&&(!sec.riff||sec.riff[0]===null))bass(root-12,t,spb*(div-1),.14);
     nextT+=spb;step++;}}
 
@@ -1175,10 +1175,10 @@ function ampSetup(){try{
   const dg=AC.createGain();dg.gain.value=1.25;drumG.connect(dc);dc.connect(dg);dg.connect(fightG);if(revIn){const s=AC.createGain();s.gain.value=.22;drumG.connect(s);s.connect(revIn);}
 }catch(e){}}
 // guitarra rítmica 16-bits: dual FM crunch estéreo, palm mute resonante y acordes con cuerpo
-function gtr(m,t,d,v,pm){for(const [dest,dt] of [[gL,-7],[gR,7]]){const g=AC.createGain(),f=AC.createBiquadFilter();f.type=lowpass;
+function gtr(m,t,d,v,pm){for(const [dest,dt] of [[gL,-7],[gR,7]]){const g=AC.createGain(),f=AC.createBiquadFilter();f.type='lowpass';
     if(pm){f.frequency.setValueAtTime(2600,t);f.frequency.exponentialRampToValueAtTime(420,t+.07);f.Q.value=1.3;}else{f.frequency.value=7000;}
     g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v*1.6,t+.003);g.gain.setTargetAtTime(v*(pm?.5:1.1),t+.02,pm?.03:.25);g.gain.setTargetAtTime(.0001,t+d,.03);
-    for(const iv of (pm?[0,7]:[0,7,12])){const o=AC.createOscillator();o.type=sawtooth;o.frequency.value=mf(m+iv);o.detune.value=dt+(iv===7?4:0);o.connect(f);o.start(t);o.stop(t+d+.18);}
+    for(const iv of (pm?[0,7]:[0,7,12])){const o=AC.createOscillator();o.type='sawtooth';o.frequency.value=mf(m+iv);o.detune.value=dt+(iv===7?4:0);o.connect(f);o.start(t);o.stop(t+d+.18);}
     f.connect(g);g.connect(dest);}}
 function bass(m,t,d,v){const g=AC.createGain(),f=AC.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(1800,t);f.frequency.exponentialRampToValueAtTime(500,t+.12);
   g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v*1.5,t+.004);g.gain.setTargetAtTime(v,t+.01,.1);g.gain.setTargetAtTime(.0001,t+d,.03);
@@ -1195,11 +1195,11 @@ function crash(t,v,dest){const D=drumG||dest;nz(t,1.8,v*.9,'highpass',4200,D);nz
 function tom(t,f,v,dest){const D=drumG||dest,o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.setValueAtTime(f*1.4,t);o.frequency.exponentialRampToValueAtTime(f*.8,t+.2);env(g,t,.001,v*1.3,.34);o.connect(g);g.connect(D);o.start(t);o.stop(t+.4);nz(t,.03,v*.3,'bandpass',f*4,D,1);}
 function ride(t,v,dest){const D=drumG||dest;nz(t,.5,v*.7,'bandpass',5600,D,2.4);osc('triangle',2900,t,.25,v*.22,D);osc('triangle',4310,t,.2,v*.12,D);}
 // solo 16-bits: sintetizador FM solista con vibrato analógico, bending y delay
-function lead(m,t,d,v){if(!gLead)return;const g=AC.createGain(),f=AC.createBiquadFilter();f.type=lowpass;f.frequency.value=5400;f.Q.value=1.1;
+function lead(m,t,d,v){if(!gLead)return;const g=AC.createGain(),f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=5400;f.Q.value=1.1;
   g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v*1.3,t+.006);g.gain.setTargetAtTime(v*.95,t+.04,.2);g.gain.setTargetAtTime(.0001,t+d,.04);
   const fr=mf(m);
-  const o1=AC.createOscillator();o1.type=sawtooth;o1.frequency.setValueAtTime(fr*.95,t);o1.frequency.exponentialRampToValueAtTime(fr,t+Math.min(.05,d*.25));
-  const o2=AC.createOscillator();o2.type=square;o2.detune.value=7;o2.frequency.setValueAtTime(fr*.95,t);o2.frequency.exponentialRampToValueAtTime(fr,t+Math.min(.05,d*.25));
+  const o1=AC.createOscillator();o1.type='sawtooth';o1.frequency.setValueAtTime(fr*.95,t);o1.frequency.exponentialRampToValueAtTime(fr,t+Math.min(.05,d*.25));
+  const o2=AC.createOscillator();o2.type='square';o2.detune.value=7;o2.frequency.setValueAtTime(fr*.95,t);o2.frequency.exponentialRampToValueAtTime(fr,t+Math.min(.05,d*.25));
   const o2g=AC.createGain();o2g.gain.value=.35;
   const lfo=AC.createOscillator(),lg=AC.createGain();lfo.frequency.value=5.8;lg.gain.setValueAtTime(0,t);lg.gain.linearRampToValueAtTime(fr*.02,t+Math.min(.3,d*.6));
   lfo.connect(lg);lg.connect(o1.frequency);lg.connect(o2.frequency);
