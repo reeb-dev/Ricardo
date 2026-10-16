@@ -1310,7 +1310,7 @@ function v15Villains(){if(v15Villains.done)return;v15Villains.done=1;
   const add=(i,k)=>{const L=LEVELS[i];if(!L)return;L.locks.forEach((l,j)=>{if(l.groups&&l.groups.length)l.groups[j%l.groups.length].push([k,j%2?'L':'R']);});};
   add(2,'vendido');add(3,'poser');add(4,'puntero');add(5,'poser');add(6,'vendido');add(7,'puntero');add(8,'soho');add(9,'faran');add(9,'soho');add(8,'lagarto');add(9,'lagarto');
   add(0,'cumbiero');add(1,'cumbiero');add(3,'progre');add(4,'cumbiero');add(5,'progre');add(7,'cumbiero');add(8,'progre');add(9,'cumbiero');add(10,'progre');
-  add(7,'luzmala');add(8,'luzmala');add(10,'luzmala');
+  add(7,'luzmala');add(8,'luzmala');add(9,'luzmala');add(10,'luzmala');
   const vs=['','','Músicos vendidos, ','Posers, ','Punteros políticos, ','Posers, ','Músicos vendidos, ','Punteros políticos, ','Reptiloides de las sierras, modernos de Palermo Soho, ','Panelistas faranduleros, reptiloides, modernos de Palermo Soho, '];
   LEVELS.forEach((L,i)=>{if(vs[i])L.villains=vs[i]+L.villains.charAt(0).toLowerCase()+L.villains.slice(1);});}
 function v14Levels(){v15Villains();if(v14Levels.done)return;v14Levels.done=1;LEVELS.forEach((L,i)=>{L.song='c'+i;L.bossSong=['b0','b0','b0','b2','b1','b1','b2','b1','b2','b2'][i];});
@@ -2989,7 +2989,7 @@ const CINES=[
  [['stage','MONUMENTAL · SEPTIEMBRE 1994','Monsters of Rock en River Plate: decenas de miles de remeras negras del Oeste copan la cancha antes de Kiss y Sabbath.'],['scene','VÍCTIMAS DEL VACIAMIENTO','Afuera, los matones de valla y los empresarios quieren hacer negocio con la pasión popular (escena de ficción).'],['face','DISCO DE ORO Y DESPEDIDA','En el pico de su convocatoria, Hermética se separa en diciembre de 1994.']],
  [['face','EL AMASIJO DE UN GRAN SUEÑO · 1995','Tras la separación de Hermética, Ricardo funda Almafuerte en 1995: canta y toca el bajo.'],['scene','LLUVIA EN CONSTITUCIÓN','Junto a Claudio "Tano" Marciello y Claudio Cardaci vuelven a empezar desde abajo.'],['stage','MUNDO GUANACO','El metal pesado abraza la milonga, el tango y los versos de José Larralde y Pedro Bonifacio Palacios.']],
  [['road','RUTAS ARGENTINAS · 2001','Entre cacerolazos, corralito bancario y rutas cortadas, el micro de Almafuerte recorre cada provincia.'],['scene','PIEDRA LIBRE EN EL INTERIOR','Mientras los bancos se quedan con el ahorro de los abuelos, los clubes del interior laten con la banda.'],['face','PATRIA Y CAMINO','Donde otros ven crisis y se fugan, la banda sale ruta por ruta a cantarle a su gente.']],
- [['campo','SIERRA DE LA VENTANA · 2006','Lejos del cemento y la histeria porteña, el cantor halla su refugio entre cerros, molinos y eucaliptos.'],['face','TORO Y PAMPA','Le canta a los amigos y al orgullo de su sangre tehuelche.'],['stage','FOGÓN Y GUITARRA','Con el Tano Marciello y Beto Ceriotti, Almafuerte hace tronar el folclore pesado en todo el país.']],
+ [['campo','SIERRA DE LA VENTANA · 2006','Lejos del cemento y la histeria porteña, el cantor halla su refugio entre cerros, molinos y eucaliptos.'],['campo','LA LUZ MALA DE LA PAMPA','En la noche serrana flota la luz mala sobre las osamentas: "Gas fosforescente del hueso; no hay que temerle al fantasma sino al vivo", decía Ricardo.'],['face','TORO Y PAMPA','Le canta a los amigos y al orgullo de su sangre tehuelche.'],['stage','FOGÓN Y GUITARRA','Con el Tano Marciello y Beto Ceriotti, Almafuerte hace tronar el folclore pesado en todo el país.']],
  [['campo','SÁBADO SANTO · PUEBLO DE CAMPO 2012','En "Trillando la fina", un espanto nocturno desvela a los vecinos mientras la prensa amarilla busca carroña.'],['face','MUERE MONSTRUO MUERE','Al monstruo lo atan y lo llevan lejos; al comerciante informador lo sacan del pueblo.'],['scene','CHARLA CON BETO CASELLA','Una charla de amigos: Beto Casella lo entrevistó varias veces.']],
  [['campo','CORONEL SUÁREZ · TIERRA ADENTRO 2023','Coronel Suárez, tierra adentro: ahí vivía, lejos del ruido de la ciudad.'],['face','SÉ VOS, NOMÁS','Un saludo del juego a quien hizo del metal un oficio.'],['stage','UNAS ESTROFAS MÁS','En 2023 recorría el país con la gira "Unas estrofas más". Murió el 24 de octubre de 2023.']]];
 let CINE=null;
@@ -3097,7 +3097,15 @@ function cineBG(kind,t){const g=ctx,sk=LV?LV.skin:'ric1',R=(a,b,w,h,c)=>{g.fillS
     const fx=W*.53,fy=196;
     g.fillStyle='#3a2416';g.fillRect(fx-9,fy,18,3);g.fillRect(fx-7,fy-2,14,3);
     for(let k=0;k<3;k++){g.fillStyle=k===0?'#e2462c':k===1?'#f29b2e':'#f8e27a';g.beginPath();g.arc(fx-3+k*3,fy-3-Math.abs(Math.sin(t*.25+k))*4,4-k*.8,0,7);g.fill();}
-    if(lvl===8){cineActor('ricT',W*.42,198,1,'mate','mate',1.4);cineActor('pelusa',W*.64,198,-1,'stand',null,1.38);}
+    if(lvl===8){
+      cineActor('ricT',W*.42,198,1,'mate','mate',1.4);cineActor('pelusa',W*.64,198,-1,'stand',null,1.38);
+      const lx=W*.82,ly=94+Math.sin(t*.12)*8,rad=14+Math.sin(t*.2)*2;
+      const gl=g.createRadialGradient(lx,ly,2,lx,ly,rad*2);
+      gl.addColorStop(0,'rgba(255,255,240,.95)');gl.addColorStop(.3,'rgba(120,255,220,.7)');gl.addColorStop(.7,'rgba(60,180,240,.35)');gl.addColorStop(1,'rgba(20,80,200,0)');
+      g.fillStyle=gl;g.beginPath();g.arc(lx,ly,rad*2,0,Math.PI*2);g.fill();
+      g.fillStyle='rgba(255,255,255,.9)';g.beginPath();g.arc(lx,ly,5+Math.sin(t*.3)*1.5,0,Math.PI*2);g.fill();
+      g.fillStyle='rgba(180,255,240,.8)';g.beginPath();g.moveTo(lx-6,ly+2);g.quadraticCurveTo(lx,ly-14+Math.sin(t*.4)*4,lx+6,ly+2);g.quadraticCurveTo(lx,ly-5,lx-6,ly+2);g.fill();
+    }
     else if(lvl===9){cineActor('ricT',W*.40,198,1,'stand',null,1.4);cineActor('espanto',W*.70,198,-1,'idle',null,1.35);}
     else{cineActor('ric5',W*.42,198,1,'stand',null,1.42);cineActor('anselmo',W*.64,198,-1,'mate','mate',1.35);}
     return;}
