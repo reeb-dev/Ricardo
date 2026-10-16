@@ -1,6 +1,6 @@
 # Ricardio: Una vida de metal
 
-Beat 'em up arcade de 16 bits que corre en el navegador: 11 capítulos, jefes, cinemáticas, álbum de coleccionables y una banda sonora chiptune sintetizada con WebAudio. Homenaje de fan no oficial.
+Beat 'em up arcade de 16 bits que corre en el navegador: 11 capítulos más un bonus (Ruta 76, homenaje al tema de Almafuerte, se desbloquea al terminar el juego), jefes, cinemáticas, álbum de coleccionables y una banda sonora chiptune sintetizada con WebAudio. Homenaje de fan no oficial.
 
 **Jugar:** https://reeb-dev.github.io/Ricardo/
 

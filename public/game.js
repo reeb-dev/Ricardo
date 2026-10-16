@@ -1050,7 +1050,7 @@ cv.addEventListener('pointerdown',e=>{audioInit();if(AC&&AC.state==='suspended')
   }
   else if(state==='title'){
     if(cy>=198&&cy<=220&&cx>=216&&cx<=468){diffSet(diff+1);sfx('blip');return;}
-    if(cy>=78&&cy<=198&&cx>=218&&cx<=468){const row=Math.floor((cy-78)/11.2);if(row>=0&&row<LEVELS.length){sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}sfx('blip');return;}}
+    if(cy>=80&&cy<=200&&cx>=218&&cx<=468){const row=Math.floor((cy-80)/10);if(row>=0&&row<LEVELS.length){sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}sfx('blip');return;}}
     one.start=1;}
   else if(state==='results'){
     if(cy>=192&&cy<=220&&cx>=W/2+20&&cx<=W/2+160){toTitleMenu();return;}
@@ -1752,16 +1752,20 @@ Object.assign(BARKS,{cana:['¡Documentos contra el capot!','¡A la comisaría a 
   inspector:['¡Habilitación suspendida!','¡Falta el formulario y falta la atención!'],cazador:['¡Ese guanaco vale buena plata!','¡Correte de la mira, paisano!'],newage:['¡Respirá luz violeta y entregá el campo!','¡Tu vibración telúrica me desalinea el chakra!']});
 Object.assign(DIEQ,{cana:'El pelo largo y la guitarra no son delito.',cana2:'La calle es del que va a trabajar.',buchon:'Al alcahuete ni el patrón lo respeta.',cheto:'Menos champagne y más respeto por el que labura.',cheto2:'Con apellido no se compra el sentimiento.',critico:'Escribís de música y nunca subiste a un escenario.',
   revendedor:'Con la ilusión de los pibes no se trafica.',seguridad:'"Tú eres su seguridad": le pegás a tu propio hermano por dos monedas.',barra:'La vereda es del pueblo, no de los matones.',inspector:'Las coimas pedíselas a los corruptos.',cazador:'Al animal del monte no se lo mata por deporte.',newage:'Andá a meditar a Palermo, chanta.'});
-// Pelusa, el amigo de "Pa Pelusa": pelea al lado, tira piedrazos y comparte el mate
+// Pelusa, el amigo de "Pa Pelusa": pelea al lado, tira pizzas y comparte el mate
 function updAlly(n){if(state!=='play'){n.state='idle';return;}const p=player,tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4);
   let tgt=null,d=1e9;for(const e of ents){if(e.team!==1||!hittable(e))continue;const dd=Math.abs(e.x-n.x)+Math.abs(e.y-n.y)*2;if(dd<d){d=dd;tgt=e;}}
-  if(n.state==='kick'){n.t++;if(n.t===10){shots.push({x:n.x+n.face*10,y:n.y,z:36,vx:n.face*6,owner:n,t:0,k:'piedra',back:true,mv:MOVES.gun,life:80});sfx('whoosh');}if(n.t>=20)n.state='idle';return;}
+  if(n.state==='kick'){n.t++;if(n.t===10){shots.push({x:n.x+n.face*10,y:n.y,z:36,vx:n.face*6,owner:n,t:0,k:'pizza',back:true,mv:MOVES.gun,life:80});sfx('whoosh');}if(n.t>=20)n.state='idle';return;}
   const dx=tx-n.x,dy=ty-n.y;if(Math.abs(dx)>6||Math.abs(dy)>3){n.x+=clamp(dx,-2.2,2.2);n.y+=clamp(dy,-1.2,1.2);n.walkPh+=.3;n.state='walk';}else n.state='idle';
   n.mateT=(n.mateT||0)+1;if(n.mateT>1500&&p.hp<p.max*.6){n.mateT=0;items.push({kind:'mate',x:n.x+n.face*14,y:n.y,z:20,vz:2,t:0});say(n,'¡Tomá, un whisky, hermano!',90);}
-  if(tgt){n.face=tgt.x>n.x?1:-1;if(--n.cd<=0&&Math.abs(tgt.y-n.y)<16&&Math.abs(tgt.x-n.x)<220){n.state='kick';n.t=0;n.cd=110+rnd(0,40);if(Math.random()<.3)say(n,['¡Acá estoy, Ricardo!','¡Para lo que necesites!','¡Al amigo no se lo deja solo!','¡Aguante Almafuerte!'][rnd(0,4)|0],70);}}
+  if(tgt){n.face=tgt.x>n.x?1:-1;if(--n.cd<=0&&Math.abs(tgt.y-n.y)<16&&Math.abs(tgt.x-n.x)<220){n.state='kick';n.t=0;n.cd=110+rnd(0,40);if(Math.random()<.3)say(n,['¡Acá estoy, Ricardo!','¡Para lo que necesites!','¡Al amigo no se lo deja solo!','¡Aguante Almafuerte!','¡Pizza para los caretas!'][rnd(0,5)|0],70);}}
   else n.face=p.face;}
-function drawPelota(s,X,Y){ctx.save();ctx.translate(X,Y);ctx.rotate(s.t*.4);ctx.fillStyle=OUT;ctx.beginPath();ctx.ellipse(0,0,5,4,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#8a8790';ctx.beginPath();ctx.ellipse(0,0,4,3,0,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#b8b4bc';ctx.fillRect(-2,-2,2,1);ctx.fillStyle='#5a5860';ctx.fillRect(1,1,2,1);ctx.restore();}
+function drawPizza(s,X,Y){ctx.save();ctx.translate(X,Y);ctx.rotate(s.t*.4);ctx.scale(1,.8);
+  ctx.fillStyle=OUT;ctx.beginPath();ctx.arc(0,0,7,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#c98a3a';ctx.beginPath();ctx.arc(0,0,6,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#f2c84a';ctx.beginPath();ctx.arc(0,0,4.6,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#c8322a';for(const [x,y] of [[-2,-1.5],[1.8,-2],[0,1.5],[-2.6,1.8],[2.8,1.2]]){ctx.beginPath();ctx.arc(x,y,1,0,Math.PI*2);ctx.fill();}
+  ctx.strokeStyle='#c98a3a';ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(0,-4.6);ctx.lineTo(0,4.6);ctx.moveTo(-4.6,0);ctx.lineTo(4.6,0);ctx.stroke();ctx.restore();}
 
 // v10: de vuelta del Abasto arriba del camión del viejo, a los papazos contra los que le gritan "¡papero!"
 let truck=null,truckDone=false;
@@ -2359,6 +2363,69 @@ const MONSTRUO_SCENE={weather:'mist',light:'#b09aa6',
     alambre(2120,2600,176);
     for(const x of [520,1180,1880])lamp(x,70);}
 };
+// BONUS: homenaje al tema "Ruta 76" de Almafuerte, capítulo extra que se desbloquea al terminar el juego. Ficción de fans: sin letra ni hechos reales.
+Object.assign(STY,{
+  motoquero:{scale:1.02,skin:'#d9a67e',hair:'long',hairC:'#1a1212',stache:'#1a1212',top:'#16161a',shirt:'#2a2a32',pants:'#1f2a44',boots:'#0b0b0d',torsoW:11.5,jacket:true,studs:true},
+  peajero:{scale:1.3,skin:'#e0aa84',hair:'cap',hairC:'#1a1612',capC:'#d8a020',stache:'#1a1612',glasses:true,top:'#2c4a3a',shirt:'#e8e2d0',tie:'#c8322a',vest:'#d8a020',pants:'#22262e',boots:'#0f0d0b',torsoW:15,belly:1.2}
+});
+Object.assign(DEFS,{
+  motoquero:E('motoquero',30,1.3,'MOTOQUERO DE LA RUTA',170,{punch:'mpunch',wind:10,reach:28,ai:'hitrun'}),
+  peajero:E('peajero',430,.9,'EL DUEÑO DEL PEAJE',8500,{boss:1,bthrow:'contrato'})
+});
+Object.assign(NAMES,{motoquero:'MOTOQUERO',peajero:'EL DUEÑO DEL PEAJE'});
+Object.assign(BARKS,{motoquero:['¡Esta ruta tiene dueño!','¡Cuarenta pesos o se queda a pie!','¡Rajá de mi carril!'],peajero:['¡Acá se paga hasta el aire!','¡Barrera abajo, nadie pasa!']});
+Object.assign(DIEQ,{motoquero:'La ruta es de quien la camina, no de la pandilla de la curva.',peajero:'El camino es de todos: nadie le pone precio al horizonte.'});
+
+function rutaLevel(){
+  const L=L_STD([[['motoquero','R'],['cuatrero','R']],[['motoquero','L'],['chorro','R']]],[[['cuatrero','R'],['motoquero','L'],['chorro','R']],[['motoquero','R'],['cuatrero','L']]],
+    [[['estibador','R'],['motoquero','L'],['cuatrero','R']],[['chorro','L'],['motoquero','R'],['estibador','R']]],[[['motoquero','L'],['cuatrero','R'],['motoquero','R']],[['estibador','R'],['motoquero','L'],['chorro','R'],['cuatrero','L']]]);
+  return {LW:2800,skin:'ricT',song:'c8',bossSong:'b2',food:'pizza',bonus:true,lmKey:'ruta 76',
+    villains:'Motoqueros de la ruta, cuatreros de peaje y El Dueño del Peaje',title:'RUTA 76',place:'KM 76 · UNA NOCHE CUALQUIERA',hazard:'jabali',
+    card:['CAPÍTULO BONUS: homenaje al tema "Ruta 76" de Almafuerte. La escena es ficción de fans: no cuenta hechos reales ni reproduce la letra.','Una ruta de noche, un camión con la luz baja y una barrera de peaje que nadie sabe quién puso.','Para llegar al amanecer hay que cruzar el kilómetro 76, y el dueño del peaje no deja pasar a nadie gratis.'],
+    npcs:[{kind:'camionero',x:250,y:198,face:1,hold:'mate'}],guns:[[700,'escopeta'],[1700,'bersa']],locks:L,
+    rescue:{kind:'anselmo',x:1420,y:192},
+    props:[[420,'tacho','asado'],[820,'fardo','asado'],[1520,'tacho','asado'],[1940,'fardo','asado'],[2300,'tacho','asado']],pipe:[1460,240],
+    intro:[{w:'camionero',s:'Ricardo, la barrera del kilómetro 76 está bajada y los motoqueros no dejan pasar ni a los camiones.'},{w:'ricT',s:'Sirva el mate, compañero. Yo les explico que la ruta es de todos.'},
+      {w:'camionero',s:'Dicen que el dueño del peaje cobra hasta por mirar el paisaje. Cuidado con las curvas.'},{w:'ricT',s:'Vamos de a poco, con la luz baja y el corazón alto.'}],
+    rescueLines:[{w:'anselmo',s:'¡Gracias, Ricardo! Me ataron al guardarraíl porque no quise pagar el derecho de paso.'},{w:'ricT',s:'Nadie paga por caminar su propia tierra, don Anselmo.'},
+      {w:'anselmo',s:'El dueño está en la cabina del peaje, contando monedas bajo el cartel luminoso.'},{w:'ricT',s:'Entonces vamos a levantar esa barrera.'}],
+    boss:'peajero',summons:[['motoquero','cuatrero'],['motoquero','motoquero']],
+    bossLines:[{w:'peajero',s:'¡Esta es mi ruta! Cada kilómetro tiene precio y cada precio tiene su recargo.'},{w:'ricT',s:'El camino no se compra: se recorre, y se deja libre para el que viene atrás.'},{w:'peajero',s:'¡Motoqueros, cierren el paso y que nadie cruce sin pagar!'}],
+    winLines:[{w:'peajero',s:'¡Está bien, está bien! Levanto la barrera, pero no me rompas la cabina.'},{w:'ricT',s:'Que amanezca para todos. Y la próxima, pizza para el que cruza.'}],
+    winSay:'¡RUTA LIBRE!',quips:['La ruta de noche tiene su propia música.','Más lejos que el kilómetro 76 todavía queda camino.','Pizza caliente y barrera arriba.','El amanecer no cobra peaje.']};
+}
+const RUTA_SCENE={weather:'mist',light:'#8f9ab8',
+  lamps:[{x:520,y:70,r:110,c:'255,214,150'},{x:1280,y:70,r:110,c:'255,214,150',flick:true},{x:2080,y:70,r:110,c:'255,214,150'}],signs:[],
+  far(g){sky(g,['#070914','#141a38','#2a2f5a','#4a4a78'],90);
+    g.fillStyle='rgba(235,235,250,.85)';g.beginPath();g.arc(1120,60,14,0,7);g.fill();
+    g.fillStyle='#1a1e36';g.beginPath();g.moveTo(0,190);for(let x=0;x<=1400;x+=20)g.lineTo(x,142-Math.sin(x*.004)*20-Math.sin(x*.018)*6-hsh(x,5)*4);g.lineTo(1400,190);g.fill();
+    for(let x=30;x<1400;x+=60+hsh(x,2)*50){g.fillStyle='#10142a';g.fillRect(x,150,2,24);g.beginPath();g.ellipse(x+1,150,6,10,0,0,7);g.fill();}
+    g.fillStyle='#0e1226';g.fillRect(0,168,1400,22);
+    for(let x=60;x<1400;x+=140+hsh(x,7)*80){g.fillStyle='rgba(255,70,50,.9)';g.fillRect(x,150+hsh(x,8)*10,2,2);}},
+  bg(K){const {R,T,g,ruta,tree,lamp,poster}=K;
+    ruta(0,2800);
+    // guardarraíl y postes kilométricos
+    R(0,174,2800,3,'#8a8f9a');for(let x=0;x<2800;x+=48){R(x,170,3,12,'#5a5e68');}
+    for(const [x,km] of [[300,'KM 74'],[900,'KM 75'],[1500,'KM 76'],[2200,'KM 77']]){R(x,128,3,48,'#d8d4cc');R(x-12,112,28,18,'#2a5a3a');R(x-11,113,26,16,'#1a3a28');T(km,x+2,118,'#f2f2ea',4,'center');}
+    // estación de servicio con cartel
+    R(560,96,300,80,'#2a2c38');R(560,96,300,6,'#c8322a');R(580,110,260,18,'#1a1c26');T('SERVICIO · PIZZA 24 HS',710,114,'#f2b632',6,'center');
+    R(600,134,60,42,'#e8e2d0');R(606,140,48,26,'#4a6a8a');R(720,134,100,42,'#3a3c48');for(let k=0;k<3;k++){R(730+k*28,142,20,34,'#c8322a');R(733+k*28,146,14,8,'#1a1418');}
+    poster(1000,120,40,28,'#e8e2d0',[['SE VENDE','#c8322a',4],['TALLER','#2a2a32',4],['TEL 76','#2a2a32',3]]);
+    // el peaje: cabina, barrera y cartel luminoso
+    R(2260,92,330,84,'#3a3c48');R(2250,84,350,10,'#c8322a');T('PEAJE · RUTA 76 · TARIFA ÚNICA',2425,100,'#f2d23a',6,'center');
+    R(2300,118,80,58,'#1a1c26');R(2306,124,68,30,'#5a7a9a');R(2306,158,68,6,'#d8a020');
+    R(2440,150,150,4,'#e8e2d0');for(let k=0;k<6;k++)R(2440+k*25,150,12,4,'#c8322a');R(2430,140,10,36,'#8a8f9a');
+    for(const x of [1700,1800,2060,2120])tree(x,176,84,'#14201c',24);
+    for(const x of [520,1280,2080])lamp(x,70);}
+};
+function rutaInsert(){
+  const L=rutaLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
+  LEVELS.push(L);SCENES.push(RUTA_SCENE);
+  DISCOS.push({t:'RUTA 76',c:'#5a6a9a',s:'Bonus: homenaje al tema "Ruta 76" de Almafuerte. Ficción de fans, sin la letra.'});
+  AFICHES.push([[640,'ALMAFUERTE','RUTA 76','TEMA BONUS','#c8322a'],[2000,'PEAJE','TARIFA ÚNICA','NO HAY CAMBIO','#f2d23a']]);
+  DATOS.push(['"Ruta 76" es un tema de Almafuerte. Este capítulo bonus es un homenaje de fans y no reproduce la letra.','Los motoqueros y el peaje son ficción: ninguna persona real aparece en este nivel.','Se desbloquea al terminar el capítulo 11. Si cargás tu MP3 de "Ruta 76" (tecla M), suena en este nivel.']);
+  MODS.push('');CLIMA.push({moth:1,sep:.4,lbl:'RUTA DE NOCHE, KM 76'});
+}
 function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   const L=monstruoLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
   LEVELS.splice(9,0,L);SCENES.splice(9,0,MONSTRUO_SCENE);
@@ -2366,6 +2433,7 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   AFICHES.splice(9,0,[[640,'ALMAFUERTE','TRILLANDO','LA FINA','#6a8a3a'],[2260,'SE VENDE','GALPÓN','CON ESPANTO','#e8e2d0']]);
   DATOS.splice(9,0,['"Trillando la fina" (2012) fue el último disco de estudio de Almafuerte.','"Muere monstruo muere" tiene letra de Iorio y música de Claudio Marciello.','La figura del comerciante informador aparece en "El amasijo de un gran sueño" (Mundo guanaco, 1995): el periodismo que lucra con rumores y rupturas.','En 2012, en las charlas con su amigo Beto Casella, contó que en el campo tenía setecientos pajaritos y que los miraba mientras escuchaba la radio.']);
   MODS.splice(9,0,'');
+  rutaInsert();
   DATOS[0].unshift('En 1978 recibió su primer bajo, un Faim de cuatro cuerdas: el segundo regalo más importante de su vida, después de la guitarra criolla que le dejaron los Reyes en 1972.');
   AFICHES[4].push([1300,'BLACK SABBATH','OBRAS 1992','ABRE HERMÉTICA','#7a5a9a']);AFICHES[5].push([1700,'MONSTERS OF ROCK','KISS Y SABBATH','RIVER 3/9/94','#c8a060']);
   AFICHES[6].push([1500,'ALMAFUERTE','VERSIONA A','LARRALDE','#a87a4a']);AFICHES[10].push([1400,'JOSÉ LARRALDE','Y PATAGONIA','EN LA RADIO','#a87a4a']);
@@ -2374,8 +2442,8 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   DATOS[6].push('Almafuerte también versionó tangos y folclore: Gardel, Troilo y José Larralde.');
   DATOS[10].push('Como solista grabó covers de Black Sabbath, y entre sus colaboradores criollos estuvieron José Larralde y Rubén Patagonia.');
   DATOS[8].push('Su madre, Elda Pedraza, tenía ascendencia tehuelche.');
-  LEVELS.forEach((l,i)=>l.chap='CAPÍTULO '+(i+1));musicByEra();
-  try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');if((sv.unl||1)>=10)unl=Math.max(unl,11);}catch(e){}
+  LEVELS.forEach((l,i)=>l.chap=l.bonus?'CAPÍTULO BONUS':'CAPÍTULO '+(i+1));musicByEra();
+  try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');if((sv.unl||1)>=10)unl=Math.max(unl,(sv.unl||1)>=12?12:11);}catch(e){}
 }
 
 // el loro (y los pájaros) del campo: en 2012 le contó a Beto Casella que tenía muchos pájaros
@@ -2884,7 +2952,7 @@ const SHOWS=[
   r:['Como solista grabó covers, tangos y milongas.','Larralde y Rubén Patagonia, sus referentes criollos.','Su gente lo sigue cantando.'],f:['RICARDO IORIO','TIERRA ADENTRO']}];
 let SHOW=null;
 function showStart(){const S=SHOWS[lvl];if(!S){showEnd();return;}SHOW={S,t:0,i:0,ch:0};state='show';try{song=LV.song;}catch(e){}sfx('win');}
-function showEnd(){SHOW=null;if(lvl<LEVELS.length-1)startChapter(lvl+1,true);else{state='ending';endT=0;song='l5';}}
+function showEnd(){SHOW=null;if(lvl<LEVELS.length-1&&!LEVELS[lvl+1].bonus)startChapter(lvl+1,true);else{state='ending';endT=0;song='l5';}}
 function showUpd(){const Q=SHOW;if(!Q){showEnd();return;}Q.t++;const r=Q.S.r[Q.i]||'';if(Q.ch<r.length)Q.ch+=.8;
   if(press.start){showEnd();return;}
   if(Q.t>40&&(press.atk||press.jump||Q.ch>=r.length+150)){if(Q.ch<r.length)Q.ch=r.length;else{Q.i++;Q.ch=0;if(Q.i>=Q.S.r.length)showEnd();}}}
@@ -3080,7 +3148,7 @@ function lombrizPick(it,f){if(it.kind!=='lombriz')return false;it.gone=true;scor
   dato={s:'En lo de Beto Casella contó que tenía unos setecientos pajaritos en el campo, y hasta una lombriz doméstica.',t:420};say(f,'Esta va con los setecientos pajaritos.',110);return true;}
 
 // v23: Bandas sonoras de Ricardo Iorio en 16-bits (V8, Hermética, Almafuerte)
-function musicByEra(){LEVELS.forEach((L,i)=>{L.song='c'+i;L.bossSong=i<=2?'b0':i<=5?'b1':'b2';});}
+function musicByEra(){LEVELS.forEach((L,i)=>{L.song=SONGS['c'+i]?'c'+i:'c8';L.bossSong=i<=2?'b0':i<=5?'b1':'b2';});}
 
 function stepWorld(){
   timeF++;
@@ -3245,7 +3313,7 @@ function drawEnt(e){if(e.gone||e.state==='ride'||e.state==='hidden')return;if(e.
   if(e.state==='aim'){const k=e.t/46;if(k<1){ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.3+k*.6;const s=10+k*26;ctx.drawImage(glow('#fff2c8'),X+e.face*24-s/2,Y-54*e.st.scale-s/2,s,s);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';}}
   if(e.dazed>0){for(let i=0;i<3;i++){const a=tick*.15+i*2.1;ctx.fillStyle='#f2e6a0';ctx.fillRect(X+Math.cos(a)*12-1,Y-90*e.st.scale+Math.sin(a)*3,3,3);}}}
 function drawShot(s){const X=Math.round(s.x-cam.x),Y=Math.round(s.y-s.z);ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(X,Math.round(s.y),5,2,0,0,Math.PI*2);ctx.fill();
-  if(s.k==='frase'){drawFrase(s,X,Y);return;}if(s.k==='piedra'){drawPelota(s,X,Y);return;}
+  if(s.k==='frase'){drawFrase(s,X,Y);return;}if(s.k==='pizza'){drawPizza(s,X,Y);return;}
   if(s.k==='soda'){const d=Math.sign(s.vx);ctx.fillStyle='rgba(200,235,255,.55)';ctx.fillRect(d>0?X-16:X,Y-1.5,16,3);ctx.fillStyle='#f4fbff';for(let k=0;k<4;k++)ctx.fillRect(X-d*k*4+Math.sin(s.t+k)*1.5,Y-2+Math.cos(s.t*1.3+k)*2,1.5,1.5);return;}
   if(s.k==='bala'||s.k==='perdigon'){const d=Math.sign(s.vx),l=s.k==='bala'?14:8;ctx.fillStyle='rgba(255,220,120,.45)';ctx.fillRect(X-d*l-(d<0?-l:0)*0,Y-1,l*d,2);ctx.fillStyle='#fff6c8';ctx.fillRect(X-1.5,Y-1,3,2);return;}
   ctx.save();ctx.translate(X,Y);ctx.rotate(s.t*.45);const k=s.k||'phone';
@@ -3339,9 +3407,9 @@ function drawTitle(){
   txt(L5.place.split('·').pop().trim(),109,240,'#f2b632',8,'center');
   ctx.save();ctx.translate(342,30);ctx.rotate(-.05);txt('RICARDO IORIO',3,3,'#7a1a14',18,'center');txt('RICARDO IORIO',0,0,'#f2b632',18,'center');ctx.restore();
   ctx.fillStyle='#e2462c';ctx.save();ctx.translate(342,66);ctx.rotate(-.05);ctx.fillRect(-112,-8,224,18);txt('UNA VIDA DE METAL',0,-3,'#fff',9,'center');ctx.restore();
-  LEVELS.forEach((L,i)=>{const y=82+i*11.2,open=i<unl,on=i===sel;
+  LEVELS.forEach((L,i)=>{const y=82+i*10,open=i<unl,on=i===sel;
     if(on){ctx.fillStyle='rgba(226,70,44,.28)';ctx.fillRect(222,y-2,240,11);ctx.fillStyle='#f2b632';ctx.fillRect(222,y-2,3,11);}
-    txt((i+1)+'. '+(open?L.title:'???'),230,y,open?(on?'#fff':'#efe4d2'):'#5a4a5e',5);});
+    txt((L.bonus?'★':(i+1)+'.')+' '+(open?L.title:'???'),230,y,open?(on?'#fff':'#efe4d2'):'#5a4a5e',5);});
   const df=DIFFS[diff];
   ctx.fillStyle='rgba(18,14,24,.92)';ctx.fillRect(222,201,240,17);
   ctx.strokeStyle=df.col;ctx.lineWidth=1.2;ctx.strokeRect(222.5,201.5,239,16);
