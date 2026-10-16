@@ -1,8 +1,8 @@
-const CACHE = 'ricardio-v1';
+const CACHE = 'ricardio-v2';
 const ASSETS = ['./', 'index.html', 'style.css', 'game.js', 'icon.svg', 'manifest.webmanifest'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS.map(a => new Request(a, { cache: 'reload' })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', e => {
@@ -13,11 +13,11 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Network first so updates show up right away; cache is the offline fallback.
+// Network first and always revalidated (no-cache) so updates show up right away; the cache is only the offline fallback.
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, { cache: 'no-cache' })
       .then(r => {
         if (r.ok && new URL(e.request.url).origin === location.origin) {
           const copy = r.clone();
