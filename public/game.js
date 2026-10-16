@@ -1819,6 +1819,8 @@ const BUILTIN_TRACKS = [
   { era: 2, key: 'piedra_libre', name: 'Piedra libre (Almafuerte)', url: 'audio/piedra_libre.mp3' },
   { era: 2, key: 'toro_y_pampa', name: 'Toro y pampa (Almafuerte)', url: 'audio/toro_y_pampa.mp3' },
   { era: 2, key: 'monstruo', name: 'Muere monstruo muere (Almafuerte)', url: 'audio/monstruo.mp3' },
+  { era: 2, key: 'ultimando', name: 'Ultimando (Almafuerte)', url: 'audio/ultimando.mp3' },
+  { era: 2, key: 'gran_reviente', name: 'En el siglo del gran reviente (Almafuerte)', url: 'audio/gran_reviente.mp3' },
   { era: 2, key: 'tierra_adentro', name: 'Tierra adentro (Iorio - Flavio)', url: 'audio/tierra_adentro.mp3' },
   { era: 2, key: 'ruta_76', name: 'Ruta 76 (Almafuerte)', url: 'audio/ruta_76.mp3' },
   { era: 2, key: 'c7', name: 'Sé vos (Almafuerte)', url: 'audio/c7.mp3' },
@@ -1850,8 +1852,8 @@ const LEVEL_TRACK_MAP = [
   { song: 'toro_y_pampa', boss: 'b2' }, // Toro y pampa / Triunfo
   // Cap 10: Muere monstruo muere 2012 (Pueblo de campo, Trillando la fina, Beto Casella)
   { song: 'monstruo', boss: 'el_amasijo' }, // Muere monstruo muere / El Comerciante Informador
-  // Cap 11: Tierra adentro 2023 (Coronel Suárez, raíces pampas y tehuelches, Mandinga)
-  { song: 'tierra_adentro', boss: 'b2' }, // Tierra adentro / Triunfo
+  // Cap 11: Tierra adentro 2023 (Coronel Suárez, combate contra El Loteador y Mandinga)
+  { song: 'ultimando', boss: 'b0' }, // Tierra adentro / Triunfo
   // Cap 12 (Bonus): Ruta 76 (Noche, peaje, KM 76)
   { song: 'ruta_76', boss: 'b2' } // Ruta 76 / Triunfo
 ];
