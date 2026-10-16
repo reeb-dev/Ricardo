@@ -1121,7 +1121,7 @@ const DEFS={
 // Los capítulos de su vida. Los hechos de las tarjetas salen de su biografía y entrevistas; los diálogos homenajean sus canciones y dichos reales.
 const LEVELS=[
  {LW:2600,skin:'ric1',song:'l1',bossSong:'bossRock',food:'mila',chap:'CAPÍTULO 1',truck:true,villains:'Patoteros, hippies caretas, chorros, estibadores y El Capanga del Abasto',title:'EL PAPERO',place:'CASEROS · 1978',hazard:'zorra',
-  card:['Ricardo nació en Ciudadela (1962) y se crió en Caseros, hijo de Alfredo Iorio y Elda Pedraza (de sangre tehuelche).','Desde pibe acompañaba a su viejo a las 4 de la mañana en el camión Ford F-100 a cargar bolsas de papas al Mercado de Abasto.','En el barrio le gritaban "el papero". En julio de 1978, viendo la película de Led Zeppelin en el Cine Ocean, conoció al Chofa Moreno.'],
+  card:['Ricardo nació en Ciudadela (1962) y se crió en Caseros, hijo de Alfredo Iorio y Elda Pedraza (de sangre tehuelche).','Desde pibe ayudaba a su viejo en la verdulería y lo acompañaba al Mercado de Abasto a cargar papas.','Por ese trabajo le decían "el papero". En julio de 1978, viendo la película de Led Zeppelin en un cine de barrio, conoció al Chofa Moreno.'],
   npcs:[{kind:'viejo',x:250,y:198,face:1,hold:'mate'}],
   locks:[{trig:120,L:0,groups:[[['patotero','R'],['patotero','R']],[['patotero2','R'],['chorro','L']]]},
    {trig:640,L:560,groups:[[['patotero','R'],['hippie2','L'],['chorro','R']],[['estibador','R'],['hippie2','L']]]},
@@ -1134,7 +1134,7 @@ const LEVELS=[
    {w:'ric1',s:'Ya voy, viejo. Mirá mis manos: de cargar cajones van a salir los callos para tocar el bajo.'},
    {w:'viejo',s:'Primero el lomo, hijo. Y cuidate del Capanga de la feria: les cobra peaje a los puesteros que vienen del Oeste.'},
    {w:'ric1',s:'Al que madruga para laburar no lo pisa ningún matón. Vamos con el camión.'}],
-  rescueLines:[{w:'chofa',s:'¡Gracias, loco! Salía del Cine Ocean de ver la película de Led Zeppelin y estos caretas me rodearon.'},{w:'ric1',s:'¿Vos también escuchás a Zeppelin y Black Sabbath? La guitarra criolla no se escucha arriba del ruido de un motor.'},
+  rescueLines:[{w:'chofa',s:'¡Gracias, loco! Salía del cine de ver la película de Led Zeppelin y estos caretas me rodearon.'},{w:'ric1',s:'¿Vos también escuchás a Zeppelin y Black Sabbath? La guitarra criolla no se escucha arriba del ruido de un motor.'},
    {w:'chofa',s:'Soy el Chofa Moreno, toco la eléctrica. Armemos una banda pesada y rabiosa, pero cantando en nuestro idioma.'},{w:'ric1',s:'Termino de descargar con mi viejo y armamos V8. En castellano y bien al frente.'}],
   boss:'capanga',summons:[['patotero','patotero2'],['estibador','chorro']],
   bossLines:[{w:'capanga',s:'¿Así que vos sos el hijo de Alfredo, el papero de Caseros? Acá en el Abasto mandamos nosotros: o pagás peaje o no descargás.'},
@@ -1144,7 +1144,7 @@ const LEVELS=[
   winSay:'¡ORGULLO DE LABURANTE!',
   quips:['¿Papero? ¡A mucha honra!','La criolla no se escucha arriba de un motor.','No se debe ser más de lo que uno es, ni menos de lo que uno vale.','Madrugar en el Abasto te enseña quién es quién.','Una papa no se regala: se transpira.','En Caseros se aprende a no agachar la cabeza.']},
  {LW:2600,skin:'ric2',song:'l2',bossSong:'bossRock',food:'chori',chap:'CAPÍTULO 2',villains:'Hippies pacifistas falsos, travoltas de boliche, patovicas y El Productor',title:'LUCHANDO POR EL METAL',place:'OBRAS · BA ROCK 1982',hazard:null,
-  card:['En noviembre de 1982, Pappo exigió que V8 tocara en el festival BA Rock IV: si no iban ellos, Riff no tocaba.','En la conferencia previa en el Hotel Alvear la policía se llevó detenidos a los V8 por su aspecto; un abogado los sacó a tiempo.','En las canchas de Obras, los hippies les tiraron naranjas y silbaron; V8 respondió con "Destrucción" a todo volumen.'],
+  card:['En 1982, Pappo pidió que V8 y Los Violadores tocaran en el BA Rock IV; si no, Riff no iba.','Antes del festival, la policía detuvo a los V8 por su aspecto y los liberó unas dos horas después.','En las canchas de Obras, los hippies les tiraron naranjas y silbaron; V8 respondió con "Destrucción" a todo volumen.'],
   npcs:[{kind:'carpo',x:250,y:200,face:1}],
   locks:[{trig:120,L:0,groups:[[['hippie2','R'],['hippie2','R']],[['hippie','R'],['disco','L']]]},
    {trig:640,L:560,groups:[[['hippie','R'],['hippie2','L'],['disco','R']],[['patovica','R'],['hippie2','L'],['hippie','R']]]},
@@ -1153,7 +1153,7 @@ const LEVELS=[
    {boss:true,groups:[]}],
   rescue:{kind:'heavy',x:1420,y:192},
   props:[[400,'tacho','chori'],[800,'tacho','mate'],[1500,'ampli','chori'],[1900,'ampli','mate'],[2050,'ampli','chori']],pipe:[1460,240],
-  intro:[{w:'ric2',s:'En la gala del Hotel Alvear nos metieron en cana por llevar campera de cuero y tachas.'},{w:'carpo',s:'Tranquilo, Ricardo. Ya les dije a los organizadores: si no toca V8, Riff tampoco toca.'},
+  intro:[{w:'ric2',s:'Antes del festival nos metieron en cana por llevar campera de cuero y tachas.'},{w:'carpo',s:'Tranquilo, Ricardo. Ya les dije a los organizadores: si no toca V8, Riff tampoco toca.'},
    {w:'ric2',s:'Afuera está lleno de hippies pidiendo paz y amor mientras nos tiran cascotes y naranjas.'},
    {w:'carpo',s:'Ustedes suban, enchufen todo al taco y demuestren que las Brigadas Metálicas llegaron para quedarse.'}],
   rescueLines:[{w:'heavy',s:'¡Ricardo! Entre los patovicas y los chetos del festival me querían arrancar las tachas.'},{w:'ric2',s:'Cálmense, pibes, no rompan el lugar, que si no dicen que los pesados somos salvajes.'},
@@ -1166,7 +1166,7 @@ const LEVELS=[
   winSay:'¡BRIGADAS METÁLICAS!',
   quips:['¡Llegaron las Brigadas Metálicas!','Cálmense, no rompan nada, pero no se callen.','Fuerte, crudo y en castellano.','Gracias al Carpo hoy nos escuchan todos.']},
  {LW:2700,skin:'ric3',song:'l3',bossSong:'bossThrash',food:'pizza',chap:'CAPÍTULO 3',villains:'Caretas privatizadores, Doctores de la Ley, tasadores, transas y El Vaciador',title:'ÁCIDO ARGENTINO',place:'EL OESTE · 1991',hazard:'moto',
-  card:['Con Hermética puso en letras la realidad del obrero, el conurbano y el desguace industrial de los años 90.','En 1991 editaron "Ácido argentino" (disco de oro), con himnos como "Gil trabajador", "Memoria de siglos" y "Olvídalo y volverá por más".','En 1992 abrieron para Black Sabbath y para Motörhead en Obras Sanitarias.'],
+  card:['Con Hermética puso en letras la realidad del obrero, el conurbano y el desguace industrial de los años 90.','En 1991 editaron "Ácido argentino", con himnos como "Gil trabajador", "Memoria de siglos" y "Olvídalo y volverá por más".','En 1992 abrieron para Black Sabbath y para Motörhead en Obras Sanitarias.'],
   npcs:[{kind:'vecina',x:250,y:198,face:1}],
   locks:[{trig:120,L:0,groups:[[['careta','R'],['careta','R']],[['movilero','R'],['careta2','L']]]},
    {trig:660,L:580,hazard:true,groups:[[['careta','R'],['careta2','L'],['careta','R']],[['tasador','R'],['patovica','L'],['cipayo','R']]]},
@@ -1191,7 +1191,7 @@ const LEVELS=[
   winSay:'¡MEMORIA DE SIGLOS!',
   quips:['El que labura no es ningún gil trabajador.','Olvídalo y volverá por más.','Doctor de la ley, disfrazado de señor.','Ácido argentino en las venas.']},
  {LW:2800,skin:'ric4',song:'l4',bossSong:'bossFolk',food:'empanada',chap:'CAPÍTULO 4',villains:'Políticos en campaña, bancarios del corralito, cuatreros y El Banquero',title:'PIEDRA LIBRE',place:'RUTAS DEL INTERIOR · 2001',hazard:'camion',
-  card:['Con Almafuerte recorrió las rutas del país profundo junto a Claudio "Tano" Marciello y Bin Valencia.','Fusionó el metal pesado con la milonga, el tango y la poesía de Pedro B. Palacios y José Larralde.','En diciembre de 2001, en pleno estallido y corralito bancario, editó "Piedra libre" y llenó Obras.'],
+  card:['Con Almafuerte recorrió las rutas del país profundo junto a Claudio "Tano" Marciello y Bin Valencia.','Fusionó el metal pesado con la milonga, el tango y la poesía de Pedro B. Palacios y José Larralde.','En 2001, año de crisis y corralito, editó "Piedra libre" y grabó el vivo "En vivo Obras 2001".'],
   npcs:[{kind:'jubilado',x:250,y:198,face:1,hold:'cacerola'}],
   locks:[{trig:120,L:0,groups:[[['bancario','R'],['cuatrero','R']],[['politico','R'],['bancario','L'],['cuatrero','L']]]},
    {trig:660,L:580,groups:[[['cuatrero','R'],['patovica','L'],['bancario','R']],[['cuatrero','R'],['cuatrero','L'],['bancario','R']]]},
@@ -1214,7 +1214,7 @@ const LEVELS=[
   winSay:'¡PIEDRA LIBRE AL PUEBLO!',
   quips:['La tierra y el sudor no se embargan.','Pueblo por pueblo, ruta por ruta.','Las aguas turbias suben esta vez.','Sé vos, hermano: no te dejes comprar.']},
  {LW:2800,skin:'ric5',song:'l5',bossSong:'bossFolk',food:'asado',chap:'CAPÍTULO 5',villains:'Movileros amarillistas, influencers, agrimensores y El Loteador... o Mandinga',final:true,title:'TIERRA ADENTRO',place:'CORONEL SUÁREZ · 2023',hazard:'toro',ride:true,
-  card:['Instalado tierra adentro en la pampa bonaerense, lejos del cemento, donde no llegan ni el delivery ni el correo.','Defendió siempre la amistad real cara a cara, la palabra empeñada y las raíces criollas y tehuelches.','En 2023 recorrió la Argentina con su gira despedida "Unas estrofas más" junto a Chewelche.'],
+  card:['Instalado tierra adentro en la pampa bonaerense, lejos del cemento, donde no llegan ni el delivery ni el correo.','Defendió siempre la amistad real cara a cara, la palabra empeñada y las raíces criollas y tehuelches.','En 2023 estaba de gira por el país con "Unas estrofas más". Murió el 24 de octubre de 2023 en Coronel Suárez, donde vivía.'],
   npcs:[{kind:'anselmo',x:214,y:198,face:-1,hold:'mate'},{kind:'reporter',x:560,y:232,face:-1,hold:'mic',hidden:true}],
   locks:[{trig:120,L:0,groups:[[['movilero','R'],['agrimensor','R']],[['influ','R'],['agrimensor','L']]]},
    {trig:660,L:580,hazard:true,groups:[[['agrimensor','R'],['cuatrero','L'],['movilero','R']],[['influ','R'],['patovica','L'],['agrimensor','R']]]},
@@ -1224,7 +1224,7 @@ const LEVELS=[
   rescue:{kind:'peon',x:1440,y:192},
   props:[[380,'fardo','asado'],[860,'fardo','mate'],[1500,'fardo','asado'],[1990,'fardo','mate'],[2150,'fardo','asado']],pipe:[1480,240],
   intro:[{w:'anselmo',s:'Ricardo, se llenó el camino de ripio de camionetas de televisión, influencers con telefonito y agrimensores.'},
-   {w:'ric5',s:'Yo me vine a vivir tierra adentro para escuchar a los pájaros y la radio AM, no para hacer circo.'},
+   {w:'ric5',s:'Yo me vine a vivir tierra adentro para vivir tranquilo, no para hacer circo.'},
    {w:'movilero',s:'¡Ricardo! ¡Estamos en directo! ¿Qué consejo le dejás a los pibes que te miran?',fx:'reporter'},
    {w:'ric5',s:'Que estudien, que trabajen y que abracen a sus padres hoy: porque el abrazo que no se dio, se llora.'},
    {w:'anselmo',s:'Y atrás viene El Loteador con una topadora: quiere desmontar el monte para hacer un country VIP.'},
@@ -1346,7 +1346,7 @@ const NEWLEVELS={
   winLines:[{w:'comisario',s:'¡Retírense, agentes! ¡Dejen pasar a los de la banda!'},{w:'ricV',s:'Esto recién empieza: muy pronto van a escuchar rugir a V8 en todo el país.'}],
   winSay:'¡V8 NO SE CALLA!',quips:['El pelo largo no es delito.','En los garajes del Oeste nace la historia.','Fuerte, rápido y en nuestro idioma.','Aunque nos lleven mil veces, vamos a seguir tocando.']},
  recoleta88:{LW:2600,skin:'ricH',song:'l3',bossSong:'bossThrash',food:'empanada',villains:'Chetos elitistas, críticos de suplemento y El Curador que desprecia al conurbano',title:'HERMÉTICA',place:'RECOLETA · SAN MARTÍN 1988',hazard:'auto',
-  card:['Tras el fin de V8, en 1987 formó Hermética junto a Claudio O\'Connor, Antonio "Tano" Romano y Fabián Spataro.','El 6 de mayo de 1988 tocaron gratis al aire libre en el Centro Cultural Recoleta, y al día siguiente debutaron en Helloween (San Martín).','Frente al rock de plástico de las radios, Hermética trajo el thrash metal crudo con poesía social argentina.'],
+  card:['Tras el fin de V8, en 1988 formó Hermética junto a Claudio O\'Connor, Antonio "Tano" Romano y Fabián Spataro.','El 6 de mayo de 1988 tocaron gratis al aire libre en el Centro Cultural Recoleta, y al día siguiente debutaron en Helloween (San Martín).','Frente al rock de plástico de las radios, Hermética trajo el thrash metal crudo con poesía social argentina.'],
   npcs:[{kind:'heavy',x:250,y:200,face:1}],
   locks:L_STD([[['cheto','R'],['cheto2','R']],[['critico','R'],['cheto','L']]],[[['cheto','R'],['critico','L'],['cheto2','R']],[['patovica','R'],['cheto','L']]],
    [[['cheto2','R'],['cheto','L'],['critico','R']],[['patovica','L'],['critico','R'],['cheto','R']]],[[['cheto','L'],['patovica','R'],['critico','R']],[['cheto2','R'],['cheto','L'],['critico','R'],['patovica','L']]]),
@@ -1361,7 +1361,7 @@ const NEWLEVELS={
   winLines:[{w:'curador',s:'¡Por favor, no toque mi foulard! ¡Tienen el escenario habilitado!'},{w:'ricH',s:'Hoy suena en Recoleta y mañana en San Martín: ¡somos Hermética!'}],
   winSay:'¡SOMOS HERMÉTICA!',quips:['Del conurbano al centro sin cambiar la cara.','Menos pose de galería y más verdad.','La cultura no es propiedad de cuatro snobs.','Desde el Oeste llega el vendaval.']},
  monumental94:{LW:2600,skin:'ricM',song:'l3',bossSong:'bossThrash',food:'chori',villains:'Revendedores, matones de valla ("Tú eres su seguridad") y El Empresario',title:'VÍCTIMAS DEL VACIAMIENTO',place:'MONUMENTAL · 1994',hazard:'carrito',
-  card:['En 1994 Hermética alcanzó la masividad con "Víctimas del vaciamiento", denunciando la corrupción, el olvido del hospital público y los abusos de poder.','En "Tú eres su seguridad" retrató a los que golpean a los pibes en los recitales por unas monedas del patrón.','El 3 de septiembre de 1994 coparon el estadio de River en el Monsters of Rock junto a Black Sabbath y Kiss.'],
+  card:['En 1994 Hermética alcanzó la masividad con "Víctimas del vaciamiento", denunciando la corrupción, el olvido del hospital público y los abusos de poder.','En "Tú eres su seguridad" retrató a los que golpean a los pibes en los recitales por unas monedas del patrón.','A comienzos de septiembre de 1994 tocaron en el estadio de River, en el Monsters of Rock, junto a Black Sabbath, Kiss y Slayer.'],
   npcs:[{kind:'heavy',x:250,y:200,face:1}],guns:[[1500,'bersa']],
   locks:L_STD([[['revendedor','R'],['revendedor','R']],[['seguridad','R'],['revendedor','L']]],[[['revendedor','R'],['seguridad','L'],['transa','R']],[['seguridad','R'],['revendedor','L']]],
    [[['transa','R'],['revendedor','L'],['seguridad','R']],[['seguridad','L'],['revendedor','R'],['transa','R']]],[[['revendedor','L'],['seguridad','R'],['transa','R']],[['revendedor','R'],['revendedor','L'],['seguridad','R'],['transa','L']]]),
@@ -1391,7 +1391,7 @@ const NEWLEVELS={
   winLines:[{w:'clausurador',s:'¡Sello aprobado! ¡Adentro, adentro, que ya está habilitado!'},{w:'ricA',s:'Entrá, Tano, y pelá esos solos criollos. ¡Bienvenidos al Mundo Guanaco!'}],
   winSay:'¡MUNDO GUANACO!',quips:['Del amasijo de un gran sueño salimos de pie.','Con el Tano Marciello, pesado y bien criollo.','Al que vive de la coima no se le baja la cabeza.','Como decía Almafuerte: no te des por vencido ni aun vencido.']},
  sierras06:{LW:2600,skin:'ricT',song:'l5',bossSong:'bossFolk',food:'asado',villains:'Cazadores furtivos, falsos gurúes new age, lobizones y El Intendente',title:'TORO Y PAMPA',place:'SIERRA DE LA VENTANA · 2006',hazard:'jabali',
-  card:['En 2006 Almafuerte lanzó "Toro y pampa", celebrando la vida campera, las rutas bonaerenses y la memoria de los amigos.','Le dedicó canciones entrañables a sus afectos reales, como "Pa\' Pelusa" y el homenaje a su perro en "Toro y pampa".','Radicado lejos de la histeria urbana, reivindicó al hombre de campo y su sangre criolla e indígena.'],
+  card:['En 2006 Almafuerte lanzó "Toro y pampa", celebrando la vida campera, las rutas bonaerenses y la memoria de los amigos.','Le dedicó canciones a sus afectos, como "Pa\' Pelusa" (de "Trillando la fina", 2012), dedicada a un amigo de Mar del Plata.','Radicado lejos de la histeria urbana, reivindicó al hombre de campo y su sangre criolla e indígena.'],
   npcs:[{kind:'peon',x:250,y:198,face:1,hold:'mate'}],guns:[[700,'escopeta'],[1700,'escopeta']],
   locks:L_STD([[['cazador','R'],['newage','R']],[['agrimensor','R'],['cazador','L']]],[[['newage','R'],['cazador','L'],['reptil','R']],[['cazador','R'],['newage','L']]],
    [[['reptil','R'],['cazador','L'],['newage','R']],[['agrimensor','L'],['reptil','R'],['cazador','R']]],[[['cazador','L'],['reptil','R'],['newage','R']],[['reptil','R'],['cazador','L'],['newage','R'],['agrimensor','L']]]),
@@ -1623,7 +1623,7 @@ function updShots(){for(const s of shots){s.t++;s.x+=s.vx;if(s.vy)s.y+=s.vy;if(s
   shots=shots.filter(s=>!s.gone);}
 function splat(x,y){for(let i=0;i<6;i++)parts.push({k:'deb',x,y,vx:rnd(-2,2),vy:rnd(-3,-.5),t:0,max:30,c:'#d8322a',w:3,h:3});}
 function updLocks(){
-  if(!lock&&lockIdx<LV.locks.length&&player.x>LV.locks[lockIdx].trig&&state==='play'){lock=LV.locks[lockIdx];lock.g=0;lock.mt=0;goT=0;if(lock.alvear)banner={a:'¡SALIDA DEL ALVEAR!',b:'NOVIEMBRE 1982 · LA CANA EN LA PUERTA',t:150,boss:false};
+  if(!lock&&lockIdx<LV.locks.length&&player.x>LV.locks[lockIdx].trig&&state==='play'){lock=LV.locks[lockIdx];lock.g=0;lock.mt=0;goT=0;if(lock.alvear)banner={a:'¡SALIDA DEL ALVEAR!',b:'FINES DE 1982 · LA CANA EN LA PUERTA',t:150,boss:false};
     if(lock.boss){startBossCut();return;}
     lock.groups[0].forEach(([k,s])=>spawnEnemy(k,s));
     if(lock.train&&!train){train={x:lock.L+W+60,t:0};sfx('train');}}
@@ -2244,10 +2244,10 @@ function drawHead2(hx,hy,a,st,fl,sw){sw=sw||0;const H=headSpec(st),sk=fl?'#fff':
 // afiches de época en las paredes y la moto que vio de chico. Todo sale de la investigación (ricardio/investigacion-iorio.md).
 const DISCOS=[
  {t:'ENTRADA DE CINE',c:'#d8c08a',s:'Julio de 1978: en una proyección de una película de Led Zeppelin conoció al Chofa Moreno. Con él armó V8.'},
- {t:'LUCHANDO POR EL METAL',c:'#c8322a',s:'El primer disco de V8 salió en abril de 1983, con Pappo de invitado.'},
+ {t:'LUCHANDO POR EL METAL',c:'#c8322a',s:'El primer disco de V8 salió en 1983, con Pappo de invitado.'},
  {t:'UN PASO MÁS EN LA BATALLA',c:'#e8c83a',s:'El segundo disco de V8. Después vino "El fin de los inicuos" y la banda se separó en 1987.'},
  {t:'HERMÉTICA',c:'#3a8ad8',s:'El primer disco de Hermética salió en 1989. Él tocaba el bajo y escribía las letras.'},
- {t:'ÁCIDO ARGENTINO',c:'#8ad83a',s:'"Ácido argentino" (1991) fue disco de oro en marzo de 1993. Antes salió el EP "Intérpretes", con "Cambalache".'},
+ {t:'ÁCIDO ARGENTINO',c:'#8ad83a',s:'"Ácido argentino" salió en 1991. Antes salió el EP "Intérpretes", con "Cambalache".'},
  {t:'VÍCTIMAS DEL VACIAMIENTO',c:'#d87a3a',s:'El último disco de estudio de Hermética, de 1994. En 1995 salió "Lo último", en vivo en Obras.'},
  {t:'MUNDO GUANACO',c:'#e8e2d0',s:'El primer disco de Almafuerte, de 1995. El nombre de la banda homenajea al poeta Pedro B. Palacios.'},
  {t:'PIEDRA LIBRE',c:'#c8a060',s:'Almafuerte sacó "Piedra libre" en 2001. Antes: "Del entorno", "Almafuerte" y "A fondo blanco".'},
@@ -2311,18 +2311,18 @@ function monstruoLevel(){
     [[['espanto','R'],['informador','L'],['espanto','R']],[['buchon','L'],['informador','R'],['espanto','R']]],[[['informador','L'],['espanto','R'],['informador','R']],[['espanto','R'],['informador','L'],['espanto','R'],['buchon','L']]]);
   return {LW:2600,skin:'ricT',song:'c8',bossSong:'b2',food:'asado',lmKey:'monstruo',
     villains:'Operadores de prensa amarilla, espantos de Sábado Santo y El Comerciante Informador',title:'MUERE MONSTRUO MUERE',place:'UN PUEBLO DE CAMPO · 2012',hazard:'jabali',
-    card:['En 2012 Almafuerte editó su último álbum de estudio, "Trillando la fina", que abre con "Muere monstruo muere" (letra de Iorio, música de Marciello).','Ese mismo año le dio sus históricas entrevistas a su amigo Beto Casella, contando de sus setecientos pajaritos, la radio AM y la vida tierra adentro.','Pero detrás de las notas sinceras siempre merodea "El Comerciante Informador" (de "El amasijo de un gran sueño"), que lucra con el chisme y el espanto.'],
+    card:['En 2012 Almafuerte editó su último álbum de estudio, "Trillando la fina", que abre con "Muere monstruo muere" (letra de Iorio, música de Marciello).','Fue amigo de Beto Casella, que lo entrevistó varias veces en televisión.','Pero detrás de las notas sinceras siempre merodea "El Comerciante Informador" (de "El amasijo de un gran sueño"), que lucra con el chisme y el espanto.'],
     npcs:[{kind:'beto',x:250,y:198,face:1,hold:'mic'}],guns:[[700,'escopeta'],[1700,'escopeta']],locks:L,
     rescue:{kind:'peon',x:1420,y:192},
     props:[[420,'fardo','asado'],[820,'tacho','asado'],[1520,'fardo','asado'],[1940,'tacho','asado'],[2080,'fardo','asado']],pipe:[1460,240],
-    intro:[{w:'beto',s:'Querido Ricardo, vine hasta el campo para charlar como amigos de tus canciones y tus setecientos pajaritos.'},{w:'ricT',s:'Beto querido, con vos hablo de corazón porque venís de frente. El problema son los buitres que nos siguieron por la ruta.'},
+    intro:[{w:'beto',s:'Querido Ricardo, vine hasta el campo para charlar como amigos de tus canciones y de tu vida tierra adentro.'},{w:'ricT',s:'Beto querido, con vos hablo de corazón porque venís de frente. El problema son los buitres que nos siguieron por la ruta.'},
       {w:'beto',s:'Vino "El Comerciante Informador" con sus pasquines amarillos, y encima de madrugada apareció el espanto de Sábado Santo.'},{w:'ricT',s:'Al comerciante informador que rumorea y deshonra lo saco carpiendo, y del monstruo me encargo yo para que el pueblo duerma en paz.'}],
     rescueLines:[{w:'peon',s:'¡Don Ricardo! Los pasquineros del Comerciante Informador me ataron para inventar que en su campo pasan cosas raras.'},{w:'ricT',s:'Viven del amasijo de los sueños ajenos: mienten en los diarios para vender papel y dividir amigos.'},
       {w:'peon',s:'Además soltaron al espanto del galpón para sacarle fotos y asustar a los vecinos en Sábado Santo.'},{w:'ricT',s:'Primero le cierro el quiosco al informador, y al bicho lo llevo lejos y lo encomiendo a Dios.'}],
     boss:'comerciante',summons:[['informador','espanto'],['espanto','informador']],
     bossLines:[{w:'comerciante',s:'¡Soy El Comerciante Informador! Yo invento internas, vendo rumores y convierto tu vida en espectáculo de feria.'},{w:'ricT',s:'Ya te retraté en "El amasijo de un gran sueño": comerciante informador que rumorea y deshonra.'},{w:'comerciante',s:'¡Paparazzis, pasquineros! ¡Suelten al espanto y saquen la foto de tapa!'}],
     winLines:[{w:'comerciante',s:'¡No me rompas los diarios! ¡Me vuelvo a las redacciones de la capital!'},{w:'ricT',s:'Rajá con tus chismes. Y al monstruo me lo llevo atado tierra adentro y que Dios se apiade: acá en el pueblo no asusta más.'}],
-    winSay:'¡MUERE MONSTRUO MUERE!',quips:['Comerciante informador, que rumorea y deshonra.','Tengo setecientos pajaritos y escucho la radio AM.','Sábado Santo de madrugada: ¡muere monstruo muere!','Con mi amigo Beto hablo de frente; a los amarillistas ni cabida.']};
+    winSay:'¡MUERE MONSTRUO MUERE!',quips:['Comerciante informador, que rumorea y deshonra.','Tierra adentro, el tiempo corre distinto.','Sábado Santo de madrugada: ¡muere monstruo muere!','Con mi amigo Beto hablo de frente; a los amarillistas ni cabida.']};
 }
 const MONSTRUO_SCENE={weather:'mist',light:'#b09aa6',
   lamps:[{x:520,y:70,r:110,c:'255,200,140'},{x:1180,y:70,r:110,c:'255,200,140',flick:true},{x:1880,y:70,r:110,c:'255,200,140'}],signs:[],
@@ -2380,7 +2380,7 @@ function rutaLevel(){
     [[['estibador','R'],['motoquero','L'],['cuatrero','R']],[['chorro','L'],['motoquero','R'],['estibador','R']]],[[['motoquero','L'],['cuatrero','R'],['motoquero','R']],[['estibador','R'],['motoquero','L'],['chorro','R'],['cuatrero','L']]]);
   return {LW:2800,skin:'ricT',song:'c8',bossSong:'b2',food:'pizza',bonus:true,lmKey:'ruta 76',
     villains:'Motoqueros de la ruta, cuatreros de peaje y El Dueño del Peaje',title:'RUTA 76',place:'KM 76 · UNA NOCHE CUALQUIERA',hazard:'jabali',
-    card:['CAPÍTULO BONUS: homenaje al tema "Ruta 76" de Almafuerte. La escena es ficción de fans: no cuenta hechos reales ni reproduce la letra.','Una ruta de noche, un camión con la luz baja y una barrera de peaje que nadie sabe quién puso.','Para llegar al amanecer hay que cruzar el kilómetro 76, y el dueño del peaje no deja pasar a nadie gratis.'],
+    card:['CAPÍTULO BONUS: homenaje al tema "Ruta 76" de Almafuerte, del disco "Ultimando" (2003). La escena es ficción de fans: no cuenta hechos reales ni reproduce la letra.','Una ruta de noche, un camión con la luz baja y una barrera de peaje que nadie sabe quién puso.','Para llegar al amanecer hay que cruzar el kilómetro 76, y el dueño del peaje no deja pasar a nadie gratis.'],
     npcs:[{kind:'camionero',x:250,y:198,face:1,hold:'mate'}],guns:[[700,'escopeta'],[1700,'bersa']],locks:L,
     rescue:{kind:'anselmo',x:1420,y:192},
     props:[[420,'tacho','asado'],[820,'fardo','asado'],[1520,'tacho','asado'],[1940,'fardo','asado'],[2300,'tacho','asado']],pipe:[1460,240],
@@ -2420,9 +2420,9 @@ const RUTA_SCENE={weather:'mist',light:'#8f9ab8',
 function rutaInsert(){
   const L=rutaLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
   LEVELS.push(L);SCENES.push(RUTA_SCENE);
-  DISCOS.push({t:'RUTA 76',c:'#5a6a9a',s:'Bonus: homenaje al tema "Ruta 76" de Almafuerte. Ficción de fans, sin la letra.'});
-  AFICHES.push([[640,'ALMAFUERTE','RUTA 76','TEMA BONUS','#c8322a'],[2000,'PEAJE','TARIFA ÚNICA','NO HAY CAMBIO','#f2d23a']]);
-  DATOS.push(['"Ruta 76" es un tema de Almafuerte. Este capítulo bonus es un homenaje de fans y no reproduce la letra.','Los motoqueros y el peaje son ficción: ninguna persona real aparece en este nivel.','Se desbloquea al terminar el capítulo 11. Si cargás tu MP3 de "Ruta 76" (tecla M), suena en este nivel.']);
+  DISCOS.push({t:'RUTA 76',c:'#5a6a9a',s:'Bonus: homenaje al tema "Ruta 76" de Almafuerte, del disco "Ultimando" (2003). Ficción de fans, sin la letra.'});
+  AFICHES.push([[640,'ALMAFUERTE','RUTA 76','ULTIMANDO 2003','#c8322a'],[2000,'PEAJE','TARIFA ÚNICA','NO HAY CAMBIO','#f2d23a']]);
+  DATOS.push(['"Ruta 76" es un tema de Almafuerte, del disco "Ultimando" (2003). Este capítulo bonus es un homenaje de fans y no reproduce la letra.','Los motoqueros y el peaje son ficción: ninguna persona real aparece en este nivel.','Se desbloquea al terminar el capítulo 11. Si cargás tu MP3 de "Ruta 76" (tecla M), suena en este nivel.']);
   MODS.push('');CLIMA.push({moth:1,sep:.4,lbl:'RUTA DE NOCHE, KM 76'});
 }
 function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
@@ -2430,14 +2430,14 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   LEVELS.splice(9,0,L);SCENES.splice(9,0,MONSTRUO_SCENE);
   DISCOS.splice(9,0,{t:'MUERE MONSTRUO MUERE',c:'#7a5a8a',s:'"Muere monstruo muere" abre "Trillando la fina" (2012): letra de Iorio y música de Claudio Marciello.'});
   AFICHES.splice(9,0,[[640,'ALMAFUERTE','TRILLANDO','LA FINA','#6a8a3a'],[2260,'SE VENDE','GALPÓN','CON ESPANTO','#e8e2d0']]);
-  DATOS.splice(9,0,['"Trillando la fina" (2012) fue el último disco de estudio de Almafuerte.','"Muere monstruo muere" tiene letra de Iorio y música de Claudio Marciello.','La figura del comerciante informador aparece en "El amasijo de un gran sueño" (Mundo guanaco, 1995): el periodismo que lucra con rumores y rupturas.','En 2012, en las charlas con su amigo Beto Casella, contó que en el campo tenía setecientos pajaritos y que los miraba mientras escuchaba la radio.']);
+  DATOS.splice(9,0,['"Trillando la fina" (2012) fue el último disco de estudio de Almafuerte.','"Muere monstruo muere" tiene letra de Iorio y música de Claudio Marciello.','La figura del comerciante informador aparece en "El amasijo de un gran sueño" (Mundo guanaco, 1995): el periodismo que lucra con rumores y rupturas.','Beto Casella, su amigo, lo entrevistó varias veces en televisión.']);
   MODS.splice(9,0,'');
   rutaInsert();
-  DATOS[0].unshift('En 1978 recibió su primer bajo, un Faim de cuatro cuerdas: el segundo regalo más importante de su vida, después de la guitarra criolla que le dejaron los Reyes en 1972.');
+  DATOS[0].unshift('Se cuenta que en 1978 tuvo su primer bajo, un Faim de cuatro cuerdas (dato sin confirmar).');
   AFICHES[4].push([1300,'BLACK SABBATH','OBRAS 1992','ABRE HERMÉTICA','#7a5a9a']);AFICHES[5].push([1700,'MONSTERS OF ROCK','KISS Y SABBATH','RIVER 3/9/94','#c8a060']);
   AFICHES[6].push([1500,'ALMAFUERTE','VERSIONA A','LARRALDE','#a87a4a']);AFICHES[10].push([1400,'JOSÉ LARRALDE','Y PATAGONIA','EN LA RADIO','#a87a4a']);
   DATOS[4].push('En 1992, con Ácido argentino, Hermética abrió para Black Sabbath en Obras.');
-  DATOS[5].push('El 3 de septiembre de 1994 tocaron en el Monsters of Rock de River, con Kiss y Black Sabbath.');
+  DATOS[5].push('A comienzos de septiembre de 1994 tocaron en el Monsters of Rock de River, con Kiss y Black Sabbath.');
   DATOS[6].push('Almafuerte también versionó tangos y folclore: Gardel, Troilo y José Larralde.');
   DATOS[10].push('Como solista grabó covers de Black Sabbath, y entre sus colaboradores criollos estuvieron José Larralde y Rubén Patagonia.');
   DATOS[8].push('Su madre, Elda Pedraza, tenía ascendencia tehuelche.');
@@ -2573,7 +2573,7 @@ function landmarkBG(cv,i){const g=cv.getContext('2d');g.save();g.setTransform(RS
   if(i===2){alvearBG(g,R,T,arch);
     // fachada de Obras Sanitarias ("El Templo del Rock") para el BA Rock IV
     const ox=2080;R(ox,54,320,122,'#c8b692');R(ox+12,64,296,24,'#242028');T('ESTADIO OBRAS SANITARIAS · BA ROCK IV',ox+160,72,'#f2b632',5,'center');
-    T('NOVIEMBRE 1982 · RIFF · V8 · LOS VIOLADORES',ox+160,96,'#4a2018',5,'center');
+    T('FINES DE 1982 · RIFF · V8 · LOS VIOLADORES',ox+160,96,'#4a2018',5,'center');
     for(let k=0;k<4;k++){arch(ox+28+k*70,114,44,62,'#2a2422');}
     for(const [bx,t1,c1,c2] of [[760,'BRIGADAS METÁLICAS','#141218','#e8e2d0'],[1830,'V8 · METAL PESADO','#c8322a','#e8e2d0']]){R(bx,96,140,16,c1);T(t1,bx+70,101,c2,5,'center');}}
   baBG(g,R,T,arch,i);g.restore();}
@@ -2598,18 +2598,18 @@ function drawVinilo(s){ctx.rotate(s.t*.4);ctx.scale(1,.8);ctx.fillStyle='rgba(10
   ctx.fillStyle='rgba(255,255,255,.35)';ctx.beginPath();ctx.ellipse(-3.5,-4,3,.9,-.6,0,7);ctx.fill();}
 // un recuerdo de su vida por capítulo (datos de entrevistas y biografías)
 const RECUERDOS=['En el 72 los Reyes me dejaron una criolla. Y este año mi viejo me trajo el Faim de cuatro cuerdas.',
-  'Al Chofa Moreno lo conocí viendo la película de Led Zeppelin en el Cine Ocean. Ahí nació V8.',
-  'En la gala del Hotel Alvear nos llevaron presos por el cuero y las tachas. Igual llegamos a Obras.',
+  'Al Chofa Moreno lo conocí viendo la película de Led Zeppelin en un cine de barrio. Ahí nació V8.',
+  'Antes del festival nos llevaron presos por el cuero y las tachas. Igual llegamos a Obras.',
   'Hermética nació en San Martín con O\'Connor y el Tano Romano. Al principio casi le ponemos Helvética.',
   'Yo componía y tocaba el bajo; cantaba algunos temas como "En las calles de Liniers" o "De los pagos del tiempo".',
   'De repartir papas en Caseros a llenar River con Kiss y Black Sabbath.',
   'Cuando todo parecía roto, con el Tano Marciello levantamos Almafuerte desde abajo.',
-  'Por una lesión en la mano tuve que ir dejando el bajo para pararme al frente con el micrófono.',
+  'Por una tendinitis tuve que ir dejando el bajo para pararme al frente con el micrófono.',
   'Soy un hombre de tierra adentro, no un costero. Acá el silencio te enseña a escucharte.',
-  'Tengo setecientos pajaritos en el campo: los miro mientras fumo y escucho a Larralde en la radio.',
+  'En el campo se escucha otro silencio.',
   'No se debe ser más de lo que uno es, ni menos de lo que uno vale.'];
 const GUINO2={4:'Abrir para Black Sabbath en Obras... ¡quién lo hubiera dicho en el Abasto!',5:'Hoy River es nuestro, y después tocan Kiss y Sabbath.',
-  6:'Un tema de Larralde también es metal, si se toca con el alma.',10:'Poné a Larralde en la radio, que los pajaritos lo escuchan.'};
+  6:'Un tema de Larralde también es metal, si se toca con el alma.',10:'Poné a Larralde en la radio.'};
 
 // v25-v27: capítulo 1. Ricardo no puede seguir hasta que el viejo le trae su primer bajo (un Faim, 1978).
 // El viejo entra caminando desde atrás con el bajo en la mano, se lo da en la escena y Ricardo lo levanta.
@@ -2636,7 +2636,7 @@ function bajoTick(){if(BGIFT.p!==player)BGIFT={p:player,done:false,on:false,v:nu
       _cineOnEnd=()=>{state='play';BGIFT.done=true;MOMENT=0;v.hold=null;player.holdBack='bass';player.state='victory';BGIFT.show=tick+110;player.face=1;sfx('pickup');
         floatTxt(player.x,player.y-100,'¡EL FAIM DE TU VIEJO!','#f2b632');v.state='walkoff';
         banner={a:'¡TU PRIMER BAJO!',b:'EL FAIM QUE TE REGALÓ TU VIEJO · YA PODÉS SEGUIR',t:170};
-        setTimeout(()=>{dato={s:'En 1978 tuvo su primer bajo, un Faim de cuatro cuerdas. Lo contaba como su segundo regalo más importante, después de la guitarra criolla que le dejaron los Reyes en 1972.',t:480};},2900);};
+        setTimeout(()=>{dato={s:'Se cuenta que en 1978 tuvo su primer bajo, un Faim de cuatro cuerdas (dato sin confirmar).',t:480};},2900);};
       state='cine';}}}
 function sinBajo(f){if(f===player&&lvl===0&&!BGIFT.done){say(f,'¡Todavía no tengo bajo!',70);return true;}return false;}
 
@@ -2665,16 +2665,16 @@ function rideTick(p){if(p===player&&BGIFT.show&&tick<BGIFT.show){p.state='victor
 
 // v26: cinemáticas antes de cada capítulo con escenas animadas de los protagonistas reales de su historia
 const CINES=[
- [['scene','CASEROS · 1978','Madrugada helada en el Oeste: Ricardo carga cajones con su padre Alfredo antes de salir para el Abasto.'],['truck','RUMBO AL ABASTO','En el camión Ford F-100 por Rivadavia: cuatro meses hombreando bolsas para comprarse la campera de cuero.'],['face','EL PAPERO Y EL SUEÑO','En la cuadra se burlan gritándole "el papero". Él mira pasar las motos y sueña con un bajo eléctrico y distorsión.']],
- [['scene','CINE OCEAN · CIUDADELA 1979','A la salida de la película de Led Zeppelin conoce al Chofa Moreno, mientras los patrulleros hacen razzias en la calle.'],['stage','EL RUGIDO DE V8','En un garaje de Ciudadela enchufan los amplificadores: nace V8, heavy metal crudo, veloz y en castellano.'],['face','CONTRA LA CENSURA','"El pelo largo y el rock pesado no se negocian": un pibe de rulos que ruge frente al miedo de la época.']],
- [['scene','HOTEL ALVEAR · NOVIEMBRE 1982','En la gala previa al BA Rock IV, la policía se lleva demorados a los V8; Pappo da la cara para que toquen.'],['face','BRIGADAS METÁLICAS','"Si no toca V8, Riff tampoco toca", planta bandera El Carpo. Un abogado los saca de la comisaría justo a tiempo.'],['stage','BA ROCK IV · OBRAS','Frente a una multitud hippie que les tira naranjas y pide paz, V8 sacude el escenario con "Destrucción".']],
+ [['scene','CASEROS · 1978','Madrugada helada en el Oeste: Ricardo carga cajones con su padre Alfredo antes de salir para el Abasto.'],['truck','RUMBO AL ABASTO','En el camión rumbo al Abasto: meses hombreando bolsas de papas con su viejo.'],['face','EL PAPERO Y EL SUEÑO','En el barrio lo conocen como "el papero". Él mira pasar las motos y sueña con un bajo eléctrico y distorsión.']],
+ [['scene','UN CINE DE BARRIO · 1978','A la salida de la película de Led Zeppelin conoce al Chofa Moreno, mientras los patrulleros hacen razzias en la calle.'],['stage','EL RUGIDO DE V8','En un garaje de Ciudadela enchufan los amplificadores: nace V8, heavy metal crudo, veloz y en castellano.'],['face','CONTRA LA CENSURA','"El pelo largo y el rock pesado no se negocian": un pibe de rulos que ruge frente al miedo de la época.']],
+ [['scene','ANTES DEL FESTIVAL · 1982','En la gala previa al BA Rock IV, la policía se lleva demorados a los V8; Pappo da la cara para que toquen.'],['face','BRIGADAS METÁLICAS','"Si no toca V8, Riff tampoco toca", planta bandera El Carpo. Un abogado los saca de la comisaría justo a tiempo.'],['stage','BA ROCK IV · OBRAS','Frente a una multitud hippie que les tira naranjas y pide paz, V8 sacude el escenario con "Destrucción".']],
  [['scene','CENTRO CULTURAL RECOLETA · 6/5/1988','Entre galerías snobs y miradas de desprecio, cuatro pibes del conurbano arman sus equipos al aire libre.'],['stage','PUB HELLOWEEN · SAN MARTÍN 7/5/1988','Con Claudio O\'Connor y el Tano Romano debuta oficialmente Hermética: thrash argentino con conciencia obrera.'],['face','LA H NO ES MUDA','"Hermética: cerrada a la careteada, abierta de par en par para el pibe trabajador del barrio."']],
  [['scene','EL CONURBANO · 1991','Persianas bajas, remates judiciales y despidos: la bronca del taller inspira las letras de "Ácido argentino".'],['stage','OBRAS SANITARIAS · 1992','El sueño del pibe del Abasto se vuelve realidad: Hermética llena Obras y abre para Black Sabbath y Motörhead.'],['face','GIL TRABAJADOR','"Miente el patrón y miente el diario: al que sostiene la patria con sus manos no lo van a quebrar."']],
  [['stage','MONUMENTAL · 3/9/1994','Monsters of Rock en River Plate: decenas de miles de remeras negras del Oeste copan la cancha antes de Kiss y Sabbath.'],['scene','VÍCTIMAS DEL VACIAMIENTO','Afuera, los patovicas de "Tú eres su seguridad" y los empresarios quieren hacer negocio con la pasión popular.'],['face','DISCO DE ORO Y DESPEDIDA','En el pico más alto de convocatoria, las diferencias internas anuncian el final de Hermética a fines del 94.']],
  [['face','EL AMASIJO DE UN GRAN SUEÑO · 1995','Tras el dolor de la ruptura y el veneno de la prensa, Ricardo toma la voz principal y funda Almafuerte.'],['scene','LLUVIA EN CONSTITUCIÓN','Junto al virtuoso Claudio "Tano" Marciello vuelven a empezar desde abajo: Olivos, Arpegios y el templo de Cemento.'],['stage','MUNDO GUANACO','El metal pesado abraza la milonga, el tango y los versos de José Larralde y Pedro Bonifacio Palacios.']],
- [['road','RUTAS ARGENTINAS · DICIEMBRE 2001','Entre cacerolazos, corralito bancario y rutas cortadas, el micro de Almafuerte recorre cada provincia.'],['scene','PIEDRA LIBRE EN EL INTERIOR','Mientras los bancos se quedan con el ahorro de los abuelos, los clubes del interior laten con la banda.'],['face','PATRIA Y CAMINO','"Donde otros ven crisis y se fugan, nosotros salimos ruta por ruta a cantarle a nuestra gente."']],
+ [['road','RUTAS ARGENTINAS · 2001','Entre cacerolazos, corralito bancario y rutas cortadas, el micro de Almafuerte recorre cada provincia.'],['scene','PIEDRA LIBRE EN EL INTERIOR','Mientras los bancos se quedan con el ahorro de los abuelos, los clubes del interior laten con la banda.'],['face','PATRIA Y CAMINO','"Donde otros ven crisis y se fugan, nosotros salimos ruta por ruta a cantarle a nuestra gente."']],
  [['campo','SIERRA DE LA VENTANA · 2006','Lejos del cemento y la histeria porteña, el cantor halla su refugio entre cerros, molinos y eucaliptos.'],['face','TORO Y PAMPA','Con la cresta canosa y camisa campera, le canta a los amigos como el Pelusa y al orgullo de su sangre tehuelche.'],['stage','FOGÓN Y GUITARRA','Con el Tano Marciello, Beto Ceriotti y Bin Valencia, Almafuerte hace tronar el folclore pesado en todo el país.']],
- [['campo','SÁBADO SANTO · PUEBLO DE CAMPO 2012','En "Trillando la fina", un espanto nocturno desvela a los vecinos mientras la prensa amarilla busca carroña.'],['face','MUERE MONSTRUO MUERE','"Al monstruo lo até, lo llevé lejos y lo encomendé a Dios; al comerciante informador lo saqué del pueblo."'],['scene','CHARLA CON BETO CASELLA','Mate y radio AM entre setecientos pajaritos: las reflexiones que quedaron grabadas en la memoria popular.']],
+ [['campo','SÁBADO SANTO · PUEBLO DE CAMPO 2012','En "Trillando la fina", un espanto nocturno desvela a los vecinos mientras la prensa amarilla busca carroña.'],['face','MUERE MONSTRUO MUERE','"Al monstruo lo até, lo llevé lejos y lo encomendé a Dios; al comerciante informador lo saqué del pueblo."'],['scene','CHARLA CON BETO CASELLA','Una charla de amigos: Beto Casella lo entrevistó varias veces.']],
  [['campo','CORONEL SUÁREZ · TIERRA ADENTRO 2023','Donde no llegan ni el delivery ni el correo: su emblemática cresta plateada, guardapolvo de trabajo y bastón.'],['face','SÉ VOS, NOMÁS','"El abrazo que no se dio, se llora. Yo no soy un ídolo: soy un trabajador de la música."'],['stage','UNAS ESTROFAS MÁS','Una última gira federal junto a su gente para quedar inmortalizado en el corazón del metal argentino.']]];
 let CINE=null;
 function cineStart(){const P=CINES[lvl];if(!P)return false;CINE={P,i:0,t:0,ch:0};state='cine';return true;}
@@ -2699,7 +2699,7 @@ function cineBG(kind,t){const g=ctx,sk=LV?LV.skin:'ric1',R=(a,b,w,h,c)=>{g.fillS
     if(CINE&&CINE.gift){cineActor('viejo',W*.36+Math.min(40,t*.35),wy,1,'stand','bass',1.4,ph);cineActor('ric1',W*.58,wy,-1,'stand',null,1.4);}
     else if(lvl===0){g.save();g.translate(W*.28,198);g.scale(1.3,1.3);drawTruck(0,0,false);g.restore();cineActor('viejo',W*.46,wy,1,'mate','mate',1.35);cineActor('ric1',W*.62,wy,-1,'stand',null,1.35);}
     else if(lvl===1){
-      // CINE OCEAN · CIUDADELA 1979 · SALIDA DE LA PELÍCULA DE LED ZEPPELIN
+      // UN CINE DE BARRIO · 1978 · SALIDA DE LA PELÍCULA DE LED ZEPPELIN
       const cx=W*.08,cw=W*.48;
       g.fillStyle='#18121e';g.fillRect(cx,56,cw,78);
       g.fillStyle='#2c1e34';g.fillRect(cx+4,60,cw-8,24);
@@ -2872,7 +2872,7 @@ function drawAlbum(){const g=ctx,i=ALB.pg,L=LEVELS[i],F=albumList(i);g.fillStyle
     if(y+h>H-42){if(col)return;col=1;y=56;}
     const xx=col?W/2+8:26;g.fillStyle=has?'#fff8e4':'#d0c4a4';g.fillRect(xx,y,W/2-34,h);g.strokeStyle=has?'#c8322a':'#a89870';g.lineWidth=1;g.strokeRect(xx,y,W/2-34,h);
     lines.forEach((l,j)=>txt(l,xx+5,y+4+j*8,has?'#2a1a10':'#8a7a5a',5));y+=h+4;});
-  txt('Fuentes: Wikipedia, Los Andes, Sitio Andino, entrevista con Beto Casella (2012) y discografía oficial.',W/2,H-26,'#7a6a4a',4,'center');
+  txt('Fuentes: Wikipedia, Los Andes, Sitio Andino y notas de 2023. Los diálogos son ficción.',W/2,H-26,'#7a6a4a',4,'center');
   txt(coarse?'◀ ▶ PÁGINA · TOCÁ PARA VOLVER':'◀ ▶ PÁGINA · Z O ENTER: VOLVER',W/2,H-11,'#e8dcc0',5,'center');}
 function albumBtn(){try{const b0=LM.btns&&LM.btns[0];if(!b0||document.getElementById('albBtn'))return;const b=b0.cloneNode(false);b.id='albBtn';b.textContent='ÁLBUM';b.addEventListener('click',e=>{e.stopPropagation();audioInit&&audioInit();albumOpen();});b0.parentNode.appendChild(b);LM.btns.push(b);}catch(e){}}
 setTimeout(albumBtn,300);setTimeout(albumBtn,1500);
@@ -2883,7 +2883,7 @@ function runChk(f,ix){if(!MOVES.rush)MOVES.rush={dur:24,a0:4,a1:12,reach:34,dmg:
 // ---- 1982: la salida del Hotel Alvear
 function alvearInit(){if(alvearInit.done)return;alvearInit.done=1;try{trimTalk();auditFix();}catch(e){console.error(e)}try{AFICHES[7].push([1900,'PESO ARGENTO','IORIO Y FLAVIO','1997','#c8a060']);AFICHES[9].push([1700,'AYER DESEO','HOY REALIDAD','IORIO SOLISTA','#7a5a9a']);AFICHES[10].push([2100,'TANGOS Y','MILONGAS','IORIO 2014','#a87a4a']);}catch(e){}const L=LEVELS[2];if(!L)return;
   L.locks[0].groups=[[['cana','R'],['cana','R']],[['cana2','R'],['cana','L'],['cana','R']]];L.locks[0].alvear=1;
-  if(L.intro&&L.intro[0])L.intro[0].s='En la gala del Hotel Alvear nos cayó la cana. El abogado nos sacó, pero en la puerta hay más.';}
+  if(L.intro&&L.intro[0])L.intro[0].s='Antes del festival nos cayó la cana. Nos soltaron, pero en la puerta hay más.';}
 function alvearBG(g,R,T,arch){R(40,30,600,146,'#ddd0b4');for(let y=36;y<176;y+=7)R(40,y,600,1,'#c8bb9c');
   g.fillStyle='#3e4450';g.beginPath();g.moveTo(32,34);g.lineTo(60,6);g.lineTo(620,6);g.lineTo(648,34);g.fill();
   for(let x=80;x<620;x+=60){R(x,12,22,18,'#ddd0b4');arch(x+4,14,14,16,'#2a2e36');}
@@ -2932,7 +2932,7 @@ const SHOWS=[
  {v:'UN CLUB DEL OESTE',d:'1979 · 1981',b:'V8',L:[['Ricardo Iorio','bajo y voz','me'],['Chofa Moreno','guitarra','chofa'],['Gerardo Osemberg','batería','heavy']],set:['Heavy rápido y en castellano'],
   r:['La razzia no pudo con los melenudos.','Primera formación de V8: un trío.','El Chofa y Ricardo, como lo charlaron a la salida del cine.'],f:['V8','METAL PESADO']},
  {v:'OBRAS · BA ROCK IV',d:'NOVIEMBRE DE 1982',b:'V8',L:[['Ricardo Iorio','bajo','me'],['Beto Zamarbide','voz','heavy'],['Osvaldo Civile','guitarra','violero'],['Gustavo Rowek','batería','heavy']],set:['Lo que va a ser Luchando por el metal (1983)'],
-  r:['Recién salidos de la cana en la gala del Alvear.','El público hippie silba; V8 sube el volumen.','Pappo, El Carpo, los apadrinó para que tocaran.'],f:['V8','BRIGADAS METÁLICAS']},
+  r:['Recién salidos de la cana, antes del festival.','El público hippie silba; V8 sube el volumen.','Pappo, El Carpo, los apadrinó para que tocaran.'],f:['V8','BRIGADAS METÁLICAS']},
  {v:'PUB HELLOWEEN · SAN MARTÍN',d:'7 DE MAYO DE 1988',b:'HERMÉTICA',L:[['Ricardo Iorio','bajo','me'],["Claudio O'Connor",'voz','heavy'],['Antonio Romano','guitarra','violero'],['Fabián Spataro','batería','heavy']],set:['El debut oficial de Hermética'],
   r:['El día antes tocaron gratis en el Centro Cultural Recoleta.','La banda casi se llama Helvética.','Nace la banda del laburante y del barrio.'],f:['HERMÉTICA','SAN MARTÍN']},
  {v:'OBRAS SANITARIAS',d:'1992',b:'HERMÉTICA',L:[['Ricardo Iorio','bajo','me'],["Claudio O'Connor",'voz','heavy'],['Antonio Romano','guitarra','violero'],['Claudio Strunz','batería','heavy']],set:['Cambalache (versión)','Temas de Ácido argentino'],
@@ -2942,7 +2942,7 @@ const SHOWS=[
  {v:'BIBLIOTECA POPULAR DE OLIVOS',d:'1995',b:'ALMAFUERTE',L:[['Ricardo Iorio','voz y bajo','me'],['Claudio Marciello','guitarra','violero'],['Claudio Cardacci','batería','heavy']],set:['Temas de Mundo guanaco'],
   r:['Los primeros shows: Olivos y después Arpegios.','El nombre homenajea al poeta Almafuerte.','Después de Hermética, empezar de nuevo.'],f:['ALMAFUERTE','MUNDO GUANACO']},
  {v:'UN CLUB DEL INTERIOR',d:'2001',b:'ALMAFUERTE',L:[['Ricardo Iorio','voz y bajo','me'],['Claudio Marciello','guitarra','violero'],['Bin Valencia','batería','heavy']],set:['Temas de Piedra libre'],
-  r:['Afuera, el corralito. Adentro, el club lleno.','Ese año graban En vivo Obras 2001.','La mano ya le duele: pronto deja el bajo.'],f:['ALMAFUERTE','PIEDRA LIBRE']},
+  r:['Afuera, el corralito. Adentro, el club lleno.','Ese año graban En vivo Obras 2001.','La tendinitis avanza: pronto deja el bajo.'],f:['ALMAFUERTE','PIEDRA LIBRE']},
  {v:'PRESENTACIÓN DE TORO Y PAMPA',d:'2006',b:'ALMAFUERTE',L:[['Ricardo Iorio','voz','me'],['Claudio Marciello','guitarra','violero'],['Beto Ceriotti','bajo','heavy'],['Bin Valencia','batería','heavy']],set:['Toro y pampa'],
   r:['Desde 2003 el bajo lo toca Beto Ceriotti; él canta.','Toro y pampa: campo, asado y amistad.','Del pueblo de la sierra, sin cazadores ni loteadores.'],f:['ALMAFUERTE','TORO Y PAMPA']},
  {v:'CLUB ALL BOYS · MONTE CASTRO',d:'JUNIO DE 2013',b:'ALMAFUERTE',L:[['Ricardo Iorio','voz y bajo','me'],['Claudio Marciello','guitarra','violero'],['Bin Valencia','batería','heavy'],['Beto Zamarbide','invitado: temas de V8','heavy']],set:['Muere monstruo muere','Mamuil Mapu','Temas de V8 con Zamarbide'],
@@ -3084,7 +3084,7 @@ function dedupe(){const D=DATOS;
   show(7,2,'Los abuelos recuperan lo suyo.');show(8,1,'Asado para todos después del show.');show(8,2,'Sin cazadores ni country en la sierra.');
   show(10,2,'Ni El Loteador ni Mandinga: el campo sigue libre.');
   try{delete GUINO2[10];}catch(e){}
-  try{if(ALB&&ALB.got){const canon='En 1978 tuvo su primer bajo, un Faim de cuatro cuerdas. Lo contaba como su segundo regalo más importante, después de la guitarra criolla que le dejaron los Reyes en 1972.';const hadFaim=Object.keys(ALB.got).some(k=>/[Ff]aim|primer bajo/.test(k));let chg=false;for(const k in ALB.got)if(k!==canon&&/[Ff]aim|primer bajo/.test(k)){delete ALB.got[k];chg=true;}if(hadFaim&&!(canon in ALB.got)){ALB.got[canon]=0;chg=true;}if(chg)albumSave();}}catch(e){}
+  try{if(ALB&&ALB.got){const canon='Se cuenta que en 1978 tuvo su primer bajo, un Faim de cuatro cuerdas (dato sin confirmar).';const hadFaim=Object.keys(ALB.got).some(k=>/[Ff]aim|primer bajo/.test(k));let chg=false;for(const k in ALB.got)if(k!==canon&&/[Ff]aim|primer bajo/.test(k)){delete ALB.got[k];chg=true;}if(hadFaim&&!(canon in ALB.got)){ALB.got[canon]=0;chg=true;}if(chg)albumSave();}}catch(e){}
 }
 // recorte de diálogos: mantiene los diálogos completos de hasta 6 líneas junto con sus efectos
 function trimTalk(){for(const L of LEVELS)for(const k of ['intro','rescueLines'])if(L[k]&&L[k].length>6){const n=6;const fx=L[k].filter((l,i)=>i>=n&&l.fx);L[k]=L[k].slice(0,n).concat(fx);}}
@@ -3144,7 +3144,7 @@ function drawPajaros(cx){if(lvl<8)return;for(let f=0;f<2;f++){const T=(tick*.6+f
 function drawLombriz(X,y){ctx.strokeStyle=OUT;ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();for(let k=0;k<=8;k++){const px=X-8+k*2,py=y-3+Math.sin(tick*.2+k*.9)*1.6;k?ctx.lineTo(px,py):ctx.moveTo(px,py);}ctx.stroke();
   ctx.strokeStyle='#d88a8a';ctx.lineWidth=2.6;ctx.stroke();ctx.fillStyle='#141016';ctx.fillRect(X+7,y-4+Math.sin(tick*.2+8*.9)*1.6,1,1);}
 function lombrizPick(it,f){if(it.kind!=='lombriz')return false;it.gone=true;score+=700;sfx('pickup');floatTxt(f.x,f.y-90,'¡LA LOMBRIZ DOMÉSTICA! +700','#f2b4b4');
-  dato={s:'En lo de Beto Casella contó que tenía unos setecientos pajaritos en el campo, y hasta una lombriz doméstica.',t:420};say(f,'Esta va con los setecientos pajaritos.',110);return true;}
+  dato={s:'Beto Casella fue su amigo y lo entrevistó varias veces en televisión.',t:420};say(f,'Esta va por Beto.',110);return true;}
 
 // v23: Bandas sonoras de Ricardo Iorio en 16-bits (V8, Hermética, Almafuerte)
 function musicByEra(){LEVELS.forEach((L,i)=>{L.song=SONGS['c'+i]?'c'+i:'c8';L.bossSong=i<=2?'b0':i<=5?'b1':'b2';});}
@@ -3417,7 +3417,7 @@ function drawTitle(){
   const curS=SONGS[LEVELS[sel]?.song]||SONGS[song];if(curS&&curS.name)txt('♫ 16-BIT: '+curS.name,342,219,'#f2b632',5,'center');if(tick%60<40)txt(coarse?'TOCÁ PARA JUGAR':'ENTER / ESPACIO PARA JUGAR',342,227.5,'#fff',7,'center');
   txt('▲/▼: CAPÍTULO · ◄/►: DIFICULTAD · '+(sel<unl?LEVELS[sel].place:'BLOQUEADO'),342,237.5,'#9b8aa3',4,'center');
   txt(coarse?'BOTÓN ÁLBUM: TUS FIGURITAS':'G: ÁLBUM · DOBLE TOQUE: CORRER',342,243.5,'#f2b632',4,'center');
-  txt('FAN GAME · PARODIA · SIN FINES DE LUCRO',342,249.5,'#7a6a80',4.5,'center');
+  txt('FAN GAME · DIÁLOGOS DE FICCIÓN · SIN FINES DE LUCRO',342,249.5,'#7a6a80',4.5,'center');
   if(hiscore)txt('RÉCORD '+String(hiscore).padStart(7,'0'),342,256.5,'#f2b632',5,'center');}
 function drawCard(){ctx.fillStyle='#0b0910';ctx.fillRect(0,0,W,H);
   const k=Math.min(1,cardT/30);ctx.globalAlpha=k;
@@ -3480,7 +3480,7 @@ function drawTourMap(t){ctx.fillStyle='#0c1020';ctx.fillRect(0,0,W,H);
     txt(s[0],x+s[4],y+s[5],'#efe4d2',4,s[6]);}
   const a=Math.min(1,t/60);ctx.globalAlpha=a;
   txt('GIRA FEDERAL 2023',360,46,'#f2b632',8,'center');txt('UNAS ESTROFAS MÁS',360,62,'#efe4d2',7,'center');
-  const L=['Algunas fechas documentadas','de la gira con Chewelche.','','Del oeste del conurbano','a todo el país, pueblo por pueblo.','','Toda una vida tierra adentro.'];
+  const L=['Algunas fechas documentadas','de la gira "Unas estrofas más".','','Del oeste del conurbano','a todo el país, pueblo por pueblo.','','Toda una vida tierra adentro.'];
   L.forEach((s,i)=>txt(s,360,96+i*13,'#c8bcd0',4,'center'));
   if(t>300&&t%60<40)txt('ENTER PARA SEGUIR',360,236,'#9b8aa3',4,'center');ctx.globalAlpha=1;}
 function drawEnding(){if(endT<420){drawTourMap(endT);return;}const t=endT-420;
@@ -3509,7 +3509,7 @@ function drawEnding(){if(endT<420){drawTourMap(endT);return;}const t=endT-420;
   grade();
   // título y créditos
   if(t>40){const a=Math.min(1,(t-40)/40);ctx.globalAlpha=a;txt('TIERRA ADENTRO',W/2+2,14,'#3a1410',18,'center');txt('TIERRA ADENTRO',W/2,12,'#f2b632',18,'center');ctx.globalAlpha=1;}
-  const lines=['Lejos del ruido, donde la patria se hace con las manos.','Fue quien fue, por ser él mismo, sin pedir permiso.','','Gracias por jugar. Ricardio es una parodia de fans, sin fines de lucro,','en homenaje a la música de Ricardo Iorio: V8, Hermética y Almafuerte.','',total?'TIEMPO TOTAL '+Math.floor(total.t/60)+':'+String(total.t%60).padStart(2,'0')+' · PUNTAJE '+String(score).padStart(7,'0'):''];
+  const lines=['Lejos del ruido, donde la patria se hace con las manos.','Fue quien fue, por ser él mismo, sin pedir permiso.','','Gracias por jugar. Ricardio es una parodia de fans, sin fines de lucro,','en homenaje a la música de Ricardo Iorio: V8, Hermética y Almafuerte.','Los diálogos son ficción. In memoriam: Ricardo Iorio (1962 - 2023).','',total?'TIEMPO TOTAL '+Math.floor(total.t/60)+':'+String(total.t%60).padStart(2,'0')+' · PUNTAJE '+String(score).padStart(7,'0'):''];
   if(t>120){ctx.fillStyle='rgba(8,6,11,.66)';ctx.fillRect(12,38,178,118);let yy=44;lines.forEach((s,i)=>{if(!s){yy+=4;return;}const ls=wrap(s,i<2?28:34);if(t>120+i*20)ls.forEach((l,j)=>txt(l,101,yy+j*7,i<2?'#f2e2b0':'#d8cfc0',i<2?5:4,'center'));yy+=ls.length*7+2;});}
   if(t>260&&tick%60<40)txt(coarse?'TOCÁ PARA VOLVER':'ENTER PARA VOLVER',W/2,256,'#fff',7,'center');}
 
@@ -3542,14 +3542,14 @@ function modDraw(){const m=modOf();if(state!=='play'&&state!=='cut')return;if(!p
 const DATOS=[
  ['De chico vio a un pibe en una moto grande, con campera de cuero y pelo largo, y dijo: yo quiero ser eso.','Su vieja tenía sangre tehuelche, y él lo decía con orgullo.','En San Justo, donde vivían sus abuelos sicilianos, escuchaba a El Reloj.','Iba con el viejo en el camión al Abasto a buscar fruta y verdura.'],
  ['V8 lo fundó con Ricardo "Chofa" Moreno, en 1979.','Antes pasó por bandas como Alarma y Comunión.','Decía que la guitarra criolla no se escuchaba arriba del ruido de un motor.'],
- ['Pappo ponía una condición: si querían a Riff, tenían que llevar también a V8 y a Los Violadores.','En la gala del Alvear los demoró la policía, y un abogado los sacó.','"Luchando por el metal" salió en abril de 1983, con Pappo de invitado.'],
+ ['Pappo ponía una condición: si querían a Riff, tenían que llevar también a V8 y a Los Violadores.','Antes del festival la policía los demoró unas dos horas.','"Luchando por el metal" salió en 1983, con Pappo de invitado.'],
  ['Al principio la banda se iba a llamar Helvética.','El Cubo de Recoleta fue gratis y al aire libre. Al otro día tocaron en el pub Helloween de San Martín.','Él tocaba el bajo y escribía las letras; la voz era de Claudio O\'Connor.'],
- ['En 1990 hicieron playback de "Cambalache" en la tele.','En 1992 tocaron por primera vez en San Francisco, Córdoba, en el estadio El Ceibo.','En 1993 tocaron en un festival dentro de la cárcel de Olmos y él repartió cartones de cigarrillos.'],
- ['El Monsters of Rock en River fue el 3 de septiembre de 1994.','"Ácido argentino" fue disco de oro en marzo de 1993: unas 30 mil copias.','El 12 de noviembre de 1994 recibieron el disco de oro en Obras.'],
+ ['En 1990 editaron el EP "Intérpretes", con una versión de "Cambalache".','En 1992 abrieron para Black Sabbath y Motörhead en Obras.','Hermética se separó en diciembre de 1994; su último show fue el 18 de diciembre en Mar del Plata.'],
+ ['El Monsters of Rock en River fue a comienzos de septiembre de 1994.','"Ácido argentino" salió a fines de 1991.','El 12 de noviembre de 1994 recibieron el disco de oro en Obras.'],
  ['Almafuerte se llama así por el poeta Pedro Bonifacio Palacios, que firmaba con ese nombre.','En 1997 grabó "Peso argento" con el Sr. Flavio de Los Fabulosos Cadillacs.','Los primeros shows de Almafuerte fueron en la Biblioteca Popular de Olivos y en Arpegios.'],
- ['Almafuerte versionaba tangos y folclore: Gardel, Troilo, Larralde.','Le gustaban José Larralde y Rubén Patagonia.','Hacia 2002 dejó el bajo por una lesión en la mano y se dedicó a cantar.'],
- ['En 2008 dijo que vivía "tierra adentro" y que no era un costero.','En 2012 contó en la tele que tenía muchos pájaros y los miraba mientras escuchaba la radio.','Contaba que a su casa no llegaban ni la ambulancia, ni el delivery, ni el correo: todo ripio.'],
- ['En la última etapa tocaba con Chewelche.','La gira "Unas estrofas más" pasó por Trelew, Bariloche, San Francisco y Villa Ballester, entre otros lugares.','Beto Casella, su amigo, lo entrevistó varias veces en la tele.']];
+ ['Almafuerte versionaba tangos y folclore: Gardel, Troilo, Larralde.','Le gustaban José Larralde y Rubén Patagonia.','Hacia 2002 dejó el bajo por una tendinitis y se dedicó a cantar.'],
+ ['En 2008 dijo que vivía "tierra adentro" y que no era un costero.','Beto Casella fue su amigo y lo entrevistó varias veces en televisión.','Contaba que a su casa no llegaban ni la ambulancia, ni el delivery, ni el correo: todo ripio.'],
+ ['En 2023 estaba de gira por el país con "Unas estrofas más".','La gira pasó por Trelew en septiembre de 2023. Iorio murió el 24 de octubre de 2023, en Coronel Suárez.','Beto Casella, su amigo, lo entrevistó varias veces en la tele.']];
 let datoT=0,datoI=0,dato=null;
 function datoTick(){loroTick();discoTick();bajoTick();albumTick();guiTick();if(state!=='play'){return;}datoT++;if(datoT%2400===420){const L=DATOS[lvl]||[];if(L.length){const fs=nextFact(L);if(fs)dato={s:fs,t:420};}}if(dato&&--dato.t<=0)dato=null;}
 function datoDraw(){if(!dato||state!=='play')return;if(banner){return;}const a=Math.min(1,dato.t/30,(420-dato.t)/20)*(bubbles.length?.22:1);ctx.globalAlpha=a;
