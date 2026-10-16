@@ -99,9 +99,9 @@ const STY={
   ric3:{scale:1.16,skin:'#d99c72',top:'#17161a',shirt:'#17161a',pants:'#38485e',boots:'#1a1410',torsoW:13,bareFore:true,tee:'HERMETICA',tattoo:true,
     ior:{hairC:'#140e0a',hi:'#36281c',len:17,beard:'candado',stacheC:'#140e0a',beardC:'#140e0a',brow:'#140e0a'}},
   ric4:{scale:1.18,skin:'#cf9068',top:'#18171b',shirt:'#18171b',pants:'#2a2a30',boots:'#2a1c12',torsoW:14,bareFore:true,vest:'#3a2616',scarf:'#a8241e',tattoo:true,
-    ior:{hairC:'#1a120c',hi:'#4a3a2e',len:18,beard:'full',stacheC:'#120c08',beardC:'#1e1610',brow:'#1a120c',gray:.25}},
+    ior:{hair:'crest',hairC:'#1a120c',hi:'#4a3a2e',len:0,beard:'none',stacheC:'#120c08',beardC:'#1e1610',brow:'#1a120c',gray:.25}},
   ric5:{scale:1.18,skin:'#c98a62',top:'#141317',shirt:'#141317',overall:'#4d5b46',pants:'#4d5b46',boots:'#2a1c12',torsoW:14,bareFore:true,scarf:'#a8241e',belly:true,tattoo:true,
-    ior:{hairC:'#8c8780',hi:'#c4bfb6',len:18,beard:'long',stacheC:'#e2ded6',beardC:'#d2cec6',brow:'#e6e2da',gray:1}},
+    ior:{hair:'crest',hairC:'#8c8780',hi:'#c4bfb6',len:0,beard:'none',stacheC:'#e2ded6',beardC:'#d2cec6',brow:'#e6e2da',gray:1}},
   // vecinos y amigos
   viejo:{scale:1.0,skin:'#c98d66',hair:'boina',hairC:'#6a625a',stache:'#5a5048',top:'#6a5a48',shirt:'#c9c2b0',pants:'#3a3a40',boots:'#2a1a10',torsoW:12,apron:'#d6ceb4'},
   chofa:{scale:1.02,skin:'#e3b089',hair:'long',hairC:'#2a1a10',top:'#2a2a30',shirt:'#c8c2b0',pants:'#34507a',boots:'#111',torsoW:9.5,bell:true},
@@ -163,10 +163,10 @@ Object.assign(STY,{
     ior:{hairC:'#140e0a',hi:'#3a2c20',len:18,beard:'candado',stacheC:'#140e0a',beardC:'#140e0a',brow:'#140e0a'}},
   // 1995: Almafuerte, barba cerrada oscura
   ricA:{scale:1.18,skin:'#d2946a',top:'#16151a',shirt:'#16151a',pants:'#2a2a30',boots:'#2a1c12',torsoW:14,bareFore:true,tattoo:true,scarf:'#2a2a6a',
-    ior:{hairC:'#160f0a',hi:'#3e2e22',len:18,beard:'full',stacheC:'#100a06',beardC:'#1a120c',brow:'#160f0a'}},
+    ior:{hair:'crest',hairC:'#160f0a',hi:'#3e2e22',len:0,beard:'none',stacheC:'#100a06',beardC:'#1a120c',brow:'#160f0a'}},
   // 2006: las sierras, barba larga que encanece, camisa de campo
   ricT:{scale:1.18,skin:'#cc8c64',top:'#5e2a20',shirt:'#5e2a20',pants:'#3a3a32',boots:'#2a1c12',torsoW:14,bareFore:true,tattoo:true,scarf:'#e8e2d0',belly:true,
-    ior:{hairC:'#3a3430',hi:'#7a746c',len:18,beard:'long',stacheC:'#4a443e',beardC:'#5e5850',brow:'#3a3430',gray:.6}},
+    ior:{hair:'crest',hairC:'#3a3430',hi:'#7a746c',len:0,beard:'none',stacheC:'#4a443e',beardC:'#5e5850',brow:'#3a3430',gray:.35}},
   pelusa:{scale:1.06,skin:'#d09468',hair:'long',hairC:'#6a6058',beard:true,beardC:'#7a7068',top:'#2a2a30',shirt:'#c8c2b0',pants:'#34507a',boots:'#2a1c12',torsoW:12,jacket:true,belly:true},
   violero:{scale:1.0,skin:'#e3b089',hair:'long',hairC:'#3a2414',top:'#151418',shirt:'#0d0d10',pants:'#2a2a30',boots:'#111',torsoW:9.5,jacket:true},
   pibe:{scale:.94,skin:'#e6b48e',hair:'long',hairC:'#2a1a10',band:'#e8e2d0',top:'#151418',shirt:'#151418',pants:'#2f4a7a',boots:'#e8e8ea',torsoW:9,tee:true},
@@ -245,18 +245,31 @@ function L(x1,y1,x2,y2,w,c,p){ctx.strokeStyle=p?c:OUTP;ctx.lineWidth=p?w:w+2.4*O
 function Cc(x,y,r,c,p){ctx.fillStyle=p?c:OUTP;ctx.beginPath();ctx.arc(x,y,p?r:r+1.2*OW,0,Math.PI*2);ctx.fill();}
 function poly(pts,c,p,g){g=g||ctx;g.fillStyle=p?c:OUTP;g.beginPath();pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();g.fill();if(!p){g.strokeStyle=OUT;g.lineWidth=2.4;g.lineJoin='round';g.stroke();}}
 function drawIorioHead(st,sk,hc,fl){
-  const I=st.ior,bc=fl?'#fff':(I.beardC||hc),hl=I.len||14;
+  const I=st.ior,bc=fl?'#fff':(I.beardC||hc),hl=I.hair==='crest'?0:(I.len||14);
   for(const p of [0,1]){
-    poly([[-6,-4],[0,-6],[-1,4],[-2.6,hl],[-8.6,hl-1.5],[-9.2,4]],hc,p);           // melena atrás, hasta los hombros
-    Cc(1,.5,6.6,sk,p);                                                                // cara
-    if(I.beard==='full'||I.beard==='long'){const by=I.beard==='long'?18:13;poly([[-.5,1.5],[3,2],[9.2,3.4],[9,by-4.5],[5.8,by+.5],[1.5,by],[-1.5,7]],bc,p);}
-    poly([[-6.8,-1],[-5.4,-6.2],[0,-8.2],[5.2,-7.2],[7.6,-3.4],[4.2,-4.6],[1.6,-3.4],[.8,3],[.4,hl-2],[-3,hl-.8],[-5.4,6]],hc,p); // raya al medio: la melena cae al costado de la cara
+    if(I.hair==='crest'){
+      Cc(-.5,-1,6.2,fl?'#fff':shade(sk,.84),p);
+      poly([[4.6,-5.5],[4,-8.2],[2.2,-12],[0,-12.8],[-2.4,-12.4],[-5,-11],[-7.2,-7.5],[-7.8,-2],[-6.8,1.5],[-5,1.5],[-5.5,-2],[-4.6,-6],[-1,-7.2],[2,-6.5]],hc,p);
+      Cc(1,.5,6.6,sk,p);
+    }else{
+      poly([[-6,-4],[0,-6],[-1,4],[-2.6,hl],[-8.6,hl-1.5],[-9.2,4]],hc,p);           // melena atrás, hasta los hombros
+      Cc(1,.5,6.6,sk,p);                                                                // cara
+      if(I.beard==='full'||I.beard==='long'){const by=I.beard==='long'?18:13;poly([[-.5,1.5],[3,2],[9.2,3.4],[9,by-4.5],[5.8,by+.5],[1.5,by],[-1.5,7]],bc,p);}
+      poly([[-6.8,-1],[-5.4,-6.2],[0,-8.2],[5.2,-7.2],[7.6,-3.4],[4.2,-4.6],[1.6,-3.4],[.8,3],[.4,hl-2],[-3,hl-.8],[-5.4,6]],hc,p); // raya al medio: la melena cae al costado de la cara
+    }
   }
   if(fl)return;
-  {const sw=Math.sin(tick*.08)*.8;ctx.strokeStyle=I.hi;ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(-1,-6);ctx.quadraticCurveTo(.4,4,0+sw,hl-3);ctx.moveTo(-3.5,-5);ctx.quadraticCurveTo(-3,4,-4.5+sw,hl-2);ctx.moveTo(-7,0);ctx.lineTo(-7.6+sw,hl-3);ctx.moveTo(2,-6.6);ctx.lineTo(5.6,-5.4);ctx.stroke();
-   ctx.strokeStyle=shade(hc,.6);ctx.beginPath();ctx.moveTo(-2.2,-4);ctx.quadraticCurveTo(-1.6,5,-2+sw,hl-1);ctx.moveTo(-5.6,-2);ctx.lineTo(-6+sw,hl-1);ctx.stroke();
-   if(I.curly){for(let k=0;k<9;k++){const a=k/8*Math.PI*1.25+Math.PI*.85,r=7.4+(k%2);ctx.fillStyle=k%2?hc:shade(hc,1.35);ctx.beginPath();ctx.arc(-1+Math.cos(a)*r,-1+Math.sin(a)*r*.95,1.9,0,Math.PI*2);ctx.fill();}for(let k=0;k<4;k++){ctx.fillStyle=k%2?I.hi:hc;ctx.beginPath();ctx.arc(-3.5-k*.8+sw,6+k*2.4,1.8,0,Math.PI*2);ctx.fill();}}}
-  if(I.gray){ctx.strokeStyle=I.gray>=1?'#d8d4cc':'#7a746c';ctx.beginPath();ctx.moveTo(1,-6.5);ctx.lineTo(.6,hl-5);if(I.gray>=1){ctx.moveTo(-5.6,-2);ctx.lineTo(-6.4,hl-4);}ctx.stroke();}
+  if(I.hair==='crest'){
+    ctx.strokeStyle=I.hi;ctx.lineWidth=.9;ctx.beginPath();
+    ctx.moveTo(4,-8.2);ctx.lineTo(2.2,-12);ctx.moveTo(1.2,-7.5);ctx.lineTo(0,-12.8);ctx.moveTo(-1.8,-7);ctx.lineTo(-2.4,-12.4);ctx.moveTo(-4,-6.5);ctx.lineTo(-5,-11);ctx.stroke();
+    if(I.gray){ctx.strokeStyle=I.gray>=1?'#ffffff':'#9a948c';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(2.2,-12);ctx.lineTo(0,-12.8);ctx.lineTo(-2.4,-12.4);ctx.stroke();}
+    Cc(-.5,-1,4.5,'rgba(40,25,20,.18)');
+  }else{
+    const sw=Math.sin(tick*.08)*.8;ctx.strokeStyle=I.hi;ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(-1,-6);ctx.quadraticCurveTo(.4,4,0+sw,hl-3);ctx.moveTo(-3.5,-5);ctx.quadraticCurveTo(-3,4,-4.5+sw,hl-2);ctx.moveTo(-7,0);ctx.lineTo(-7.6+sw,hl-3);ctx.moveTo(2,-6.6);ctx.lineTo(5.6,-5.4);ctx.stroke();
+    ctx.strokeStyle=shade(hc,.6);ctx.beginPath();ctx.moveTo(-2.2,-4);ctx.quadraticCurveTo(-1.6,5,-2+sw,hl-1);ctx.moveTo(-5.6,-2);ctx.lineTo(-6+sw,hl-1);ctx.stroke();
+    if(I.curly){for(let k=0;k<9;k++){const a=k/8*Math.PI*1.25+Math.PI*.85,r=7.4+(k%2);ctx.fillStyle=k%2?hc:shade(hc,1.35);ctx.beginPath();ctx.arc(-1+Math.cos(a)*r,-1+Math.sin(a)*r*.95,1.9,0,Math.PI*2);ctx.fill();}for(let k=0;k<4;k++){ctx.fillStyle=k%2?I.hi:hc;ctx.beginPath();ctx.arc(-3.5-k*.8+sw,6+k*2.4,1.8,0,Math.PI*2);ctx.fill();}}
+    if(I.gray){ctx.strokeStyle=I.gray>=1?'#d8d4cc':'#7a746c';ctx.beginPath();ctx.moveTo(1,-6.5);ctx.lineTo(.6,hl-5);if(I.gray>=1){ctx.moveTo(-5.6,-2);ctx.lineTo(-6.4,hl-4);}ctx.stroke();}
+  }
   ctx.fillStyle=I.brow;ctx.fillRect(2.6,-3.3,4.8,1.5);                              // cejas gruesas
   ctx.fillStyle='#efe6da';ctx.fillRect(3.4,-1.5,2.8,1.7);ctx.fillStyle='#3a2414';ctx.fillRect(4.5,-1.5,1.5,1.7);ctx.fillStyle='#0a0606';ctx.fillRect(4.9,-1.2,.8,1.1);ctx.fillStyle=shade(st.skin,.7);ctx.fillRect(3.2,-1.9,3.2,.6);
   ctx.globalAlpha=.35;ctx.fillStyle=shade(st.skin,.6);ctx.beginPath();ctx.ellipse(2.6,2.6,2.2,1.6,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=.25;ctx.fillStyle='#fff3e0';ctx.fillRect(4,-4.6,3,1);ctx.fillRect(7.6,.2,1,1);ctx.globalAlpha=1;
@@ -2030,7 +2043,7 @@ function realFAR(cv){try{const g=cv.getContext('2d'),w=cv.width/RS;g.save();g.se
 // Cuerpo con volumen (miembros con forma y luz), ropa con detalle y cabeza de perfil con rasgos reales.
 const PSK=1.12; // los personajes se ven un poco más grandes en pantalla
 // Ricardio por época, según las fotos: V8 y Hermética de melena larga ondulada y cara afeitada,
-// Almafuerte de pelo corto y remera, 2006 rapado al costado, 2022-23 canoso peinado para atrás, guardapolvo oscuro y bastón.
+// y desde Mundo Guanaco (Almafuerte 1995) hasta el final: corte cresta (mohawk) rapado a los costados, canosa y plateada con los años.
 (function(){const A=(k,o)=>{if(STY[k])Object.assign(STY[k],o);};
   A('ric1',{ior:{hair:'long',hairC:'#1c130d',hi:'#4a3626',len:9,beard:'none',brow:'#1c130d'},top:'#18171b',shirt:'#18171b',bareFore:true,apron:null,pants:'#2e3a52',boots:'#d8d2c2',sneak:true});
   A('ricV',{ior:{hair:'long',curly:true,hairC:'#1a120c',hi:'#4a3624',len:13,beard:'none',brow:'#1a120c'},top:'#141317',shirt:'#222228',boots:'#e2dccb',sneak:true,pants:'#2e3a52',wrist:'#141216',studs:true});
@@ -2038,10 +2051,10 @@ const PSK=1.12; // los personajes se ven un poco más grandes en pantalla
   A('ricH',{pants:'#1c1b20',ior:{hair:'long',hairC:'#130c08',hi:'#3e2c1e',len:19,beard:'none',brow:'#130c08'},shirt:'#18181c',leather:true,logo:'H',wrist:'#141216'});
   A('ric3',{pants:'#1c1b20',ior:{hair:'long',hairC:'#140e0a',hi:'#3e2e22',len:23,beard:'none',brow:'#140e0a',stub:.3},tattoo:true,logo:'H',wrist:'#141216'});
   A('ricM',{pants:'#1c1b20',ior:{hair:'long',hairC:'#140e0a',hi:'#3e2e22',len:23,beard:'none',brow:'#140e0a',stub:.35},wrist:'#141216',logo:'H',tattoo:true});
-  A('ricA',{pants:'#1c1b20',ior:{hair:'buzz',hairC:'#18110c',hi:'#3c2c20',len:0,beard:'none',brow:'#18110c',jaw:.45,stub:.35},torsoW:15,scarf:null,wrist:'#141216',logo:'pampa',tattoo:true});
-  A('ric4',{ior:{hair:'short',hairC:'#1a130e',hi:'#46362a',len:0,beard:'none',brow:'#1a130e',jaw:.55,stub:.38},top:'#141317',shirt:'#141317',torsoW:15,vest:null,scarf:null,wrist:'#141216',pants:'#2c3040',logo:'pampa'});
-  A('ricT',{pants:'#1c1b20',ior:{hair:'crest',hairC:'#2a2420',hi:'#6a625a',len:0,beard:'none',brow:'#2a2420',gray:.35,jaw:.75,stub:.42},top:'#121114',shirt:'#1e1d22',buttons:true,rastra:true,jacket:false,bareFore:false,scarf:null,torsoW:15});
-  A('ric5',{ior:{hair:'swept',hairC:'#b8b3a8',hi:'#ece8e0',len:5,beard:'none',brow:'#5a554e',gray:1,jaw:1,stub:.38,stubC:'#b0aaa0'},top:'#1b1a20',shirt:'#141318',coat:true,rastra:true,overall:null,pants:'#222128',boots:'#121114',bareFore:false,scarf:null,staff:true,torsoW:15.5});
+  A('ricA',{pants:'#1c1b20',ior:{hair:'crest',hairC:'#18110c',hi:'#3c2c20',len:0,beard:'none',brow:'#18110c',jaw:.45,stub:.35},torsoW:15,scarf:null,wrist:'#141216',logo:'pampa',tattoo:true});
+  A('ric4',{ior:{hair:'crest',hairC:'#1a130e',hi:'#46362a',len:0,beard:'none',brow:'#1a130e',jaw:.55,stub:.38,gray:.2},top:'#141317',shirt:'#141317',torsoW:15,vest:null,scarf:null,wrist:'#141216',pants:'#2c3040',logo:'pampa'});
+  A('ricT',{pants:'#1c1b20',ior:{hair:'crest',hairC:'#2a2420',hi:'#6a625a',len:0,beard:'none',brow:'#2a2420',gray:.4,jaw:.75,stub:.42},top:'#121114',shirt:'#1e1d22',buttons:true,rastra:true,jacket:false,bareFore:false,scarf:null,torsoW:15});
+  A('ric5',{ior:{hair:'crest',hairC:'#8a847e',hi:'#ece8e0',len:0,beard:'none',brow:'#5a554e',gray:1,jaw:1,stub:.38,stubC:'#b0aaa0'},top:'#1b1a20',shirt:'#141318',coat:true,rastra:true,overall:null,pants:'#222128',boots:'#121114',bareFore:false,scarf:null,staff:true,torsoW:15.5});
   // físico por época (de las fotos): flaco de pibe, se ensancha en los 90, panza y espalda ancha de grande
   const BODY={ric1:[10.5,.84,0],ricV:[11,.87,0],ric2:[12,.93,0],ricH:[12.8,.98,0],ric3:[13.6,1.03,0],ricM:[14.2,1.06,.15],ricA:[14.8,1.1,.3],ric4:[15.4,1.13,.5],ricT:[16,1.15,.75],ric5:[16.6,1.14,1.05]};
   for(const k in BODY){const [w,b,p]=BODY[k];A(k,{torsoW:w,bulk:b,belly:p});}
@@ -2254,10 +2267,23 @@ function drawHead2(hx,hy,a,st,fl,sw){sw=sw||0;const H=headSpec(st),sk=fl?'#fff':
       ctx.fillStyle=hc;ctx.fillRect(.2,-1.2,1.2,3.2);}}
   else if(H.hair==='buzz'){const p=P2([[5.6,-5.8],[3.6,-9.4,-1,-9.4],[-6.8,-8.8,-7.4,-3.4],[-7.4,1.4,-5.6,2.8],[-3,2.6],[-1.4,-.4],[.6,-1],[1.8,-4.2]]);INK([p],fl?'#fff':'rgba(28,20,16,.68)',.5);
     if(!fl){ctx.fillStyle='rgba(18,12,8,.55)';for(let k=0;k<28;k++)ctx.fillRect(-6.4+(k*2.7)%11.4,-8.6+((k*1.9)%10),.45,.45);}}
-  else if(H.hair==='crest'){const sides=P2([[5.4,-5.6],[3,-8.8,-1,-8.8],[-6.6,-8.4,-7.4,-3.4],[-7.4,1.4,-5.6,2.8],[-3,2.6],[-1.4,-.4],[.6,-1],[1.6,-4]]);
-    INK([sides],fl?'#fff':'rgba('+(H.gray?'125,120,112':'40,32,28')+',.62)',.4);
-    const top=P2([[5.8,-5.8],[4.8,-10.8,-.4,-11],[-5.6,-10.8,-7.2,-6.4],[-5.4,-6.0],[-1,-8.0],[3.6,-7.2]]);HP(top,LG(0,-11,0,-6,hc,1.4,.7));
-    if(!fl)for(let k=0;k<6;k++)S(k%2?hi:shade(hc,.6),.38,[4.6-k*1.6,-7,3.6-k*1.8,-10.6,2-k*1.8,-9.6]);}
+  else if(H.hair==='crest'){
+    const sides=P2([[5.4,-5.6],[3,-8.8,-1,-8.8],[-6.6,-8.4,-7.4,-3.4],[-7.4,1.4,-5.6,2.8],[-3,2.6],[-1.4,-.4],[.6,-1],[1.6,-4]]);
+    INK([sides],fl?'#fff':'rgba('+(H.gray?'110,105,98':'36,28,24')+',.58)',.4);
+    const top=P2([[6.2,-5.6],[5.8,-8.8],[4.6,-12.4],[3.2,-10.8],[1.8,-13.2],[.2,-11.4],[-1.4,-13.0],[-3.2,-11.2],[-5.2,-12.4],[-6.8,-9.2],[-7.6,-6.2],[-7.2,-2.5],[-5.8,-2.2],[-5.2,-5.8],[-1.4,-8.2],[3.6,-7.4]]);
+    HP(top,LG(0,-13,0,-5,hc,1.4,.65));
+    if(!fl){
+      const tipCol=H.gray>=1?'#f0ece4':H.gray?'#a8a29a':hi;
+      for(let k=0;k<8;k++){
+        const px=4.8-k*1.5,py=-7.2+k*.3,tx=4.0-k*1.6,ty=-11.8+(k%2?-.8:.4);
+        S(k%2?tipCol:shade(hc,.6),.42,[px,py,tx+.6,ty+1.6,tx,ty]);
+      }
+      if(H.gray){
+        ctx.strokeStyle=H.gray>=1?'#ffffff':'rgba(210,205,198,.85)';ctx.lineWidth=.35;
+        ctx.beginPath();ctx.moveTo(4.6,-12.4);ctx.lineTo(1.8,-13.2);ctx.lineTo(-1.4,-13.0);ctx.lineTo(-5.2,-12.4);ctx.stroke();
+      }
+    }
+  }
   else if(H.hair==='swept'){const p=P2([[4.6,-6.8],[3.8,-10.6,-1.4,-10.4],[-6.8,-9.8,-8.6,-4.8],[-9.0,.6,-7.8,4.0],[-5.6,4.8],[-3.2,2.8],[-1.6,-.6],[.4,-1.4],[.6,-4],[2.8,-5.6]]);
     HP(p,LG(2,-10,-6,4,hc,1.22,.68));
     if(!fl){for(let k=0;k<8;k++)S(k%2?'#f4f0e8':shade(hc,.72),.34,[4.4-k*.3,-7.4+k*.55,-1-k*.4,-10.2+k*1.15,-7.6+k*.1,-4+k*1.15]);ctx.fillStyle=shade(hc,.82);ctx.fillRect(-.3,-1.4,1.2,3.2);}}
@@ -2649,7 +2675,7 @@ const CINES=[
  [['road','RUTAS ARGENTINAS · DICIEMBRE 2001','Entre cacerolazos, corralito bancario y rutas cortadas, el micro de Almafuerte recorre cada provincia.'],['scene','PIEDRA LIBRE EN EL INTERIOR','Mientras los bancos se quedan con el ahorro de los abuelos, los clubes del interior laten con la banda.'],['face','PATRIA Y CAMINO','"Donde otros ven crisis y se fugan, nosotros salimos ruta por ruta a cantarle a nuestra gente."']],
  [['campo','SIERRA DE LA VENTANA · 2006','Lejos del cemento y la histeria porteña, el cantor halla su refugio entre cerros, molinos y eucaliptos.'],['face','TORO Y PAMPA','Con la cresta canosa y camisa campera, le canta a los amigos como el Pelusa y al orgullo de su sangre tehuelche.'],['stage','FOGÓN Y GUITARRA','Con el Tano Marciello, Beto Ceriotti y Bin Valencia, Almafuerte hace tronar el folclore pesado en todo el país.']],
  [['campo','SÁBADO SANTO · PUEBLO DE CAMPO 2012','En "Trillando la fina", un espanto nocturno desvela a los vecinos mientras la prensa amarilla busca carroña.'],['face','MUERE MONSTRUO MUERE','"Al monstruo lo até, lo llevé lejos y lo encomendé a Dios; al comerciante informador lo saqué del pueblo."'],['scene','CHARLA CON BETO CASELLA','Mate y radio AM entre setecientos pajaritos: las reflexiones que quedaron grabadas en la memoria popular.']],
- [['campo','CORONEL SUÁREZ · TIERRA ADENTRO 2023','Donde no llegan ni el delivery ni el correo: pelo blanco peinado hacia atrás, guardapolvo de trabajo y bastón.'],['face','SÉ VOS, NOMÁS','"El abrazo que no se dio, se llora. Yo no soy un ídolo: soy un trabajador de la música."'],['stage','UNAS ESTROFAS MÁS','Una última gira federal junto a su gente para quedar inmortalizado en el corazón del metal argentino.']]];
+ [['campo','CORONEL SUÁREZ · TIERRA ADENTRO 2023','Donde no llegan ni el delivery ni el correo: su emblemática cresta plateada, guardapolvo de trabajo y bastón.'],['face','SÉ VOS, NOMÁS','"El abrazo que no se dio, se llora. Yo no soy un ídolo: soy un trabajador de la música."'],['stage','UNAS ESTROFAS MÁS','Una última gira federal junto a su gente para quedar inmortalizado en el corazón del metal argentino.']]];
 let CINE=null;
 function cineStart(){const P=CINES[lvl];if(!P)return false;CINE={P,i:0,t:0,ch:0};state='cine';return true;}
 function cineEnd(){CINE=null;if(_cineOnEnd){const cb=_cineOnEnd;_cineOnEnd=null;cb();}else{state='card';cardT=0;}}
@@ -3144,8 +3170,19 @@ function drawIorioPortrait(st,x,y,sz){const I=st.ior,g=ctx,u=sz/40,sk=st.skin;g.
   else if(hair==='buzz'){g.save();P([[20-W-.2,13],[20-W+1,6.4,20,4.2],[20+W-1,6.4,20+W+.2,13],[20+W-1,10,20+W-3,9.4],[20,8.2],[20-W+3,9.4],[20-W+1,10,20-W-.2,13]],shade(hc,1.1));g.globalAlpha=.5;for(let k=0;k<70;k++){g.fillStyle=k%2?hd:hi;g.fillRect(20+(hsh(k,21)-.5)*2*W*.9,4.6+hsh(k,22)*5.6,.3,.3);}g.restore();}
   else if(hair==='short'){P([[20-W-.4,14],[20-W,5.6,20,3.4],[20+W,5.6,20+W+.4,14],[20+W-1.2,9.6,20+W-3.2,8.8],[22,8.4],[20,9.4],[16,8.4],[20-W+3.2,8.8],[20-W+1.2,9.6,20-W-.4,14]],hc);
     for(let k=0;k<8;k++)strands([[13+k*2,8.6],[14+k*2,5]],k%2?hi:hd,.25);}
-  else if(hair==='crest'){g.save();g.globalAlpha=.55;P([[20-W-.2,13],[20-W+1,6.6,20,4.6],[20+W-1,6.6,20+W+.2,13],[20,9]],shade(I.gray?'#7a7470':hc,1.1));g.restore();
-    P([[17.4,9.6],[16.8,3],[18.4,-1.6],[20,-2.4],[21.6,-1.6],[23.2,3],[22.6,9.6]],hc);for(let k=0;k<5;k++)strands([[17.8+k*1.1,9],[18+k*1.1,-1]],k%2?hi:hd,.3);}
+  else if(hair==='crest'){
+    g.save();
+    P([[20-W-.2,13.4],[20-W+.6,6.8,20,4.8],[20+W-.6,6.8,20+W+.2,13.4],[20+W-1.6,9.6,20,8.8],[20-W+1.6,9.6,20-W-.2,13.4]],shade(I.gray?'#6e6862':hc,1));
+    g.globalAlpha=.42;
+    for(let k=0;k<55;k++){g.fillStyle=I.gray?(k%2?'#b0aaa0':'#3a3430'):(k%2?'#2e2018':'#140c08');g.fillRect(20+(hsh(k,41)-.5)*2*W*.9,6+hsh(k,42)*7,.3,.3);}
+    g.restore();
+    const gr=g.createLinearGradient(0,-3.5,0,9);gr.addColorStop(0,I.gray>=1?'#ece8e0':I.gray?'#9c948c':hi);gr.addColorStop(.35,hc);gr.addColorStop(1,hd);
+    P([[16.2,8.8],[15.8,5.2],[16.6,2.1],[17.0,-1.2],[18.0,1.2],[18.8,-2.8],[20.0,-3.6],[21.2,-2.8],[22.0,1.2],[23.0,-1.2],[23.4,2.1],[24.2,5.2],[23.8,8.8],[22.4,8.0],[20.0,8.4],[17.6,8.0]],gr);
+    const crTip=I.gray>=1?'#f8f6f0':I.gray?'#c8c2b8':hi;
+    for(let k=0;k<11;k++){const t=k/10,x0=16.6+t*6.8,x1=17.2+t*5.6+(Math.sin(k*1.8)*.4),y1=-3.2+Math.abs(t-.5)*4.2+(k%2?-.4:.3);
+      strands([[x0,8.2],[x0+(t-.5)*1.2,4.2],[x1,y1]],k%2?crTip:shade(hc,.7),.28);}
+    if(I.gray){const silv=I.gray>=1?'#ffffff':'rgba(235,230,222,.9)';for(let k=0;k<6;k++){const sx=17.2+k*1.1,sy=-2.8+Math.abs(k-2.5)*1.2;strands([[sx,2.5],[sx+.2,sy]],silv,.32);}}
+  }
   else if(hair==='swept'){const gr=g.createLinearGradient(0,0,0,12);gr.addColorStop(0,hi);gr.addColorStop(1,hc);
     P([[20-W-.6,15],[20-W-1.2,6,15,1.6],[20,.8],[25,1.6],[20+W+1.2,6,20+W+.6,15],[20+W-1,9.6,20+W-2.6,8.4],[24,6.6],[20,6.2],[16,6.6],[20-W+2.6,8.4],[20-W+1,9.6,20-W-.6,15]],gr);
     for(let k=0;k<9;k++)strands([[13+k*1.8,7],[14+k*1.6,2.6],[16+k*1.2,1.2]],k%2?'#f0ece4':shade(hc,.75),.28);
@@ -3827,10 +3864,14 @@ function hurtVig(){if(hurtV<=0)return;const a=hurtV/16;hurtV--;const g=ctx.creat
 // Desde Almafuerte se ensancha: cara llena, cuello grueso, papada y cachetes caídos de grande.
 (()=>{const E={ric1:{thin:.95,fat:0,wave:.55,vol:.35,len:9},ricV:{thin:.95,fat:0,wave:1.3,vol:1.15,len:12,curly:true},ric2:{thin:.85,fat:0,wave:1.35,vol:1.3,len:15,curly:true},
   ricH:{thin:.75,fat:0,wave:.9,vol:.85,len:18,curly:false},ric3:{thin:.6,fat:.05,wave:.9,vol:.9,len:21},ricM:{thin:.5,fat:.1,wave:.85,vol:.95,len:21},
-  ricA:{thin:0,fat:.4},ric4:{thin:0,fat:.55},ricT:{thin:0,fat:.8},ric5:{thin:0,fat:1}};
+  ricA:{hair:'crest',thin:0,fat:.4,len:0},ric4:{hair:'crest',thin:0,fat:.55,len:0},ricT:{hair:'crest',thin:0,fat:.8,len:0},ric5:{hair:'crest',thin:0,fat:1,len:0}};
   for(const k in E)if(STY[k]&&STY[k].ior)Object.assign(STY[k].ior,E[k]);
-  // la cresta de 2006 era corta y peinada para arriba, con canas a los costados
-  if(STY.ricT)Object.assign(STY.ricT.ior,{hairC:'#2e2824',hi:'#7a7068',gray:.35});})();
+  // siempre el corte cresta (mohawk) desde Mundo Guanaco (Almafuerte 1995) hasta el final
+  if(STY.ricA)Object.assign(STY.ricA.ior,{hair:'crest',hairC:'#18110c',hi:'#3c2c20',gray:0,len:0});
+  if(STY.ric4)Object.assign(STY.ric4.ior,{hair:'crest',hairC:'#1a130e',hi:'#46362a',gray:.2,len:0});
+  if(STY.ricT)Object.assign(STY.ricT.ior,{hair:'crest',hairC:'#2e2824',hi:'#7a7068',gray:.4,len:0});
+  if(STY.ric5)Object.assign(STY.ric5.ior,{hair:'crest',hairC:'#8a847e',hi:'#e8e4dc',gray:1,len:0});
+})();
 function drawIorioPortrait(st,x,y,sz){const I=st.ior,g=ctx,u=sz/40,sk=st.skin;g.save();g.translate(x,y);g.scale(u,u);g.lineJoin='round';g.lineCap='round';
   const P=(pts,c)=>{g.fillStyle=c;g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++){const p=pts[i];if(p.length===4)g.quadraticCurveTo(p[0],p[1],p[2],p[3]);else if(p.length===6)g.bezierCurveTo(p[0],p[1],p[2],p[3],p[4],p[5]);else g.lineTo(p[0],p[1]);}g.closePath();g.fill();};
   const S=(pts,c,w)=>{g.strokeStyle=c;g.lineWidth=w;g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++){const p=pts[i];if(p.length===4)g.quadraticCurveTo(p[0],p[1],p[2],p[3]);else g.lineTo(p[0],p[1]);}g.stroke();};
@@ -3933,10 +3974,18 @@ function drawIorioPortrait(st,x,y,sz){const I=st.ior,g=ctx,u=sz/40,sk=st.skin;g.
   else if(hair==='short'){P([[20-W-.4,14],[20-W,5.6,20,3.4],[20+W,5.6,20+W+.4,14],[20+W-1.2,9.6,20+W-3.2,8.8],[22,8.4],[20,9.4],[16,8.4],[20-W+3.2,8.8],[20-W+1.2,9.6,20-W-.4,14]],hc);
     for(let k=0;k<8;k++)strand([[13+k*2,8.6],[14+k*2,5]],k%2?hi:hd,.25);}
   else if(hair==='crest'){
-    g.save();g.globalAlpha=.72;P([[20-W-.2,13.4],[20-W+.6,6.8,20,4.8],[20+W-.6,6.8,20+W+.2,13.4],[20+W-1.6,9.6,20,8.8],[20-W+1.6,9.6,20-W-.2,13.4]],shade('#6e6862',1));g.restore();
-    g.save();g.globalAlpha=.48;for(let k=0;k<64;k++){g.fillStyle=k%2?'#a8a29a':'#3a3430';g.fillRect(20+(hsh(k,41)-.5)*2*W*.9,6+hsh(k,42)*6,.32,.32);}g.restore();
-    P([[15.6,9.2],[16.4,6.2,18,3.8],[20,3.0],[22,3.8],[23.6,6.2,24.4,9.2],[22.4,8.2],[20,8.8],[17.6,8.2]],hc);
-    for(let k=0;k<7;k++)strand([[16.2+k*1.2,8.8],[16.8+k*1.0,5.6],[17.4+k*.8,3.8]],k%2?hi:hd,.3);}
+    g.save();
+    P([[20-W-.2,13.4],[20-W+.6,6.8,20,4.8],[20+W-.6,6.8,20+W+.2,13.4],[20+W-1.6,9.6,20,8.8],[20-W+1.6,9.6,20-W-.2,13.4]],shade(I.gray?'#6e6862':hc,1));
+    g.globalAlpha=.42;
+    for(let k=0;k<55;k++){g.fillStyle=I.gray?(k%2?'#b0aaa0':'#3a3430'):(k%2?'#2e2018':'#140c08');g.fillRect(20+(hsh(k,41)-.5)*2*W*.9,6+hsh(k,42)*7,.3,.3);}
+    g.restore();
+    const gr=g.createLinearGradient(0,-3.5,0,9);gr.addColorStop(0,I.gray>=1?'#ece8e0':I.gray?'#9c948c':hi);gr.addColorStop(.35,hc);gr.addColorStop(1,hd);
+    P([[16.2,8.8],[15.8,5.2],[16.6,2.1],[17.0,-1.2],[18.0,1.2],[18.8,-2.8],[20.0,-3.6],[21.2,-2.8],[22.0,1.2],[23.0,-1.2],[23.4,2.1],[24.2,5.2],[23.8,8.8],[22.4,8.0],[20.0,8.4],[17.6,8.0]],gr);
+    const crTip=I.gray>=1?'#f8f6f0':I.gray?'#c8c2b8':hi;
+    for(let k=0;k<11;k++){const t=k/10,x0=16.6+t*6.8,x1=17.2+t*5.6+(Math.sin(k*1.8)*.4),y1=-3.2+Math.abs(t-.5)*4.2+(k%2?-.4:.3);
+      strand([[x0,8.2],[x0+(t-.5)*1.2,4.2],[x1,y1]],k%2?crTip:shade(hc,.7),.28);}
+    if(I.gray){const silv=I.gray>=1?'#ffffff':'rgba(235,230,222,.9)';for(let k=0;k<6;k++){const sx=17.2+k*1.1,sy=-2.8+Math.abs(k-2.5)*1.2;strand([[sx,2.5],[sx+.2,sy]],silv,.32);}}
+  }
   else if(hair==='swept'){const gr=g.createLinearGradient(0,0,0,12);gr.addColorStop(0,hi);gr.addColorStop(1,hc);
     P([[20-W-.6,15],[20-W-1.2,6,15,1.6],[20,.8],[25,1.6],[20+W+1.2,6,20+W+.6,15],[20+W-1,9.6,20+W-2.6,8.4],[24,6.6],[20,6.2],[16,6.6],[20-W+2.6,8.4],[20-W+1,9.6,20-W-.6,15]],gr);
     for(let k=0;k<10;k++)strand([[12.6+k*1.65,7.2],[13.6+k*1.5,2.6],[15.6+k*1.1,1.1]],k%2?'#f8f4ec':shade(hc,.72),.3);
