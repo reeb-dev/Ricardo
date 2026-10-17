@@ -6386,16 +6386,16 @@ function drawBigFin(cx, cy, t){
   ctx.globalCompositeOperation = 'source-over';
 
   const text = 'FIN';
-  ctx.font = '900 36px ' + FONT;
+  ctx.font = '900 24px ' + FONT;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  for(let d = 7; d >= 1; d--){
-    ctx.fillStyle = d === 7 ? 'rgba(0,0,0,0.65)' : (d > 3 ? '#2e1502' : '#7c4308');
+  for(let d = 5; d >= 1; d--){
+    ctx.fillStyle = d === 5 ? 'rgba(0,0,0,0.65)' : (d > 2 ? '#2e1502' : '#7c4308');
     ctx.fillText(text, d * 1.1, d * 1.1);
   }
 
-  const fg = ctx.createLinearGradient(0, -18, 0, 18);
+  const fg = ctx.createLinearGradient(0, -14, 0, 14);
   fg.addColorStop(0, '#fffbe6');
   fg.addColorStop(0.25, '#ffd942');
   fg.addColorStop(0.65, '#e08f0a');
@@ -6403,25 +6403,25 @@ function drawBigFin(cx, cy, t){
   ctx.fillStyle = fg;
   ctx.fillText(text, 0, 0);
 
-  ctx.lineWidth = 2.2;
+  ctx.lineWidth = 1.8;
   ctx.strokeStyle = '#1a0b02';
   ctx.strokeText(text, 0, 0);
 
-  const glX = -45 + ((t * 2.2) % 110);
+  const glX = -35 + ((t * 2.2) % 90);
   ctx.save();
   ctx.beginPath();
-  ctx.rect(-50, -22, 100, 44);
+  ctx.rect(-40, -16, 80, 32);
   ctx.clip();
   ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
   ctx.beginPath();
-  ctx.moveTo(glX - 8, 22);
-  ctx.lineTo(glX + 2, 22);
-  ctx.lineTo(glX + 14, -22);
-  ctx.lineTo(glX + 4, -22);
+  ctx.moveTo(glX - 6, 16);
+  ctx.lineTo(glX + 2, 16);
+  ctx.lineTo(glX + 12, -16);
+  ctx.lineTo(glX + 4, -16);
   ctx.fill();
   ctx.restore();
 
-  txt('★  LIBERTAD Y METAL PESADO  ★', 0, 24, '#ffe48a', 4.5, 'center');
+  txt('★  LIBERTAD Y METAL PESADO  ★', 0, 17, '#ffe48a', 3.8, 'center');
   ctx.restore();
 }
 
@@ -6482,36 +6482,37 @@ function drawEnding(){
     ctx.stroke();
   }
 
-  // Molino y alambrado
+  // 1) Molino pampeano en el horizonte despejado (x=212)
   ctx.fillStyle = '#221b1f';
-  ctx.fillRect(44, 98, 3, 80);
-  ctx.fillRect(38, 174, 15, 4);
+  ctx.fillRect(212, 98, 3, 76);
+  ctx.fillRect(206, 172, 15, 3);
   ctx.save();
-  ctx.translate(45.5, 98);
-  ctx.rotate(t * 0.04);
+  ctx.translate(213.5, 98);
+  ctx.rotate(t * 0.035);
   for(let k = 0; k < 12; k++){
     ctx.rotate(Math.PI / 6);
-    ctx.fillRect(2, -1.2, 15, 2.4);
+    ctx.fillRect(2, -1.2, 14, 2.4);
   }
   ctx.restore();
 
-  for(let x = 0; x < W; x += 40){
+  // 2) Alambrado pampeano
+  for(let x = 196; x < W; x += 36){
     ctx.fillStyle = '#32241b';
     ctx.fillRect(x, 166, 2, 14);
   }
   ctx.fillStyle = 'rgba(50,32,24,.55)';
-  ctx.fillRect(0, 170, W, 1);
-  ctx.fillRect(0, 175, W, 1);
+  ctx.fillRect(196, 170, W - 196, 1);
+  ctx.fillRect(196, 175, W - 196, 1);
 
-  // Ford F-100 en la pampa
+  // 3) Camioneta Ford F-100 en la pampa derecha
   ctx.save();
-  ctx.translate(92, 218);
-  ctx.scale(1.15, 1.15);
+  ctx.translate(412, 206);
+  ctx.scale(1.08, 1.08);
   drawTruck(0, 0, false);
   ctx.restore();
 
-  // Fogón campero
-  const fx = 168, fy2 = 222;
+  // 4) Fogón campero criollo
+  const fx = 336, fy2 = 216;
   for(let k = 0; k < 6; k++){
     const a = t * 0.3 + k;
     ctx.fillStyle = k % 2 ? 'rgba(255,130,30,.92)' : 'rgba(255,225,85,.92)';
@@ -6531,47 +6532,96 @@ function drawEnding(){
     ctx.fillRect(fx + Math.sin(k + t * 0.05) * 8, fy2 - 8 - a, 1.2, 1.2);
   }
 
-  // Baúles de gira y exhibición de discografía sobre el escenario
-  ctx.fillStyle = '#100e14';
-  ctx.fillRect(6, 172, 164, 46);
-  ctx.strokeStyle = '#32323c';
-  ctx.lineWidth = 1.2;
-  ctx.strokeRect(6, 172, 164, 46);
-  ctx.fillStyle = '#9ca0a8';
-  ctx.fillRect(5, 171, 4, 4); ctx.fillRect(167, 171, 4, 4);
-  ctx.fillRect(5, 215, 4, 4); ctx.fillRect(167, 215, 4, 4);
-  txt('DISCOGRAFÍA ESENCIAL · TAPAS HISTÓRICAS REALES', 88, 175, '#f2d278', 4.2, 'center');
-
-  drawAlbumCover(ctx, 'luchando', 10, 182, 23, '1983');
-  drawAlbumCover(ctx, 'acido', 36, 182, 23, '1991');
-  drawAlbumCover(ctx, 'victimas', 62, 182, 23, '1994');
-  drawAlbumCover(ctx, 'guanaco', 88, 182, 23, '1995');
-  drawAlbumCover(ctx, 'toroypampa', 114, 182, 23, '2006');
-  drawAlbumCover(ctx, 'ayerdeseo', 140, 182, 23, '2008');
-
-  // Estandartes de las 4 bandas históricas en el fondo del escenario
-  ctx.fillStyle = '#14101a';
-  ctx.fillRect(6, 126, 164, 42);
-  ctx.strokeStyle = '#302638';
-  ctx.lineWidth = 1;
-  ctx.strokeRect(6, 126, 164, 42);
-
-  drawV8Logo(ctx, 24, 147, 0.65, finSongBand === 'v8' && finSingT > 0);
-  drawHermeticaLogo(ctx, 64, 147, 0.62, finSongBand === 'hermetica' && finSingT > 0);
-  drawAlmafuerteLogo(ctx, 106, 147, 0.62, finSongBand === 'almafuerte' && finSingT > 0);
-  drawIorioLogo(ctx, 148, 147, 0.65, finSongBand === 'iorio' && finSingT > 0);
-
-  // Mástil y Bandera Argentina flameando gigante
+  // 5) Mástil y Bandera Argentina flameando gigante
   ctx.fillStyle = '#dfdcd5';
-  ctx.fillRect(265, 32, 3.5, 172);
+  ctx.fillRect(282, 26, 3.5, 174);
   ctx.fillStyle = '#f2c03a';
   ctx.beginPath();
-  ctx.arc(266.8, 30, 3.8, 0, Math.PI * 2);
+  ctx.arc(283.8, 24, 3.8, 0, Math.PI * 2);
   ctx.fill();
-  drawFlag(268, 44, 185, 115, t);
+  drawFlag(285, 36, 175, 108, t);
 
-  // Cartel 3D "FIN"
-  drawBigFin(W / 2, 30, t);
+  // 6) PANEL IZQUIERDO DE HOMENAJE (Columna de honor: x=8..194)
+  // Gran título "FIN" en 3D sobre la columna izquierda
+  drawBigFin(101, 20, t);
+
+  // --- PANEL 1: CUATRO PILARES DEL METAL (Logos en cuadrícula 2x2 sin superposición) ---
+  const p1x = 8, p1y = 44, p1w = 186, p1h = 64;
+  ctx.fillStyle = 'rgba(12, 10, 16, 0.92)';
+  ctx.fillRect(p1x, p1y, p1w, p1h);
+  ctx.strokeStyle = '#4a3d24';
+  ctx.lineWidth = 1.2;
+  ctx.strokeRect(p1x, p1y, p1w, p1h);
+  ctx.fillStyle = '#f2c03a';
+  for(const [rx, ry] of [[p1x+2, p1y+2], [p1x+p1w-3, p1y+2], [p1x+2, p1y+p1h-3], [p1x+p1w-3, p1y+p1h-3]]){
+    ctx.fillRect(rx, ry, 2, 2);
+  }
+  txt('✦ CUATRO PILARES DEL METAL PESADO ✦', p1x + p1w/2, p1y + 4, '#f2d278', 4.0, 'center');
+
+  // Divisores en cruz sutiles
+  ctx.strokeStyle = 'rgba(255, 215, 0, 0.12)';
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(p1x + p1w/2, p1y + 16); ctx.lineTo(p1x + p1w/2, p1y + p1h - 4);
+  ctx.moveTo(p1x + 10, p1y + 38); ctx.lineTo(p1x + p1w - 10, p1y + 38);
+  ctx.stroke();
+
+  // Logos colocados con amplio margen (52px de espacio libre entre columnas)
+  drawV8Logo(ctx, p1x + 46, p1y + 26, 0.65, finSongBand === 'v8' && finSingT > 0);
+  drawHermeticaLogo(ctx, p1x + 140, p1y + 26, 0.62, finSongBand === 'hermetica' && finSingT > 0);
+  drawAlmafuerteLogo(ctx, p1x + 46, p1y + 51, 0.62, finSongBand === 'almafuerte' && finSingT > 0);
+  drawIorioLogo(ctx, p1x + 140, p1y + 51, 0.65, finSongBand === 'iorio' && finSingT > 0);
+
+  // --- PANEL 2: DISCOGRAFÍA HISTÓRICA (5 vinilos esenciales) ---
+  const p2x = 8, p2y = 112, p2w = 186, p2h = 56;
+  ctx.fillStyle = 'rgba(12, 10, 16, 0.92)';
+  ctx.fillRect(p2x, p2y, p2w, p2h);
+  ctx.strokeStyle = '#4a3d24';
+  ctx.lineWidth = 1.2;
+  ctx.strokeRect(p2x, p2y, p2w, p2h);
+  ctx.fillStyle = '#f2c03a';
+  for(const [rx, ry] of [[p2x+2, p2y+2], [p2x+p2w-3, p2y+2], [p2x+2, p2y+p2h-3], [p2x+p2w-3, p2y+p2h-3]]){
+    ctx.fillRect(rx, ry, 2, 2);
+  }
+  txt('✦ DISCOGRAFÍA HISTÓRICA ✦', p2x + p2w/2, p2y + 4, '#f2d278', 4.0, 'center');
+
+  const albList = [
+    { k: 'luchando', yr: '1983' },
+    { k: 'acido', yr: '1991' },
+    { k: 'victimas', yr: '1994' },
+    { k: 'guanaco', yr: '1995' },
+    { k: 'toroypampa', yr: '2006' }
+  ];
+  albList.forEach((a, idx) => {
+    const ax = p2x + 8 + idx * 35;
+    const ay = p2y + 14;
+    const asz = 28;
+    drawAlbumCover(ctx, a.k, ax, ay, asz);
+    if(finSongAlbum === a.k && finSingT > 0){
+      ctx.strokeStyle = '#ffd700';
+      ctx.lineWidth = 1.6;
+      ctx.strokeRect(ax - 1, ay - 1, asz + 2, asz + 2);
+    }
+    txt(a.yr, ax + asz/2, ay + asz + 3, finSongAlbum === a.k ? '#ffe48a' : '#c8c2b4', 3.6, 'center');
+  });
+
+  // --- PANEL 3: PLACA IN MEMORIAM Y PUNTAJE ---
+  const p3x = 8, p3y = 172, p3w = 186, p3h = 58;
+  ctx.fillStyle = 'rgba(10, 8, 16, 0.92)';
+  ctx.fillRect(p3x, p3y, p3w, p3h);
+  ctx.strokeStyle = '#4a3d24';
+  ctx.lineWidth = 1.2;
+  ctx.strokeRect(p3x, p3y, p3w, p3h);
+  ctx.fillStyle = '#f2c03a';
+  for(const [rx, ry] of [[p3x+2, p3y+2], [p3x+p3w-3, p3y+2], [p3x+2, p3y+p3h-3], [p3x+p3w-3, p3y+p3h-3]]){
+    ctx.fillRect(rx, ry, 2, 2);
+  }
+  txt('«Lejos del ruido, donde la patria se hace con las manos»', p3x + p3w/2, p3y + 4, '#ffe08a', 4.0, 'center');
+  txt('Fue quien fue, por ser él mismo, sin pedir permiso.', p3x + p3w/2, p3y + 16, '#eae2d0', 3.6, 'center');
+  txt('In memoriam: Ricardo Iorio (1962 - 2023)', p3x + p3w/2, p3y + 27, '#78b4ff', 4.2, 'center');
+  txt('¡El metal pesado argentino es eterno!', p3x + p3w/2, p3y + 38, '#f2d278', 3.8, 'center');
+  const statsTxt = total ? ('TIEMPO ' + Math.floor(total.t / 60) + ':' + String(total.t % 60).padStart(2, '0') + ' · PUNTAJE ' + String(score).padStart(7, '0')) : 'PUNTAJE: ' + String(score).padStart(7, '0');
+  txt(statsTxt, p3x + p3w/2, p3y + 48, '#a0c8f0', 3.6, 'center');
 
   // Amigos y público escuchando al costado
   for(const f of FANS){
@@ -6584,7 +6634,7 @@ function drawEnding(){
     if(up) ctx.fillRect((f.x > 260 ? f.x + 20 : f.x - 30) + 2, f.y - 12, 2, 10);
   }
 
-  // Ricardo Iorio cantando apasionadamente en primer plano
+  // 7) Ricardo Iorio cantando apasionadamente
   const singBase = finSingT > 0
     ? mkP({ fa1: 1.5, fa2: 1.6, ba1: -0.8, ba2: 0.6, lean: 0.15, tilt: -0.12, crouch: 2 })
     : (t % 70 < 35 ? PO.spec : PO.victory);
@@ -6603,35 +6653,35 @@ function drawEnding(){
     state: finSingT > 0 ? 'jab' : 'idle'
   };
   const sv = STY.ric5.scale;
-  STY.ric5.scale = 2.1;
-  drawPuppet(hero, 236, 232);
+  STY.ric5.scale = 2.05;
+  drawPuppet(hero, 246, 226);
   STY.ric5.scale = sv;
 
   // Pie de micrófono clásico vintage
   ctx.fillStyle = '#222';
-  ctx.fillRect(244, 202, 2.2, 34);
-  ctx.fillRect(238, 235, 14, 2.5);
+  ctx.fillRect(254, 196, 2.2, 34);
+  ctx.fillRect(248, 229, 14, 2.5);
   ctx.fillStyle = '#b0b5c0';
   ctx.beginPath();
-  ctx.arc(245, 201, 3.2, 0, Math.PI * 2);
+  ctx.arc(255, 195, 3.2, 0, Math.PI * 2);
   ctx.fill();
 
   // Animación de boca cantando
   if(finSingT > 0 && Math.sin(t * 0.5) > 0){
     ctx.fillStyle = '#1c0808';
     ctx.beginPath();
-    ctx.ellipse(244, 169, 2.2, 2.8, 0, 0, Math.PI * 2);
+    ctx.ellipse(254, 163, 2.2, 2.8, 0, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // Cartel / burbuja de letra cuando Ricardo canta
+  // 8) Cartel / burbuja de letra cuando Ricardo canta (dinámica en la zona abierta)
   if(finSingT > 0 && finSingText){
     ctx.save();
-    ctx.fillStyle = 'rgba(10, 8, 16, 0.93)';
+    ctx.fillStyle = 'rgba(10, 8, 16, 0.94)';
     ctx.strokeStyle = '#ffd700';
     ctx.lineWidth = 1.4;
-    const bw = 376;
-    const bx = (W - bw) / 2, by = 126, bh = 42;
+    const bw = 264, bh = 44;
+    const bx = 206, by = 138;
     ctx.beginPath();
     if(ctx.roundRect) ctx.roundRect(bx, by, bw, bh, 6); else ctx.rect(bx, by, bw, bh);
     ctx.fill();
@@ -6639,42 +6689,23 @@ function drawEnding(){
 
     ctx.fillStyle = '#ffd700';
     ctx.beginPath();
-    ctx.moveTo(242, by + bh);
-    ctx.lineTo(245, by + bh + 5);
-    ctx.lineTo(248, by + bh);
+    ctx.moveTo(250, by + bh);
+    ctx.lineTo(254, by + bh + 6);
+    ctx.lineTo(258, by + bh);
     ctx.fill();
 
     // Portada del disco y logo de la banda iluminados en el escenario
-    drawAlbumCover(ctx, finSongAlbum, bx + 6, by + 4, 34);
-    drawBandLogo(ctx, finSongBand, bx + 64, by + 16, 0.65, true);
+    drawAlbumCover(ctx, finSongAlbum, bx + 6, by + 5, 34);
+    drawBandLogo(ctx, finSongBand, bx + 66, by + 16, 0.60, true);
 
-    txt(finSingSub, bx + 225, by + 8, '#8cc4ff', 4.8, 'center');
-    txt(finSingText, bx + 225, by + 23, '#fffbe0', 5.6, 'center');
+    txt(finSingSub, bx + 160, by + 9, '#8cc4ff', 4.6, 'center');
+    txt(finSingText, bx + 160, by + 24, '#fffbe0', 5.4, 'center');
     ctx.restore();
-  } else if(t > 60){
-    // Texto homenaje y estadísticas
-    const lines = [
-      'Lejos del ruido, donde la patria se hace con las manos.',
-      'Fue quien fue, por ser él mismo, sin pedir permiso.',
-      'In memoriam: Ricardo Iorio (1962 - 2023). ¡El metal pesado es eterno!',
-      total ? ('TIEMPO TOTAL ' + Math.floor(total.t / 60) + ':' + String(total.t % 60).padStart(2, '0') + ' · PUNTAJE ' + String(score).padStart(7, '0')) : ''
-    ];
-    ctx.fillStyle = 'rgba(8, 6, 12, 0.75)';
-    ctx.fillRect(8, 56, 184, 52);
-    let yy = 60;
-    lines.forEach((s, i) => {
-      if(!s) return;
-      const ls = wrap(s, 29);
-      ls.forEach(l => {
-        txt(l, 100, yy, i === 0 ? '#ffe08a' : (i === 2 ? '#70b5ff' : '#ddd4c6'), i === 0 ? 4.5 : 4.0, 'center');
-        yy += 6.2;
-      });
-    });
   }
 
   // Interacción en vivo
   const singPrompt = coarse ? '🎤 TOCÁ LA PANTALLA PARA HACER CANTAR A RICARDO' : '🎤 APRETÁ Z / ESPACIO / CLICK PARA HACER CANTAR A RICARDO';
-  txt(singPrompt, W / 2, 239, (t % 40 < 25 ? '#ffe08a' : '#ffffff'), 5.2, 'center');
+  txt(singPrompt, W / 2, 239, (t % 40 < 25 ? '#ffe08a' : '#ffffff'), 5.0, 'center');
 
   const btnX = W / 2 - 110, btnY = 250, btnW = 220, btnH = 15;
   ctx.fillStyle = 'rgba(16, 12, 24, 0.88)';
