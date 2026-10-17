@@ -516,7 +516,7 @@ const SCENES=[
  }
 ];
 function buildLevel(i){const S=SCENES[i];LW=LEVELS[i].LW;BG=mkc(LW*RS,H*RS);LIGHT=mkc(LW,H);FAR=mkc(1400*RS,190*RS);LAMPS=S.lamps;SIGNS=S.signs||[];
-  {const fg=FAR.getContext('2d');fg.scale(RS,RS);S.far(fg);const bg2=BG.getContext('2d');bg2.scale(RS,RS);S.bg(sceneKit(bg2));realFAR(FAR);landmarkBG(BG,i);realBG(BG,LAMPS,S);extraBG(BG,i===9&&monstruoInsert.done?-1:i>9?i-1:i);}
+  {const fg=FAR.getContext('2d');fg.scale(RS,RS);S.far(fg);const bg2=BG.getContext('2d');bg2.scale(RS,RS);S.bg(sceneKit(bg2));realFAR(FAR);landmarkBG(BG,i);realBG(BG,LAMPS,S);if(LEVELS[i]&&LEVELS[i].dyn==='campo')extraBG(BG,i===8?8:10);}
   const g=LIGHT.getContext('2d');g.fillStyle=S.light;g.fillRect(0,0,LW,H);g.globalCompositeOperation='lighter';
   for(const l of LAMPS){const cy=l.y>40?190:150;const gr=g.createRadialGradient(l.x+8,cy,4,l.x+8,cy,l.r);gr.addColorStop(0,'rgba('+l.c+',.85)');gr.addColorStop(.5,'rgba('+l.c+',.35)');gr.addColorStop(1,'rgba('+l.c+',0)');
     g.fillStyle=gr;g.beginPath();g.ellipse(l.x+8,cy,l.r,l.r*.75,0,0,Math.PI*2);g.fill();
@@ -1372,8 +1372,9 @@ LEVELS[0].locks.forEach((l,i)=>{if(l.groups&&l.groups.length)l.groups.push(i%2?[
 function resetWorld(i,keep){v14Levels();lvl=i;truckDone=false;truck=null;modReset();datoT=0;dato=null;papas=diff===0?10:diff===2?5:8;papaT=0;LV=LEVELS[i];skin=LV.skin;buildLevel(i);
   ents=[];items=[];props=[];parts=[];bubbles=[];shots=[];hazard=null;quipDeck=[];cam.x=0;lockIdx=0;lock=null;stopT=0;shake=0;flashT=0;slowT=0;banner=null;goT=0;cut=null;train=null;
   if(!keep){score=0;lives=3;total={t:0,combo:0,hits:0};}meter=100;combo=0;comboT=0;maxCombo=0;hitsTaken=0;timeF=0;lastHit=null;results=null;song=LV.song;step=0;
-  for(const l of LV.locks){l.g=0;l.mt=0;}
-  player=mk('ricardio',-40,226);player.st=STY[skin];player.face=1;
+  if(typeof LM!=='undefined'&&LM.el){LM.songEnded=false;if(state!=='title')LM.el.currentTime=0;}
+  for(const l of LV.locks){l.g=0;l.mt=0;l.extra=0;}
+  player=mk('ricardio',-40,226);player.st=STY[skin];player.face=1;player.herido=!!(LV&&LV.pelusa);player.operated=false;
   if(diff===0){player.hp=player.max=140;}else if(diff===2){player.hp=player.max=100;}
   hpTrail=player.hp;ents.push(player);boss=null;npcs={};
   for(const n of LV.npcs){const e=mk(n.kind,n.x,n.y);e.face=n.face;e.hold=n.hold||null;if(n.hidden)e.state='hidden';npcs[n.kind]=e;ents.push(e);}
@@ -1520,6 +1521,20 @@ function applyHit(a,t,mv,dirOverride){
     if(player.hold==='pipe'&&mv.weapon){player.wdur--;if(player.wdur<=0){player.hold=null;for(let i=0;i<5;i++)parts.push({k:'deb',x:player.x+player.face*20,y:player.y-40,vx:rnd(-2,2),vy:rnd(-3,-1),t:0,max:40,c:'#9aa0a8',w:4,h:2});}}}
   if(t===player){hitsTaken++;combo=0;}
   if(t.grabbedBy)releaseGrab(t);
+  if(t.D.boss){
+    const pr=typeof levelSongProgress==='function'?levelSongProgress().ratio:1;
+    if(pr<.94){
+      const minHp=Math.max(12,Math.floor(t.max*clamp((.94-pr)/.24,0,.72)));
+      if(t.hp<minHp){
+        t.hp=minHp;
+        if(tick-(t.lastSumT||0)>260&&alive().length<=2&&(t.D.summons||LV.summons)){
+          t.lastSumT=tick;
+          const S=(t.D.summons||LV.summons)[0];
+          if(S){spawnEnemy(S[0],'L');spawnEnemy(S[1],'R');}
+        }
+      }
+    }
+  }
   const kd=mv.kd||t.hp<=0;
   if(t.D.boss&&t.hp>0){t.armor++;if(['bcharge','slam','slamj','taunt'].includes(t.state))return;if(!(mv.kd&&mv.kd>1)&&t.armor%4!==0)return;}
   if(kd)knockdown(t,dir,mv.kd||1);
@@ -1700,31 +1715,45 @@ function updShots(){for(const s of shots){s.t++;s.x+=s.vx;if(s.vy)s.y+=s.vy;if(s
   else if(hittable(player)&&player.z<30&&Math.abs(player.y-s.y)<8&&Math.abs(player.x-s.x)<10){applyHit(s.owner,player,MOVES.phone,Math.sign(s.vx));s.gone=true;if(s.k==='tomate')splat(s.x,s.y-s.z);}}
   shots=shots.filter(s=>!s.gone);}
 function splat(x,y){for(let i=0;i<6;i++)parts.push({k:'deb',x,y,vx:rnd(-2,2),vy:rnd(-3,-.5),t:0,max:30,c:'#d8322a',w:3,h:3});}
+const SONG_DURS=[174,186,128,305,186,348,202,246,210,288,232,248,197,235];
+function levelSongProgress(){
+  const fallback=SONG_DURS[lvl]||200;
+  const dur=(typeof LM!=='undefined'&&LM.el&&isFinite(LM.el.duration)&&LM.el.duration>30)?LM.el.duration:fallback;
+  if(typeof LM!=='undefined'&&LM.songEnded)return {cur:dur,dur,ratio:1};
+  const cur=(typeof LM!=='undefined'&&LM.el&&!LM.el.paused&&isFinite(LM.el.currentTime)&&LM.el.currentTime>0)?Math.max(LM.el.currentTime,timeF/60):(timeF/60);
+  return {cur:Math.min(cur,dur),dur,ratio:clamp(cur/dur,0,1)};
+}
 function updLocks(){
-  if(!lock&&lockIdx<LV.locks.length&&player.x>LV.locks[lockIdx].trig&&state==='play'){lock=LV.locks[lockIdx];lock.g=0;lock.mt=0;goT=0;if(lock.alvear)banner={a:'¡SALIDA DEL ALVEAR!',b:'FINES DE 1982 · LA CANA EN LA PUERTA',t:150,boss:false};
+  if(!lock&&lockIdx<LV.locks.length&&player.x>LV.locks[lockIdx].trig&&state==='play'){lock=LV.locks[lockIdx];lock.g=0;lock.mt=0;lock.extra=0;goT=0;if(lock.alvear)banner={a:'¡SALIDA DEL ALVEAR!',b:'FINES DE 1982 · LA CANA EN LA PUERTA',t:150,boss:false};
     if(lock.boss){startBossCut();return;}
     lock.groups[0].forEach(([k,s])=>spawnEnemy(k,s));
     if(lock.train&&!train){train={x:lock.L+W+60,t:0};sfx('train');}}
   if(lock&&!lock.boss){const n=alive().length;
-    if(lock.g<lock.groups.length-1&&n<=(lvl===0?2:1)){lock.g++;if(lvl===0)floatTxt(player.x,player.y-96,pick(['¡VIENEN MÁS!','¡LA PATOTA ENTERA!','¡OTRA TANDA!']),'#ff6a4a');lock.groups[lock.g].forEach(([k,s])=>spawnEnemy(k,s));}
+    const lockGoals=[.18,.36,.56,.76],goal=lockGoals[Math.min(3,lockIdx)]||.76,prog=levelSongProgress().ratio;
+    if(lock.g<lock.groups.length-1&&n<=(lvl===0?2:1)){lock.g++;if(lvl===0)floatTxt(player.x,player.y-96,pick(['¡VIENEN MÁS!','¡LA PATOTA!','¡OTRA TANDA!']),'#ff6a4a');lock.groups[lock.g].forEach(([k,s])=>spawnEnemy(k,s));}
+    else if(lock.g>=lock.groups.length-1&&n===0&&prog<goal&&(lock.extra||0)<10){
+      const grp=lock.groups[(lock.extra=(lock.extra||0)+1)%lock.groups.length];
+      grp.forEach(([k,s])=>spawnEnemy(k,s));
+    }
     else if(lock.g>=lock.groups.length-1&&n===0){const after=lock.after;lock=null;lockIdx++;goT=200;sfx('go');hazard=null;if(after==='rescue')startRescueCut();else if(Math.random()<.4&&!bubbles.some(b=>b.f===player))say(player,quip(),170);}}}
 
 /* ================= cutscenes ================= */
 function startCut(lines,onEnd){bubbles=[];cut={lines,i:0,ch:0,onEnd};state='cut';}
 function startChapter(i,keep){resetWorld(i,keep);if(cineStart())return;state='card';cardT=0;}
 function startIntro(){state='intro';introT=0;if(LV.ride)sfx('moto');}
-function afterIntro(){state='play';if(LV.pelusa&&!ents.some(e=>e.ally)){const p=mk('pelusa_friend',player.x-36,player.y+6);p.ally=true;p.face=1;p.cd=30;p.hold='pala_pizzera';ents.push(p);}for(const k in npcs){const n=npcs[k];if(n===npcs.rescue)continue;if(n.kind==='reporter'){if(n.state!=='hidden')n.state='runoff';}else n.state='walkoff';}
+function afterIntro(){state='play';for(const k in npcs){const n=npcs[k];if(n===npcs.rescue)continue;if(n.kind==='pelusa_friend'){n.ally=true;n.state='idle';n.face=1;n.cd=25;n.hold='pala_pizzera';continue;}if(n.kind==='reporter'){if(n.state!=='hidden')n.state='runoff';}else n.state='walkoff';}
+  if(LV.pelusa&&!ents.some(e=>e.ally)){const p=mk('pelusa_friend',player.x-36,player.y+6);p.ally=true;p.face=1;p.cd=30;p.hold='pala_pizzera';ents.push(p);}
   banner={a:LV.chap,b:LV.title,t:150};}
 function updIntro(){introT++;const p=player;
   if(LV.ride){const k=Math.min(1,introT/120),e=1-Math.pow(1-k,3);p.mx=-130+e*240;
     if(introT<=130){p.x=p.mx+2;p.state='ride';p.face=1;p.z=12;}
     if(introT===130){p.state='idle';p.z=0;p.x=p.mx+20;p.y=238;dust(p.x,p.y,6);sfx('land');}
     if(introT===150)startCut(LV.intro,afterIntro);}
-  else{if(introT<=90){p.x=-30+introT*1.55;p.y=226;p.state='walk';p.walkPh+=.21;p.face=1;}
+  else{if(introT<=90){p.x=-30+introT*1.55;p.y=226;p.state='walk';p.walkPh+=p.herido?.14:.21;p.face=1;}
     if(introT===91)p.state='idle';
     if(introT===110)startCut(LV.intro,afterIntro);}}
-function startRescueCut(){const f=npcs.rescue;startCut(LV.rescueLines,()=>{state='play';f.state='runoff';f.face=-1;say(player,quip(),150);});}
-function startBossCut(){boss=mk(LV.boss,LW-80,224);boss.face=-1;ents.push(boss);song=LV.bossSong;step=0;
+function startRescueCut(){const f=npcs.rescue;startCut(LV.rescueLines,()=>{state='play';if(LV&&LV.pelusa&&player){player.operated=true;player.hp=player.max;hpTrail=player.max;sfx('heal');floatTxt(player.x,player.y-82,'¡OPERADO DE URGENCIA!','#8fe0ff');}f.state='runoff';f.face=-1;say(player,quip(),150);});}
+function startBossCut(){boss=mk(LV.boss,LW-80,224);boss.face=-1;ents.push(boss);
   startCut(LV.bossLines,()=>{state='play';banner={a:boss.D.name,b:LV.place,t:140,boss:true};boss.cd=90;});}
 function startMonsterCut(){const old=boss;old.gone=true;ents=ents.filter(e=>e!==old);
   for(let i=0;i<24;i++)parts.push({k:'deb',x:old.x+rnd(-14,14),y:old.y-rnd(20,90),vx:rnd(-4,4),vy:rnd(-5,-1),t:0,max:60,c:i%2?'#e07a1a':'#3a4a5a',w:4,h:3});
@@ -1996,7 +2025,7 @@ function updAlly(n){if(state!=='play'){n.state='idle';return;}
     if(n.t===6&&tgt&&Math.abs(tgt.x-n.x)<44&&Math.abs(tgt.y-n.y)<16){
       applyHit(n,tgt,MOVES.buck,Math.sign(tgt.x-n.x)||n.face);
       sfx('punch');spark(tgt.x,tgt.y-30,false);shake=Math.max(shake,2.5);
-      floatTxt(tgt.x,tgt.y-75,pick(['¡PALAZO DE TOPACIO!','¡A PATA NO TE DEJO!','¡DE ALVARADO Y PEÑAROL!','¡AUXILIO SIN DUDARLO!']),'#ffb340');
+      floatTxt(tgt.x,tgt.y-72,pick(['¡PALAZO!','¡POR EL AMIGO!','¡TOPACIO!']),'#ffb340');
     }
     if(n.t>=15)n.state='idle';
     return;
@@ -2014,20 +2043,19 @@ function updAlly(n){if(state!=='play'){n.state='idle';return;}
   if(n.mateT>420&&p.hp<p.max*.82){
     n.mateT=0;
     items.push({kind:'pizza',x:p.x+p.face*18,y:p.y,z:18,vz:2.2,t:0});
-    floatTxt(n.x,n.y-82,'¡AUXILIO DE PELUSA!','#ffb340');
+    floatTxt(n.x,n.y-78,'¡AUXILIO!','#ffb340');
     say(n,pick([
-      '¡Al verte en la mala, a pata no te dejo, Ricardo!',
-      '¡Tomá una fugazzeta de Topacio y aguantá que ya llegamos al tordo!',
-      '¡Apoyate en mí, hermano, que yo aviso a los tuyos y madrugo en el pasillo!',
-      '¡Auxilio sin dudarlo para mi amigo!'
-    ]),110);
+      '¡A pata no te dejo, Ricardo!',
+      '¡Auxilio sin dudarlo, hermano!',
+      '¡Aguantá que llegamos al tordo!'
+    ]),85);
   }
   if(tgt){
     n.face=tgt.x>n.x?1:-1;
     const dx=tgt.x-n.x,dy=tgt.y-n.y;
     if(Math.abs(dx)>110&&Math.abs(dx)<230&&Math.abs(dy)<20&&--n.cd<=0){
       n.state='kick';n.t=0;n.cd=55+rnd(0,25);
-      if(Math.random()<.45)say(n,pick(['¡Mestre de Topacio, pizzero de profesión!','¡De Alvarado y Peñarol!','¡A mi amigo en la mala lo defiendo yo!']),80);
+      if(Math.random()<.35)say(n,pick(['¡Mestre de Topacio!','¡De Alvarado y Peñarol!','¡Por mi amigo!']),70);
       return;
     }
     if(Math.abs(dx)>34||Math.abs(dy)>9){
@@ -2036,7 +2064,7 @@ function updAlly(n){if(state!=='play'){n.state='idle';return;}
       n.state='idle';
       if(--n.cd<=0){
         n.cd=32+rnd(0,18);n.state='atk';n.t=0;
-        if(Math.random()<.4)say(n,pick(['¡Salgan del paso que llevo a Ricardo al tordo!','¡Quien al verme en la mala a pata no me dejó!','¡En Mar del Plata fue sucedido!']),75);
+        if(Math.random()<.3)say(n,pick(['¡Abran paso al tordo!','¡A pata no se deja al amigo!']),65);
       }
     }
   } else {
@@ -2161,24 +2189,22 @@ function lmChapterEra(){const idx=state==='title'?sel:lvl;return idx<=2?0:idx<=5
 function lmPick(){
   const pool = LM.userTracks.length ? LM.userTracks : LM.tracks;
   if(!pool.length) return null;
-  const isBoss = state==='play' && boss && !boss.gone;
   const curIdx = (state==='title') ? sel : lvl;
   const curLV = LEVELS[curIdx] || LV;
 
   if(!LM.userTracks.length && typeof curIdx === 'number' && LEVEL_TRACK_MAP[curIdx]){
     const map = LEVEL_TRACK_MAP[curIdx];
-    const targetKey = isBoss ? map.boss : map.song;
-    const match = pool.find(t=>t.key === targetKey);
+    const match = pool.find(t=>t.key === map.song);
     if(match) return match;
   }
 
   if(curLV && !LM.userTracks.length){
-    const targetKey = isBoss ? curLV.bossSong : curLV.song;
+    const targetKey = curLV.song;
     if(targetKey){
       const match = pool.find(t=>t.key===targetKey);
       if(match) return match;
     }
-    if(curLV.lmKey && !isBoss){
+    if(curLV.lmKey){
       const matchK = pool.find(t=>lmNorm(t.name).includes(curLV.lmKey) || lmNorm(t.key||'').includes(curLV.lmKey));
       if(matchK) return matchK;
     }
@@ -2186,8 +2212,7 @@ function lmPick(){
   const era = lmChapterEra();
   const byEra = pool.filter(t=>t.era===era);
   const list = byEra.length ? byEra : pool;
-  const fight = isBoss ? 1 : 0;
-  return list[(curIdx*3 + fight + (LM.skip||0)) % list.length];
+  return list[(curIdx*3 + (LM.skip||0)) % list.length];
 }
 
 function lmDB(){return new Promise((res,rej)=>{try{const q=indexedDB.open('ricardio-musica',1);q.onupgradeneeded=()=>q.result.createObjectStore('t');q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);}catch(e){rej(e);}});}
@@ -2238,12 +2263,13 @@ function lmSync(force){
     LM.cur=t;
     LM.err=false;
     LM.pending=true;
+    LM.songEnded=false;
     LM.el.src=t.url;
     LM.el.currentTime=0;
     const curIdx=(state==='title')?sel:lvl;
     const lvTitle=LEVELS[curIdx]?LEVELS[curIdx].title:t.name;
     LM.label='♫ 16-BIT: '+lvTitle.toUpperCase();
-    LM.labT=240;
+    LM.labT=180;
     const p=LM.el.play();
     if(p&&p.then)p.then(()=>{LM.pending=false;}).catch(()=>{LM.pending=false;});
     else LM.pending=false;
@@ -2294,9 +2320,9 @@ function lmSetup(){
     LM.btns=[b1,b2,b3,bDiff,bMenu];
     LM.el=new Audio();
     LM.el.volume=.85;
-    LM.el.loop=true;
+    LM.el.loop=false;
     LM.el.preload='auto';
-    LM.el.addEventListener('ended',()=>{LM.el.currentTime=0;LM.el.play().catch(()=>{});});
+    LM.el.addEventListener('ended',()=>{if(state==='play')LM.songEnded=true;LM.el.currentTime=0;LM.el.play().catch(()=>{});});
     LM.el.addEventListener('error',()=>{
       LM.err=true;
       console.warn('Audio local fallback to 16-bit synth');
@@ -2630,16 +2656,37 @@ function drawPuppet(f,X,Y){
       ctx.strokeStyle='#a8865a';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(hx+2.6,hy-29);ctx.quadraticCurveTo(hx+.6,hy-10,hx+2.1,-2);ctx.stroke();HAND(hx,hy,a2,skin,fl);}
     if(weapon)HELD(weapon,hx,hy,a2,f,st);};
   const topB=D(st.top,.72),skB=D(st.skin,.8),pantB=D(st.pants,.72),bootB=D(st.boots,.8);
-  arm(P.ba1,P.ba2,-1.5,topB,skB,f.holdBack,true);
+  if(!f.herido)arm(P.ba1,P.ba2,-1.5,topB,skB,f.holdBack,true);
   leg(P.bt1,P.bt2,-1.5,pantB,bootB);
   const hx=nx+Math.sin(P.lean+P.tilt*.5)*6.4,hy=ny-Math.cos(P.lean+P.tilt*.5)*6.4;
   LIMB(nx+.6,ny+2,hx-Math.sin(P.lean)*.4,hy+3,(st.ior&&st.ior.jaw?5.8:4.8)*BK,4.3*BK,D(st.skin,.86),fl,1);
   const br=(f.state==='idle'||f.state==='stand')?Math.sin(tick*.07+(f.x||0)*.1)*.018:0;
-  ctx.save();ctx.translate(0,hipY);ctx.rotate(P.lean);ctx.scale(1+br*.5,1+br);TORSO2(st,f,fl);ctx.restore();
+  ctx.save();ctx.translate(0,hipY);ctx.rotate(P.lean);ctx.scale(1+br*.5,1+br);TORSO2(st,f,fl);
+  if(f.herido&&!fl){
+    if(f.operated){
+      // Faja / vendaje quirúrgico blanco en el abdomen tras la operación del tordo
+      ctx.fillStyle='#ece8e0';ctx.fillRect(-5.5,-9.5,13,5);
+      ctx.fillStyle='rgba(200,36,28,.55)';ctx.fillRect(1.5,-8.5,3.5,3);
+    }else{
+      // Dolor de vísceras rotas infectando el interior (mancha/pulso carmesí en el abdomen)
+      const pulse=.48+Math.sin(tick*.18)*.2;
+      ctx.fillStyle='rgba(215,32,26,'+pulse.toFixed(2)+')';
+      ctx.beginPath();ctx.ellipse(3.2,-7.2,4.4,3.2,.15,0,7);ctx.fill();
+    }
+  }
+  ctx.restore();
   leg(P.ft1,P.ft2,1.5,st.pants,st.boots);
   if(st.coat)SKIRT(st,hipY,sl,cl,knee(P.ft1,1.5),knee(P.bt1,-1.5),fl);
+  if(f.herido)arm(-.12,1.25,-1.5,topB,skB,null,true);
   if(!fl){ctx.fillStyle='rgba(30,16,12,.3)';ctx.beginPath();ctx.ellipse(hx+1,hy+5.4,3,1.4,P.lean,0,7);ctx.fill();}
   if(st.lizard)drawHead(hx,hy,P.lean*.5+P.tilt,st,fl);else drawHead2(hx,hy,P.lean*.5+P.tilt,st,fl,(f.state==='walk'?Math.sin(tick*.25)*1.4+1.2:Math.sin(tick*.05+(f.x||0))*.4)+(f.state==='hurt'?2:0));
+  if(f.herido&&!fl){
+    // Gotas de sudor frío por el dolor de peritonitis
+    const swY=(tick*.12)%3;
+    ctx.fillStyle='#9fe0ff';
+    ctx.fillRect(hx+3.5,hy-3+swY,1.1,1.8);
+    ctx.fillRect(hx+1.2,hy-1.5+((swY+1.5)%3),1,1.6);
+  }
   arm(P.fa1,P.fa2,1.5,st.top,st.skin,f.state==='spec'?'bass':f.hold,false);
   ctx.restore();
 }
@@ -3105,83 +3152,83 @@ Object.assign(DEFS,{
   pelusa_friend:N('pelusa_friend')
 });
 Object.assign(NAMES,{
-  el_tordo:'EL TORDO (CIRUJANO DE GUARDIA)',
-  matasano:'EL PROMOTOR BUITRE',
-  enfermero:'FALSO AMIGO DE LA MALA',
-  pelusa_friend:'CARLOS "PELUSA" LÓPEZ'
+  el_tordo:'EL TORDO',
+  matasano:'PROMOTOR BUITRE',
+  enfermero:'FALSO AMIGO',
+  pelusa_friend:'EL PELUSA'
 });
 Object.assign(BARKS,{
   matasano:[
     '¡Aunque tengas las vísceras rotas te exprimimos igual!',
-    '¡En la mala no existe la amistad, solo el negocio!',
-    '¡Sáquenle fotos en el pasillo del sanatorio!'
+    '¡En la mala no hay amigos, solo negocio!',
+    '¡Sáquenle fotos en el sanatorio!'
   ],
   enfermero:[
-    '¡Te vimos en la mala y te dejamos a pata!',
-    '¡Con ese dolor de vísceras rotas no llegás ni a la esquina!',
-    '¡Cuando se acaba el show nos borramos todos!'
+    '¡En la mala te dejamos a pata!',
+    '¡Con las vísceras rotas no llegás!',
+    '¡Terminó el show y nos borramos!'
   ]
 });
 Object.assign(DIEQ,{
-  matasano:'¡En Mar del Plata fue sucedido: Pelusa en la mala a pata no me dejó!',
-  enfermero:'¡Quien al verme en la mala, me brindó auxilio sin dudarlo!'
+  matasano:'¡En Mar del Plata fue sucedido: Pelusa a pata no me dejó!',
+  enfermero:'¡Quien al verme en la mala me brindó auxilio sin dudarlo!'
 });
 
 function pelusaLevel(){
   const L=L_STD(
-    [[['enfermero','R'],['careta','R']],[['enfermero','R'],['faran','L']]],
-    [[['enfermero','R'],['careta2','L'],['enfermero','R']],[['informador','R'],['enfermero','L']]],
-    [[['enfermero','R'],['enfermero','L'],['patovica','R']],[['faran','L'],['enfermero','R'],['informador','R']]],
+    [[['enfermero','R'],['careta','R']],[['enfermero','R'],['faran','L']],[['enfermero','L'],['careta2','R']]],
+    [[['enfermero','R'],['careta2','L'],['enfermero','R']],[['informador','R'],['enfermero','L']],[['enfermero','R'],['faran','L']]],
+    [[['enfermero','R'],['enfermero','L'],['patovica','R']],[['faran','L'],['enfermero','R'],['informador','R']],[['enfermero','L'],['patovica','R']]],
     [[['enfermero','L'],['patovica','R'],['enfermero','R']],[['enfermero','R'],['informador','L'],['patovica','R'],['enfermero','L']]]
   );
   return {
-    LW:2800,skin:'ricA',song:'pa_pelusa',bossSong:'b1',food:'pizza',lmKey:'pa pelusa',pelusa:true,
+    LW:2800,skin:'ricA',song:'pa_pelusa',bossSong:'pa_pelusa',food:'pizza',lmKey:'pa pelusa',pelusa:true,
     villains:'Falsos amigos que te dejan a pata en la mala, buitres mediáticos y El Promotor Buitre',
     title:"PA' PELUSA",place:'MAR DEL PLATA · TOPACIO Y EL ATLÁNTICO',hazard:'colectivo',
     card:[
-      '"Llegué a Mar del Plata, arrastrando el dolor de vísceras rotas, infectando mi interior. A pesar de eso, Almafuerte tocó, contentando a los metaleros del Atlántico."',
-      '29 de agosto de 2009 en Mar del Plata: Ricardo sufre una peritonitis aguda tras tocar en vivo. Cuando los falsos amigos se borran en la mala, su amigo Carlos "Pelusa" López (de Alvarado y Peñarol, Mestre de Topacio, pizzero de profesión) no lo deja a pata y le brinda auxilio sin dudarlo.',
-      'En la clínica, el Tordo (el matasano) se asombra de que "el perro cristiano" haya aguantado tanto dolor y opera de urgencia tras escuchar: "¡Hurguen mis infiernos!". Pelusa avisa a la familia de Ricardo, madruga pasilleando toda la noche y está allí firme cuando Ricardo despierta.'
+      '"Llegué a Mar del Plata arrastrando el dolor de vísceras rotas infectando mi interior. A pesar de eso, Almafuerte tocó, contentando a los metaleros del Atlántico."',
+      '29 de agosto de 2009 en Mar del Plata: Ricardo sufre peritonitis aguda. Su amigo Carlos "Pelusa" López (de Alvarado y Peñarol, Mestre de Topacio, pizzero de profesión) al verlo en la mala a pata no lo dejó y le brindó auxilio sin dudarlo.',
+      'El Tordo (el matasano) pregunta por qué el perro cristiano aguantó tanto dolor y opera tras "¡Hurguen mis infiernos!". Pelusa avisa a los suyos, madruga pasilleando y está allí cuando Ricardo despierta.'
     ],
-    npcs:[{kind:'pelusa_friend',x:235,y:198,face:1,hold:'pala_pizzera'}],
+    npcs:[{kind:'pelusa_friend',x:215,y:222,face:-1,hold:'pala_pizzera'}],
     guns:[[550,'pala_pizzera'],[1100,'pala_pizzera'],[1650,'escopeta'],[2200,'pala_pizzera']],
     locks:L,
     rescue:{kind:'el_tordo',x:1520,y:192},
     props:[[380,'tacho','pizza'],[840,'cajon','pizza'],[1480,'tacho','pizza'],[1960,'cajon','pizza'],[2320,'tacho','pizza']],
     pipe:[1460,240],
     intro:[
-      {w:'ricA',s:'Llegué a Mar del Plata arrastrando el dolor de vísceras rotas infectando mi interior... A pesar de eso, Almafuerte tocó, contentando a los metaleros del Atlántico.'},
-      {w:'pelusa_friend',s:'¡Ricardo, hermano! Estás doblado del dolor y todos los caretas se borraron al verte en la mala... ¡Pero yo a pata no te dejo jamás!'},
-      {w:'pelusa_friend',s:'Soy de Alvarado y Peñarol, Mestre de Topacio, pizzero de profesión: ¡te brindo auxilio sin dudarlo y te llevo ya mismo al tordo!'},
-      {w:'ricA',s:'¡Gracias, Pelusa querido! Abramos paso entre estos buitres hasta el quirófano antes de que reviente todo.'}
+      {w:'ricA',s:'Llegué a Mar del Plata arrastrando el dolor de vísceras rotas... Igual tocó Almafuerte en el Atlántico.'},
+      {w:'pelusa_friend',s:'¡Ricardo! Estás herido y todos los caretas se borraron en la mala... ¡Pero yo a pata no te dejo!'},
+      {w:'pelusa_friend',s:'Soy de Alvarado y Peñarol, Mestre de Topacio: ¡te brindo auxilio sin dudarlo y te llevo al tordo!'},
+      {w:'ricA',s:'¡Gracias, Pelusa! Peleemos codo a codo hasta el quirófano.'}
     ],
     rescueLines:[
-      {w:'el_tordo',s:'¡Por Dios! ¿Por qué motivo o razón este perro cristiano aguantó tanto dolor tocando en vivo con las vísceras rotas?'},
-      {w:'ricA',s:'Escuche del tordo mi grave convicción: ¡Hurguen mis infiernos! ¡Autorizo que me operen de urgencia ya mismo!'},
-      {w:'pelusa_friend',s:'¡Operalo tranquilo, doctor! Yo ya mismo aviso a los suyos y me quedo pasilleando toda la madrugada acá afuera cuidándolo.'},
-      {w:'el_tordo',s:'¡A quirófano de inmediato! Quedate firme en el pasillo, Pelusa, que tu auxilio sin dudarlo le salvó la vida.'}
+      {w:'el_tordo',s:'¿Por qué motivo o razón este perro cristiano aguantó tanto dolor con las vísceras rotas?'},
+      {w:'ricA',s:'Escuche mi grave convicción, doctor: ¡Hurguen mis infiernos! ¡Opéreme ya mismo!'},
+      {w:'pelusa_friend',s:'¡Operalo, tordo! Yo aviso a los suyos y me quedo pasilleando toda la madrugada.'},
+      {w:'el_tordo',s:'¡A quirófano! Tu auxilio sin dudarlo le salvó la vida, Pelusa.'}
     ],
     boss:'matasano',
     summons:[['enfermero','informador'],['enfermero','patovica']],
     bossLines:[
-      {w:'pelusa_friend',s:'Ya avisé a los tuyos, Ricardo, y acá sigo pasilleando de madrugada... ¡Pero mirá qué buitres cayeron al pasillo a lucrar con tu desgracia!'},
-      {w:'matasano',s:'¡Nos enteramos que Iorio está en la mala con las vísceras rotas! ¡Venimos por la recaudación del Atlántico y la primicia del hospital!'},
-      {w:'pelusa_friend',s:'¡Acá en el pasillo madrugo yo cuidando a mi hermano! ¡Al amigo en la mala a pata no se lo deja!'},
-      {w:'ricA',s:'¡Recién operado y con el Pelusa firme a mi lado, los vamos a sacar de Mar del Plata a los palazos!'}
+      {w:'pelusa_friend',s:'Ya avisé a los tuyos y acá sigo pasilleando de madrugada... ¡Pero cayeron estos buitres!'},
+      {w:'matasano',s:'¡Iorio está herido en la mala! ¡Venimos por la recaudación y la primicia del hospital!'},
+      {w:'pelusa_friend',s:'¡Acá madrugo yo cuidando a mi amigo! ¡A pata no se lo deja!'},
+      {w:'ricA',s:'¡Con una mano en la herida y Pelusa a mi lado, los sacamos a los palazos!'}
     ],
     winLines:[
-      {w:'ricA',s:'Avisó a los míos, pasilleando madrugó... ¡Desperté y allí estaba este amigo firme al pie de la cama!'},
-      {w:'pelusa_friend',s:'¡Quien al verte en la mala a pata no te dejó, hermano! Ya pasó el infierno, Ricardo: en Topacio te espera una grande de muzza.'},
-      {w:'ricA',s:"¡En Mar del Plata fue sucedido! ¡Pa' Pelusa quiero, pa' Pelusa doy, pa' Pelusa dejo dedicada esta canción!"}
+      {w:'ricA',s:'Avisó a los míos, pasilleando madrugó... ¡Desperté y allí estaba este amigo!'},
+      {w:'pelusa_friend',s:'¡Al verte en la mala a pata no te dejé, hermano! En Topacio te espera una grande de muzza.'},
+      {w:'ricA',s:"¡En Mar del Plata fue sucedido! ¡Es pa' Pelusa, se lo dedico!"}
     ],
     winSay:"¡PA' PELUSA!",
     quips:[
-      '¡Llegué a Mar del Plata arrastrando el dolor de vísceras rotas!',
-      '¡A pesar de eso, Almafuerte tocó para los metaleros del Atlántico!',
-      '¡Tengo un amigo de Alvarado y Peñarol, Mestre de Topacio, pizzero de profesión!',
-      '¡Quien al verme en la mala, a pata no me dejó!',
+      '¡Arrastrando el dolor de vísceras rotas!',
+      '¡Almafuerte tocó en el Atlántico!',
+      '¡Mestre de Topacio, de Alvarado y Peñarol!',
+      '¡Al verme en la mala, a pata no me dejó!',
       '¡Hurguen mis infiernos, él autorizó!',
-      '¡Avisó a los míos, pasilleando madrugó, desperté y allí estaba este amigo!'
+      '¡Desperté y allí estaba este amigo!'
     ]
   };
 }
@@ -3192,12 +3239,10 @@ const PELUSA_SCENE={
   signs:[{x:720,y:72,t:'TOPACIO',c:'#ffb340',off:'#4a2810'}],
   far(g){
     sky(g,['#0b1426','#182844','#2b4668','#4e6e92'],85);
-    // Mar Atlántico de Mar del Plata y luces de la costa
     g.fillStyle='#102438';g.fillRect(0,140,1400,50);
     for(let x=0;x<1400;x+=30){
       g.fillStyle='rgba(210,235,255,.32)';g.fillRect(x+hsh(x,2)*8,144+Math.sin(x*.025)*3,16,2);
     }
-    // Silueta de la Rambla Casino y edificios de Mar del Plata
     g.fillStyle='#1a2436';
     g.fillRect(0,110,1400,32);
     for(let x=35;x<1400;x+=44){
@@ -3212,61 +3257,55 @@ const PELUSA_SCENE={
     const {R,T,g,houses,lamp,poster,brick,sidewalk}=K;
     sidewalk(0,2800);
 
-    // ACTO 1 (x=80..480): Recital de Almafuerte en el Atlántico (Mar del Plata 29/08/2009)
-    R(90,62,370,112,'#181c26');R(90,56,370,8,'#c8322a');
-    T('ALMAFUERTE EN VIVO · MAR DEL PLATA',275,66,'#f2b632',5.5,'center');
-    T('"CONTENTANDO A LOS METALEROS DEL ATLÁNTICO"',275,77,'#ffffff',4,'center');
-    T('"ARRASTRANDO EL DOLOR DE VÍSCERAS ROTAS"',275,86,'#ff6a5a',3.8,'center');
-    // Cajas de sonido / marshalls del show
-    for(const sx of [115,395]){
-      R(sx,100,44,70,'#101216');R(sx+3,104,38,30,'#262a32');R(sx+3,138,38,30,'#262a32');
+    // ACTO 1 (x=90..460): Recital en el Atlántico (Mar del Plata 29/08/2009)
+    R(90,68,360,106,'#181c26');R(90,62,360,6,'#c8322a');
+    T('ALMAFUERTE · MAR DEL PLATA',270,74,'#f2b632',4,'center');
+    T('METALEROS DEL ATLÁNTICO',270,84,'#ffffff',3.5,'center');
+    for(const sx of [115,390]){
+      R(sx,102,42,68,'#101216');R(sx+3,106,36,28,'#262a32');R(sx+3,138,36,28,'#262a32');
     }
-    poster(255,112,48,36,'#12141a',[['29 AGO 09','#f2b632',4.5],['ALMAFUERTE','#ffffff',4.5],['SONÓ IGUAL','#6cace4',4]]);
+    poster(250,112,48,36,'#12141a',[['29 AGO 09','#f2b632',3.5],['ALMAFUERTE','#ffffff',3.5],['MDQ','#6cace4',3.5]]);
 
-    // ACTO 2 (x=540..1240): Pizzería Topacio + Alvarado y Peñarol de Mar del Plata + El Auxilio de Pelusa
-    R(540,68,430,106,'#3e261e');brick(540,68,430,38,'#5c3828');
-    R(556,74,398,26,'#1a1210');
-    T('PIZZERÍA TOPACIO · MESTRE DE TOPACIO',755,80,'#ffb340',5.8,'center');
-    T('CARLOS "PELUSA" LÓPEZ · PIZZERO DE PROFESIÓN',755,91,'#f4ede2',4,'center');
-    // Horno pizzero encendido y mostrador
+    // ACTO 2 (x=540..1240): Pizzería Topacio + Alvarado y Peñarol de Mar del Plata
+    R(540,68,430,106,'#3e261e');brick(540,68,430,36,'#5c3828');
+    R(560,74,390,22,'#1a1210');
+    T('PIZZERÍA TOPACIO · MESTRE DE TOPACIO',755,78,'#ffb340',4,'center');
+    T('PIZZERO DE PROFESIÓN',755,87,'#f4ede2',3.4,'center');
     R(566,112,130,60,'#181416');R(574,118,114,48,'#d85a28');R(584,126,94,34,'#ffb340');
-    T('HORNO A LEÑA',631,114,'#ffffff',3.8,'center');
+    T('HORNO',631,113,'#ffffff',3.4,'center');
 
-    // Escudos / Banderas de ALVARADO y PEÑAROL (Milrayitas azul y blanco de Mar del Plata)
-    // Club Atlético Alvarado (Azul y Blanco con franja diagonal)
+    // Club Atlético Alvarado (Azul y Blanco)
     R(716,110,110,48,'#163a70');R(716,130,110,12,'#ffffff');
-    T('CLUB ALVARADO',771,116,'#ffffff',4.2,'center');
-    T('MAR DEL PLATA',771,146,'#a8d0ff',3.8,'center');
-    // Club Atlético Peñarol de Mar del Plata (El Milrayitas: bastones azules y blancos)
+    T('ALVARADO',771,116,'#ffffff',3.8,'center');
+    T('MDQ',771,145,'#a8d0ff',3.4,'center');
+    // Club Atlético Peñarol de Mar del Plata (El Milrayitas azul y blanco)
     R(842,110,114,48,'#ffffff');
     for(let b=0;b<10;b++)R(842+b*11.4,110,5.7,48,'#163a70');
     R(846,122,106,22,'#102850');
-    T('PEÑAROL MDQ',899,126,'#ffffff',4.2,'center');
-    T('EL MILRAYITAS',899,136,'#ffb340',3.8,'center');
+    T('PEÑAROL MDQ',899,126,'#ffffff',3.8,'center');
+    T('MILRAYITAS',899,135,'#ffb340',3.4,'center');
 
-    // Cartel del Auxilio en la Mala
-    R(1010,92,240,56,'#1c2432');R(1012,94,236,52,'#263246');
-    T('"AL VERME EN LA MALA"',1130,102,'#ffb340',5,'center');
-    T('"A PATA NO ME DEJÓ"',1130,114,'#ffffff',5,'center');
-    T('"ME BRINDÓ AUXILIO SIN DUDARLO"',1130,126,'#8fc4ff',3.8,'center');
+    // Cartel del Auxilio
+    R(1010,96,230,50,'#1c2432');R(1012,98,226,46,'#263246');
+    T('AL VERME EN LA MALA',1125,106,'#ffb340',3.8,'center');
+    T('A PATA NO ME DEJÓ',1125,117,'#ffffff',3.8,'center');
+    T('AUXILIO SIN DUDARLO',1125,128,'#8fc4ff',3.4,'center');
 
-    // ACTO 3 (x=1440..2080): Clínica Marplatense · El Tordo / El Matasano y "Hurguen mis infiernos"
-    R(1460,58,520,116,'#364656');R(1460,52,520,8,'#243240');
-    T('CLÍNICA MARPLATENSE · GUARDIA QUIRÚRGICA',1720,64,'#ffffff',6,'center');
-    T('"PREGUNTÓ EL MATASANO POR QUÉ EL PERRO CRISTIANO AGUANTÓ TANTO DOLOR"',1720,76,'#ffb340',3.8,'center');
-    T('"ESCUCHÓ DEL TORDO MI GRAVE CONVICCIÓN: ¡HURGUEN MIS INFIERNOS!, ÉL AUTORIZÓ"',1720,86,'#8fe0ff',3.8,'center');
-    R(1620,102,200,72,'#1c2834');
-    R(1708,108,24,8,'#c8322a');R(1716,100,8,24,'#c8322a');
+    // ACTO 3 (x=1460..1980): Guardia Quirúrgica · El Tordo / El Matasano
+    R(1460,64,500,110,'#364656');R(1460,58,500,6,'#243240');
+    T('GUARDIA QUIRÚRGICA · EL TORDO',1710,70,'#ffffff',4.2,'center');
+    T('¡HURGUEN MIS INFIERNOS!, ÉL AUTORIZÓ',1710,82,'#8fe0ff',3.5,'center');
+    R(1610,102,200,72,'#1c2834');
+    R(1698,108,24,8,'#c8322a');R(1706,100,8,24,'#c8322a');
 
-    // ACTO 4 (x=2140..2740): El Pasillo de Madrugada y el Despertar ("Avisó a los míos, pasilleando madrugó, desperté y allí estaba este amigo")
-    R(2140,62,560,112,'#283646');R(2140,56,560,8,'#ffb340');
-    T('PASILLO DE GUARDIA · MADRUGADA EN MAR DEL PLATA',2420,68,'#ffb340',5.2,'center');
-    T('"AVISÓ A LOS MÍOS, PASILLEANDO MADRUGÓ"',2420,80,'#ffffff',4.5,'center');
-    T('"DESPERTÉ Y ALLÍ ESTABA ESTE AMIGO · ES PA\' PELUSA, SE LO DEDICO"',2420,92,'#a8e070',4,'center');
-    // Ventanales del pasillo mostrando el amanecer atlántico
-    for(let wx=2180;wx<=2600;wx+=105){
-      R(wx,104,76,48,'#18222e');
-      R(wx+4,108,68,22,'#e89a54');R(wx+4,130,68,18,'#284a6e');
+    // ACTO 4 (x=2140..2700): Pasillo de Madrugada
+    R(2140,64,540,110,'#283646');R(2140,58,540,6,'#ffb340');
+    T('PASILLO DE GUARDIA · MADRUGADA',2410,70,'#ffb340',4,'center');
+    T('AVISÓ A LOS MÍOS · PASILLEANDO MADRUGÓ',2410,81,'#ffffff',3.5,'center');
+    T('DESPERTÉ Y ALLÍ ESTABA ESTE AMIGO',2410,91,'#a8e070',3.5,'center');
+    for(let wx=2180;wx<=2580;wx+=100){
+      R(wx,104,72,48,'#18222e');
+      R(wx+4,108,64,22,'#e89a54');R(wx+4,130,64,18,'#284a6e');
     }
     for(const l of [320,680,1140,1580,2100,2560])lamp(l,64);
   }
@@ -3274,7 +3313,6 @@ const PELUSA_SCENE={
 
 function pelusaInsert(){
   const L=pelusaLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
-  // Insertar como Capítulo 10 (después de Toro y Pampa), antes de Muere Monstruo Muere
   LEVELS.splice(9,0,L);SCENES.splice(9,0,PELUSA_SCENE);
   DISCOS.splice(9,0,{t:"PA' PELUSA",c:'#ffb340',s:'"Trillando la fina" (2012): homenaje de Ricardo Iorio a su amigo leal Carlos "Pelusa" López (Mestre de Topacio, de Alvarado y Peñarol), quien en Mar del Plata no lo dejó a pata, lo llevó a operar de urgencia, avisó a los suyos y madrugó pasilleando hasta que despertó.'});
   AFICHES.splice(9,0,[[640,"PA' PELUSA",'TRILLANDO LA FINA','ALVARADO Y PEÑAROL','#f2b632'],[2260,'MESTRE DE','TOPACIO','A PATA NO ME DEJÓ','#ff5a3a']]);
@@ -3285,7 +3323,14 @@ function pelusaInsert(){
   ]);
   MODS.splice(9,0,'');
   CLIMA.splice(9,0,{moth:1,sep:.28,lbl:"MAR DEL PLATA · PA' PELUSA"});
-  LEVEL_TRACK_MAP.splice(9,0,{song:'pa_pelusa',boss:'b1'});
+  LEVEL_TRACK_MAP.splice(9,0,{song:'pa_pelusa',boss:'pa_pelusa'});
+  if(typeof CINES!=='undefined'){
+    CINES.splice(9,0,[
+      ['stage','MAR DEL PLATA · 29/8/2009','Arrastrando el dolor de vísceras rotas, Ricardo sale igual a cantar con Almafuerte para los metaleros del Atlántico.'],
+      ['scene','MESTRE DE TOPACIO','Su amigo Carlos "Pelusa" López, de Alvarado y Peñarol y pizzero de profesión, al verlo en la mala a pata no lo dejó.'],
+      ['face',"ES PA' PELUSA, SE LO DEDICO",'El tordo operó tras "¡Hurguen mis infiernos!". Pelusa avisó a los suyos, pasilleando madrugó, y al despertar allí estaba este amigo.']
+    ]);
+  }
   if(typeof SHOWS!=='undefined'){
     SHOWS.splice(9,0,{
       v:'MAR DEL PLATA · EL ATLÁNTICO Y TOPACIO',d:'29 DE AGOSTO DE 2009 · TRILLANDO LA FINA (2012)',b:'ALMAFUERTE',
@@ -3304,7 +3349,6 @@ function pelusaInsert(){
 function malvinasInsert(){
 
   const L=malvinasLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
-  // Insertar en la posición 10 (Capítulo 11), desplazando a Tierra Adentro al 12 y Ruta 76 al 13
   LEVELS.splice(10,0,L);SCENES.splice(10,0,MALVINAS_SCENE);
   DISCOS.splice(10,0,{t:'PATRIA AL HOMBRO',c:'#6cace4',s:'Homenaje al sentimiento patriótico de Ricardo Iorio, los 649 caídos y los veteranos de la Gesta de Malvinas de 1982.'});
   AFICHES.splice(10,0,[[640,'LAS MALVINAS','SON ARGENTINAS','1982','#6cace4'],[2260,'HONOR Y GLORIA','A LOS 649','HÉROES','#f2b632']]);
@@ -3316,7 +3360,14 @@ function malvinasInsert(){
   ]);
   MODS.splice(10,0,'');
   CLIMA.splice(10,0,{moth:1,sep:.35,lbl:'PUERTO ARGENTINO · MALVINAS'});
-  LEVEL_TRACK_MAP.splice(10,0,{song:'patria_al_hombro',boss:'sentir_indiano'});
+  LEVEL_TRACK_MAP.splice(10,0,{song:'patria_al_hombro',boss:'patria_al_hombro'});
+  if(typeof CINES!=='undefined'){
+    CINES.splice(10,0,[
+      ['scene','ATLÁNTICO SUR · 1982','En las Islas Malvinas, los soldados argentinos defienden la soberanía nacional en las trincheras australes.'],
+      ['face','PATRIA AL HOMBRO','Ricardo Iorio honró siempre a los 649 héroes caídos y a los veteranos de la Gesta de Malvinas.'],
+      ['stage','MEMORIA ETERNA','¡Las Islas Malvinas fueron, son y serán por siempre argentinas!']
+    ]);
+  }
   if(typeof SHOWS!=='undefined'){
     SHOWS.splice(10,0,{
       v:'HOMENAJE A LOS HÉROES DE MALVINAS',d:'1982 · MEMORIA ETERNA',b:'ALMAFUERTE',
@@ -4044,28 +4095,36 @@ function drawHUD2(){
     if(atkBtn.textContent!==gunName)atkBtn.textContent=gunName;
   }
 
-  txt(String(score).padStart(7,'0'),W-8,8,'#fff',10,'right');txt(LV.place,W-8,22,'#c8b8cc',6,'right');
-  const df=DIFFS[diff];txt(df.name,W-8,32,df.col,5,'right');
-  if(!musicOn)txt('MÚSICA: NO',W-8,41,'#c8b8cc',5,'right');else{const cS=SONGS[song];if(cS&&cS.name)txt('♫ '+cS.name,W-8,41,'#f2b632',4.5,'right');}
-  if(lastHit&&lastHit.e&&!lastHit.e.D.boss&&lastHit.e.max>1){const e=lastHit.e,v=Math.max(0,e.hp)/e.max;txt(e.D.name,8,63,'#efe4d2',6);hudBar(8,72,120,4,v,null,'#e2462c');}
+  txt(String(score).padStart(7,'0'),W-8,8,'#fff',9,'right');txt(LV.place,W-8,21,'#c8b8cc',5,'right');
+  const df=DIFFS[diff];txt(df.name,W-8,30,df.col,4.5,'right');
+  if(!musicOn)txt('MÚSICA: NO',W-8,38,'#c8b8cc',4.5,'right');
+  else{
+    const cS=SONGS[LV.song]||SONGS[song];
+    const pr=typeof levelSongProgress==='function'?levelSongProgress():{cur:0,dur:200,ratio:0};
+    const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');
+    const sName=cS&&cS.name?cS.name:LV.title;
+    txt('♫ '+sName+' '+fmt(pr.cur)+'/'+fmt(pr.dur),W-8,38,'#f2b632',4.2,'right');
+    hudBar(W-108,46,100,3,pr.ratio,null,'#f2b632','#221828');
+  }
+  if(lastHit&&lastHit.e&&!lastHit.e.D.boss&&lastHit.e.max>1){const e=lastHit.e,v=Math.max(0,e.hp)/e.max;txt(e.D.name,8,63,'#efe4d2',5);hudBar(8,71,120,4,v,null,'#e2462c');}
   if(boss&&boss.hp>0&&state==='play'){const v=boss.hp/boss.max,bx=W/2-130,by=H-20;ctx.fillStyle='rgba(10,8,13,.8)';ctx.fillRect(bx-6,by-16,272,30);ctx.fillStyle='#e2462c';ctx.fillRect(bx-6,by-16,272,2);
-    txt(boss.D.name,bx,by-12,'#ff6a4a',8);hudBar(bx,by,260,8,v,null,'#e2462c');}
-  if(combo>=2){const pop=comboT>100?1+(comboT-100)*.04:1;ctx.save();ctx.translate(W-60,74);ctx.scale(pop,pop);txt(String(combo),0,0,'#f2b632',18,'center');txt('GOLPES',0,22,'#efe4d2',7,'center');ctx.restore();
-    const r=combo>=25?'S':combo>=15?'A':combo>=8?'B':combo>=4?'C':'';if(r)txt(r,W-18,78,r==='S'?'#ff5a3a':'#efe4d2',12,'center');}
-  if(goT>0&&goT%40<26&&state==='play'){txt('¡SEGUÍ!',W-74,H/2-8,'#f2b632',12,'center');ctx.fillStyle='#f2b632';ctx.beginPath();ctx.moveTo(W-30,H/2-12);ctx.lineTo(W-14,H/2-2);ctx.lineTo(W-30,H/2+8);ctx.fill();}
-  if(banner){const b=banner,k=Math.min(1,(150-b.t)/14),o=Math.min(1,b.t/14),y=96;ctx.globalAlpha=o;ctx.fillStyle=b.boss?'rgba(120,20,16,.85)':'rgba(10,8,13,.82)';
-    ctx.beginPath();ctx.moveTo(-20+W*(1-k),y);ctx.lineTo(W+20,y);ctx.lineTo(W+20,y+54);ctx.lineTo(-40+W*(1-k),y+54);ctx.fill();ctx.fillStyle='#f2b632';ctx.fillRect(0,y,W,2);ctx.fillRect(0,y+52,W,2);
-    txt(b.a,W/2+(1-k)*200,y+10,b.boss?'#fff':'#f2b632',16,'center');txt(b.b,W/2-(1-k)*200,y+33,'#efe4d2',9,'center');ctx.globalAlpha=1;}
+    txt(boss.D.name,bx,by-12,'#ff6a4a',6.5);hudBar(bx,by,260,8,v,null,'#e2462c');}
+  if(combo>=2){const pop=comboT>100?1+(comboT-100)*.04:1;ctx.save();ctx.translate(W-60,74);ctx.scale(pop,pop);txt(String(combo),0,0,'#f2b632',14,'center');txt('GOLPES',0,18,'#efe4d2',5.5,'center');ctx.restore();
+    const r=combo>=25?'S':combo>=15?'A':combo>=8?'B':combo>=4?'C':'';if(r)txt(r,W-18,78,r==='S'?'#ff5a3a':'#efe4d2',10,'center');}
+  if(goT>0&&goT%40<26&&state==='play'){txt('¡SEGUÍ!',W-74,H/2-8,'#f2b632',10,'center');ctx.fillStyle='#f2b632';ctx.beginPath();ctx.moveTo(W-30,H/2-12);ctx.lineTo(W-14,H/2-2);ctx.lineTo(W-30,H/2+8);ctx.fill();}
+  if(banner){const b=banner,k=Math.min(1,(150-b.t)/14),o=Math.min(1,b.t/14),y=98;ctx.globalAlpha=o;ctx.fillStyle=b.boss?'rgba(120,20,16,.85)':'rgba(10,8,13,.82)';
+    ctx.beginPath();ctx.moveTo(-20+W*(1-k),y);ctx.lineTo(W+20,y);ctx.lineTo(W+20,y+46);ctx.lineTo(-40+W*(1-k),y+46);ctx.fill();ctx.fillStyle='#f2b632';ctx.fillRect(0,y,W,2);ctx.fillRect(0,y+44,W,2);
+    txt(b.a,W/2+(1-k)*200,y+9,b.boss?'#fff':'#f2b632',11,'center');txt(b.b,W/2-(1-k)*200,y+28,'#efe4d2',6,'center');ctx.globalAlpha=1;}
 }
 const BUBR={a:[]};
-// globos de diálogo más grandes, con salto de línea
-function drawBubble2(b){const f=b.f;const X=Math.round(f.x-cam.x),Y0=Math.round(f.y-f.z-(f.D.boss?104:92)*f.st.scale/1.1*PSK);ctx.font='6px '+FONT;
-  const lines=wrapTxt(U(b.s),34),w=Math.max(...lines.map(l=>ctx.measureText(l).width))+10,h=lines.length*8+6;
+// globos de diálogo compactos y legibles
+function drawBubble2(b){const f=b.f;const X=Math.round(f.x-cam.x),Y0=Math.round(f.y-f.z-(f.D.boss?104:92)*f.st.scale/1.1*PSK);ctx.font='4.5px '+FONT;
+  const lines=wrapTxt(U(b.s),28),w=Math.max(...lines.map(l=>ctx.measureText(l).width))+8,h=lines.length*6.5+5;
   let bx=clamp(X-w/2,4,W-w-4),Y=Y0-h+12;
   // si otro globo ya ocupa ese lugar en este cuadro, este sube (o se corre) para no encimarse
   for(let k=0;k<6;k++){const r=BUBR.a.find(r=>bx<r.x+r.w+2&&bx+w+2>r.x&&Y<r.y+r.h+8&&Y+h+8>r.y);if(!r)break;Y=r.y-h-9;if(Y<62){Y=Math.max(62,r.y+r.h+9);bx=clamp(r.x+r.w+6,4,W-w-4);}}
-  BUBR.a.push({x:bx,y:Y,w,h});ctx.fillStyle=OUT;ctx.fillRect(bx-1,Y-1,w+2,h+2);ctx.fillStyle='#f4efe4';ctx.fillRect(bx,Y,w,h);{const tx=clamp(X,bx+6,bx+w-6);ctx.beginPath();ctx.moveTo(tx-4,Y+h);ctx.lineTo(tx+4,Y+h);ctx.lineTo(tx,Y+h+5);ctx.fill();}
-  ctx.fillStyle='#1a1418';ctx.textAlign='left';ctx.textBaseline='top';lines.forEach((l,i)=>ctx.fillText(l,bx+5,Y+3+i*8));}
+  BUBR.a.push({x:bx,y:Y,w,h});ctx.fillStyle=OUT;ctx.fillRect(bx-1,Y-1,w+2,h+2);ctx.fillStyle='#f4efe4';ctx.fillRect(bx,Y,w,h);{const tx=clamp(X,bx+6,bx+w-6);ctx.beginPath();ctx.moveTo(tx-3,Y+h);ctx.lineTo(tx+3,Y+h);ctx.lineTo(tx,Y+h+4);ctx.fill();}
+  ctx.fillStyle='#1a1418';ctx.textAlign='left';ctx.textBaseline='top';lines.forEach((l,i)=>ctx.fillText(l,bx+4,Y+2.5+i*6.5));}
 // a veces, al voltear a uno, Ricardio lo bardea
 const BARDO=['¡Andá a laburar, vago!','¡Sé vos, nomás, careta!','¡Esto es metal pesado argentino!','¡No seas menos de lo que valés!','¡Chupamedias del patrón!','¡Rajá de acá, comerciante informador!','¡Tomá, entregador!','¡Te falta calle y galpón, nene!','¡La pobreza es no superarse!','¡Andá a quejarte al multimedio!','¡Yo soy un trabajador de la música!','¡Cipayo de cuarta!'];
 let bardoT=0;
@@ -4209,7 +4268,25 @@ function targetPose(f){
     case 'runoff':case 'walkoff':return walkPose(f.walkPh,PO.stand);
     default:return f.team===2?(f.hold==='mate'?PO.mate:PO.stand):Object.assign({},PO.idle,{crouch:Math.sin(tick*.08+f.walkPh)*1});
   }}
-function smoothPose(f){let tp=targetPose(f);if(f.hold==='camera'&&['idle','walk','aim'].includes(f.state)){tp=Object.assign({},tp,{fa1:PO.film.fa1,fa2:PO.film.fa2});}const fast=['atk','spec','knee','hbutt','throw','jump','hurt'].includes(f.state),r=fast?.5:.28;for(const k of PK)f.pose[k]+=(tp[k]-f.pose[k])*(k==='rot'?.3:r);}
+function smoothPose(f){
+  let tp=targetPose(f);
+  if(f.hold==='camera'&&['idle','walk','aim'].includes(f.state)){tp=Object.assign({},tp,{fa1:PO.film.fa1,fa2:PO.film.fa2});}
+  if(f.herido&&!['fall','thrown','down','dead','getup','ride','victory'].includes(f.state)){
+    tp=Object.assign({},tp,{
+      ba1:-.12,
+      ba2:1.25,
+      lean:Math.max(tp.lean||0,.22)+Math.sin(tick*.09)*.03,
+      crouch:(tp.crouch||0)+2.2,
+      tilt:(tp.tilt||0)+.08
+    });
+    // Con una mano en las vísceras heridas y luchando con la otra mano
+    if(f.state==='atk'&&f.move&&f.move.pose==='cross'&&f.t>=f.move.a0&&f.t<=f.move.a1+3){
+      tp.fa1=1.62;tp.fa2=1.65;
+    }
+  }
+  const fast=['atk','spec','knee','hbutt','throw','jump','hurt'].includes(f.state),r=fast?.5:.28;
+  for(const k of PK)f.pose[k]+=(tp[k]-f.pose[k])*(k==='rot'?.3:r);
+}
 
 /* ================= rendering ================= */
 const RAIN=Array.from({length:90},()=>({x:Math.random()*W,y:Math.random()*H,s:rnd(4,7),k:Math.random()}));
@@ -4263,10 +4340,10 @@ function drawEnt(e){if(e.gone||e.state==='ride'||e.state==='hidden')return;if(e.
   if(e.D.dozer&&(e.state==='bcharge'||e.state==='ctele'))drawDozer(e,X,Y);
   if(e.st.tail){const s=e.st.scale,w=Math.sin(tick*.1)*6;for(const p of [0,1]){ctx.strokeStyle=p?e.st.skin:OUT;ctx.lineWidth=p?7:10;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(X-e.face*4*s,Y-22*s);ctx.quadraticCurveTo(X-e.face*24*s,Y-8+w,X-e.face*44*s,Y-6-w);ctx.stroke();}if(e.st.horns){const tx=X-e.face*44*s,ty=Y-6-w;ctx.fillStyle=e.st.skin;ctx.beginPath();ctx.moveTo(tx,ty-6*s);ctx.lineTo(tx-e.face*8*s,ty);ctx.lineTo(tx,ty+6*s);ctx.fill();}}
   drawPuppetLit(e,X,Y);
-  if(e.kind==='heavy'&&e.ally){const hb=Math.sin(tick*.22)*2;txt('🤘 BRIGADA 🤘',X,Y-96*e.st.scale+hb,'#f2b632',4.5,'center');}
-  if(e.papeT>0){e.papeT--;const bob=Math.sin(tick*.25)*2;txt('¡PAPERO!',X,Y-98*e.st.scale+bob,'#ff6a4a',5,'center');ctx.fillStyle='#b8864a';ctx.beginPath();ctx.ellipse(X,Y-86*e.st.scale+bob,5,3.6,0,0,7);ctx.fill();}
+  if(e.kind==='heavy'&&e.ally){const hb=Math.sin(tick*.22)*2;txt('🤘 BRIGADA 🤘',X,Y-96*e.st.scale+hb,'#f2b632',4,'center');}
+  if(e.papeT>0){e.papeT--;const bob=Math.sin(tick*.25)*2;txt('¡PAPERO!',X,Y-98*e.st.scale+bob,'#ff6a4a',4.5,'center');ctx.fillStyle='#b8864a';ctx.beginPath();ctx.ellipse(X,Y-86*e.st.scale+bob,5,3.6,0,0,7);ctx.fill();}
   if(e===npcs.rescue&&e.state==='tied'){ctx.strokeStyle='#c9b26a';ctx.lineWidth=1.5;for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(X-9,Y-38+i*7);ctx.lineTo(X+6,Y-40+i*7);ctx.stroke();}}
-  if(e.state==='ctele'){ctx.fillStyle='#ff3b2a';txt('!',X,Y-86*e.st.scale,'#ff3b2a',12,'center');}
+  if(e.state==='ctele'){ctx.fillStyle='#ff3b2a';txt('!',X,Y-86*e.st.scale,'#ff3b2a',10,'center');}
   if(e.state==='aim'){const k=e.t/46;if(k<1){ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.3+k*.6;const s=10+k*26;ctx.drawImage(glow('#fff2c8'),X+e.face*24-s/2,Y-54*e.st.scale-s/2,s,s);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';}}
   if(e.dazed>0){for(let i=0;i<3;i++){const a=tick*.15+i*2.1;ctx.fillStyle='#f2e6a0';ctx.fillRect(X+Math.cos(a)*12-1,Y-90*e.st.scale+Math.sin(a)*3,3,3);}}}
 function drawShot(s){const X=Math.round(s.x-cam.x),Y=Math.round(s.y-s.z);ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(X,Math.round(s.y),5,2,0,0,Math.PI*2);ctx.fill();
@@ -4344,7 +4421,7 @@ function drawToro(t){const R=(a,b,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(a,b,w,h)
   ctx.fillStyle='#1e1a1a';ctx.beginPath();ctx.arc(24,-28,9,0,Math.PI*2);ctx.fill();R(28,-24,8,6,'#3a2e2e');ctx.fillStyle='#e8e2d0';ctx.beginPath();ctx.moveTo(20,-34);ctx.lineTo(14,-44);ctx.lineTo(23,-36);ctx.fill();ctx.beginPath();ctx.moveTo(28,-34);ctx.lineTo(34,-44);ctx.lineTo(29,-36);ctx.fill();
   R(26,-31,2,2,'#ff3a2a');R(-26,-30,3,12,'#1e1a1a');ctx.fillStyle='rgba(255,255,255,.12)';ctx.beginPath();ctx.ellipse(-4,-30,14,4,0,0,Math.PI*2);ctx.fill();}
 function drawHazard(){const h=hazard;if(!h)return;const cx=cam.x;
-  if(h.t<=50){if(h.t%10<6){ctx.fillStyle='rgba(255,60,40,.55)';for(let x=0;x<W;x+=14)ctx.fillRect(x,Math.round(h.y),8,2);txt('!',h.dir>0?16:W-16,Math.round(h.y)-24,'#ff3b2a',12,'center');}return;}
+  if(h.t<=50){if(h.t%10<6){ctx.fillStyle='rgba(255,60,40,.55)';for(let x=0;x<W;x+=14)ctx.fillRect(x,Math.round(h.y),8,2);txt('!',h.dir>0?16:W-16,Math.round(h.y)-24,'#ff3b2a',10,'center');}return;}
   ctx.save();ctx.translate(Math.round(h.x-cx),Math.round(h.y));if(h.dir<0)ctx.scale(-1,1);
   if(h.k==='zorra')drawZorra();else if(h.k==='camion')drawCamion();else if(h.k==='toro')drawToro(h.t);else if(HZD[h.k])HZD[h.k](h.t);
   else{drawMoto(0,0);ctx.fillStyle=OUT;ctx.fillRect(-10,-48,12,24);ctx.fillStyle='#2a2a30';ctx.fillRect(-9,-47,10,22);ctx.fillStyle=OUT;ctx.beginPath();ctx.arc(-3,-52,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c8322a';ctx.beginPath();ctx.arc(-3,-52,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#111';ctx.fillRect(-1,-54,6,3);}
@@ -4382,7 +4459,7 @@ function drawParts(){const cx=cam.x;for(const p of parts){const k=p.t/p.max,X=p.
   else if(p.k==='dust'){ctx.fillStyle='rgba(150,145,160,'+(.5*(1-k)).toFixed(2)+')';ctx.beginPath();ctx.arc(X,p.y,p.r*(1+k),0,Math.PI*2);ctx.fill();}
   else if(p.k==='camflash'){ctx.globalCompositeOperation='lighter';ctx.globalAlpha=1-k;ctx.drawImage(glow('#fff6e0'),X-60,p.y-60,120,120);ctx.fillStyle='rgba(255,250,235,'+(.35*(1-k)).toFixed(2)+')';ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';}
   else if(p.k==='deb'){ctx.fillStyle=p.c;ctx.fillRect(Math.round(X),Math.round(p.y),p.w,p.h);}
-  else if(fxDraw(p,X,k)){}else if(p.k==='txt'){ctx.globalAlpha=1-Math.max(0,k-.6)*2.5;txt(p.s,Math.round(X),Math.round(p.y),p.c,10,'center');ctx.globalAlpha=1;}}}
+  else if(fxDraw(p,X,k)){}else if(p.k==='txt'){ctx.globalAlpha=1-Math.max(0,k-.6)*2.5;txt(p.s,Math.round(X),Math.round(p.y),p.c,6.5,'center');ctx.globalAlpha=1;}}}
 function drawBubble(b){return drawBubble2(b);}
 function portrait(who,x,y,sz){ctx.save();ctx.fillStyle='#120e16';ctx.fillRect(x,y,sz,sz);ctx.beginPath();ctx.rect(x,y,sz,sz);ctx.clip();
   const g=ctx.createLinearGradient(x,y,x,y+sz);g.addColorStop(0,'#3a2440');g.addColorStop(1,'#120e16');ctx.fillStyle=g;ctx.fillRect(x,y,sz,sz);
@@ -4390,10 +4467,10 @@ function portrait(who,x,y,sz){ctx.save();ctx.fillStyle='#120e16';ctx.fillRect(x,
   drawFaceFront(st,x+sz*.02,y+sz*.06,sz*.96);
   ctx.restore();ctx.strokeStyle='#e2462c';ctx.lineWidth=1;ctx.strokeRect(x+.5,y+.5,sz-1,sz-1);}
 function drawHUD(){return drawHUD2();}
-function drawCut(){const c=cut;if(!c)return;const l=c.lines[c.i];const y=H-74;
-  ctx.fillStyle='rgba(8,6,11,.88)';ctx.fillRect(8,y,W-16,66);ctx.fillStyle='#e2462c';ctx.fillRect(8,y,W-16,2);
-  const who=DEFS[l.w]?DEFS[l.w].sty:l.w;portrait(who,14,y+8,50);txt(NAMES[l.w]||NAMES[who]||'',72,y+8,'#f2b632',8);
-  const lines=wrap(l.s.slice(0,Math.floor(c.ch)),52);lines.forEach((s,i)=>txt(s,72,y+22+i*10.5,'#efe4d2',6.5));
+function drawCut(){const c=cut;if(!c)return;const l=c.lines[c.i];const y=H-72;
+  ctx.fillStyle='rgba(8,6,11,.9)';ctx.fillRect(8,y,W-16,64);ctx.fillStyle='#e2462c';ctx.fillRect(8,y,W-16,2);
+  const who=DEFS[l.w]?DEFS[l.w].sty:l.w;portrait(who,14,y+7,48);txt(NAMES[l.w]||NAMES[who]||'',70,y+7,'#f2b632',6);
+  const lines=wrap(l.s.slice(0,Math.floor(c.ch)),62);lines.forEach((s,i)=>txt(s,70,y+19+i*9,'#efe4d2',5));
   if(c.ch>=l.s.length&&tick%40<26){ctx.fillStyle='#f2b632';ctx.beginPath();ctx.moveTo(W-24,y+52);ctx.lineTo(W-16,y+52);ctx.lineTo(W-20,y+58);ctx.fill();}
   ctx.fillStyle='#000';ctx.fillRect(0,0,W,14);}
 
