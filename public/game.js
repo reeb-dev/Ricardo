@@ -1439,20 +1439,20 @@ const NEWLEVELS={
   winLines:[{w:'clausurador',s:'¡Sello aprobado! ¡Adentro, adentro, que ya está habilitado!'},{w:'ricA',s:'Entrá, Tano, y pelá esos solos criollos. ¡Bienvenidos al Mundo Guanaco!'}],
   winSay:'¡MUNDO GUANACO!',quips:['Del amasijo de un gran sueño salimos de pie.','Con el Tano Marciello, pesado y bien criollo.','Al que vive de la coima no se le baja la cabeza.','Como decía Almafuerte: no te des por vencido ni aun vencido.']},
  sierras06:{LW:2600,skin:'ricT',song:'l5',bossSong:'bossFolk',food:'asado',villains:'Cazadores furtivos, falsos gurúes new age, lobizones y El Intendente',title:'TORO Y PAMPA',place:'SIERRA DE LA VENTANA · 2006',hazard:'jabali',
-  card:['En 2006 Almafuerte lanzó "Toro y pampa", celebrando la vida campera, las rutas bonaerenses y la memoria de los amigos.','Le dedicó canciones a sus afectos, como "Pa\' Pelusa" (de "Trillando la fina", 2012), dedicada a un amigo de Mar del Plata.','Radicado lejos de la histeria urbana, reivindicó al hombre de campo y su sangre criolla e indígena.'],
+  card:['En 2006 Almafuerte lanzó "Toro y pampa", su celebrado álbum de estudio que consagró el folclore pesado y la vida de campo.','Inspirado en la amistad pura y leal que más tarde inmortalizó en "Pa\' Pelusa" (Trillando la fina, 2012): homenaje a Carlos "Pelusa" López, pizzero de Mar del Plata, de Alvarado y Peñarol, que en la mala no lo dejó a pata.','En las sierras bonaerenses, Ricardo combate con el orgullo gaucho y criollo para que nadie profane la tierra.'],
   npcs:[{kind:'peon',x:250,y:198,face:1,hold:'mate'}],guns:[[700,'escopeta'],[1700,'escopeta']],
   locks:L_STD([[['cazador','R'],['newage','R']],[['agrimensor','R'],['cazador','L']]],[[['newage','R'],['cazador','L'],['reptil','R']],[['cazador','R'],['newage','L']]],
    [[['reptil','R'],['cazador','L'],['newage','R']],[['agrimensor','L'],['reptil','R'],['cazador','R']]],[[['cazador','L'],['reptil','R'],['newage','R']],[['reptil','R'],['cazador','L'],['newage','R'],['agrimensor','L']]]),
   rescue:{kind:'jubilado',x:1420,y:192},
   props:[[400,'fardo','asado'],[800,'fardo','mate'],[1500,'fardo','asado'],[1900,'fardo','mate'],[2050,'fardo','asado']],pipe:[1460,240],
-  intro:[{w:'peon',s:'Don Ricardo, se metieron cazadores furtivos en la sierra y el Intendente quiere alambrar el arroyo para un loteo privado.'},{w:'ricT',s:'Se llenan la boca hablando de ecología y progreso, y vienen a destruir el monte.'},
-   {w:'pelusa',s:'¡Acá llegó el Pelusa para darte una mano, hermano! Después armamos el asado bajo los eucaliptos.'},{w:'ricT',s:'Grande, Pelusa: la amistad verdadera vale más que todo el oro del mundo. Vamos.'}],pelusa:true,
+  intro:[{w:'peon',s:'Don Ricardo, se metieron cazadores furtivos en la sierra y el Intendente quiere alambrar el arroyo para un loteo privado.'},{w:'ricT',s:'Se llenan la boca hablando de ecología y progreso, y vienen a profanar el monte.'},
+   {w:'peon',s:'Los vecinos resisten como pueden. Como usted siempre dice: al amigo leal se lo honra en la memoria y en la vida.'},{w:'ricT',s:'Así es, hermano: firme en la huella, con el orgullo criollo y la verdad como bandera. ¡Toro y pampa de estudio!'}],
   rescueLines:[{w:'jubilado',s:'¡Gracias, Ricardo! Los matones del municipio me ataron al poste porque no quise vender la servidumbre de paso del arroyo.'},{w:'ricT',s:'El agua y la sierra son de la tierra, don Tito, no de una inmobiliaria.'},
    {w:'jubilado',s:'El Intendente está en el galpón firmando la excepción municipal con los cazadores.'},{w:'ricT',s:'Vamos a vetarle esa ordenanza a mano limpia.'}],
   boss:'intendente',summons:[['cazador','newage'],['reptil','cazador']],
   bossLines:[{w:'intendente',s:'¡Pero Iorio, pensá en el negocio turístico! Un barrio náutico privado en el arroyo nos deja millones a todos.'},{w:'ricT',s:'El que vende el lugar donde nació su gente no merece pisar esta pampa.'},{w:'intendente',s:'¡Cazadores, custodios! ¡Saquen a este gaucho metido del expediente!'}],
-  winLines:[{w:'intendente',s:'¡Rompo el decreto, Ricardo! ¡El arroyo y el cerro quedan libres para el pueblo!'},{w:'ricT',s:'Ahora sí, muchachos: descorchen el tinto y pongan la carne al asador. ¡Toro y pampa!'}],
-  winSay:'¡TORO Y PAMPA!',quips:['Toro y pampa, firme en mi huella.','Con amigos como el Pelusa no hace falta nada más.','Mi madre tenía sangre tehuelche y la llevo con orgullo.','Lejos del cemento se escucha la voz del alma.']}
+  winLines:[{w:'intendente',s:'¡Rompo el decreto, Ricardo! ¡El arroyo y el cerro quedan libres para el pueblo!'},{w:'ricT',s:'Ahora sí, muchachos: descorchen el tinto y pongan la carne al asador. ¡Toro y pampa de estudio y de raíz!'}],
+  winSay:'¡TORO Y PAMPA!',quips:['Toro y pampa, versión de estudio y de raíz.','Al amigo leal, como dice Pa\' Pelusa: en la mala no me dejó a pata.','Mi madre tenía sangre tehuelche y la llevo con orgullo.','Lejos del cemento se escucha la voz del alma.']}
 };
 (function(){
   const order=[0,'caseros79',1,'recoleta88',2,'monumental94','cemento95',3,'sierras06',4];
