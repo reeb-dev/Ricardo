@@ -330,19 +330,388 @@ function HELD(weapon,hx,hy,a2,f,st){
     if(weapon==='patacon'){ctx.fillStyle=OUT;ctx.fillRect(hx-6,hy-6,12,7);ctx.fillStyle='#a8c08a';ctx.fillRect(hx-5,hy-5,10,5);ctx.fillStyle='#5a7a4a';ctx.fillRect(hx-1,hy-4,3,3);}
     if(GUNS&&GUNS[weapon])drawGunHeld(weapon,hx,hy,a2,f);
     if(weapon==='mate'){for(const p of [0,1])Cc(hx+1,hy-3,3.4,'#5c3a1e',p);ctx.strokeStyle='#c9c9cf';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(hx+1,hy-5);ctx.lineTo(hx+3,hy-10);ctx.stroke();}}
+function drawF100Body(ctx,opt){
+  opt=opt||{};
+  const fl=!!opt.fl;
+  const isPlayer=!!opt.isPlayer;
+  const riding=!!opt.riding;
+  const e=opt.e||null;
+  const walkPh=opt.walkPh||0;
+  const t=typeof tick!=='undefined'?tick:0;
+  const R=(a,b,w,h,c)=>{ctx.fillStyle=fl?'#fff':c;ctx.fillRect(a,b,w,h);};
+
+  // 1. Haz de faros delanteros (proyección sobre la ruta o terreno)
+  if(!fl&&opt.lights){
+    const reach=isPlayer?175:135;
+    const bright=0.58;
+    const hg=ctx.createLinearGradient(56,-26,reach,-10);
+    hg.addColorStop(0,'rgba(255,246,195,'+bright+')');
+    hg.addColorStop(0.35,'rgba(255,238,160,'+(bright*0.45)+')');
+    hg.addColorStop(1,'rgba(255,230,140,0)');
+    ctx.fillStyle=hg;
+    ctx.beginPath();
+    ctx.moveTo(56,-28);
+    ctx.lineTo(reach,-44);
+    ctx.lineTo(reach,-1);
+    ctx.lineTo(56,-20);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // 2. Humo rutero de escape diesel (cuando está en marcha)
+  if(!fl&&riding){
+    const puff=(t*0.45)%24;
+    for(let k=0;k<3;k++){
+      const pAge=(puff+k*8)%24;
+      const px=-65-pAge*1.6;
+      const py=-14-Math.sin(pAge*0.25)*3-pAge*0.25;
+      const pr=2.4+pAge*0.32;
+      const pa=Math.max(0,0.42-pAge*0.017);
+      ctx.fillStyle='rgba(74,76,84,'+pa+')';
+      ctx.beginPath();
+      ctx.arc(px,py,pr,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  // 3. Caño de escape
+  R(-65,-15,6,3,'#52555e');
+  R(-66,-14,2,2,'#2b2c32');
+
+  // 4. Silueta y estructura base (outlines)
+  R(-61,-37,120,28,OUT);
+  R(-2,-56,42,23,OUT);
+  R(38,-56,3,3,OUT);
+
+  // 5. Caja de carga pampeana (barandas de estacas de quebracho y equipo)
+  R(-59,-47,57,11,OUT);
+  R(-58,-46,55,3,'#8d542a');
+  R(-58,-46,55,1,'#ad6f3a');
+  R(-58,-42,55,3,'#784520');
+  R(-58,-42,55,1,'#9c5f2d');
+  for(const sx of [-58,-40,-22,-4]){
+    R(sx,-48,3,13,OUT);
+    R(sx+0.5,-47,2,11,'#2b2a32');
+    R(sx+0.5,-45,2,1,'#d8dbe0');
+    R(sx+0.5,-39,2,1,'#d8dbe0');
+  }
+
+  // Amplificador Marshall JCM800 en la caja
+  R(-50,-52,23,16,OUT);
+  R(-49,-51,21,14,'#17171d');
+  R(-48,-47,19,9,'#cbb483');
+  R(-47,-46,17,1,'#e2cb98');
+  R(-48,-50,19,2.5,'#d4a838');
+  for(let kb=0;kb<4;kb++)R(-46+kb*4,-49.5,1.5,1.5,'#111');
+  R(-44,-44,11,1.5,'#f4f4f4');
+  R(-42,-53,7,1.5,'#111');
+
+  // Bidón rutero rojo de chapa (Jerry Can militar/campero)
+  R(-24,-48,12,12,OUT);
+  R(-23,-47,10,10,'#b32219');
+  R(-23,-47,10,2,'#d6382e');
+  R(-21,-44,6,5,'#8f1912');
+  R(-20,-50,4,3,'#b32219');
+  R(-21,-50,6,1,'#d8b83a');
+  R(-23,-49,10,1.2,'#1a1920');
+
+  // Rueda de auxilio atada con correa de cuero
+  R(-11,-49,9,13,OUT);
+  R(-10,-48,7,11,'#1b1b22');
+  R(-8,-46,3,7,'#ede5cf');
+  R(-12,-43,11,1.5,'#5a381e');
+
+  // Antena látigo de radioaficionado (CB) con cinta argentina
+  if(!fl){
+    const antCurv=riding?Math.sin(t*0.25)*1.5-2:0;
+    ctx.strokeStyle='#c0c4cc';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(-2,-54);
+    ctx.quadraticCurveTo(-5+antCurv*0.5,-66,-9+antCurv,-76);
+    ctx.stroke();
+    R(-3,-55,3,2,'#666');
+    const ribY=-71+Math.sin(t*0.35)*1.2;
+    const ribX=-7+antCurv*0.8;
+    const ribW=riding?8+Math.sin(t*0.4)*2:6;
+    ctx.fillStyle='#74acdf';ctx.fillRect(ribX-ribW,ribY,ribW,1.4);
+    ctx.fillStyle='#ffffff';ctx.fillRect(ribX-ribW,ribY+1.4,ribW,1.4);
+    ctx.fillStyle='#74acdf';ctx.fillRect(ribX-ribW,ribY+2.8,ribW,1.4);
+    ctx.fillStyle='#f6b40e';ctx.fillRect(ribX-ribW*0.55,ribY+1.4,1.4,1.4);
+  }
+
+  // 6. Carrocería Two-Tone: Azul Acero y Techo Crema
+  R(-60,-30,118,18,'#2d5470');
+  R(-60,-30,118,2.5,'#4a7b9c');
+  R(-60,-13,118,1.5,'#1b3547');
+  R(-60,-36,58,7,'#2d5470');
+  R(-60,-37,58,1.5,'#4a7b9c');
+  R(38,-38,20,9,'#2d5470');
+  R(38,-38,20,2,'#4a7b9c');
+  R(42,-36,14,1,'#5d92b5');
+
+  // Techo crema vintage con alero
+  R(-1,-55,40,4,'#ede5cf');
+  R(-1,-55,41,1.5,'#fbf7ed');
+  R(37,-54,3,2,'#ede5cf');
+  // Pilares de la cabina (B-pillar trasero y parante de techo)
+  R(-1,-51,4,14,'#ede5cf');
+  R(30,-51,3,13,'#ede5cf');
+
+  // 3 Luces reglamentarias ámbar del techo
+  if(!fl){
+    for(const lx of [8,19,30]){
+      ctx.fillStyle='#ffaa18';
+      ctx.beginPath();
+      ctx.arc(lx,-55.5,1.4,0,Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle='#fff4a0';
+      ctx.fillRect(lx-0.5,-56,1,1);
+    }
+  }
+
+  // Moldura cromada lateral (chrome spear) con alma negra
+  R(-60,-31.5,118,2,'#e0e4eb');
+  R(-60,-31,118,0.8,'#1b1b22');
+
+  // 7. Ventanillas y Cabina
+  // Parabrisas delantero inclinado
+  ctx.fillStyle=fl?'#fff':'#141e28';
+  ctx.beginPath();
+  ctx.moveTo(33,-51);
+  ctx.lineTo(41,-38);
+  ctx.lineTo(33,-38);
+  ctx.closePath();
+  ctx.fill();
+  if(!fl){
+    ctx.strokeStyle='rgba(255,255,255,0.35)';
+    ctx.lineWidth=1.2;
+    ctx.beginPath();
+    ctx.moveTo(35,-49);
+    ctx.lineTo(39,-41);
+    ctx.stroke();
+  }
+
+  // Ventanilla lateral de la puerta
+  R(3,-51,27,13,'#16232e');
+  // Ventilete triangular clásico delantero con poste cromado
+  R(24,-51,1.2,13,'#d8dce2');
+  if(!fl){
+    ctx.fillStyle='rgba(130,185,220,0.25)';
+    ctx.beginPath();
+    ctx.moveTo(4,-50);
+    ctx.lineTo(13,-50);
+    ctx.lineTo(7,-39);
+    ctx.lineTo(3,-39);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Conductor / Interior
+  if(isPlayer&&e){
+    ctx.save();
+    ctx.translate(16,-41);
+    ctx.scale(0.92,0.92);
+    drawHead2(0,0,0.06,e.st,fl,0);
+    ctx.restore();
+    R(25,-43,3,7,'#111');
+    R(24,-45,1.5,4,'#333');
+    R(15,-39,12,3.5,e.st?e.st.skin:'#d39a74');
+    if(e.hold||e.state==='spec'||e.state==='atk'){
+      ctx.save();
+      HELD(e.state==='spec'?'bass':(e.hold||'pipe'),32,-39,1.35,e,e.st);
+      ctx.restore();
+    }
+  }else if(riding){
+    ctx.fillStyle='#1c1b22';
+    ctx.beginPath();
+    ctx.arc(16,-44,4.5,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#d39a74';
+    ctx.fillRect(15,-44,5,4);
+    ctx.fillStyle='#111';
+    ctx.fillRect(17,-43,3,2);
+    ctx.fillStyle='#3a2418';
+    ctx.fillRect(14,-40,12,3);
+    R(24,-43,3,6,'#111');
+    R(16,-39,10,3,'#d39a74');
+  }else{
+    R(6,-45,18,6,'#5a3822');
+    R(7,-46,16,2,'#74482c');
+    R(24,-44,2.5,6,'#222');
+  }
+
+  // Espejo retrovisor cromado
+  R(30,-43,3,1,'#c0c4cc');
+  R(32,-45,1.5,4.5,'#e0e4eb');
+  R(32.5,-44.5,1,3.5,'#6a8ca8');
+
+  // Manija de puerta
+  R(8,-34,6,2,'#d8dce4');
+  R(8,-31.5,1.5,1.5,'#444');
+
+  // Insignia roja y cromada FORD F-100 en el guardabarro
+  R(42,-34,9,3,'#9e1814');
+  R(42,-34,9,0.6,'#e0e4eb');
+  R(42,-31.6,9,0.6,'#e0e4eb');
+  R(43,-33.2,1.8,1.4,'#fff');
+  R(45.5,-33.2,1.2,1.4,'#fff');
+  R(47.5,-33.2,2.5,1.4,'#fff');
+  R(40,-37.2,14,0.9,'#d8dce4');
+
+  // Cruz Pampa y homenaje RP 76 en la puerta
+  R(14,-26,6,2,'#d4a838');
+  R(16,-28,2,6,'#d4a838');
+  R(15,-25.5,4,1,'#fff4b0');
+  if(!fl){
+    ctx.fillStyle='#eedcbf';
+    ctx.font='3.5px '+FONT;
+    ctx.textAlign='center';
+    ctx.textBaseline='top';
+    ctx.fillText('RP 76',17,-22);
+  }
+
+  // Letras cromadas "FORD F-100" en la caja
+  if(!fl){
+    ctx.fillStyle='#eedcbf';
+    ctx.font='4px '+FONT;
+    ctx.textAlign='left';
+    ctx.textBaseline='middle';
+    ctx.fillText('FORD F-100',-55,-25);
+  }
+
+  // 8. Parrilla cromada, ópticas y paragolpes
+  R(55,-36,5,19,OUT);
+  R(56,-35,3.5,17,'#1b1c20');
+  for(let gy=-34;gy<=-19;gy+=3){
+    R(56,gy,3.5,1,'#d8dce4');
+  }
+  R(57.5,-35,1,17,'#e8ecf4');
+  R(57,-26.5,2.5,2,'#184fa2');
+  R(57.5,-26,1.5,1,'#fff');
+
+  // Ópticas delanteras selladas con bisel cromado
+  ctx.fillStyle=OUT;
+  ctx.beginPath();
+  ctx.arc(55,-27,4.2,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle='#d8dce4';
+  ctx.beginPath();
+  ctx.arc(55,-27,3.6,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle=fl?'#fff':(opt.lights?'#fff8d8':'#d2d9e4');
+  ctx.beginPath();
+  ctx.arc(55,-27,2.7,0,Math.PI*2);
+  ctx.fill();
+  if(!fl){
+    ctx.strokeStyle=opt.lights?'#f4d27a':'#9ea7b4';
+    ctx.lineWidth=0.8;
+    ctx.beginPath();
+    ctx.moveTo(54,-28);ctx.lineTo(54,-26);
+    ctx.moveTo(56,-28);ctx.lineTo(56,-26);
+    ctx.stroke();
+  }
+
+  // Guiño ámbar
+  R(55,-20,3,2,'#ea8e16');
+  R(55.5,-19.5,2,1,'#ffc24a');
+
+  // Paragolpes cromados con uñas de goma negra
+  R(53,-15,10,4.5,OUT);
+  R(54,-14.5,8.5,3.5,'#e4e8f0');
+  R(54,-14.5,8.5,1,'#ffffff');
+  R(54,-12,8.5,1,'#8b8f98');
+  R(58,-16.5,2.5,7.5,'#16161a');
+  R(58.5,-16,1.5,6.5,'#2e2e36');
+  R(58.5,-15.5,1.5,1,'#d8dce4');
+
+  R(-64,-15,9,4.5,OUT);
+  R(-63.5,-14.5,8,3.5,'#e4e8f0');
+  R(-63.5,-14.5,8,1,'#ffffff');
+  R(-63.5,-12,8,1,'#8b8f98');
+  R(-62,-16.5,2.5,7.5,'#16161a');
+
+  // Baberos y barro pampeano
+  R(-48,-15,3,8,'#141418');
+  R(-47.5,-9,2,1.5,'#ffffff');
+  R(-58,-15,112,2.5,'#543c26');
+  R(-46,-18,20,2.5,'#6a4e32');
+  R(24,-18,22,2.5,'#6a4e32');
+
+  // 9. Pasarrudas, neumáticos todoterreno y tazas cromadas
+  const rot=walkPh*1.5;
+  for(const wx of [-38,34]){
+    ctx.fillStyle=OUT;
+    ctx.beginPath();
+    ctx.arc(wx,-10,13.5,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#101014';
+    ctx.beginPath();
+    ctx.arc(wx,-10,12.8,0,Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle=fl?'#fff':'#1c1b22';
+    ctx.beginPath();
+    ctx.arc(wx,-10,11.8,0,Math.PI*2);
+    ctx.fill();
+
+    if(!fl){
+      ctx.strokeStyle='#111116';
+      ctx.lineWidth=1.6;
+      for(let tStep=0;tStep<8;tStep++){
+        const ta=rot+tStep*(Math.PI/4);
+        ctx.beginPath();
+        ctx.moveTo(wx+Math.cos(ta)*9.5,-10+Math.sin(ta)*9.5);
+        ctx.lineTo(wx+Math.cos(ta)*11.6,-10+Math.sin(ta)*11.6);
+        ctx.stroke();
+      }
+    }
+
+    ctx.fillStyle=fl?'#fff':'#ede5cf';
+    ctx.beginPath();
+    ctx.arc(wx,-10,8.5,0,Math.PI*2);
+    ctx.fill();
+
+    if(!fl){
+      ctx.fillStyle='#222';
+      for(let sl=0;sl<4;sl++){
+        const sa=rot+sl*(Math.PI/2);
+        ctx.fillRect(wx+Math.cos(sa)*6.2-1,-10+Math.sin(sa)*6.2-1,2,2);
+      }
+    }
+
+    ctx.fillStyle=fl?'#fff':'#e4e8f0';
+    ctx.beginPath();
+    ctx.arc(wx,-10,4.6,0,Math.PI*2);
+    ctx.fill();
+
+    if(!fl){
+      ctx.fillStyle='#ffffff';
+      ctx.beginPath();
+      ctx.arc(wx-1,-11,2,0,Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle='#6a6e78';
+      ctx.fillRect(wx-1,-11,2,2);
+      ctx.fillStyle='#3a3a42';
+      for(let bIdx=0;bIdx<4;bIdx++){
+        const ba=rot+bIdx*(Math.PI/2)+Math.PI/4;
+        ctx.fillRect(wx+Math.cos(ba)*3.4-0.6,-10+Math.sin(ba)*3.4-0.6,1.2,1.2);
+      }
+    }
+  }
+}
 function drawTruck(x,y,riding){
-  ctx.save();ctx.translate(Math.round(x),Math.round(y));
-  const R=(a,b,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(a,b,w,h);};
-  R(-61,-37,120,28,OUT);R(-2,-55,41,22,OUT);
-  R(-60,-30,118,18,'#3f6a86');R(-60,-30,118,3,'#5a87a4');R(-60,-36,58,6,'#3f6a86');R(-60,-37,58,2,'#5a87a4');
-  R(-1,-54,39,22,'#e6dcc2');R(4,-50,28,13,'#24323e');R(5,-49,8,3,'#4a5e6e');
-  if(riding){ctx.fillStyle='#bdb8ae';ctx.beginPath();ctx.arc(24,-42,5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#d39a74';ctx.fillRect(26,-43,4,4);ctx.fillStyle='#d6d2ca';ctx.fillRect(26,-40,4,3);}
-  R(38,-38,20,8,'#3f6a86');R(38,-38,20,2,'#5a87a4');R(55,-36,5,18,'#c9ccd2');R(56,-34,3,1,'#6a6e78');R(56,-30,3,1,'#6a6e78');
-  R(-62,-14,8,3,'#c9ccd2');R(52,-14,9,3,'#c9ccd2');R(40,-24,6,2,'#24323e');
-  ctx.fillStyle='#fff3c8';ctx.beginPath();ctx.arc(55,-27,2.5,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#e6dcc2';ctx.font='5px '+FONT;ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText('F100',40,-34);
-  for(const wx of [-38,34]){ctx.fillStyle=OUT;ctx.beginPath();ctx.arc(wx,-10,11,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1c1b20';ctx.beginPath();ctx.arc(wx,-10,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='#e6dcc2';ctx.beginPath();ctx.arc(wx,-10,4.5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#8a8790';ctx.fillRect(wx-1,-11,2,2);}
-  ctx.restore();}
+  ctx.save();
+  ctx.translate(Math.round(x),Math.round(y));
+  drawF100Body(ctx,{
+    riding:!!riding,
+    lights:!!riding,
+    walkPh:riding?(typeof tick!=='undefined'?tick*0.18:0):0,
+    fl:false,
+    isPlayer:false
+  });
+  ctx.restore();
+}
 function drawMoto(x,y,run){
   ctx.save();ctx.translate(Math.round(x),Math.round(y));ctx.lineCap='round';
   for(const p of [0,1]){Cc(-20,-10,10,'#141216',p);Cc(20,-10,10,'#141216',p);}
@@ -5948,68 +6317,16 @@ function drawPlayerCamioneta(e,X,Y){
   const camScale=1.46;
   ctx.scale((e.face||1)*camScale,camScale);
   const fl=e.flash>0;
-  const R=(a,b,w,h,c)=>{ctx.fillStyle=fl?'#fff':c;ctx.fillRect(a,b,w,h);};
-  // Haz de faros delanteros iluminando la Ruta 76
-  if(!fl){
-    const pSun=clamp((player?player.x:0)/((LV.LW||7200)-360),0,1);
-    const bright=(e.lights>0||pSun>.65)?0.62:0.42;
-    const reach=(e.lights>0||pSun>.65)?170:140;
-    const hg=ctx.createLinearGradient(54,-26,reach,-12);
-    hg.addColorStop(0,'rgba(255,246,200,'+bright+')');
-    hg.addColorStop(1,'rgba(255,246,200,0)');
-    ctx.fillStyle=hg;
-    ctx.beginPath();ctx.moveTo(54,-28);ctx.lineTo(reach,-44);ctx.lineTo(reach,-2);ctx.lineTo(54,-22);ctx.closePath();ctx.fill();
-  }
-  // Caño de escape y humo rutero
-  R(-64,-15,6,3,'#6a6e78');
-  // Chasis y carrocería de la F100 pampeana
-  R(-61,-37,120,28,OUT);R(-2,-56,42,23,OUT);
-  // Caja con equipo Marshall y bidón rutero
-  R(-50,-50,24,14,OUT);R(-49,-49,22,12,'#1c1a22');R(-45,-46,14,2,'#d8c498');
-  R(-22,-47,12,11,OUT);R(-21,-46,10,9,'#b83228');
-  // Carrocería azul acero y techo crema
-  R(-60,-30,118,18,'#2f5670');R(-60,-30,118,3,'#4e7c9a');
-  R(-60,-36,58,6,'#2f5670');R(-60,-37,58,2,'#4e7c9a');
-  R(-1,-55,40,22,'#e6dcc2');
-  // Ventanilla de cabina con Ricardo al volante
-  R(3,-51,30,14,'#1a242e');R(4,-50,10,2,'#3e5468');
-  ctx.save();
-  ctx.translate(16,-41);
-  ctx.scale(.92,.92);
-  drawHead2(0,0,.06,e.st,fl,0);
-  ctx.restore();
-  // Volante y brazo de Ricardo asomando por la ventanilla
-  R(26,-42,3,6,'#111');
-  R(18,-39,10,3.5,e.st.skin);
-  if(e.hold||e.state==='spec'||e.state==='atk'){
-    ctx.save();
-    HELD(e.state==='spec'?'bass':(e.hold||'pipe'),32,-39,1.35,e,e.st);
-    ctx.restore();
-  }
-  // Capot, trompa cromada F100 y barro de las márgenes de la Ruta 76
-  R(38,-38,20,8,'#2f5670');R(38,-38,20,2,'#4e7c9a');
-  R(55,-36,5,18,'#c9ccd2');R(56,-34,3,1,'#5a5e68');R(56,-30,3,1,'#5a5e68');
-  R(-62,-14,8,4,'#c9ccd2');R(52,-14,10,4,'#c9ccd2');
-  // Emblema Cruz Pampa en la puerta y barro rutero en los guardabarros
-  R(14,-26,6,2,'#e2b638');R(16,-28,2,6,'#e2b638');
-  R(-58,-16,112,3,'#5c442c');R(-46,-19,20,3,'#6a4e32');R(24,-19,22,3,'#6a4e32');
-  ctx.fillStyle=fl?'#fff':'#fff3c8';ctx.beginPath();ctx.arc(56,-27,2.8,0,Math.PI*2);ctx.fill();
-  if(!fl){ctx.fillStyle='#e6dcc2';ctx.font='5.0px '+FONT;ctx.textAlign='left';ctx.textBaseline='top';ctx.fillText('FORD F100 · RP 76',-54,-26);}
-  // Ruedas girando con barro
-  const rot=(e.walkPh||0)*1.4;
-  for(const wx of [-38,34]){
-    ctx.fillStyle=OUT;ctx.beginPath();ctx.arc(wx,-10,11.5,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=fl?'#fff':'#1c1b20';ctx.beginPath();ctx.arc(wx,-10,10.2,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=fl?'#fff':'#e6dcc2';ctx.beginPath();ctx.arc(wx,-10,4.6,0,Math.PI*2);ctx.fill();
-    if(!fl){
-      ctx.strokeStyle='#6a4e32';ctx.lineWidth=1.4;
-      for(let s=0;s<3;s++){
-        const a=rot+s*Math.PI*2/3;
-        ctx.beginPath();ctx.moveTo(wx+Math.cos(a)*2, -10+Math.sin(a)*2);
-        ctx.lineTo(wx+Math.cos(a)*8.5, -10+Math.sin(a)*8.5);ctx.stroke();
-      }
-    }
-  }
+  const pSun=clamp((player?player.x:0)/((LV.LW||7200)-360),0,1);
+  const lightsOn=(e.lights>0||pSun>.65);
+  drawF100Body(ctx,{
+    e:e,
+    riding:true,
+    lights:lightsOn,
+    walkPh:e.walkPh||0,
+    fl:fl,
+    isPlayer:true
+  });
   ctx.restore();
 }
 const PCW=330,PCH=330,PC=document.createElement('canvas');PC.width=PCW*RS;PC.height=PCH*RS;const PCX=PC.getContext('2d');
@@ -6627,7 +6944,7 @@ function drawBigFin(cx, cy, t){
   ctx.fill();
   ctx.restore();
 
-  txt('★  LIBERTAD Y METAL PESADO  ★', 0, 17, '#ffe48a', 3.8, 'center');
+  txt('★  LIBERTAD Y METAL PESADO  ★', 0, 13, '#ffe48a', 3.5, 'center');
   ctx.restore();
 }
 
@@ -6747,49 +7064,66 @@ function drawEnding(){
   ctx.fill();
   drawFlag(285, 36, 175, 108, t);
 
-  // 6) PANEL IZQUIERDO DE HOMENAJE (Columna de honor: x=8..194)
-  // Gran título "FIN" en 3D sobre la columna izquierda
-  drawBigFin(101, 20, t);
+  // 6) PANEL IZQUIERDO DE HOMENAJE (Columna de honor: x=8..210)
+  // Gran título "FIN" en 3D sobre la columna izquierda con amplio respiro
+  drawBigFin(108, 15, t);
+
+  // Helper para textos nítidos con sombra limpia antidesenfoque y soporte limpio para fuentes retro
+  const drawCleanTxt = (str, x, y, col, fontStr, align = 'center') => {
+    ctx.save();
+    let s = String(str);
+    if(fontStr.includes('Press Start 2P')){
+      s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+    ctx.font = fontStr;
+    ctx.textAlign = align;
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#000000';
+    ctx.fillText(s, x + 0.8, y + 0.8);
+    ctx.fillStyle = col;
+    ctx.fillText(s, x, y);
+    ctx.restore();
+  };
 
   // --- PANEL 1: CUATRO PILARES DEL METAL (Logos en cuadrícula 2x2 sin superposición) ---
-  const p1x = 8, p1y = 44, p1w = 186, p1h = 64;
-  ctx.fillStyle = 'rgba(12, 10, 16, 0.92)';
+  const p1x = 8, p1y = 40, p1w = 200, p1h = 60;
+  ctx.fillStyle = 'rgba(12, 10, 16, 0.94)';
   ctx.fillRect(p1x, p1y, p1w, p1h);
-  ctx.strokeStyle = '#4a3d24';
+  ctx.strokeStyle = '#cda238';
   ctx.lineWidth = 1.2;
   ctx.strokeRect(p1x, p1y, p1w, p1h);
   ctx.fillStyle = '#f2c03a';
   for(const [rx, ry] of [[p1x+2, p1y+2], [p1x+p1w-3, p1y+2], [p1x+2, p1y+p1h-3], [p1x+p1w-3, p1y+p1h-3]]){
     ctx.fillRect(rx, ry, 2, 2);
   }
-  txt('✦ CUATRO PILARES DEL METAL PESADO ✦', p1x + p1w/2, p1y + 4, '#f2d278', 4.0, 'center');
+  drawCleanTxt('✦ CUATRO PILARES DEL METAL PESADO ✦', p1x + p1w/2, p1y + 6, '#ffd700', 'bold 4.8px "Press Start 2P", monospace');
 
   // Divisores en cruz sutiles
-  ctx.strokeStyle = 'rgba(255, 215, 0, 0.12)';
+  ctx.strokeStyle = 'rgba(255, 215, 0, 0.16)';
   ctx.lineWidth = 0.8;
   ctx.beginPath();
-  ctx.moveTo(p1x + p1w/2, p1y + 16); ctx.lineTo(p1x + p1w/2, p1y + p1h - 4);
-  ctx.moveTo(p1x + 10, p1y + 38); ctx.lineTo(p1x + p1w - 10, p1y + 38);
+  ctx.moveTo(p1x + p1w/2, p1y + 14); ctx.lineTo(p1x + p1w/2, p1y + p1h - 4);
+  ctx.moveTo(p1x + 10, p1y + 36); ctx.lineTo(p1x + p1w - 10, p1y + 36);
   ctx.stroke();
 
-  // Logos colocados con amplio margen (52px de espacio libre entre columnas)
-  drawV8Logo(ctx, p1x + 46, p1y + 26, 0.65, finSongBand === 'v8' && finSingT > 0);
-  drawHermeticaLogo(ctx, p1x + 140, p1y + 26, 0.62, finSongBand === 'hermetica' && finSingT > 0);
-  drawAlmafuerteLogo(ctx, p1x + 46, p1y + 51, 0.62, finSongBand === 'almafuerte' && finSingT > 0);
-  drawIorioLogo(ctx, p1x + 140, p1y + 51, 0.65, finSongBand === 'iorio' && finSingT > 0);
+  // Logos colocados con amplio margen
+  drawV8Logo(ctx, p1x + 48, p1y + 24, 0.65, finSongBand === 'v8' && finSingT > 0);
+  drawHermeticaLogo(ctx, p1x + 152, p1y + 24, 0.62, finSongBand === 'hermetica' && finSingT > 0);
+  drawAlmafuerteLogo(ctx, p1x + 48, p1y + 48, 0.62, finSongBand === 'almafuerte' && finSingT > 0);
+  drawIorioLogo(ctx, p1x + 152, p1y + 48, 0.65, finSongBand === 'iorio' && finSingT > 0);
 
   // --- PANEL 2: DISCOGRAFÍA HISTÓRICA (5 vinilos esenciales) ---
-  const p2x = 8, p2y = 112, p2w = 186, p2h = 56;
-  ctx.fillStyle = 'rgba(12, 10, 16, 0.92)';
+  const p2x = 8, p2y = 104, p2w = 200, p2h = 56;
+  ctx.fillStyle = 'rgba(12, 10, 16, 0.94)';
   ctx.fillRect(p2x, p2y, p2w, p2h);
-  ctx.strokeStyle = '#4a3d24';
+  ctx.strokeStyle = '#cda238';
   ctx.lineWidth = 1.2;
   ctx.strokeRect(p2x, p2y, p2w, p2h);
   ctx.fillStyle = '#f2c03a';
   for(const [rx, ry] of [[p2x+2, p2y+2], [p2x+p2w-3, p2y+2], [p2x+2, p2y+p2h-3], [p2x+p2w-3, p2y+p2h-3]]){
     ctx.fillRect(rx, ry, 2, 2);
   }
-  txt('✦ DISCOGRAFÍA HISTÓRICA ✦', p2x + p2w/2, p2y + 4, '#f2d278', 4.0, 'center');
+  drawCleanTxt('✦ DISCOGRAFIA HISTORICA ✦', p2x + p2w/2, p2y + 6, '#ffd700', 'bold 4.8px "Press Start 2P", monospace');
 
   const albList = [
     { k: 'luchando', yr: '1983' },
@@ -6799,7 +7133,7 @@ function drawEnding(){
     { k: 'toroypampa', yr: '2006' }
   ];
   albList.forEach((a, idx) => {
-    const ax = p2x + 8 + idx * 35;
+    const ax = p2x + 10 + idx * 37;
     const ay = p2y + 14;
     const asz = 28;
     drawAlbumCover(ctx, a.k, ax, ay, asz);
@@ -6808,26 +7142,42 @@ function drawEnding(){
       ctx.lineWidth = 1.6;
       ctx.strokeRect(ax - 1, ay - 1, asz + 2, asz + 2);
     }
-    txt(a.yr, ax + asz/2, ay + asz + 3, finSongAlbum === a.k ? '#ffe48a' : '#c8c2b4', 3.6, 'center');
+    drawCleanTxt(a.yr, ax + asz/2, ay + asz + 4, finSongAlbum === a.k ? '#ffe48a' : '#d0cbbe', 'bold 4.6px "Press Start 2P", monospace');
   });
 
   // --- PANEL 3: PLACA IN MEMORIAM Y PUNTAJE ---
-  const p3x = 8, p3y = 172, p3w = 186, p3h = 58;
-  ctx.fillStyle = 'rgba(10, 8, 16, 0.92)';
+  const p3x = 8, p3y = 164, p3w = 200, p3h = 70;
+  ctx.fillStyle = 'rgba(10, 8, 16, 0.96)';
   ctx.fillRect(p3x, p3y, p3w, p3h);
-  ctx.strokeStyle = '#4a3d24';
-  ctx.lineWidth = 1.2;
-  ctx.strokeRect(p3x, p3y, p3w, p3h);
-  ctx.fillStyle = '#f2c03a';
-  for(const [rx, ry] of [[p3x+2, p3y+2], [p3x+p3w-3, p3y+2], [p3x+2, p3y+p3h-3], [p3x+p3w-3, p3y+p3h-3]]){
+  ctx.strokeStyle = '#ffd700';
+  ctx.lineWidth = 1.4;
+  ctx.strokeRect(p3x + 0.5, p3y + 0.5, p3w - 1, p3h - 1);
+  ctx.strokeStyle = '#5a3d1c';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(p3x + 2.5, p3y + 2.5, p3w - 5, p3h - 5);
+  ctx.fillStyle = '#ffd700';
+  for(const [rx, ry] of [[p3x+3, p3y+3], [p3x+p3w-5, p3y+3], [p3x+3, p3y+p3h-5], [p3x+p3w-5, p3y+p3h-5]]){
     ctx.fillRect(rx, ry, 2, 2);
   }
-  txt('«Lejos del ruido, donde la patria se hace con las manos»', p3x + p3w/2, p3y + 4, '#ffe08a', 4.0, 'center');
-  txt('Fue quien fue, por ser él mismo, sin pedir permiso.', p3x + p3w/2, p3y + 16, '#eae2d0', 3.6, 'center');
-  txt('In memoriam: Ricardo Iorio (1962 - 2023)', p3x + p3w/2, p3y + 27, '#78b4ff', 4.2, 'center');
-  txt('¡El metal pesado argentino es eterno!', p3x + p3w/2, p3y + 38, '#f2d278', 3.8, 'center');
-  const statsTxt = total ? ('TIEMPO ' + Math.floor(total.t / 60) + ':' + String(total.t % 60).padStart(2, '0') + ' · PUNTAJE ' + String(score).padStart(7, '0')) : 'PUNTAJE: ' + String(score).padStart(7, '0');
-  txt(statsTxt, p3x + p3w/2, p3y + 48, '#a0c8f0', 3.6, 'center');
+
+  const pMidX = p3x + p3w / 2;
+
+  // 1. Título homenaje
+  drawCleanTxt('✦ IN MEMORIAM · 1962 - 2023 ✦', pMidX, p3y + 8, '#ffd700', 'bold 5.2px "Press Start 2P", monospace');
+
+  // 2. Ricardo Iorio en letras destacadas doradas/blancas
+  drawCleanTxt('RICARDO IORIO', pMidX, p3y + 19, '#ffffff', 'bold 7.2px "Press Start 2P", monospace');
+
+  // 3. Poema en 2 líneas sin desbordes y con tipografía de máxima claridad
+  drawCleanTxt('«Lejos del ruido, donde la patria', pMidX, p3y + 31, '#ffeaa7', 'bold 5.6px -apple-system, system-ui, "Segoe UI", sans-serif');
+  drawCleanTxt('se hace con las manos»', pMidX, p3y + 40, '#ffeaa7', 'bold 5.6px -apple-system, system-ui, "Segoe UI", sans-serif');
+
+  // 4. Frase memorable de Ricardo
+  drawCleanTxt('Fue quien fue, por ser él mismo, sin pedir permiso.', pMidX, p3y + 50, '#dce8f8', 'bold 5.2px -apple-system, system-ui, "Segoe UI", sans-serif');
+
+  // 5. Estadísticas del jugador
+  const statsTxt = total ? ('TIEMPO ' + Math.floor(total.t / 60) + ':' + String(total.t % 60).padStart(2, '0') + ' · PUNTAJE ' + String(score).padStart(7, '0')) : ('PUNTAJE: ' + String(score).padStart(7, '0'));
+  drawCleanTxt(statsTxt, pMidX, p3y + 61, '#78d0ff', 'bold 4.8px "Press Start 2P", monospace');
 
   // Amigos y público escuchando al costado
   for(const f of FANS){
@@ -6880,46 +7230,80 @@ function drawEnding(){
     ctx.fill();
   }
 
-  // 8) Cartel / burbuja de letra cuando Ricardo canta (dinámica en la zona abierta)
+  // 8) Cartel / burbuja de letra cuando Ricardo canta (posicionada a la derecha del micrófono sin tapar a Ricardo)
   if(finSingT > 0 && finSingText){
     ctx.save();
+    const bx = 268, by = 126, bw = 204, bh = 54;
+
     ctx.fillStyle = 'rgba(10, 8, 16, 0.94)';
     ctx.strokeStyle = '#ffd700';
     ctx.lineWidth = 1.4;
-    const bw = 264, bh = 44;
-    const bx = 206, by = 138;
     ctx.beginPath();
     if(ctx.roundRect) ctx.roundRect(bx, by, bw, bh, 6); else ctx.rect(bx, by, bw, bh);
     ctx.fill();
     ctx.stroke();
 
+    // Piquito de la burbuja hacia el micrófono / boca de Ricardo
     ctx.fillStyle = '#ffd700';
     ctx.beginPath();
-    ctx.moveTo(250, by + bh);
-    ctx.lineTo(254, by + bh + 6);
-    ctx.lineTo(258, by + bh);
+    ctx.moveTo(bx, by + 18);
+    ctx.lineTo(bx - 8, by + 23);
+    ctx.lineTo(bx, by + 28);
+    ctx.closePath();
     ctx.fill();
 
-    // Portada del disco y logo de la banda iluminados en el escenario
-    drawAlbumCover(ctx, finSongAlbum, bx + 6, by + 5, 34);
-    drawBandLogo(ctx, finSongBand, bx + 66, by + 16, 0.60, true);
+    // Portada del disco
+    drawAlbumCover(ctx, finSongAlbum, bx + 6, by + 8, 38);
+    ctx.strokeStyle = '#ffd700';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(bx + 6, by + 8, 38, 38);
 
-    txt(finSingSub, bx + 160, by + 9, '#8cc4ff', 4.6, 'center');
-    txt(finSingText, bx + 160, by + 24, '#fffbe0', 5.4, 'center');
+    // Subtítulo con año y banda
+    const txtX = bx + 48 + (bw - 54) / 2;
+    drawCleanTxt(finSingSub, txtX, by + 12, '#8cc4ff', 'bold 4.4px "Press Start 2P", monospace');
+
+    // Letra partida en líneas legibles sin desbordar el cartel
+    const words = finSingText.split(' ');
+    const lines = [];
+    let cur = '';
+    for(const w of words){
+      if((cur + ' ' + w).trim().length <= 26){
+        cur = (cur + ' ' + w).trim();
+      } else {
+        if(cur) lines.push(cur);
+        cur = w;
+      }
+    }
+    if(cur) lines.push(cur);
+
+    if(lines.length === 1){
+      drawCleanTxt(lines[0], txtX, by + 32, '#fffbe0', 'bold 5.8px -apple-system, system-ui, sans-serif');
+    } else {
+      drawCleanTxt(lines[0], txtX, by + 27, '#fffbe0', 'bold 5.6px -apple-system, system-ui, sans-serif');
+      drawCleanTxt(lines[1] + (lines[2] ? ' ' + lines[2] : ''), txtX, by + 39, '#ffe48a', 'bold 5.6px -apple-system, system-ui, sans-serif');
+    }
+
     ctx.restore();
   }
 
-  // Interacción en vivo
+  // Interacción en vivo con fondo de píldora para legibilidad impecable
   const singPrompt = coarse ? '🎤 TOCÁ LA PANTALLA PARA HACER CANTAR A RICARDO' : '🎤 APRETÁ Z / ESPACIO / CLICK PARA HACER CANTAR A RICARDO';
-  txt(singPrompt, W / 2, 239, (t % 40 < 25 ? '#ffe08a' : '#ffffff'), 5.0, 'center');
+  ctx.save();
+  ctx.fillStyle = 'rgba(10, 8, 16, 0.88)';
+  ctx.fillRect(W / 2 - 170, 237, 340, 10);
+  ctx.strokeStyle = 'rgba(242, 182, 50, 0.45)';
+  ctx.lineWidth = 0.8;
+  ctx.strokeRect(W / 2 - 170, 237, 340, 10);
+  drawCleanTxt(singPrompt, W / 2, 242, (t % 40 < 25 ? '#ffd700' : '#ffffff'), 'bold 4.8px "Press Start 2P", monospace');
+  ctx.restore();
 
-  const btnX = W / 2 - 110, btnY = 250, btnW = 220, btnH = 15;
-  ctx.fillStyle = 'rgba(16, 12, 24, 0.88)';
+  const btnX = W / 2 - 120, btnY = 250, btnW = 240, btnH = 14;
+  ctx.fillStyle = 'rgba(16, 12, 24, 0.94)';
   ctx.fillRect(btnX, btnY, btnW, btnH);
-  ctx.strokeStyle = '#4e6e9e';
+  ctx.strokeStyle = '#f2b632';
   ctx.lineWidth = 1;
   ctx.strokeRect(btnX, btnY, btnW, btnH);
-  txt('🏠 VOLVER AL MENÚ PRINCIPAL (ESC / M / ENTER)', W / 2, btnY + 3.5, '#b0d0ff', 4.5, 'center');
+  drawCleanTxt('🏠 VOLVER AL MENÚ PRINCIPAL (ESC / M / ENTER)', W / 2, btnY + 7, '#d8e8ff', 'bold 4.6px "Press Start 2P", monospace');
 }
 
 

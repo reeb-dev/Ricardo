@@ -1,4 +1,4 @@
-const CACHE = 'ricardio-v32';
+const CACHE = 'ricardio-v34';
 const ASSETS = [
   './',
   'index.html',
