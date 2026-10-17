@@ -4323,14 +4323,18 @@ function landmarkBG(cv,i){const g=cv.getContext('2d');g.save();g.setTransform(RS
       g.strokeStyle='#f2b632';g.lineWidth=2;g.beginPath();g.arc(sx,132,14,0,7);g.stroke();
       T('H',sx,125,'#f2b632',11,'center');T('LA H NO ES MUDA',sx,150,'#e8e2d0',4,'center');
     }
+    drawHermeticaLogo(g, 720, 134, 0.8, false);
     poster(860,116,58,46,'#141218',[['OBRAS 92','#f2b632',5],['SABBATH','#c8322a',5],['HERMÉTICA','#e8e2d0',4]]);
-    poster(1720,116,58,46,'#141218',[['ÁCIDO','#f2b632',5],['ARGENTINO','#c8322a',4],['ORO 1993','#e8e2d0',4]]);}
+    drawAlbumCover(g, 'acido', 1720, 108, 38, 'ÁCIDO ARGENTINO (1991)');}
   if(i===5){ // el Monumental: tribunas blancas de hormigón con la banda roja, escenario Monsters of Rock y torres de luz
     R(0,20,1100,78,'#d8d6d0');for(let y=24;y<96;y+=6)R(0,y,1100,1,'#b8b6b0');
     g.fillStyle='#c8322a';g.beginPath();g.moveTo(0,52);g.lineTo(1100,30);g.lineTo(1100,44);g.lineTo(0,66);g.fill();
     for(let x=0;x<1100;x+=24)R(x,20,3,78,'#a8a6a0');R(0,94,1100,4,'#8a8882');
     for(const tx of [160,560,960]){R(tx,0,6,98,'#6a6a72');R(tx-22,0,50,16,'#3a3a44');for(let k=0;k<5;k++)for(let j=0;j<2;j++)R(tx-19+k*9,2+j*7,7,5,'#f8f2c8');}
     T('ESTADIO RIVER PLATE · MONSTERS OF ROCK 1994',560,72,'#c8322a',7,'center');
+    drawHermeticaLogo(g, 560, 46, 0.85, true);
+    drawAlbumCover(g, 'victimas', 560 - 74, 32, 28, '1994');
+    drawAlbumCover(g, 'acido', 560 + 46, 32, 28, '1991');
     // banderas de la hinchada metalera colgadas de la tribuna
     for(const [bx,t1,c1,c2] of [[80,'SAN JUSTO ES DE LA H','#141218','#f2b632'],[260,'AGUANTE EL METAL PESADO','#141218','#f2b632'],[460,'CASEROS Y CIUDADELA','#c8322a','#e8e2d0'],[690,'LOS DEL OESTE PRESENTES','#e8e2d0','#141218'],[880,'HERMÉTICA NO SE TOCA','#c8322a','#e8e2d0']]){R(bx,58,150,18,c1);R(bx,58,150,2,'rgba(0,0,0,.3)');T(t1,bx+75,63,c2,4,'center');}}
   if(i===6){ // estación Constitución: fachada francesa de piedra, mansardas de pizarra, el reloj y el templo de Cemento
@@ -4347,6 +4351,8 @@ function landmarkBG(cv,i){const g=cv.getContext('2d');g.save();g.setTransform(RS
     // fachada de Cemento (Estados Unidos 1238) con afiches de Mundo Guanaco
     const cm=1820;R(cm,66,240,110,'#242028');R(cm+10,74,220,22,'#141018');T('CEMENTO · ESTADOS UNIDOS 1238',cm+120,81,'#f2b632',5,'center');
     T('HOY: ALMAFUERTE · MUNDO GUANACO',cm+120,104,'#c8322a',5,'center');
+    drawAlmafuerteLogo(g, cm+56, 134, 0.72, false);
+    drawAlbumCover(g, 'guanaco', cm+174, 116, 30, 'MUNDO GUANACO');
     for(const dx of [cm+40,cm+160]){R(dx,120,40,56,'#121016');R(dx+4,124,32,48,'#2c2428');}}
   if(i===7){ // Ruta 2001: santuario rutero del Gauchito Gil con banderas rojas y Club Social del Interior con guirnaldas
     const gx=820;R(gx,136,38,38,'#a8241e');g.fillStyle='#c82e24';g.beginPath();g.moveTo(gx-6,136);g.lineTo(gx+19,118);g.lineTo(gx+44,136);g.fill();
@@ -4358,6 +4364,8 @@ function landmarkBG(cv,i){const g=cv.getContext('2d');g.save();g.setTransform(RS
     // fachada de Obras Sanitarias ("El Templo del Rock") para el BA Rock IV
     const ox=2080;R(ox,54,320,122,'#c8b692');R(ox+12,64,296,24,'#242028');T('ESTADIO OBRAS SANITARIAS · BA ROCK IV',ox+160,72,'#f2b632',5,'center');
     T('FINES DE 1982 · RIFF · V8 · LOS VIOLADORES',ox+160,96,'#4a2018',5,'center');
+    drawV8Logo(g, ox+62, 122, 0.85, false);
+    drawAlbumCover(g, 'luchando', ox+230, 102, 30, 'V8 1983');
     for(let k=0;k<4;k++){arch(ox+28+k*70,114,44,62,'#2a2422');}
     for(const [bx,t1,c1,c2] of [[760,'BRIGADAS METÁLICAS','#141218','#e8e2d0'],[1830,'V8 · METAL PESADO','#c8322a','#e8e2d0']]){R(bx,96,140,16,c1);T(t1,bx+70,101,c2,5,'center');}}
   baBG(g,R,T,arch,i);g.restore();}
@@ -4474,6 +4482,360 @@ function cineActor(styKey,x,y,face,poseKey,hold,scMul,walkPh){
   const f={st,pose:Object.assign({},base),face:face||1,flash:0,state:walkPh!=null?'walk':'idle',x,kind:styKey,hold:hold||null,walkPh:walkPh||0,t:0};
   const sv=st.scale;st.scale=sv*(scMul||1.35);try{drawPuppet(f,x,y);}catch(e){}st.scale=sv;
 }
+
+function drawV8Logo(g, x, y, s, gl){
+  g.save();
+  g.translate(x, y);
+  g.scale(s, s);
+  if(gl){
+    g.globalCompositeOperation = 'lighter';
+    g.fillStyle = 'rgba(230,40,20,.35)';
+    g.beginPath();g.ellipse(0, 0, 36, 18, 0, 0, Math.PI*2);g.fill();
+    g.globalCompositeOperation = 'source-over';
+  }
+  g.fillStyle = '#b31505';
+  g.beginPath();
+  g.moveTo(-32, -2); g.lineTo(-18, -6); g.lineTo(-20, 2); g.lineTo(-30, 4); g.fill();
+  g.moveTo(32, -2); g.lineTo(18, -6); g.lineTo(20, 2); g.lineTo(30, 4); g.fill();
+
+  g.beginPath();
+  g.moveTo(-22, -14); g.lineTo(-14, -14); g.lineTo(-4, 10); g.lineTo(8, -14);
+  g.lineTo(18, -14); g.lineTo(2, 14); g.lineTo(-10, 14); g.closePath();
+  g.fillStyle = '#110505'; g.fill();
+
+  const vg = g.createLinearGradient(0, -14, 0, 14);
+  vg.addColorStop(0, '#ff6a4a'); vg.addColorStop(0.4, '#e52010');
+  vg.addColorStop(0.8, '#910800'); vg.addColorStop(1, '#ff3010');
+  g.fillStyle = vg;
+  g.beginPath();
+  g.moveTo(-20, -12); g.lineTo(-14, -12); g.lineTo(-5, 8); g.lineTo(6, -12);
+  g.lineTo(15, -12); g.lineTo(1, 12); g.lineTo(-8, 12); g.closePath();
+  g.fill();
+
+  g.fillStyle = '#ffffff';
+  g.beginPath();
+  g.moveTo(-20, -12); g.lineTo(-14, -12); g.lineTo(-17, -7); g.closePath(); g.fill();
+  g.beginPath();
+  g.moveTo(15, -12); g.lineTo(10, -12); g.lineTo(12, -7); g.closePath(); g.fill();
+
+  const ox = 14;
+  g.fillStyle = '#110505';
+  g.beginPath();
+  g.ellipse(ox, -6, 9.5, 7.5, 0, 0, Math.PI*2);
+  g.ellipse(ox, 6, 11, 8.5, 0, 0, Math.PI*2);
+  g.fill();
+
+  const og = g.createLinearGradient(ox, -14, ox, 14);
+  og.addColorStop(0, '#ffd860'); og.addColorStop(0.3, '#e52010');
+  og.addColorStop(0.7, '#8b0a00'); og.addColorStop(1, '#ff6a4a');
+  g.fillStyle = og;
+  g.beginPath();
+  g.ellipse(ox, -6, 8, 6.5, 0, 0, Math.PI*2);
+  g.ellipse(ox, 6, 9.5, 7.5, 0, 0, Math.PI*2);
+  g.fill();
+
+  g.fillStyle = '#0a060c';
+  g.beginPath();
+  g.ellipse(ox, -6, 3.5, 2.8, 0, 0, Math.PI*2);
+  g.ellipse(ox, 6, 4.5, 3.5, 0, 0, Math.PI*2);
+  g.fill();
+
+  g.fillStyle = 'rgba(255,255,255,.7)';
+  g.fillRect(ox - 3, -11, 6, 1.8);
+  g.fillRect(ox - 3, 1, 6, 1.8);
+  g.restore();
+}
+
+function drawHermeticaLogo(g, x, y, s, gl){
+  g.save();
+  g.translate(x, y);
+  g.scale(s, s);
+  if(gl){
+    g.globalCompositeOperation = 'lighter';
+    g.fillStyle = 'rgba(240,180,40,.3)';
+    g.beginPath();g.ellipse(0, 0, 48, 18, 0, 0, Math.PI*2);g.fill();
+    g.globalCompositeOperation = 'source-over';
+  }
+
+  const r = 14;
+  g.strokeStyle = '#f2b632'; g.lineWidth = 1.8;
+  g.beginPath(); g.arc(0, -6, r, 0, Math.PI*2); g.stroke();
+  g.strokeStyle = '#7c5814'; g.lineWidth = 0.8;
+  g.beginPath(); g.arc(0, -6, r - 2.5, 0, Math.PI*2); g.stroke();
+
+  g.fillStyle = '#ffeaa0';
+  for(let a=0; a<Math.PI*2; a+=Math.PI/4){
+    g.fillRect(Math.cos(a)*(r-1.2)-1, -6+Math.sin(a)*(r-1.2)-1, 2, 2);
+  }
+
+  g.fillStyle = '#161008';
+  g.fillRect(-6.5, -16, 13, 20);
+  const hg = g.createLinearGradient(0, -16, 0, 4);
+  hg.addColorStop(0, '#fff6d0'); hg.addColorStop(0.3, '#f2b632');
+  hg.addColorStop(0.8, '#b87c14'); hg.addColorStop(1, '#e8caa0');
+  g.fillStyle = hg;
+  g.fillRect(-5.5, -15, 3.2, 18);
+  g.fillRect(2.3, -15, 3.2, 18);
+  g.fillRect(-4, -7.5, 8, 3.2);
+
+  g.fillRect(-7, -15, 6, 2); g.fillRect(-7, 1, 6, 2);
+  g.fillRect(1, -15, 6, 2); g.fillRect(1, 1, 6, 2);
+
+  g.font = '900 11px ' + FONT;
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillStyle = '#100a04';
+  g.fillText('HERMÉTICA', 1, 13);
+  g.fillText('HERMÉTICA', 0, 13.5);
+
+  const tg = g.createLinearGradient(0, 8, 0, 16);
+  tg.addColorStop(0, '#fff9e0'); tg.addColorStop(0.3, '#ffd448');
+  tg.addColorStop(0.7, '#c08210'); tg.addColorStop(1, '#684004');
+  g.fillStyle = tg;
+  g.fillText('HERMÉTICA', 0, 12);
+  g.lineWidth = 0.5; g.strokeStyle = '#2a1a06';
+  g.strokeText('HERMÉTICA', 0, 12);
+  g.restore();
+}
+
+function drawAlmafuerteLogo(g, x, y, s, gl){
+  g.save();
+  g.translate(x, y);
+  g.scale(s, s);
+  if(gl){
+    g.globalCompositeOperation = 'lighter';
+    g.fillStyle = 'rgba(255,200,60,.28)';
+    g.beginPath();g.ellipse(0, 0, 52, 18, 0, 0, Math.PI*2);g.fill();
+    g.globalCompositeOperation = 'source-over';
+  }
+
+  const cr = 10;
+  g.fillStyle = '#6cace4';
+  g.beginPath(); g.arc(0, -6, cr, 0, Math.PI*2); g.fill();
+  g.fillStyle = '#f8f8f2';
+  g.beginPath(); g.arc(0, -6, cr*0.65, 0, Math.PI*2); g.fill();
+  g.fillStyle = '#6cace4';
+  g.beginPath(); g.arc(0, -6, cr*0.35, 0, Math.PI*2); g.fill();
+  g.fillStyle = '#f2c03a';
+  g.beginPath(); g.arc(0, -6, 2, 0, Math.PI*2); g.fill();
+
+  g.font = '900 12px ' + FONT;
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillStyle = '#241008';
+  g.fillText('ALMAFUERTE', 1.2, 11);
+  g.fillText('ALMAFUERTE', -1.2, 11);
+  g.fillText('ALMAFUERTE', 0, 12.2);
+
+  const ag = g.createLinearGradient(0, 6, 0, 16);
+  ag.addColorStop(0, '#fffbee'); ag.addColorStop(0.3, '#f2d278');
+  ag.addColorStop(0.7, '#c68820'); ag.addColorStop(1, '#6e3e08');
+  g.fillStyle = ag;
+  g.fillText('ALMAFUERTE', 0, 10);
+  g.lineWidth = 0.6; g.strokeStyle = '#220d04';
+  g.strokeText('ALMAFUERTE', 0, 10);
+
+  g.fillStyle = '#f2c03a';
+  g.fillRect(-38, 17, 76, 1.2);
+  g.beginPath();
+  g.moveTo(0, 19); g.lineTo(-4, 17); g.lineTo(4, 17); g.fill();
+  g.restore();
+}
+
+function drawIorioLogo(g, x, y, s, gl){
+  g.save();
+  g.translate(x, y);
+  g.scale(s, s);
+  if(gl){
+    g.globalCompositeOperation = 'lighter';
+    g.fillStyle = 'rgba(110,180,255,.3)';
+    g.beginPath();g.ellipse(0, 0, 40, 16, 0, 0, Math.PI*2);g.fill();
+    g.globalCompositeOperation = 'source-over';
+  }
+
+  g.fillStyle = '#6cace4'; g.fillRect(-28, -12, 56, 3);
+  g.fillStyle = '#f6f6f2'; g.fillRect(-28, -9, 56, 3);
+  g.fillStyle = '#6cace4'; g.fillRect(-28, -6, 56, 3);
+  g.fillStyle = '#f2c03a';
+  g.beginPath(); g.arc(0, -7.5, 1.8, 0, Math.PI*2); g.fill();
+
+  g.font = '900 13px ' + FONT;
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillStyle = '#080c14';
+  g.fillText('IORIO', 1, 6); g.fillText('IORIO', 0, 7);
+
+  const ig = g.createLinearGradient(0, 0, 0, 12);
+  ig.addColorStop(0, '#ffffff'); ig.addColorStop(0.4, '#9fd0ff');
+  ig.addColorStop(0.8, '#468ad0'); ig.addColorStop(1, '#1b3f74');
+  g.fillStyle = ig;
+  g.fillText('IORIO', 0, 5.5);
+  g.lineWidth = 0.6; g.strokeStyle = '#051020';
+  g.strokeText('IORIO', 0, 5.5);
+  g.restore();
+}
+
+function drawBandLogo(g, bandKey, x, y, sc, glow){
+  if(bandKey === 'v8') drawV8Logo(g, x, y, sc, glow);
+  else if(bandKey === 'hermetica') drawHermeticaLogo(g, x, y, sc, glow);
+  else if(bandKey === 'almafuerte') drawAlmafuerteLogo(g, x, y, sc, glow);
+  else drawIorioLogo(g, x, y, sc, glow);
+}
+
+function drawAlbumCover(g, key, x, y, sz, label){
+  g.save();
+  g.translate(x, y);
+  const w = sz, h = sz;
+
+  g.fillStyle = 'rgba(0,0,0,0.6)';
+  g.fillRect(3, 3, w, h);
+  g.fillStyle = '#0a0a0e';
+  g.fillRect(0, 0, w, h);
+
+  if(key === 'luchando'){ // V8 - Luchando por el metal (1983)
+    g.fillStyle = '#0d0d12';
+    g.fillRect(1, 1, w-2, h-2);
+    g.save();
+    g.translate(w/2, h/2 - 2);
+    g.scale(w/60, w/60);
+    drawV8Logo(g, 0, 0, 0.9, false);
+    g.restore();
+    g.fillStyle = '#9aa0a8';
+    for(let cx = 3; cx < w - 3; cx += 4) g.fillRect(cx, h - 5, 3, 2);
+    txt('LUCHANDO', w/2, 2.5, '#e52010', w*0.12, 'center');
+    txt('1983', w/2, h - 3, '#d8cfc0', w*0.10, 'center');
+  }
+  else if(key === 'batalla'){ // V8 - Un paso más en la batalla (1985)
+    g.fillStyle = '#1a0404';
+    g.fillRect(1, 1, w-2, h-2);
+    g.fillStyle = '#780c05';
+    g.beginPath();
+    g.moveTo(1, 1); g.lineTo(w-1, 1); g.lineTo(1, h-1); g.fill();
+    g.fillStyle = '#d8dce2';
+    g.fillRect(w/2 - 1, 4, 2, h - 8);
+    g.fillRect(w/2 - 4, 7, 8, 2);
+    g.save();
+    g.translate(w/2, h/2);
+    g.scale(w/64, w/64);
+    drawV8Logo(g, 0, 0, 0.75, false);
+    g.restore();
+    txt('BATALLA', w/2, h - 4, '#f2d278', w*0.11, 'center');
+  }
+  else if(key === 'hermetica89'){ // Hermética (1989)
+    g.fillStyle = '#141418';
+    g.fillRect(1, 1, w-2, h-2);
+    g.strokeStyle = '#f2b632';
+    g.lineWidth = 1;
+    g.beginPath(); g.arc(w/2, h/2 - 1, w*0.24, 0, Math.PI*2); g.stroke();
+    txt('H', w/2, h/2 - 4, '#ffd448', w*0.28, 'center');
+    txt('HERMÉTICA', w/2, 2.5, '#f2b632', w*0.12, 'center');
+    txt('1989', w/2, h - 3.5, '#c0b498', w*0.10, 'center');
+  }
+  else if(key === 'acido'){ // Hermética - Ácido Argentino (1991)
+    g.fillStyle = '#ff5500';
+    g.fillRect(0, 0, w, h);
+    g.fillStyle = '#142018';
+    g.fillRect(3, 3, w-6, h-6);
+    g.fillStyle = '#2a4430';
+    g.beginPath();
+    g.ellipse(w/2, h/2 + 2, w*0.3, h*0.25, 0, 0, Math.PI*2);
+    g.fill();
+    g.fillStyle = '#70e080';
+    g.fillRect(w/2 - 3, h/2 - 2, 2, 2);
+    g.fillRect(w/2 + 1, h/2 - 2, 2, 2);
+    g.fillStyle = '#e8f0a0';
+    g.fillRect(w/2 - 3, h/2 + 2, 6, 2);
+    txt('HERMÉTICA', w/2, 3.5, '#ffd700', w*0.12, 'center');
+    txt('ÁCIDO ARGENTINO', w/2, h - 4.5, '#ffffff', w*0.09, 'center');
+  }
+  else if(key === 'victimas'){ // Hermética - Víctimas del vaciamiento (1994)
+    g.fillStyle = '#1a1c24';
+    g.fillRect(1, 1, w-2, h-2);
+    g.fillStyle = '#3a3e4c';
+    g.beginPath(); g.arc(w/2, h/2, w*0.34, 0, Math.PI*2); g.fill();
+    g.fillStyle = '#f2b632';
+    g.beginPath(); g.arc(w/2, h/2, w*0.24, 0, Math.PI*2); g.fill();
+    g.fillStyle = '#8b6010';
+    g.beginPath(); g.arc(w/2, h/2, w*0.14, 0, Math.PI*2); g.fill();
+    g.fillStyle = '#c4c8d4';
+    g.fillRect(2, 2, 2, 2); g.fillRect(w-4, 2, 2, 2);
+    g.fillRect(2, h-4, 2, 2); g.fillRect(w-4, h-4, 2, 2);
+    txt('VÍCTIMAS', w/2, 2.5, '#ffd448', w*0.11, 'center');
+    txt('1994', w/2, h - 3.5, '#ddd4c0', w*0.10, 'center');
+  }
+  else if(key === 'guanaco'){ // Almafuerte - Mundo Guanaco (1995)
+    g.fillStyle = '#2e1c12';
+    g.fillRect(1, 1, w-2, h-2);
+    g.fillStyle = '#4a3020';
+    g.fillRect(3, 3, w-6, h-6);
+    g.fillStyle = '#6cace4';
+    g.beginPath(); g.arc(w - 6, 6, 3.5, 0, Math.PI*2); g.fill();
+    g.fillStyle = '#fff';
+    g.beginPath(); g.arc(w - 6, 6, 2, 0, Math.PI*2); g.fill();
+    g.fillStyle = '#6cace4';
+    g.beginPath(); g.arc(w - 6, 6, 1, 0, Math.PI*2); g.fill();
+    txt('ALMAFUERTE', w/2, h*0.35, '#efe4cc', w*0.12, 'center');
+    txt('MUNDO GUANACO', w/2, h*0.65, '#e8ba30', w*0.10, 'center');
+  }
+  else if(key === 'fondoblanco'){ // Almafuerte - A fondo blanco (1999)
+    g.fillStyle = '#ececf0';
+    g.fillRect(1, 1, w-2, h-2);
+    g.fillStyle = '#70aee8';
+    g.fillRect(1, h*0.48, w-2, 3);
+    txt('ALMAFUERTE', w/2, h*0.30, '#101016', w*0.13, 'center');
+    txt('A FONDO BLANCO', w/2, h*0.68, '#303038', w*0.09, 'center');
+  }
+  else if(key === 'toroypampa'){ // Almafuerte - Toro y pampa (2006)
+    const pg = g.createLinearGradient(0, 0, 0, h);
+    pg.addColorStop(0, '#5a1e20');
+    pg.addColorStop(0.5, '#c85a20');
+    pg.addColorStop(1, '#241408');
+    g.fillStyle = pg;
+    g.fillRect(1, 1, w-2, h-2);
+    g.fillStyle = '#100604';
+    g.beginPath();
+    g.ellipse(w/2, h*0.62, w*0.22, h*0.14, 0, 0, Math.PI*2);
+    g.fill();
+    g.beginPath();
+    g.moveTo(w/2 - w*0.2, h*0.62);
+    g.quadraticCurveTo(w/2 - w*0.28, h*0.42, w/2 - w*0.22, h*0.36);
+    g.lineTo(w/2 - w*0.15, h*0.58);
+    g.moveTo(w/2 + w*0.2, h*0.62);
+    g.quadraticCurveTo(w/2 + w*0.28, h*0.42, w/2 + w*0.22, h*0.36);
+    g.lineTo(w/2 + w*0.15, h*0.58);
+    g.fill();
+    txt('ALMAFUERTE', w/2, 3, '#f2d278', w*0.11, 'center');
+    txt('TORO Y PAMPA', w/2, h - 3.5, '#ffd890', w*0.09, 'center');
+  }
+  else if(key === 'trillando'){ // Almafuerte - Trillando la fina (2012)
+    g.fillStyle = '#2a2818';
+    g.fillRect(1, 1, w-2, h-2);
+    g.fillStyle = '#d8b848';
+    for(let k = 0; k < 5; k++){
+      const tx = w*0.25 + k*(w*0.12);
+      g.fillRect(tx, h*0.4, 1.5, h*0.35);
+      g.fillRect(tx - 1.5, h*0.45, 1.5, 2);
+      g.fillRect(tx + 1.5, h*0.42, 1.5, 2);
+    }
+    txt('ALMAFUERTE', w/2, 3, '#efe8d0', w*0.11, 'center');
+    txt('TRILLANDO', w/2, h - 3.5, '#f2b632', w*0.10, 'center');
+  }
+  else if(key === 'ayerdeseo'){ // Iorio - Ayer deseo, hoy realidad (2008)
+    g.fillStyle = '#0e121e';
+    g.fillRect(1, 1, w-2, h-2);
+    g.fillStyle = '#f2c03a';
+    g.beginPath(); g.arc(w/2, h/2, w*0.22, 0, Math.PI*2); g.fill();
+    txt('IORIO', w/2, 3, '#8fc4f8', w*0.14, 'center');
+    txt('AYER DESEO...', w/2, h - 3.5, '#ffffff', w*0.08, 'center');
+  }
+
+  g.strokeStyle = 'rgba(255,255,255,0.22)';
+  g.lineWidth = 1;
+  g.strokeRect(0.5, 0.5, w - 1, h - 1);
+  g.restore();
+
+  if(label){
+    txt(label, x + w/2, y + h + 2, '#d8cfc0', 3.8, 'center');
+  }
+}
+
 function cineBG(kind,t){const g=ctx,sk=LV?LV.skin:'ric1',R=(a,b,w,h,c)=>{g.fillStyle=c;g.fillRect(a,b,w,h);};
   if(kind==='scene'){const sx=Math.min(1400-W,t*.35)*RS;g.drawImage(FAR,sx,0,W*RS,190*RS,-10-t*.03,0,W+20+t*.06,H);
     if(BG)g.drawImage(BG,Math.min(LW-W,180+t*.4)*RS,0,W*RS,H*RS,0,0,W,H);
@@ -4580,17 +4942,56 @@ function cineBG(kind,t){const g=ctx,sk=LV?LV.skin:'ric1',R=(a,b,w,h,c)=>{g.fillS
     return;}
   if(kind==='stage'){g.fillStyle='#08060c';g.fillRect(0,0,W,H);
     // estructura metálica de luces (truss) y telón de fondo con emblema de cada banda
-    g.fillStyle='#1c1822';g.fillRect(20,24,W-40,5);for(let x=24;x<W-28;x+=14){g.strokeStyle='#342c3e';g.lineWidth=1;g.beginPath();g.moveTo(x,24);g.lineTo(x+7,29);g.lineTo(x+14,24);g.stroke();}
-    g.fillStyle='#120e18';g.fillRect(W*.26,34,W*.48,88);g.strokeStyle='#3a2c38';g.lineWidth=1.5;g.strokeRect(W*.26,34,W*.48,88);
-    const bName=lvl<=2?'V8':lvl<=5?'HERMÉTICA':lvl<=9?'ALMAFUERTE':'IORIO';
-    txt(bName,W*.5,50,lvl<=2?'#e2462c':'#f2b632',16,'center');
-    if(lvl>=3&&lvl<=5){g.strokeStyle='rgba(242,182,50,.45)';g.lineWidth=1.5;g.beginPath();g.arc(W*.5,88,16,0,7);g.stroke();txt('H',W*.5,80,'rgba(242,182,50,.55)',12,'center');}
-    else if(lvl>=6){g.fillStyle='rgba(242,182,50,.35)';g.fillRect(W*.5-14,84,28,4);g.fillRect(W*.5-2,74,4,24);}
-    // torres de amplificadores Marshall a ambos lados del escenario
-    for(const mx of [44,90,W-74,W-120]){
-      g.fillStyle='#16141a';g.fillRect(mx,96,28,54);g.fillStyle='#26222a';g.fillRect(mx+2,98,24,22);g.fillRect(mx+2,123,24,24);
-      g.fillStyle='#d8c498';g.fillRect(mx+7,102,14,2);g.fillRect(mx+7,127,14,2);
+    g.fillStyle='#1c1822';g.fillRect(16,22,W-32,5);for(let x=20;x<W-24;x+=14){g.strokeStyle='#342c3e';g.lineWidth=1;g.beginPath();g.moveTo(x,22);g.lineTo(x+7,27);g.lineTo(x+14,22);g.stroke();}
+    const bgGrad = g.createLinearGradient(0, 30, 0, 130);
+    bgGrad.addColorStop(0, '#120c18');
+    bgGrad.addColorStop(1, '#07050a');
+    g.fillStyle = bgGrad;
+    g.fillRect(W*0.22, 30, W*0.56, 102);
+    g.strokeStyle = '#32263a';
+    g.lineWidth = 1.5;
+    g.strokeRect(W*0.22, 30, W*0.56, 102);
+
+    // Logos oficiales y portadas de discos en el escenario según época
+    if(lvl <= 2){ // V8 (1979 - 1987)
+      drawV8Logo(g, W*0.5, 78, 1.55, true);
+      drawAlbumCover(g, 'luchando', W*0.22 + 8, 42, 36, 'LUCHANDO (1983)');
+      drawAlbumCover(g, 'batalla', W*0.78 - 44, 42, 36, 'BATALLA (1985)');
+    } else if(lvl <= 5){ // Hermética (1988 - 1994)
+      drawHermeticaLogo(g, W*0.5, 76, 1.45, true);
+      drawAlbumCover(g, 'hermetica89', W*0.22 + 8, 42, 36, 'HERMÉTICA (1989)');
+      drawAlbumCover(g, 'acido', W*0.78 - 44, 40, 38, 'ÁCIDO ARGENTINO');
+      drawAlbumCover(g, 'victimas', W*0.78 - 44, 88, 30, 'VÍCTIMAS (1994)');
+    } else if(lvl <= 11){ // Almafuerte (1995 - 2016)
+      drawAlmafuerteLogo(g, W*0.5, 76, 1.5, true);
+      drawAlbumCover(g, 'guanaco', W*0.22 + 8, 42, 36, 'MUNDO GUANACO');
+      drawAlbumCover(g, 'fondoblanco', W*0.22 + 8, 88, 30, 'A FONDO BLANCO');
+      drawAlbumCover(g, 'toroypampa', W*0.78 - 44, 42, 36, 'TORO Y PAMPA');
+      drawAlbumCover(g, 'trillando', W*0.78 - 44, 88, 30, 'TRILLANDO');
+    } else { // Iorio Solista / Homenaje Nacional
+      drawV8Logo(g, W*0.34, 52, 0.8, false);
+      drawHermeticaLogo(g, W*0.50, 52, 0.8, false);
+      drawAlmafuerteLogo(g, W*0.66, 52, 0.8, false);
+      drawIorioLogo(g, W*0.50, 94, 1.3, true);
+      drawAlbumCover(g, 'acido', W*0.22 + 6, 42, 32, '1991');
+      drawAlbumCover(g, 'guanaco', W*0.78 - 38, 42, 32, '1995');
     }
+
+    // Torres de amplificadores Marshall con baúles de gira (flight-cases) stencileados
+    for(const mx of [36, 78, W-66, W-108]){
+      g.fillStyle='#141216';g.fillRect(mx, 92, 28, 58);
+      g.fillStyle='#231f26';g.fillRect(mx+2, 94, 24, 24);g.fillRect(mx+2, 122, 24, 26);
+      g.fillStyle='#d8c498';g.fillRect(mx+7, 98, 14, 2);g.fillRect(mx+7, 126, 14, 2);
+    }
+    // Baúles flight-case de gira stencileados en el escenario
+    g.fillStyle='#1c1a20';g.fillRect(18, 126, 26, 24);
+    g.fillStyle='#9aa0a8';g.fillRect(18, 126, 4, 4);g.fillRect(40, 126, 4, 4);
+    txt(lvl<=2?'V8':lvl<=5?'HERMÉTICA':'ALMAFUERTE', 31, 137, '#e0d8c0', 3.2, 'center');
+
+    g.fillStyle='#1c1a20';g.fillRect(W-44, 126, 26, 24);
+    g.fillStyle='#9aa0a8';g.fillRect(W-44, 126, 4, 4);g.fillRect(W-22, 126, 4, 4);
+    txt('EQUIPOS', W-31, 137, '#e0d8c0', 3.2, 'center');
+
     for(let k=0;k<4;k++){const a=Math.sin(t*.03+k*1.7)*.35,x=60+k*120;g.save();g.translate(x,26);g.rotate(a);const gr=g.createLinearGradient(0,0,0,200);gr.addColorStop(0,k%2?'rgba(226,70,44,.55)':'rgba(242,182,50,.45)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.beginPath();g.moveTo(-6,0);g.lineTo(6,0);g.lineTo(60,210);g.lineTo(-60,210);g.fill();g.restore();}
     g.fillStyle='#1a1418';g.fillRect(0,150,W,12);g.fillStyle='#2e242a';g.fillRect(0,150,W,2);
     if(!SHOW){
@@ -5770,19 +6171,19 @@ function drawTourMap(t){ctx.fillStyle='#0c1020';ctx.fillRect(0,0,W,H);
   const L=['Algunas fechas documentadas','de la gira "Unas estrofas más".','','Del oeste del conurbano','a todo el país, pueblo por pueblo.','','Toda una vida tierra adentro.'];
   L.forEach((s,i)=>txt(s,360,96+i*13,'#c8bcd0',4,'center'));
   if(t>300&&t%60<40)txt('ENTER PARA SEGUIR',360,236,'#9b8aa3',4,'center');ctx.globalAlpha=1;}
-let finSongIdx = 0, finSingT = 0, finSingText = '', finSingSub = '';
+let finSongIdx = 0, finSingT = 0, finSingText = '', finSingSub = '', finSongBand = 'v8', finSongAlbum = 'luchando';
 const FIN_SONGS = [
-  { sub: 'V8 · DESTRUCTOR (1983)', txt: '«¡NO SE DAN CUENTA QUE VIVEN EN UN MUNDO DESTRUCTO Y CIEGO!»' },
-  { sub: 'V8 · BRIGADAS METÁLICAS (1983)', txt: '«¡HERMANO METÁLICO, EN ESTE DÍA DE RESPLANDOR!»' },
-  { sub: 'HERMÉTICA · CRÁNEO CANDENTE (1989)', txt: '«¡MIENTRAS HAYA VIDA EN MÍ, DEFENDERÉ LO QUE SOY!»' },
-  { sub: 'HERMÉTICA · MEMORIA DE SIGLOS (1991)', txt: '«¡RUBRICARÁS LA HISTORIA, CON LA VICTORIA DE TU CORAZÓN!»' },
-  { sub: 'HERMÉTICA · SOY DE LA ESQUINA (1991)', txt: '«¡SI DE CHICO APRENDÍ A NO DOBLEGARME ANTE EL PODER!»' },
-  { sub: 'HERMÉTICA · OLVIDALO Y VOLVÉ POR MÁS (1994)', txt: '«¡DESDE EL BARRO ME LEVANTÉ, Y A LA LUZ DEL DÍA ME ENTREGUÉ!»' },
-  { sub: 'ALMAFUERTE · EL PIBE TIGRE (1995)', txt: '«¡PORQUE EL QUE SE OLVIDA DE DÓNDE VIENE, NO SABE A DÓNDE VA!»' },
-  { sub: 'ALMAFUERTE · A VOS AMIGO (1998)', txt: '«¡SABRÁS QUE ES CIERTO, AMIGO MÍO, QUE EL METAL NO TIENE FIN!»' },
-  { sub: 'ALMAFUERTE · SÉ VOS (1998)', txt: '«¡SÉ VOS, NOMÁS, Y AL MUNDO ENFRENTARÁS SIN TEMOR!»' },
-  { sub: 'ALMAFUERTE · DEL COLIMBA (2001)', txt: '«¡CUMPLIENDO CON LA PATRIA SIN QUEJARSE, PARADO EN LA HUELLA!»' },
-  { sub: 'HOMENAJE NACIONAL · RICARDO IORIO', txt: '«¡VIVA LA PATRIA Y EL METAL PESADO ARGENTINO!»' }
+  { band: 'v8', album: 'luchando', sub: 'V8 · DESTRUCTOR (1983)', txt: '«¡NO SE DAN CUENTA QUE VIVEN EN UN MUNDO DESTRUCTO Y CIEGO!»' },
+  { band: 'v8', album: 'batalla', sub: 'V8 · BRIGADAS METÁLICAS (1983)', txt: '«¡HERMANO METÁLICO, EN ESTE DÍA DE RESPLANDOR!»' },
+  { band: 'hermetica', album: 'hermetica89', sub: 'HERMÉTICA · CRÁNEO CANDENTE (1989)', txt: '«¡MIENTRAS HAYA VIDA EN MÍ, DEFENDERÉ LO QUE SOY!»' },
+  { band: 'hermetica', album: 'acido', sub: 'HERMÉTICA · MEMORIA DE SIGLOS (1991)', txt: '«¡RUBRICARÁS LA HISTORIA, CON LA VICTORIA DE TU CORAZÓN!»' },
+  { band: 'hermetica', album: 'acido', sub: 'HERMÉTICA · SOY DE LA ESQUINA (1991)', txt: '«¡SI DE CHICO APRENDÍ A NO DOBLEGARME ANTE EL PODER!»' },
+  { band: 'hermetica', album: 'victimas', sub: 'HERMÉTICA · OLVIDALO Y VOLVÉ POR MÁS (1994)', txt: '«¡DESDE EL BARRO ME LEVANTÉ, Y A LA LUZ DEL DÍA ME ENTREGUÉ!»' },
+  { band: 'almafuerte', album: 'guanaco', sub: 'ALMAFUERTE · EL PIBE TIGRE (1995)', txt: '«¡PORQUE EL QUE SE OLVIDA DE DÓNDE VIENE, NO SABE A DÓNDE VA!»' },
+  { band: 'almafuerte', album: 'fondoblanco', sub: 'ALMAFUERTE · A VOS AMIGO (1998)', txt: '«¡SABRÁS QUE ES CIERTO, AMIGO MÍO, QUE EL METAL NO TIENE FIN!»' },
+  { band: 'almafuerte', album: 'fondoblanco', sub: 'ALMAFUERTE · SÉ VOS (1998)', txt: '«¡SÉ VOS, NOMÁS, Y AL MUNDO ENFRENTARÁS SIN TEMOR!»' },
+  { band: 'almafuerte', album: 'toroypampa', sub: 'ALMAFUERTE · DEL COLIMBA (2001)', txt: '«¡CUMPLIENDO CON LA PATRIA SIN QUEJARSE, PARADO EN LA HUELLA!»' },
+  { band: 'iorio', album: 'ayerdeseo', sub: 'HOMENAJE NACIONAL · RICARDO IORIO', txt: '«¡VIVA LA PATRIA Y EL METAL PESADO ARGENTINO!»' }
 ];
 
 function singNext(){
@@ -5791,6 +6192,8 @@ function singNext(){
   finSongIdx++;
   finSingText = s.txt;
   finSingSub = s.sub;
+  finSongBand = s.band;
+  finSongAlbum = s.album;
   if(typeof snd !== 'undefined' && snd && snd.pow) snd.pow();
   for(let i = 0; i < 10; i++){
     parts.push({
@@ -5966,6 +6369,35 @@ function drawEnding(){
     ctx.fillRect(fx + Math.sin(k + t * 0.05) * 8, fy2 - 8 - a, 1.2, 1.2);
   }
 
+  // Baúles de gira y exhibición de discografía sobre el escenario
+  ctx.fillStyle = '#100e14';
+  ctx.fillRect(8, 172, 148, 46);
+  ctx.strokeStyle = '#32323c';
+  ctx.lineWidth = 1.2;
+  ctx.strokeRect(8, 172, 148, 46);
+  ctx.fillStyle = '#9ca0a8';
+  ctx.fillRect(7, 171, 4, 4); ctx.fillRect(153, 171, 4, 4);
+  ctx.fillRect(7, 215, 4, 4); ctx.fillRect(153, 215, 4, 4);
+  txt('DISCOGRAFÍA ESENCIAL · V8 · LA H · ALMAFUERTE', 82, 175, '#f2d278', 4.2, 'center');
+
+  drawAlbumCover(ctx, 'luchando', 12, 182, 24, '1983');
+  drawAlbumCover(ctx, 'acido', 41, 182, 24, '1991');
+  drawAlbumCover(ctx, 'victimas', 70, 182, 24, '1994');
+  drawAlbumCover(ctx, 'guanaco', 99, 182, 24, '1995');
+  drawAlbumCover(ctx, 'toroypampa', 128, 182, 24, '2006');
+
+  // Estandartes de las 4 bandas históricas en el fondo del escenario
+  ctx.fillStyle = '#14101a';
+  ctx.fillRect(8, 126, 148, 42);
+  ctx.strokeStyle = '#302638';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(8, 126, 148, 42);
+
+  drawV8Logo(ctx, 26, 147, 0.65, finSongBand === 'v8' && finSingT > 0);
+  drawHermeticaLogo(ctx, 62, 147, 0.62, finSongBand === 'hermetica' && finSingT > 0);
+  drawAlmafuerteLogo(ctx, 100, 147, 0.62, finSongBand === 'almafuerte' && finSingT > 0);
+  drawIorioLogo(ctx, 136, 147, 0.65, finSongBand === 'iorio' && finSingT > 0);
+
   // Mástil y Bandera Argentina flameando gigante
   ctx.fillStyle = '#dfdcd5';
   ctx.fillRect(265, 32, 3.5, 172);
@@ -6029,11 +6461,11 @@ function drawEnding(){
   // Cartel / burbuja de letra cuando Ricardo canta
   if(finSingT > 0 && finSingText){
     ctx.save();
-    ctx.fillStyle = 'rgba(10, 8, 16, 0.90)';
+    ctx.fillStyle = 'rgba(10, 8, 16, 0.93)';
     ctx.strokeStyle = '#ffd700';
     ctx.lineWidth = 1.4;
-    const bw = 360;
-    const bx = (W - bw) / 2, by = 132, bh = 34;
+    const bw = 376;
+    const bx = (W - bw) / 2, by = 126, bh = 42;
     ctx.beginPath();
     if(ctx.roundRect) ctx.roundRect(bx, by, bw, bh, 6); else ctx.rect(bx, by, bw, bh);
     ctx.fill();
@@ -6046,8 +6478,12 @@ function drawEnding(){
     ctx.lineTo(248, by + bh);
     ctx.fill();
 
-    txt(finSingSub, W / 2, by + 4, '#8cc4ff', 4.5, 'center');
-    txt(finSingText, W / 2, by + 17, '#fffbe0', 5.5, 'center');
+    // Portada del disco y logo de la banda iluminados en el escenario
+    drawAlbumCover(ctx, finSongAlbum, bx + 6, by + 4, 34);
+    drawBandLogo(ctx, finSongBand, bx + 64, by + 16, 0.65, true);
+
+    txt(finSingSub, bx + 225, by + 8, '#8cc4ff', 4.8, 'center');
+    txt(finSingText, bx + 225, by + 23, '#fffbe0', 5.6, 'center');
     ctx.restore();
   } else if(t > 60){
     // Texto homenaje y estadísticas
