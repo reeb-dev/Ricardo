@@ -922,6 +922,8 @@ SONGS.convide_rutero = SONGS.c7;
 SONGS.monstruo = SONGS.c9;
 SONGS.ultimando = SONGS.c10;
 SONGS.ruta_76 = Object.assign({}, SONGS.c8, { name: "RUTA 76" });
+SONGS.piedra_libre = Object.assign({}, SONGS.c7, { name: "PIEDRA LIBRE" });
+SONGS.tierra_adentro = Object.assign({}, SONGS.c10, { name: "TIERRA ADENTRO" });
 
 for (const k in SONGS) {
   const S = SONGS[k];
@@ -1071,7 +1073,7 @@ function sfx(n){if(!AC)return;const t=AC.currentTime;switch(n){
 const keys={},touch={},one={};
 const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'up',KeyW:'up',ArrowDown:'down',KeyS:'down',
   KeyZ:'atk',KeyJ:'atk',KeyX:'jump',KeyK:'jump',Space:'jump',KeyC:'spec',KeyL:'spec',ShiftLeft:'dodge',ShiftRight:'dodge',KeyV:'dodge',Enter:'start',Escape:'esc',KeyP:'pause',KeyM:'menu',KeyQ:'menu',KeyR:'restart',KeyB:'papa',KeyF:'papa',KeyI:'papa',KeyG:'album'};
-addEventListener('keydown',e=>{const a=KMAP[e.code];if(!a)return;e.preventDefault();audioInit();if(AC&&AC.state==='suspended')AC.resume();if(!e.repeat)one[a]=1;keys[a]=1;});
+addEventListener('keydown',e=>{audioInit();if(AC&&AC.state==='suspended')AC.resume();const a=KMAP[e.code];if(!a){if(typeof lmSync==='function')lmSync(false);return;}e.preventDefault();if(!e.repeat)one[a]=1;keys[a]=1;if(typeof lmSync==='function')lmSync(false);});
 addEventListener('keyup',e=>{const a=KMAP[e.code];if(a)keys[a]=0;});
 addEventListener('blur',()=>{for(const k in keys)keys[k]=0;if(state==='play')state='pause';});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){for(const k in keys)keys[k]=0;if(state==='play')state='pause';if(AC&&AC.state==='running')AC.suspend().catch(()=>{});}else if(AC&&AC.state==='suspended')AC.resume().catch(()=>{});});
@@ -1102,7 +1104,7 @@ cv.addEventListener('pointerdown',e=>{audioInit();if(AC&&AC.state==='suspended')
   }
   else if(state==='title'){
     if(cy>=198&&cy<=220&&cx>=216&&cx<=468){diffSet(diff+1);sfx('blip');return;}
-    if(cy>=75&&cy<=200&&cx>=218&&cx<=468){const row=Math.floor((cy-75)/8.5);if(row>=0&&row<LEVELS.length){sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}sfx('blip');return;}}
+    if(cy>=74&&cy<=196&&cx>=218&&cx<=468){const row=Math.floor((cy-74)/8.5);if(row>=0&&row<LEVELS.length){if(sel===row){if(typeof lmSync==='function')lmSync(false);one.start=1;return;}sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}if(typeof lmSync==='function')lmSync(true);sfx('blip');return;}}
     one.start=1;}
   else if(state==='results'){
     if(cy>=192&&cy<=220&&cx>=W/2+20&&cx<=W/2+160){toTitleMenu();return;}
@@ -1299,7 +1301,7 @@ for(const LV of LEVELS){const b=LV.locks[LV.locks.length-1];b.L=LV.LW-W;b.trig=b
 /* ================= world state ================= */
 let lvl=0,LV=LEVELS[0],skin='ric1',state='title',tick=0,cam={x:0},lockIdx=0,lock=null,ents=[],items=[],props=[],parts=[],bubbles=[],player=null,boss=null,npcs={};
 let papas=8,papaT=0,stopT=0,shake=0,flashT=0,slowT=0,banner=null,goT=0,cut=null,introT=0,train=null,score=0,hiscore=0,lives=3,meter=0,combo=0,comboT=0,maxCombo=0,hitsTaken=0,timeF=0;
-let lastHit=null,hpTrail=120,results=null,gameoverT=0,shots=[],hazard=null,quipDeck=[],unl=11,sel=0,endT=0,cardT=0,total=null;
+let lastHit=null,hpTrail=120,results=null,gameoverT=0,shots=[],hazard=null,quipDeck=[],unl=14,sel=0,endT=0,cardT=0,total=null;
 const DIFFS=[
   {id:0,name:'FÁCIL',tag:'TRANQUI',sub:'PIBE DE BARRIO',col:'#64d872',desc:'-35% daño recibido, +35% pegada, enemigos calmos'},
   {id:1,name:'NORMAL',tag:'CLÁSICO',sub:'BRIGADA METÁLICA',col:'#f2b632',desc:'El equilibrio original y balanceado del juego'},
@@ -1308,7 +1310,7 @@ const DIFFS=[
 let diff=1;
 try{diff=parseInt(localStorage.getItem('ricardio-diff')||'1')||1;}catch(e){}
 function diffSet(d){diff=(d%3+3)%3;try{localStorage.setItem('ricardio-diff',diff);}catch(e){}const b=document.getElementById('bDiff');if(b){b.textContent='DIFICULTAD: '+DIFFS[diff].name;b.style.borderColor=DIFFS[diff].col;b.style.color=DIFFS[diff].col;}}
-try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');hiscore=sv.hi||0;unl=11;}catch(e){}
+try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');hiscore=sv.hi||0;unl=14;}catch(e){}
 function saveProg(){try{localStorage.setItem('ricardio-v9',JSON.stringify({hi:hiscore,unl}));}catch(e){}}
 function mk(kind,x,y){const D=DEFS[kind];
   const hpMul=diff===0?(D.boss?.8:.85):diff===2?(D.boss?1.25:1.15):1;
@@ -1711,7 +1713,7 @@ function updLocks(){
 function startCut(lines,onEnd){bubbles=[];cut={lines,i:0,ch:0,onEnd};state='cut';}
 function startChapter(i,keep){resetWorld(i,keep);if(cineStart())return;state='card';cardT=0;}
 function startIntro(){state='intro';introT=0;if(LV.ride)sfx('moto');}
-function afterIntro(){state='play';if(LV.pelusa&&!ents.some(e=>e.ally)){const p=mk('pelusa',player.x-50,player.y+6);p.ally=true;p.face=1;p.cd=60;ents.push(p);}for(const k in npcs){const n=npcs[k];if(n===npcs.rescue)continue;if(n.kind==='reporter'){if(n.state!=='hidden')n.state='runoff';}else n.state='walkoff';}
+function afterIntro(){state='play';if(LV.pelusa&&!ents.some(e=>e.ally)){const p=mk('pelusa_friend',player.x-36,player.y+6);p.ally=true;p.face=1;p.cd=30;p.hold='pala_pizzera';ents.push(p);}for(const k in npcs){const n=npcs[k];if(n===npcs.rescue)continue;if(n.kind==='reporter'){if(n.state!=='hidden')n.state='runoff';}else n.state='walkoff';}
   banner={a:LV.chap,b:LV.title,t:150};}
 function updIntro(){introT++;const p=player;
   if(LV.ride){const k=Math.min(1,introT/120),e=1-Math.pow(1-k,3);p.mx=-130+e*240;
@@ -1987,12 +1989,62 @@ function updAlly(n){if(state!=='play'){n.state='idle';return;}
     else{const tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4),dx=tx-n.x,dy=ty-n.y;if(Math.abs(dx)>8||Math.abs(dy)>4){n.x+=clamp(dx,-2.2,2.2);n.y+=clamp(dy,-1.2,1.2);n.walkPh+=.3;n.state='walk';}else{n.state='idle';n.walkPh+=.18;}n.face=p.face;}
     return;
   }
-  const tx=p.x-p.face*44,ty=clamp(p.y+8,GT+6,GB-4);
-  if(n.state==='kick'){n.t++;if(n.t===10){shots.push({x:n.x+n.face*10,y:n.y,z:36,vx:n.face*6,owner:n,t:0,k:'pizza',back:true,mv:MOVES.gun,life:80});sfx('whoosh');}if(n.t>=20)n.state='idle';return;}
-  const dx=tx-n.x,dy=ty-n.y;if(Math.abs(dx)>6||Math.abs(dy)>3){n.x+=clamp(dx,-2.2,2.2);n.y+=clamp(dy,-1.2,1.2);n.walkPh+=.3;n.state='walk';}else n.state='idle';
-  n.mateT=(n.mateT||0)+1;if(n.mateT>1500&&p.hp<p.max*.6){n.mateT=0;items.push({kind:'mate',x:n.x+n.face*14,y:n.y,z:20,vz:2,t:0});say(n,'¡Tomá, un whisky, hermano!',90);}
-  if(tgt){n.face=tgt.x>n.x?1:-1;if(--n.cd<=0&&Math.abs(tgt.y-n.y)<16&&Math.abs(tgt.x-n.x)<220){n.state='kick';n.t=0;n.cd=110+rnd(0,40);if(Math.random()<.3)say(n,['¡Acá estoy, Ricardo!','¡Para lo que necesites!','¡Al amigo no se lo deja solo!','¡Aguante Almafuerte!','¡Pizza para los caretas!'][rnd(0,5)|0],70);}}
-  else n.face=p.face;}
+  // Pelusa (Carlos "Pelusa" López): protagonista activo que pelea con su pala de Topacio, tira pizzas y auxilia a Ricardo en la mala
+  n.hold='pala_pizzera';
+  if(n.state==='atk'){
+    n.t++;
+    if(n.t===6&&tgt&&Math.abs(tgt.x-n.x)<44&&Math.abs(tgt.y-n.y)<16){
+      applyHit(n,tgt,MOVES.buck,Math.sign(tgt.x-n.x)||n.face);
+      sfx('punch');spark(tgt.x,tgt.y-30,false);shake=Math.max(shake,2.5);
+      floatTxt(tgt.x,tgt.y-75,pick(['¡PALAZO DE TOPACIO!','¡A PATA NO TE DEJO!','¡DE ALVARADO Y PEÑAROL!','¡AUXILIO SIN DUDARLO!']),'#ffb340');
+    }
+    if(n.t>=15)n.state='idle';
+    return;
+  }
+  if(n.state==='kick'){
+    n.t++;
+    if(n.t===8){
+      shots.push({x:n.x+n.face*12,y:n.y,z:36,vx:n.face*6.5,owner:n,t:0,k:'pizza',back:true,mv:MOVES.gun,life:85});
+      sfx('whoosh');
+    }
+    if(n.t>=18)n.state='idle';
+    return;
+  }
+  n.mateT=(n.mateT||0)+1;
+  if(n.mateT>420&&p.hp<p.max*.82){
+    n.mateT=0;
+    items.push({kind:'pizza',x:p.x+p.face*18,y:p.y,z:18,vz:2.2,t:0});
+    floatTxt(n.x,n.y-82,'¡AUXILIO DE PELUSA!','#ffb340');
+    say(n,pick([
+      '¡Al verte en la mala, a pata no te dejo, Ricardo!',
+      '¡Tomá una fugazzeta de Topacio y aguantá que ya llegamos al tordo!',
+      '¡Apoyate en mí, hermano, que yo aviso a los tuyos y madrugo en el pasillo!',
+      '¡Auxilio sin dudarlo para mi amigo!'
+    ]),110);
+  }
+  if(tgt){
+    n.face=tgt.x>n.x?1:-1;
+    const dx=tgt.x-n.x,dy=tgt.y-n.y;
+    if(Math.abs(dx)>110&&Math.abs(dx)<230&&Math.abs(dy)<20&&--n.cd<=0){
+      n.state='kick';n.t=0;n.cd=55+rnd(0,25);
+      if(Math.random()<.45)say(n,pick(['¡Mestre de Topacio, pizzero de profesión!','¡De Alvarado y Peñarol!','¡A mi amigo en la mala lo defiendo yo!']),80);
+      return;
+    }
+    if(Math.abs(dx)>34||Math.abs(dy)>9){
+      n.x+=clamp(dx,-2.6,2.6);n.y+=clamp(dy,-1.4,1.4);n.walkPh+=.35;n.state='walk';
+    } else {
+      n.state='idle';
+      if(--n.cd<=0){
+        n.cd=32+rnd(0,18);n.state='atk';n.t=0;
+        if(Math.random()<.4)say(n,pick(['¡Salgan del paso que llevo a Ricardo al tordo!','¡Quien al verme en la mala a pata no me dejó!','¡En Mar del Plata fue sucedido!']),75);
+      }
+    }
+  } else {
+    const tx=p.x-p.face*38,ty=clamp(p.y+7,GT+6,GB-4),dx=tx-n.x,dy=ty-n.y;
+    if(Math.abs(dx)>7||Math.abs(dy)>3){n.x+=clamp(dx,-2.4,2.4);n.y+=clamp(dy,-1.3,1.3);n.walkPh+=.32;n.state='walk';}
+    else n.state='idle';
+    n.face=p.face;
+  }}
 function drawPizza(s,X,Y){ctx.save();ctx.translate(X,Y);ctx.rotate(s.t*.4);ctx.scale(1,.8);
   ctx.fillStyle=OUT;ctx.beginPath();ctx.arc(0,0,7,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='#c98a3a';ctx.beginPath();ctx.arc(0,0,6,0,Math.PI*2);ctx.fill();
@@ -2032,107 +2084,110 @@ function drawTruckL(X){ctx.save();ctx.translate(Math.round(X),224);ctx.scale(-1.
 // v24: Banda sonora 16-bits de Ricardo Iorio (V8, Hermética, Almafuerte, Solista) integrada directamente en el proyecto
 const BUILTIN_TRACKS = [
   // Época V8
-  { era: 0, key: 'c0', name: 'Momento de luchar (V8)', url: 'audio/c0.mp3' },
-  { era: 0, key: 'c1', name: 'Brigadas metálicas (V8)', url: 'audio/c1.mp3' },
-  { era: 0, key: 'c2', name: 'Destrucción (V8)', url: 'audio/c2.mp3' },
-  { era: 0, key: 'b0', name: 'Cautivos del sistema (V8)', url: 'audio/b0.mp3' },
+  { era: 0, key: 'c0', name: 'EL PAPERO · MOMENTO DE LUCHAR', url: 'audio/c0.mp3' },
+  { era: 0, key: 'c1', name: 'NACE V8 · BRIGADAS METÁLICAS', url: 'audio/c1.mp3' },
+  { era: 0, key: 'c2', name: 'LUCHANDO POR EL METAL · DESTRUCCIÓN', url: 'audio/c2.mp3' },
+  { era: 0, key: 'b0', name: 'CAUTIVOS DEL SISTEMA', url: 'audio/b0.mp3' },
   // Época Hermética
-  { era: 1, key: 'desde_el_oeste', name: 'Desde el oeste (Hermética)', url: 'audio/desde_el_oeste.mp3' },
-  { era: 1, key: 'del_camionero', name: 'Del camionero (Hermética)', url: 'audio/del_camionero.mp3' },
-  { era: 1, key: 'liniers', name: 'En las calles de Liniers (Hermética)', url: 'audio/liniers.mp3' },
-  { era: 1, key: 'c3', name: 'Tú eres su seguridad (Hermética)', url: 'audio/c3.mp3' },
-  { era: 1, key: 'c4', name: 'Memoria de siglos (Hermética)', url: 'audio/c4.mp3' },
-  { era: 1, key: 'c5', name: 'Gil trabajador (Hermética)', url: 'audio/c5.mp3' },
-  { era: 1, key: 'b1', name: 'Olvídalo y volverá por más (Hermética)', url: 'audio/b1.mp3' },
+  { era: 1, key: 'desde_el_oeste', name: 'DESDE EL OESTE', url: 'audio/desde_el_oeste.mp3' },
+  { era: 1, key: 'del_camionero', name: 'DEL CAMIONERO', url: 'audio/del_camionero.mp3' },
+  { era: 1, key: 'liniers', name: 'EN LAS CALLES DE LINIERS', url: 'audio/liniers.mp3' },
+  { era: 1, key: 'c3', name: 'HERMÉTICA · TÚ ERES SU SEGURIDAD', url: 'audio/c3.mp3' },
+  { era: 1, key: 'c4', name: 'VÍCTIMAS DEL VACIAMIENTO · MEMORIA DE SIGLOS', url: 'audio/c4.mp3' },
+  { era: 1, key: 'c5', name: 'GIL TRABAJADOR', url: 'audio/c5.mp3' },
+  { era: 1, key: 'b1', name: 'OLVÍDALO Y VOLVERÁ POR MÁS', url: 'audio/b1.mp3' },
   // Época Almafuerte
-  { era: 2, key: 'el_amasijo', name: 'El amasijo de un gran sueño (Almafuerte)', url: 'audio/el_amasijo.mp3' },
-  { era: 2, key: 'del_entorno', name: 'Del entorno (Almafuerte)', url: 'audio/del_entorno.mp3' },
-  { era: 2, key: 'almafuerte', name: 'Almafuerte (Almafuerte)', url: 'audio/almafuerte.mp3' },
-  { era: 2, key: 'convide_rutero', name: 'Convide rutero (Almafuerte)', url: 'audio/convide_rutero.mp3' },
-  { era: 2, key: 'piedra_libre', name: 'Piedra libre (Almafuerte)', url: 'audio/piedra_libre.mp3' },
-  { era: 2, key: 'toro_y_pampa', name: 'Toro y pampa (Almafuerte)', url: 'audio/toro_y_pampa.mp3' },
-  { era: 2, key: 'monstruo', name: 'Muere monstruo muere (Almafuerte)', url: 'audio/monstruo.mp3' },
-  { era: 2, key: 'ultimando', name: 'Ultimando (Almafuerte)', url: 'audio/ultimando.mp3' },
-  { era: 2, key: 'gran_reviente', name: 'En el siglo del gran reviente (Almafuerte)', url: 'audio/gran_reviente.mp3' },
-  { era: 2, key: 'tierra_adentro', name: 'Tierra adentro (Iorio - Flavio)', url: 'audio/tierra_adentro.mp3' },
-  { era: 2, key: 'ruta_76', name: 'Ruta 76 (Almafuerte)', url: 'audio/ruta_76.mp3' },
-  { era: 2, key: 'c7', name: 'Sé vos (Almafuerte)', url: 'audio/c7.mp3' },
-  { era: 2, key: 'c8', name: 'Toro y pampa (Almafuerte)', url: 'audio/c8.mp3' },
-  { era: 2, key: 'c10', name: 'A vos amigo (Almafuerte)', url: 'audio/c10.mp3' },
-  { era: 2, key: 'pa_pelusa', name: "Pa' Pelusa (Almafuerte)", url: 'audio/pa_pelusa.mp3' },
-  { era: 2, key: 'patria_al_hombro', name: 'Patria al hombro (Almafuerte)', url: 'audio/patria_al_hombro.mp3' },
-  { era: 2, key: 'sentir_indiano', name: 'Sentir indiano (Almafuerte)', url: 'audio/sentir_indiano.mp3' },
-  { era: 2, key: 'b2', name: 'Triunfo (Almafuerte)', url: 'audio/b2.mp3' },
-  { era: 2, key: 'intro', name: 'Tierra adentro (Iorio - Flavio)', url: 'audio/intro.mp3' }
+  { era: 2, key: 'el_amasijo', name: 'MUNDO GUANACO · EL AMASIJO DE UN GRAN SUEÑO', url: 'audio/el_amasijo.mp3' },
+  { era: 2, key: 'c6', name: 'MUNDO GUANACO · EL AMASIJO DE UN GRAN SUEÑO', url: 'audio/c6.mp3' },
+  { era: 2, key: 'del_entorno', name: 'DEL ENTORNO', url: 'audio/del_entorno.mp3' },
+  { era: 2, key: 'almafuerte', name: 'ALMAFUERTE', url: 'audio/almafuerte.mp3' },
+  { era: 2, key: 'convide_rutero', name: 'CONVIDE RUTERO', url: 'audio/convide_rutero.mp3' },
+  { era: 2, key: 'piedra_libre', name: 'PIEDRA LIBRE', url: 'audio/piedra_libre.mp3' },
+  { era: 2, key: 'toro_y_pampa', name: 'TORO Y PAMPA', url: 'audio/toro_y_pampa.mp3' },
+  { era: 2, key: 'monstruo', name: 'MUERE MONSTRUO MUERE', url: 'audio/monstruo.mp3' },
+  { era: 2, key: 'c9', name: 'MUERE MONSTRUO MUERE', url: 'audio/c9.mp3' },
+  { era: 2, key: 'ultimando', name: 'ULTIMANDO', url: 'audio/ultimando.mp3' },
+  { era: 2, key: 'gran_reviente', name: 'EN EL SIGLO DEL GRAN REVIENTE', url: 'audio/gran_reviente.mp3' },
+  { era: 2, key: 'tierra_adentro', name: 'TIERRA ADENTRO', url: 'audio/tierra_adentro.mp3' },
+  { era: 2, key: 'ruta_76', name: 'RUTA 76', url: 'audio/ruta_76.mp3' },
+  { era: 2, key: 'c7', name: 'PIEDRA LIBRE', url: 'audio/piedra_libre.mp3' },
+  { era: 2, key: 'c8', name: 'TORO Y PAMPA', url: 'audio/c8.mp3' },
+  { era: 2, key: 'c10', name: 'TIERRA ADENTRO', url: 'audio/tierra_adentro.mp3' },
+  { era: 2, key: 'pa_pelusa', name: "PA' PELUSA", url: 'audio/pa_pelusa.mp3' },
+  { era: 2, key: 'patria_al_hombro', name: 'PATRIA AL HOMBRO', url: 'audio/patria_al_hombro.mp3' },
+  { era: 2, key: 'sentir_indiano', name: 'SENTIR INDIANO', url: 'audio/sentir_indiano.mp3' },
+  { era: 2, key: 'b2', name: 'TRIUNFO', url: 'audio/b2.mp3' },
+  { era: 2, key: 'intro', name: 'TIERRA ADENTRO', url: 'audio/intro.mp3' }
 ];
 
-// Mapa directo de canciones 16-bits para cada capítulo y jefe (temas exactos según historia)
 const LEVEL_TRACK_MAP = [
-  // Cap 1: El Papero (Caseros 1978, verdulería / orígenes)
-  { song: 'c0', boss: 'b0' }, // Momento de luchar / Cautivos del sistema
-  // Cap 2: Nace V8 (Ciudadela / Caseros 1979, garajes, comisaría)
-  { song: 'c1', boss: 'b0' }, // Brigadas metálicas / Cautivos del sistema
-  // Cap 3: BA Rock 1982 (Obras Sanitarias, naranjas / Destrucción)
-  { song: 'c2', boss: 'b0' }, // Destrucción / Cautivos del sistema
-  // Cap 4: Hermética 1988 (Recoleta / San Martín, Helloween)
-  { song: 'c3', boss: 'b1' }, // Tú eres su seguridad / Olvídalo y volverá por más
-  // Cap 5: Ácido Argentino 1991 (El Oeste, desguace industrial)
-  { song: 'c5', boss: 'b1' }, // Gil trabajador / Olvídalo y volverá por más
-  // Cap 6: Monumental 1994 (Estadio River, Víctimas del vaciamiento)
-  { song: 'c4', boss: 'b1' }, // Memoria de siglos / Olvídalo y volverá por más
-  // Cap 7: Cemento 1995 (Nace Almafuerte, Mundo Guanaco, clausurador)
-  { song: 'c6', boss: 'b2' }, // El amasijo de un gran sueño / Triunfo
-  // Cap 8: Rutas del interior 2001 (Crisis, corralito, Obras 2001)
-  { song: 'c7', boss: 'b2' }, // Sé vos / Triunfo
-  // Cap 9: Sierras 2006 (Sierra de la Ventana, Toro y pampa)
-  { song: 'c8', boss: 'b2' }, // Toro y pampa / Triunfo
+  // Cap 1: El Papero (Caseros 1978)
+  { song: 'c0', boss: 'b0' },
+  // Cap 2: Nace V8 (Ciudadela 1979)
+  { song: 'c1', boss: 'b0' },
+  // Cap 3: BA Rock 1982 (Luchando por el metal / Destrucción)
+  { song: 'c2', boss: 'b0' },
+  // Cap 4: Hermética 1988 (Tú eres su seguridad)
+  { song: 'c3', boss: 'b1' },
+  // Cap 5: Ácido Argentino 1991 (Gil trabajador)
+  { song: 'c5', boss: 'b1' },
+  // Cap 6: Monumental 1994 (Víctimas del vaciamiento / Memoria de siglos)
+  { song: 'c4', boss: 'b1' },
+  // Cap 7: Cemento 1995 (Mundo Guanaco / El amasijo de un gran sueño)
+  { song: 'c6', boss: 'b2' },
+  // Cap 8: Rutas del interior 2001 (Piedra libre)
+  { song: 'piedra_libre', boss: 'b2' },
+  // Cap 9: Sierras 2006 (Toro y pampa - estudio)
+  { song: 'c8', boss: 'b2' },
   // Cap 10: Muere monstruo muere 2012 (se desplaza al 12 con pelusa y malvinas)
-  { song: 'c9', boss: 'b2' }, // Muere monstruo muere / Triunfo
+  { song: 'c9', boss: 'b2' },
   // Cap 11: Tierra adentro 2023 (se desplaza al 13)
-  { song: 'c10', boss: 'b2' }, // A vos amigo / Triunfo
+  { song: 'tierra_adentro', boss: 'b0' },
   // Cap 12 (Bonus): Ruta 76 (se desplaza al 14)
-  { song: 'ruta_76', boss: 'b2' } // Ruta 76 / Triunfo
+  { song: 'ruta_76', boss: 'b2' }
 ];
 
-const LM = { askOff: 1, retro: true, tracks: [], userTracks: [], cur: null, want: null, el: null, label: null, labT: 0, era: -1 };
+const LM = { askOff: 1, retro: true, tracks: [], userTracks: [], cur: null, want: null, el: null, label: null, labT: 0, era: -1, err: false, pending: false };
 const ERA_KEYS = [
   ['v8', 'luchando', 'paso mas', 'inicuos', 'destruccion', 'brigadas', 'cautivo', 'luchar'],
   ['hermetica', 'acido', 'vaciamiento', 'interpretes', 'oeste', 'seguridad', 'siglos', 'gil', 'olvidalo', 'camionero', 'liniers'],
   ['almafuerte', 'guanaco', 'entorno', 'fondo blanco', 'piedra libre', 'ultimando', 'toro', 'pampa', 'trillando', 'peso argento', 'iorio', 'flavio', 'pelusa', 'tierra adentro', 'vos amigo', 'amasijo', 'triunfo', 'se vos', 'ruta 76', 'monstruo', 'patria al hombro', 'sentir indiano', 'malvinas']
 ];
 
-function lmNorm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+function lmNorm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
 function lmEraOf(t){const n=lmNorm(t.path||t.name||'');for(let e=0;e<3;e++)if(ERA_KEYS[e].some(k=>n.includes(k)))return e;return -1;}
-function lmChapterEra(){return lvl<=2?0:lvl<=5?1:2;}
+function lmChapterEra(){const idx=state==='title'?sel:lvl;return idx<=2?0:idx<=5?1:2;}
 
 function lmPick(){
   const pool = LM.userTracks.length ? LM.userTracks : LM.tracks;
   if(!pool.length) return null;
   const isBoss = state==='play' && boss && !boss.gone;
-  
-  if(!LM.userTracks.length && typeof lvl === 'number' && LEVEL_TRACK_MAP[lvl]){
-    const map = LEVEL_TRACK_MAP[lvl];
+  const curIdx = (state==='title') ? sel : lvl;
+  const curLV = LEVELS[curIdx] || LV;
+
+  if(!LM.userTracks.length && typeof curIdx === 'number' && LEVEL_TRACK_MAP[curIdx]){
+    const map = LEVEL_TRACK_MAP[curIdx];
     const targetKey = isBoss ? map.boss : map.song;
     const match = pool.find(t=>t.key === targetKey);
     if(match) return match;
   }
-  
-  if(LV && !LM.userTracks.length){
-    if(LV.lmKey && !isBoss){
-      const matchK = pool.find(t=>lmNorm(t.name).includes(LV.lmKey) || lmNorm(t.key||'').includes(LV.lmKey));
-      if(matchK) return matchK;
-    }
-    const targetKey = isBoss ? LV.bossSong : LV.song;
+
+  if(curLV && !LM.userTracks.length){
+    const targetKey = isBoss ? curLV.bossSong : curLV.song;
     if(targetKey){
       const match = pool.find(t=>t.key===targetKey);
       if(match) return match;
+    }
+    if(curLV.lmKey && !isBoss){
+      const matchK = pool.find(t=>lmNorm(t.name).includes(curLV.lmKey) || lmNorm(t.key||'').includes(curLV.lmKey));
+      if(matchK) return matchK;
     }
   }
   const era = lmChapterEra();
   const byEra = pool.filter(t=>t.era===era);
   const list = byEra.length ? byEra : pool;
   const fight = isBoss ? 1 : 0;
-  return list[(lvl*3 + fight + (LM.skip||0)) % list.length];
+  return list[(curIdx*3 + fight + (LM.skip||0)) % list.length];
 }
 
 function lmDB(){return new Promise((res,rej)=>{try{const q=indexedDB.open('ricardio-musica',1);q.onupgradeneeded=()=>q.result.createObjectStore('t');q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);}catch(e){rej(e);}});}
@@ -2143,7 +2198,8 @@ function lmRestore(){
     q.onsuccess=()=>{
       const L=q.result;
       if(L && L.length){
-        lmLoad(L.map(o=>{const f=o.blob;try{Object.defineProperty(f,'webkitRelativePath',{value:o.path});}catch(e){}return f;}),true);
+        const files=L.map(x=>{const f=x.blob;try{f.name=x.name;f.webkitRelativePath=x.path;}catch(e){}return f;});
+        lmLoad(files,true);
       }
     };
   }).catch(()=>{});
@@ -2174,6 +2230,31 @@ function lmInitBuiltin(){
   }));
 }
 
+function lmSync(force){
+  if(!LM.el||!musicOn)return;
+  const t=lmPick();
+  if(!t)return;
+  if(force||t!==LM.cur){
+    LM.cur=t;
+    LM.err=false;
+    LM.pending=true;
+    LM.el.src=t.url;
+    LM.el.currentTime=0;
+    const curIdx=(state==='title')?sel:lvl;
+    const lvTitle=LEVELS[curIdx]?LEVELS[curIdx].title:t.name;
+    LM.label='♫ 16-BIT: '+lvTitle.toUpperCase();
+    LM.labT=240;
+    const p=LM.el.play();
+    if(p&&p.then)p.then(()=>{LM.pending=false;}).catch(()=>{LM.pending=false;});
+    else LM.pending=false;
+  } else if(LM.el.paused&&!LM.pending&&!LM.err){
+    LM.pending=true;
+    const p=LM.el.play();
+    if(p&&p.then)p.then(()=>{LM.pending=false;}).catch(()=>{LM.pending=false;});
+    else LM.pending=false;
+  }
+}
+
 function lmSetup(){
   try{
     lmInitBuiltin();
@@ -2191,30 +2272,34 @@ function lmSetup(){
     const mk2=(id,txt)=>{const b=mk(id,txt,'position:static;pointer-events:auto;');bar.appendChild(b);return b;};
     const b1=mk2('bMusInfo','♫ 16-BIT IORIO: ON');b1.style.borderColor='#f2b632';
     b1.addEventListener('click',()=>{
+      audioInit();
       musicOn=!musicOn;
       b1.textContent=musicOn?'♫ 16-BIT IORIO: ON':'♫ 16-BIT IORIO: OFF';
+      if(musicOn)lmSync(true);else if(LM.el&&!LM.el.paused)LM.el.pause();
       sfx('blip');
     });
     const b2=mk2('bMusFiles','CARGAR MP3 (OPCIONAL)');
     const b3=mk2('bMusRetro','FILTRO RETRO: SÍ');
     const bDiff=mk2('bDiff','DIFICULTAD: '+DIFFS[diff].name);
     bDiff.style.borderColor=DIFFS[diff].col;bDiff.style.color=DIFFS[diff].col;
-    bDiff.addEventListener('click',()=>{diffSet(diff+1);sfx('blip');});
+    bDiff.addEventListener('click',()=>{audioInit();diffSet(diff+1);lmSync(false);sfx('blip');});
     const bMenu=mk2('bMenu','VOLVER AL MENÚ');bMenu.style.borderColor='#ff4a3a';bMenu.style.color='#ff6a5a';
-    bMenu.addEventListener('click',()=>{toTitleMenu();});
+    bMenu.addEventListener('click',()=>{audioInit();toTitleMenu();lmSync(true);});
 
     b2.addEventListener('click',()=>{audioInit();inFiles.click();});
-    b3.addEventListener('click',()=>{LM.retro=!LM.retro;b3.textContent='FILTRO RETRO: '+(LM.retro?'SÍ':'NO');lmGraph();sfx('blip');});
+    b3.addEventListener('click',()=>{audioInit();LM.retro=!LM.retro;b3.textContent='FILTRO RETRO: '+(LM.retro?'SÍ':'NO');lmGraph();lmSync(false);sfx('blip');});
     inDir.addEventListener('change',()=>lmLoad(inDir.files));
     inFiles.addEventListener('change',()=>lmLoad(inFiles.files));
 
     LM.btns=[b1,b2,b3,bDiff,bMenu];
     LM.el=new Audio();
-    LM.el.volume=.75;
+    LM.el.volume=.85;
+    LM.el.loop=true;
     LM.el.preload='auto';
-    LM.el.addEventListener('ended',()=>{LM.skip=(LM.skip||0)+1;LM.cur=null;});
+    LM.el.addEventListener('ended',()=>{LM.el.currentTime=0;LM.el.play().catch(()=>{});});
     LM.el.addEventListener('error',()=>{
-      console.warn('Audio local fallback');
+      LM.err=true;
+      console.warn('Audio local fallback to 16-bit synth');
     });
   }catch(e){console.error(e);}
 }
@@ -2224,41 +2309,17 @@ function lmGraph(){
   try{
     if(!LM.src){
       LM.src=AC.createMediaElementSource(LM.el);
-      LM.lp=AC.createBiquadFilter();LM.lp.type='lowpass';LM.lp.frequency.value=20000;LM.lp.Q.value=.8;
-      LM.chip=AC.createScriptProcessor(2048,2,2);let hl=0,hr=0,ph=0;
-      LM.chip.onaudioprocess=e=>{
-        const a=e.inputBuffer,b=e.outputBuffer,L=a.getChannelData(0),R=a.numberOfChannels>1?a.getChannelData(1):L,oL=b.getChannelData(0),oR=b.getChannelData(1);
-        if(!LM.retro){oL.set(L);oR.set(R);return;}
-        const step=AC.sampleRate/11025,q=30;
-        for(let i=0;i<L.length;i++){
-          ph+=1;
-          if(ph>=step){
-            ph-=step;
-            const m=(L[i]+R[i])*.5,sd=(L[i]-R[i])*.25;
-            const sq=x=>{const v=Math.tanh(x*2.2);return Math.round(v*q)/q;};
-            hl=sq(m+sd*.6);hr=sq(m-sd*.6);
-          }
-          oL[i]=hl;oR[i]=hr;
-        }
-      };
+      LM.lp=AC.createBiquadFilter();LM.lp.type='lowpass';LM.lp.frequency.value=20000;LM.lp.Q.value=.7;
       LM.cart=AC.createBiquadFilter();LM.cart.type='lowpass';LM.cart.frequency.value=20000;LM.cart.Q.value=.5;
-      LM.echo=AC.createDelay(.5);LM.echo.delayTime.value=.19;
-      LM.fb=AC.createGain();LM.fb.gain.value=0;
-      LM.wet=AC.createGain();LM.wet.gain.value=0;
       LM.g=AC.createGain();LM.g.gain.value=1;
-
-      LM.src.connect(LM.lp);LM.lp.connect(LM.chip);LM.chip.connect(LM.cart);LM.cart.connect(LM.g);
-      LM.cart.connect(LM.echo);LM.echo.connect(LM.fb);LM.fb.connect(LM.echo);LM.echo.connect(LM.wet);LM.wet.connect(LM.g);
-      LM.g.connect(master);
+      LM.src.connect(LM.lp);LM.lp.connect(LM.cart);LM.cart.connect(LM.g);LM.g.connect(master);
     }
     const r=!!LM.retro,t=AC.currentTime;
-    LM.cart.frequency.setTargetAtTime(r?5200:20000,t,.05);
-    LM.fb.gain.setTargetAtTime(r?.32:0,t,.05);
-    LM.wet.gain.setTargetAtTime(r?.22:0,t,.05);
+    LM.cart.frequency.setTargetAtTime(r?7500:20000,t,.05);
   }catch(e){}
 }
 
-function lmOn(){return (LM.tracks.length>0 || LM.userTracks.length>0);}
+function lmOn(){return !LM.err && (LM.tracks.length>0 || LM.userTracks.length>0);}
 
 function lmTick(){
   if(!LM.el)return;
@@ -2275,23 +2336,19 @@ function lmTick(){
   }
   const t=lmPick();
   if(t&&t!==LM.cur){
-    LM.cur=t;
-    LM.el.src=t.url;
-    LM.el.play().catch(()=>{});
-    LM.label='♫ 16-BIT: '+t.name.toUpperCase();
-    LM.labT=240;
-  } else if(LM.el.paused&&LM.cur){
-    LM.el.play().catch(()=>{});
+    lmSync(true);
+  } else if(LM.el.paused&&LM.cur&&AC&&AC.state==='running'&&!LM.pending&&!LM.err){
+    lmSync(false);
   }
   if(AC&&!LM.src)lmGraph();
-  if(LM.lp){
-    const calm=state==='title'||state==='card'||state==='pause'||state==='results'||(state==='play'&&!combatMix);
-    LM.lp.frequency.setTargetAtTime(calm?1400:20000,AC.currentTime,.25);
+  if(LM.lp&&AC){
+    const calm=state==='pause';
+    LM.lp.frequency.setTargetAtTime(calm?1800:20000,AC.currentTime,.15);
   }
   const slow=state==='play'&&slowT>0;
   LM.el.preservesPitch=!slow;
   LM.el.playbackRate=slow?.62:1;
-  LM.el.volume=state==='pause'?.25:.8;
+  LM.el.volume=state==='pause'?.25:.85;
 }
 
 function lmDraw(){
@@ -3034,133 +3091,184 @@ const MALVINAS_SCENE={
 };
 
 
-/* ================= CAPÍTULO PA\' PELUSA ================= */
+/* ================= CAPÍTULO PA' PELUSA ================= */
 Object.assign(STY,{
-  matasano:{scale:1.28,skin:'#e8c2a8',hair:'bald',glasses:true,top:'#3a5a78',shirt:'#f4f4f4',tie:'#c8322a',pants:'#243444',boots:'#121a22',torsoW:14,belly:1.15},
-  enfermero:{scale:1.02,skin:'#dca480',hair:'cap',capC:'#6a90b8',top:'#e8eff8',shirt:'#3a5a78',pants:'#e8eff8',boots:'#f4f4f4',torsoW:10.5},
-  pelusa_friend:{scale:1.08,skin:'#d09468',hair:'long',hairC:'#6a6058',beard:true,beardC:'#7a7068',top:'#1c2a38',shirt:'#f2b632',pants:'#243444',boots:'#2a1c12',torsoW:12.5,jacket:true,belly:true}
+  el_tordo:{scale:1.08,skin:'#e8c2a8',hair:'short',hairC:'#5a6068',glasses:true,top:'#e8f2f8',shirt:'#3a6a88',tie:'#c8322a',pants:'#243444',boots:'#121a22',torsoW:11.5},
+  matasano:{scale:1.28,skin:'#dca892',hair:'slick',hairC:'#1a1618',glasses:true,top:'#1e1624',shirt:'#f2b632',tie:'#c8322a',pants:'#16121c',boots:'#0e0c12',torsoW:14,belly:1.15,jacket:true},
+  enfermero:{scale:1.02,skin:'#dca480',hair:'slick',hairC:'#221c18',top:'#282232',shirt:'#c8322a',pants:'#1c222e',boots:'#141418',torsoW:10.5,jacket:true},
+  pelusa_friend:{scale:1.1,skin:'#d09468',hair:'long',hairC:'#5a5048',beard:true,beardC:'#6a6058',top:'#1a3a6a',shirt:'#ffffff',pants:'#1e2836',boots:'#2a1c12',torsoW:12.5,jacket:true,belly:true}
 });
 Object.assign(DEFS,{
-  matasano:E('matasano',440,.88,'EL MATASANO / DOCTOR DE GUARDIA',9000,{boss:1,bthrow:'bisturi',heavy:1}),
-  enfermero:E('enfermero',34,1.25,'CAMILLERO DEL HOSPITAL',180,{wind:11,punch:'mpunch',reach:28}),
+  el_tordo:N('el_tordo'),
+  matasano:E('matasano',440,.88,'EL PROMOTOR BUITRE DE LA MALA',9000,{boss:1,bthrow:'botella',heavy:1}),
+  enfermero:E('enfermero',34,1.25,'FALSO AMIGO / CARETA EN LA MALA',180,{wind:11,punch:'mpunch',reach:28}),
   pelusa_friend:N('pelusa_friend')
 });
-Object.assign(NAMES,{matasano:'EL MATASANO',enfermero:'CAMILLERO DE GUARDIA',pelusa_friend:'PELUSA LÓPEZ'});
+Object.assign(NAMES,{
+  el_tordo:'EL TORDO (CIRUJANO DE GUARDIA)',
+  matasano:'EL PROMOTOR BUITRE',
+  enfermero:'FALSO AMIGO DE LA MALA',
+  pelusa_friend:'CARLOS "PELUSA" LÓPEZ'
+});
 Object.assign(BARKS,{
-  matasano:['¿Por qué motivo o razón el cristiano aguantó tanto dolor?','¡No hay cama para metaleros!','¡A este lo operamos sin anestesia!'],
-  enfermero:['¡Sujétenlo a la camilla!','¡Viene del Atlántico con las vísceras rotas!','¡Despejen la entrada de Topacio!']
+  matasano:[
+    '¡Aunque tengas las vísceras rotas te exprimimos igual!',
+    '¡En la mala no existe la amistad, solo el negocio!',
+    '¡Sáquenle fotos en el pasillo del sanatorio!'
+  ],
+  enfermero:[
+    '¡Te vimos en la mala y te dejamos a pata!',
+    '¡Con ese dolor de vísceras rotas no llegás ni a la esquina!',
+    '¡Cuando se acaba el show nos borramos todos!'
+  ]
 });
 Object.assign(DIEQ,{
-  matasano:'¡En Mar del Plata tengo un amigo que en la mala no me dejó a pata!',
-  enfermero:'¡Al amigo leal no lo paran ni cien matasanos!'
+  matasano:'¡En Mar del Plata fue sucedido: Pelusa en la mala a pata no me dejó!',
+  enfermero:'¡Quien al verme en la mala, me brindó auxilio sin dudarlo!'
 });
 
 function pelusaLevel(){
   const L=L_STD(
-    [[['enfermero','R'],['careta','R']],[['enfermero','R'],['chorro','L']]],
-    [[['enfermero','R'],['careta2','L'],['enfermero','R']],[['tasador','R'],['enfermero','L']]],
-    [[['enfermero','R'],['enfermero','L'],['patovica','R']],[['careta','L'],['enfermero','R'],['enfermero','R']]],
-    [[['enfermero','L'],['patovica','R'],['enfermero','R']],[['enfermero','R'],['tasador','L'],['patovica','R'],['enfermero','L']]]
+    [[['enfermero','R'],['careta','R']],[['enfermero','R'],['faran','L']]],
+    [[['enfermero','R'],['careta2','L'],['enfermero','R']],[['informador','R'],['enfermero','L']]],
+    [[['enfermero','R'],['enfermero','L'],['patovica','R']],[['faran','L'],['enfermero','R'],['informador','R']]],
+    [[['enfermero','L'],['patovica','R'],['enfermero','R']],[['enfermero','R'],['informador','L'],['patovica','R'],['enfermero','L']]]
   );
   return {
-    LW:2800,skin:'ricA',song:'pa_pelusa',bossSong:'bossThrash',food:'pizza',lmKey:'pa pelusa',pelusa:true,
-    villains:'Camilleros abusivos, cobradores de sanatorio y El Matasano de guardia',
-    title:"PA' PELUSA",place:'MAR DEL PLATA · PIZZERÍA TOPACIO',hazard:'ambulancia',
+    LW:2800,skin:'ricA',song:'pa_pelusa',bossSong:'b1',food:'pizza',lmKey:'pa pelusa',pelusa:true,
+    villains:'Falsos amigos que te dejan a pata en la mala, buitres mediáticos y El Promotor Buitre',
+    title:"PA' PELUSA",place:'MAR DEL PLATA · TOPACIO Y EL ATLÁNTICO',hazard:'colectivo',
     card:[
-      '"Llegué a Mar del Plata arrastrando el dolor de vísceras rotas infectando mi interior... A pesar de eso, Almafuerte sonó, contentando a los metaleros del Atlántico."',
-      'Homenaje directo y absoluto a la canción "Pa\' Pelusa" (Trillando la fina, 2012): la historia verídica de la noche en que Ricardo casi muere por una peritonitis fulminante.',
-      'Su amigo del alma Carlos "Pelusa" López (Mestre de Topacio, pizzero de profesión, de Alvarado y Peñarol) combate a su lado, lo asiste con pizzas calientes, no lo deja a pata y se planta ante los matasanos de la clínica para salvarle la vida.'
+      '"Llegué a Mar del Plata, arrastrando el dolor de vísceras rotas, infectando mi interior. A pesar de eso, Almafuerte tocó, contentando a los metaleros del Atlántico."',
+      '29 de agosto de 2009 en Mar del Plata: Ricardo sufre una peritonitis aguda tras tocar en vivo. Cuando los falsos amigos se borran en la mala, su amigo Carlos "Pelusa" López (de Alvarado y Peñarol, Mestre de Topacio, pizzero de profesión) no lo deja a pata y le brinda auxilio sin dudarlo.',
+      'En la clínica, el Tordo (el matasano) se asombra de que "el perro cristiano" haya aguantado tanto dolor y opera de urgencia tras escuchar: "¡Hurguen mis infiernos!". Pelusa avisa a la familia de Ricardo, madruga pasilleando toda la noche y está allí firme cuando Ricardo despierta.'
     ],
-    npcs:[{kind:'pelusa_friend',x:250,y:198,face:1,hold:'pizza'}],
+    npcs:[{kind:'pelusa_friend',x:235,y:198,face:1,hold:'pala_pizzera'}],
     guns:[[550,'pala_pizzera'],[1100,'pala_pizzera'],[1650,'escopeta'],[2200,'pala_pizzera']],
     locks:L,
-    rescue:{kind:'pelusa_friend',x:1420,y:192,hold:'pizza'},
-    props:[[380,'tacho','pizza'],[840,'cajon','pizza'],[1480,'tacho','mate'],[1960,'cajon','pizza'],[2320,'tacho','pizza']],
+    rescue:{kind:'el_tordo',x:1520,y:192},
+    props:[[380,'tacho','pizza'],[840,'cajon','pizza'],[1480,'tacho','pizza'],[1960,'cajon','pizza'],[2320,'tacho','pizza']],
     pipe:[1460,240],
     intro:[
-      {w:'pelusa_friend',s:'¡Ricardo! Te vi llegar al puerto arrastrando el dolor de vísceras rotas. ¡Casi te me vas, hermano!'},
-      {w:'ricA',s:'A pesar de eso, Pelusa, Almafuerte sonó contentando a los metaleros del Atlántico.'},
-      {w:'pelusa_friend',s:'¡Mestre de Topacio, pizzero de profesión! De Alvarado y Peñarol: ¡a vos en la mala a pata no te dejo jamás!'},
-      {w:'ricA',s:'Aviso a los míos, pasilleando madrugo... ¡Desperté y allí estaba este amigo! ¡Vamos a la clínica!'}
+      {w:'ricA',s:'Llegué a Mar del Plata arrastrando el dolor de vísceras rotas infectando mi interior... A pesar de eso, Almafuerte tocó, contentando a los metaleros del Atlántico.'},
+      {w:'pelusa_friend',s:'¡Ricardo, hermano! Estás doblado del dolor y todos los caretas se borraron al verte en la mala... ¡Pero yo a pata no te dejo jamás!'},
+      {w:'pelusa_friend',s:'Soy de Alvarado y Peñarol, Mestre de Topacio, pizzero de profesión: ¡te brindo auxilio sin dudarlo y te llevo ya mismo al tordo!'},
+      {w:'ricA',s:'¡Gracias, Pelusa querido! Abramos paso entre estos buitres hasta el quirófano antes de que reviente todo.'}
     ],
     rescueLines:[
-      {w:'pelusa_friend',s:'¡Tomá, Ricardo! ¡Fugazzeta y fainá caliente recién salida de la pala para que agarres fuerza!'},
-      {w:'ricA',s:'¡Quien al verme en la mala, me brindó auxilio sin dudarlo! ¡Sos de fierro, Pelusa!'},
-      {w:'pelusa_friend',s:'El Matasano y sus camilleros te quieren dejar en el pasillo por no tener seguro. ¡De acá no nos mueve nadie!'},
-      {w:'ricA',s:'Preguntó el matasano por qué razón el perro cristiano aguantó tanto dolor... ¡Hurguen mis infiernos, que el tordo autorizó!'}
+      {w:'el_tordo',s:'¡Por Dios! ¿Por qué motivo o razón este perro cristiano aguantó tanto dolor tocando en vivo con las vísceras rotas?'},
+      {w:'ricA',s:'Escuche del tordo mi grave convicción: ¡Hurguen mis infiernos! ¡Autorizo que me operen de urgencia ya mismo!'},
+      {w:'pelusa_friend',s:'¡Operalo tranquilo, doctor! Yo ya mismo aviso a los suyos y me quedo pasilleando toda la madrugada acá afuera cuidándolo.'},
+      {w:'el_tordo',s:'¡A quirófano de inmediato! Quedate firme en el pasillo, Pelusa, que tu auxilio sin dudarlo le salvó la vida.'}
     ],
     boss:'matasano',
-    summons:[['enfermero','patovica'],['enfermero','enfermero']],
+    summons:[['enfermero','informador'],['enfermero','patovica']],
     bossLines:[
-      {w:'matasano',s:'¿Por qué motivo o razón este perro cristiano sigue de pie con semejante infección? ¡Afuera de mi guardia!'},
-      {w:'pelusa_friend',s:'¡A mi amigo me lo atendés ya mismo o te reviento el sanatorio con la pala de pizza!'},
-      {w:'ricA',s:'Escuchó del tordo mi grave convicción. ¡Con un amigo como el Pelusa no hay dolor que me tumbe!'}
+      {w:'pelusa_friend',s:'Ya avisé a los tuyos, Ricardo, y acá sigo pasilleando de madrugada... ¡Pero mirá qué buitres cayeron al pasillo a lucrar con tu desgracia!'},
+      {w:'matasano',s:'¡Nos enteramos que Iorio está en la mala con las vísceras rotas! ¡Venimos por la recaudación del Atlántico y la primicia del hospital!'},
+      {w:'pelusa_friend',s:'¡Acá en el pasillo madrugo yo cuidando a mi hermano! ¡Al amigo en la mala a pata no se lo deja!'},
+      {w:'ricA',s:'¡Recién operado y con el Pelusa firme a mi lado, los vamos a sacar de Mar del Plata a los palazos!'}
     ],
     winLines:[
-      {w:'matasano',s:'¡Basta, por favor! ¡Abran quirófano de urgencia! ¡Este hombre y su amigo son indestructibles!'},
-      {w:'ricA',s:'¡En Mar del Plata fue sucedido! ¡Pa\' Pelusa quiero, pa\' Pelusa doy, pa\' Pelusa dejo dedicada esta canción!'}
+      {w:'ricA',s:'Avisó a los míos, pasilleando madrugó... ¡Desperté y allí estaba este amigo firme al pie de la cama!'},
+      {w:'pelusa_friend',s:'¡Quien al verte en la mala a pata no te dejó, hermano! Ya pasó el infierno, Ricardo: en Topacio te espera una grande de muzza.'},
+      {w:'ricA',s:"¡En Mar del Plata fue sucedido! ¡Pa' Pelusa quiero, pa' Pelusa doy, pa' Pelusa dejo dedicada esta canción!"}
     ],
     winSay:"¡PA' PELUSA!",
     quips:[
-      '¡En Mar del Plata tengo un amigo!',
-      '¡Mestre de Topacio, pizzero de profesión!',
-      '¡Quien al verme en la mala a pata no me dejó!',
-      '¡De Alvarado y Peñarol!',
+      '¡Llegué a Mar del Plata arrastrando el dolor de vísceras rotas!',
+      '¡A pesar de eso, Almafuerte tocó para los metaleros del Atlántico!',
+      '¡Tengo un amigo de Alvarado y Peñarol, Mestre de Topacio, pizzero de profesión!',
+      '¡Quien al verme en la mala, a pata no me dejó!',
       '¡Hurguen mis infiernos, él autorizó!',
-      '¡Pasilleando madrugo, desperté y allí estaba mi amigo!'
+      '¡Avisó a los míos, pasilleando madrugó, desperté y allí estaba este amigo!'
     ]
   };
 }
 
 const PELUSA_SCENE={
   weather:'mist',light:'#8fa4be',
-  lamps:[{x:480,y:80,r:110,c:'255,220,160'},{x:1200,y:80,r:110,c:'255,220,160',flick:true},{x:2050,y:80,r:110,c:'160,200,255'}],
-  signs:[{x:640,y:75,t:'TOPACIO',c:'#ffb340',off:'#4a2810'}],
+  lamps:[{x:320,y:80,r:110,c:'255,200,140'},{x:820,y:80,r:110,c:'255,220,160'},{x:1680,y:80,r:110,c:'180,220,255',flick:true},{x:2380,y:80,r:110,c:'255,210,160'}],
+  signs:[{x:720,y:72,t:'TOPACIO',c:'#ffb340',off:'#4a2810'}],
   far(g){
-    sky(g,['#0e1628','#1a2842','#2d4464','#4a6888'],85);
-    // Costa y mar atlántico de Mar del Plata
-    g.fillStyle='#14283c';g.fillRect(0,140,1400,50);
-    for(let x=0;x<1400;x+=32){
-      g.fillStyle='rgba(220,240,255,.3)';g.fillRect(x+hsh(x,2)*8,144+Math.sin(x*.025)*3,16,2);
+    sky(g,['#0b1426','#182844','#2b4668','#4e6e92'],85);
+    // Mar Atlántico de Mar del Plata y luces de la costa
+    g.fillStyle='#102438';g.fillRect(0,140,1400,50);
+    for(let x=0;x<1400;x+=30){
+      g.fillStyle='rgba(210,235,255,.32)';g.fillRect(x+hsh(x,2)*8,144+Math.sin(x*.025)*3,16,2);
     }
-    // Silueta de los edificios costeros y rambla
-    g.fillStyle='#1c2638';
+    // Silueta de la Rambla Casino y edificios de Mar del Plata
+    g.fillStyle='#1a2436';
     g.fillRect(0,110,1400,32);
-    for(let x=40;x<1400;x+=45){
+    for(let x=35;x<1400;x+=44){
       const h=18+hsh(x,3)*34;
       g.fillRect(x,110-h,30,h+2);
-      g.fillStyle='rgba(255,220,140,.4)';
+      g.fillStyle='rgba(255,220,140,.42)';
       for(let w=0;w<3;w++)g.fillRect(x+4+w*8,114-h+6,4,5);
-      g.fillStyle='#1c2638';
+      g.fillStyle='#1a2436';
     }
   },
   bg(K){
     const {R,T,g,houses,lamp,poster,brick,sidewalk}=K;
     sidewalk(0,2800);
-    // Pizzería Topacio en Mar del Plata
-    R(520,74,380,102,'#3e2a22');brick(520,74,380,36,'#5a3a2a');
-    R(540,82,340,24,'#1c1614');
-    T('PIZZERÍA TOPACIO · MAR DEL PLATA',710,88,'#ffb340',6,'center');
-    T('LA MEJOR MUZZA Y FUGAZZETA AL CORTE',710,98,'#e8dfd8',4,'center');
-    R(560,116,140,58,'#1c181a');R(564,120,132,50,'#4a6478');
-    // Banderas de Alvarado y Peñarol en la entrada
-    R(720,112,60,40,'#1a3a6a');R(720,128,60,12,'#ffffff');T('ALVARADO',750,130,'#1a3a6a',4,'center');
-    R(800,112,60,40,'#141416');for(let b=0;b<5;b++)R(800+b*12,112,6,40,'#f2b632');T('PEÑAROL',830,130,'#ffffff',4,'center');
 
-    poster(360,124,42,32,'#1a1c22',[['ALMAFUERTE','#f2b632',6],['EN VIVO','#ffffff',5],['MAR DEL PLATA','#c8322a',4]]);
-    poster(940,124,44,34,'#e8e2d0',[['PASTELES','#1a1a1a',5],['Y PIZZAS','#b8262a',5],['TOPACIO','#1a1a1a',4]]);
+    // ACTO 1 (x=80..480): Recital de Almafuerte en el Atlántico (Mar del Plata 29/08/2009)
+    R(90,62,370,112,'#181c26');R(90,56,370,8,'#c8322a');
+    T('ALMAFUERTE EN VIVO · MAR DEL PLATA',275,66,'#f2b632',5.5,'center');
+    T('"CONTENTANDO A LOS METALEROS DEL ATLÁNTICO"',275,77,'#ffffff',4,'center');
+    T('"ARRASTRANDO EL DOLOR DE VÍSCERAS ROTAS"',275,86,'#ff6a5a',3.8,'center');
+    // Cajas de sonido / marshalls del show
+    for(const sx of [115,395]){
+      R(sx,100,44,70,'#101216');R(sx+3,104,38,30,'#262a32');R(sx+3,138,38,30,'#262a32');
+    }
+    poster(255,112,48,36,'#12141a',[['29 AGO 09','#f2b632',4.5],['ALMAFUERTE','#ffffff',4.5],['SONÓ IGUAL','#6cace4',4]]);
 
-    // Sanatorio / Hospital de Mar del Plata
-    R(1600,60,480,116,'#3a4858');R(1600,54,480,8,'#2a3644');
-    T('SANATORIO CENTRAL MARPLATENSE',1840,68,'#ffffff',7,'center');
-    T('GUARDIA MÉDICA DE EMERGENCIAS',1840,80,'#c8322a',5,'center');
-    R(1720,104,240,72,'#1e2a36');
-    // Cartel de admisión y ambulancia
-    R(2240,94,220,52,'#2a3644');
-    T('GUARDIA 24 HS',2350,102,'#c8322a',6,'center');
-    T('"HURGUEN MIS INFIERNOS"',2350,116,'#f2b632',4.5,'center');
-    T('"ÉL AUTORIZÓ"',2350,128,'#e8e4dc',4,'center');
-    for(const l of [320,680,1140,1580,2100])lamp(l,64);
+    // ACTO 2 (x=540..1240): Pizzería Topacio + Alvarado y Peñarol de Mar del Plata + El Auxilio de Pelusa
+    R(540,68,430,106,'#3e261e');brick(540,68,430,38,'#5c3828');
+    R(556,74,398,26,'#1a1210');
+    T('PIZZERÍA TOPACIO · MESTRE DE TOPACIO',755,80,'#ffb340',5.8,'center');
+    T('CARLOS "PELUSA" LÓPEZ · PIZZERO DE PROFESIÓN',755,91,'#f4ede2',4,'center');
+    // Horno pizzero encendido y mostrador
+    R(566,112,130,60,'#181416');R(574,118,114,48,'#d85a28');R(584,126,94,34,'#ffb340');
+    T('HORNO A LEÑA',631,114,'#ffffff',3.8,'center');
+
+    // Escudos / Banderas de ALVARADO y PEÑAROL (Milrayitas azul y blanco de Mar del Plata)
+    // Club Atlético Alvarado (Azul y Blanco con franja diagonal)
+    R(716,110,110,48,'#163a70');R(716,130,110,12,'#ffffff');
+    T('CLUB ALVARADO',771,116,'#ffffff',4.2,'center');
+    T('MAR DEL PLATA',771,146,'#a8d0ff',3.8,'center');
+    // Club Atlético Peñarol de Mar del Plata (El Milrayitas: bastones azules y blancos)
+    R(842,110,114,48,'#ffffff');
+    for(let b=0;b<10;b++)R(842+b*11.4,110,5.7,48,'#163a70');
+    R(846,122,106,22,'#102850');
+    T('PEÑAROL MDQ',899,126,'#ffffff',4.2,'center');
+    T('EL MILRAYITAS',899,136,'#ffb340',3.8,'center');
+
+    // Cartel del Auxilio en la Mala
+    R(1010,92,240,56,'#1c2432');R(1012,94,236,52,'#263246');
+    T('"AL VERME EN LA MALA"',1130,102,'#ffb340',5,'center');
+    T('"A PATA NO ME DEJÓ"',1130,114,'#ffffff',5,'center');
+    T('"ME BRINDÓ AUXILIO SIN DUDARLO"',1130,126,'#8fc4ff',3.8,'center');
+
+    // ACTO 3 (x=1440..2080): Clínica Marplatense · El Tordo / El Matasano y "Hurguen mis infiernos"
+    R(1460,58,520,116,'#364656');R(1460,52,520,8,'#243240');
+    T('CLÍNICA MARPLATENSE · GUARDIA QUIRÚRGICA',1720,64,'#ffffff',6,'center');
+    T('"PREGUNTÓ EL MATASANO POR QUÉ EL PERRO CRISTIANO AGUANTÓ TANTO DOLOR"',1720,76,'#ffb340',3.8,'center');
+    T('"ESCUCHÓ DEL TORDO MI GRAVE CONVICCIÓN: ¡HURGUEN MIS INFIERNOS!, ÉL AUTORIZÓ"',1720,86,'#8fe0ff',3.8,'center');
+    R(1620,102,200,72,'#1c2834');
+    R(1708,108,24,8,'#c8322a');R(1716,100,8,24,'#c8322a');
+
+    // ACTO 4 (x=2140..2740): El Pasillo de Madrugada y el Despertar ("Avisó a los míos, pasilleando madrugó, desperté y allí estaba este amigo")
+    R(2140,62,560,112,'#283646');R(2140,56,560,8,'#ffb340');
+    T('PASILLO DE GUARDIA · MADRUGADA EN MAR DEL PLATA',2420,68,'#ffb340',5.2,'center');
+    T('"AVISÓ A LOS MÍOS, PASILLEANDO MADRUGÓ"',2420,80,'#ffffff',4.5,'center');
+    T('"DESPERTÉ Y ALLÍ ESTABA ESTE AMIGO · ES PA\' PELUSA, SE LO DEDICO"',2420,92,'#a8e070',4,'center');
+    // Ventanales del pasillo mostrando el amanecer atlántico
+    for(let wx=2180;wx<=2600;wx+=105){
+      R(wx,104,76,48,'#18222e');
+      R(wx+4,108,68,22,'#e89a54');R(wx+4,130,68,18,'#284a6e');
+    }
+    for(const l of [320,680,1140,1580,2100,2560])lamp(l,64);
   }
 };
 
@@ -3168,16 +3276,29 @@ function pelusaInsert(){
   const L=pelusaLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
   // Insertar como Capítulo 10 (después de Toro y Pampa), antes de Muere Monstruo Muere
   LEVELS.splice(9,0,L);SCENES.splice(9,0,PELUSA_SCENE);
-  DISCOS.splice(9,0,{t:"PA\' PELUSA",c:'#ffb340',s:'Homenaje a Carlos "Pelusa" López de Mar del Plata, amigo leal que socorrió a Ricardo en su peor momento. Letra de "Trillando la fina" (2012).'});
-  AFICHES.splice(9,0,[[640,"PA\' PELUSA",'TRILLANDO LA FINA','ALVARADO Y PEÑAROL','#f2b632'],[2260,'PIZZERÍA','TOPACIO','MAR DEL PLATA','#ff5a3a']]);
+  DISCOS.splice(9,0,{t:"PA' PELUSA",c:'#ffb340',s:'"Trillando la fina" (2012): homenaje de Ricardo Iorio a su amigo leal Carlos "Pelusa" López (Mestre de Topacio, de Alvarado y Peñarol), quien en Mar del Plata no lo dejó a pata, lo llevó a operar de urgencia, avisó a los suyos y madrugó pasilleando hasta que despertó.'});
+  AFICHES.splice(9,0,[[640,"PA' PELUSA",'TRILLANDO LA FINA','ALVARADO Y PEÑAROL','#f2b632'],[2260,'MESTRE DE','TOPACIO','A PATA NO ME DEJÓ','#ff5a3a']]);
   DATOS.splice(9,0,[
-    '"Pa\' Pelusa" abre con la frase histórica: "Llegué a Mar del Plata arrastrando el dolor de vísceras rotas infectando mi interior... A pesar de eso, Almafuerte sonó".',
-    'Carlos "Pelusa" López, dueño de la pizzería Topacio en Mar del Plata e hincha fanático de Peñarol y Alvarado, salvó la vida de Ricardo asistiéndolo de urgencia en una clínica.',
-    'La canción destaca el valor supremo de la amistad: "Quien al verme en la mala, a pata no me dejó... quien al verme en la mala, me brindó auxilio sin dudarlo".'
+    'El 29 de agosto de 2009 Almafuerte tocó en Mar del Plata mientras Ricardo sufría una peritonitis aguda: "Llegué a Mar del Plata arrastrando el dolor de vísceras rotas infectando mi interior. A pesar de eso, Almafuerte tocó, contentando a los metaleros del Atlántico".',
+    'Su amigo Carlos "Pelusa" López ("de Alvarado y Peñarol, Mestre de Topacio, pizzero de profesión") no lo dejó a pata al verlo en la mala y le brindó auxilio sin dudarlo llevándolo de urgencia a operar.',
+    'En la guardia, el médico ("el matasano / el tordo") preguntó cómo "el perro cristiano aguantó tanto dolor" y operó tras la orden "¡Hurguen mis infiernos!". Pelusa avisó a la familia de Ricardo, madrugó pasilleando toda la noche y estaba allí cuando Ricardo despertó.'
   ]);
   MODS.splice(9,0,'');
-  CLIMA.splice(9,0,{moth:1,sep:.35,lbl:'MAR DEL PLATA · PA\' PELUSA'});
+  CLIMA.splice(9,0,{moth:1,sep:.28,lbl:"MAR DEL PLATA · PA' PELUSA"});
   LEVEL_TRACK_MAP.splice(9,0,{song:'pa_pelusa',boss:'b1'});
+  if(typeof SHOWS!=='undefined'){
+    SHOWS.splice(9,0,{
+      v:'MAR DEL PLATA · EL ATLÁNTICO Y TOPACIO',d:'29 DE AGOSTO DE 2009 · TRILLANDO LA FINA (2012)',b:'ALMAFUERTE',
+      L:[['Ricardo Iorio','voz','me'],['Claudio Marciello','guitarra','violero'],['Beto Ceriotti','bajo','heavy'],['Bin Valencia','batería','heavy']],
+      set:["Pa' Pelusa","Toro y pampa","Almafuerte"],
+      r:[
+        'Con las vísceras rotas por una peritonitis aguda, Ricardo cumplió igual con los metaleros del Atlántico.',
+        'Carlos "Pelusa" López (de Alvarado y Peñarol, Mestre de Topacio) lo auxilió sin dudarlo, avisó a los suyos y madrugó pasilleando en la clínica.',
+        'Cuando Ricardo despertó de la operación, allí estaba su amigo. En "Trillando la fina" (2012) lo inmortalizó con "Pa\' Pelusa".'
+      ],
+      f:["PA' PELUSA",'AMIGO FIEL']
+    });
+  }
 }
 
 function malvinasInsert(){
@@ -3196,6 +3317,19 @@ function malvinasInsert(){
   MODS.splice(10,0,'');
   CLIMA.splice(10,0,{moth:1,sep:.35,lbl:'PUERTO ARGENTINO · MALVINAS'});
   LEVEL_TRACK_MAP.splice(10,0,{song:'patria_al_hombro',boss:'sentir_indiano'});
+  if(typeof SHOWS!=='undefined'){
+    SHOWS.splice(10,0,{
+      v:'HOMENAJE A LOS HÉROES DE MALVINAS',d:'1982 · MEMORIA ETERNA',b:'ALMAFUERTE',
+      L:[['Ricardo Iorio','voz','me'],['Claudio Marciello','guitarra','violero'],['Beto Ceriotti','bajo','heavy'],['Bin Valencia','batería','heavy']],
+      set:['Patria al hombro','Sentir indiano','Almafuerte'],
+      r:[
+        'Honor y gloria eterna a los 649 héroes caídos y a los veteranos de la Gesta de Malvinas.',
+        'Ricardo Iorio llevó siempre la bandera de la soberanía nacional y el respeto a nuestros combatientes.',
+        '¡Las Islas Malvinas son, fueron y serán por siempre argentinas!'
+      ],
+      f:['PATRIA AL HOMBRO','MALVINAS ARGENTINAS']
+    });
+  }
 }
 
 function rutaInsert(){
@@ -3227,7 +3361,7 @@ rutaInsert();
   DATOS[10].push('Como solista grabó covers, entre ellos una versión en castellano de un tema de Black Sabbath.');
   DATOS[8].push('Su madre, Elda Pedraza, tenía ascendencia tehuelche.');
   LEVELS.forEach((l,i)=>l.chap=l.bonus?'CAPÍTULO BONUS':'CAPÍTULO '+(i+1));musicByEra();
-  try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');if((sv.unl||1)>=10)unl=Math.max(unl,(sv.unl||1)>=12?12:11);}catch(e){}
+  try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');unl=LEVELS.length;}catch(e){}
 }
 
 // el loro (y los pájaros) del campo: en 2012 le contó a Beto Casella que tenía muchos pájaros
@@ -3997,8 +4131,8 @@ function update(){tick++;readInput();if(state!=='play')noPause=40;else if(noPaus
   if(shake>0)shake=Math.max(0,shake-.3);if(flashT>0)flashT--;
   const hp=player?player.hp:0;if(player){if(hpTrail>hp)hpTrail=Math.max(hp,hpTrail-.6);else hpTrail=hp;}
   if(state==='title'){if(press.album){albumOpen();return;}
-    if(press.up){sel=(sel+unl-1)%unl;sfx('blip');try{song=LEVELS[sel].song;step=0;}catch(e){}}
-    if(press.down){sel=(sel+1)%unl;sfx('blip');try{song=LEVELS[sel].song;step=0;}catch(e){}}
+    if(press.up){sel=(sel+LEVELS.length-1)%LEVELS.length;sfx('blip');try{song=LEVELS[sel].song;step=0;if(typeof lmSync==='function')lmSync(true);}catch(e){}}
+    if(press.down){sel=(sel+1)%LEVELS.length;sfx('blip');try{song=LEVELS[sel].song;step=0;if(typeof lmSync==='function')lmSync(true);}catch(e){}}
     if(press.left){diffSet(diff-1);sfx('blip');}
     if(press.right){diffSet(diff+1);sfx('blip');}
     if(press.start||press.atk||press.jump){audioInit();startChapter(sel,false);}}
