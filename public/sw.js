@@ -1,4 +1,4 @@
-const CACHE = 'ricardio-v20';
+const CACHE = 'ricardio-v21';
 const ASSETS = ['./', 'index.html', 'style.css', 'game.js', 'icon.svg', 'manifest.webmanifest'];
 
 self.addEventListener('install', e => {
