@@ -1,5 +1,26 @@
-const CACHE = 'ricardio-v29';
-const ASSETS = ['./', 'index.html', 'style.css', 'game.js', 'icon.svg', 'manifest.webmanifest'];
+const CACHE = 'ricardio-v30';
+const ASSETS = [
+  './',
+  'index.html',
+  'style.css',
+  'game.js',
+  'icon.svg',
+  'manifest.webmanifest',
+  'img/logos/v8.png',
+  'img/logos/hermetica.png',
+  'img/logos/almafuerte.png',
+  'img/logos/iorio.png',
+  'img/covers/luchando.jpg',
+  'img/covers/batalla.jpg',
+  'img/covers/hermetica89.jpg',
+  'img/covers/acido.jpg',
+  'img/covers/victimas.jpg',
+  'img/covers/guanaco.jpg',
+  'img/covers/fondoblanco.jpg',
+  'img/covers/toroypampa.jpg',
+  'img/covers/trillando.jpg',
+  'img/covers/ayerdeseo.jpg'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS.map(a => new Request(a, { cache: 'reload' })))).then(() => self.skipWaiting()));

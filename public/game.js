@@ -3732,6 +3732,9 @@ const RUTA_SCENE={weather:'dust',light:'#9aa6be',
     R(5860,112,180,62,'#28343e');R(5854,106,192,8,'#c8322a');
     T('PARADOR EL OMBÚ · ASADO & MATE',5950,114,'#f2f2ea',3.8,'center');
     T('GOMERÍA 24 HS · AUXILIO MECÁNICO',5950,124,'#f2d23a',3.2,'center');
+    drawAlbumCover(g, 'toroypampa', 5874, 126, 28, '2006');
+    drawAlbumCover(g, 'ayerdeseo', 5908, 126, 28, '2008');
+    drawAlmafuerteLogo(g, 6005, 138, 0.65, false);
     for(let sx=5880;sx<5930;sx+=20){
       R(sx,152,10,22,'#ffffff');R(sx+1,154,8,12,'#1e4a8a');R(sx+2,168,6,6,'#d8322a');
     }
@@ -4338,7 +4341,9 @@ function landmarkBG(cv,i){const g=cv.getContext('2d');g.save();g.setTransform(RS
     poster(1290,128,40,40,'#141218',[['HERMÉTICA','#e8e2d0',5],['DEBUT','#c8322a',6],['1988','#f2b632',6]]);poster(1680,128,40,40,'#e8e2d0',[['MUESTRA','#1a1a1a'],['DE ARTE','#1a1a1a'],['MODERNO','#c8322a']]);
     // Pub Helloween de San Martín (debut oficial del 7/5/1988)
     const hx=2100;R(hx,70,220,106,'#1c1622');R(hx+6,76,208,24,'#2a1a28');T('PUB HELLOWEEN · SAN MARTÍN',hx+110,83,'#f2b632',5,'center');
-    T('7 DE MAYO 1988 · DEBUT DE HERMÉTICA',hx+110,104,'#e8e2d0',4,'center');arch(hx+86,120,48,56,'#0e0a12');}
+    T('7 DE MAYO 1988 · DEBUT DE HERMÉTICA',hx+110,104,'#e8e2d0',4,'center');arch(hx+86,120,48,56,'#0e0a12');
+    drawHermeticaLogo(g, hx+46, 134, 0.72, false);
+    drawAlbumCover(g, 'hermetica89', hx+170, 114, 32, 'HERMÉTICA 1989');}
   if(i===4){ // Talleres cerrados del conurbano, pintadas de la H y afiches de Obras 1992 (Black Sabbath / Motörhead)
     for(const sx of [520,1380,2140]){
       g.strokeStyle='#f2b632';g.lineWidth=2;g.beginPath();g.arc(sx,132,14,0,7);g.stroke();
@@ -4380,6 +4385,8 @@ function landmarkBG(cv,i){const g=cv.getContext('2d');g.save();g.setTransform(RS
     R(gx+17,108,4,12,'#8a1c16');R(gx+13,112,12,4,'#8a1c16');T('GAUCHITO GIL',gx+19,140,'#f8e6a0',4,'center');
     for(let k=0;k<6;k++){R(gx-28+k*18,124+(k%2)*6,3,18,'#d42820');R(gx+6+k*5,168,2,6,'#f8e6a0');}
     const cl=1920;R(cl,74,260,102,'#6e5440');R(cl+8,82,244,20,'#3a281c');T('CLUB SOCIAL Y DEPORTIVO · HOY ALMAFUERTE',cl+130,88,'#f2b632',5,'center');
+    drawAlmafuerteLogo(g, cl+56, 134, 0.7, false);
+    drawAlbumCover(g, 'fondoblanco', cl+186, 114, 32, 'A FONDO BLANCO');
     for(let lx=cl+14;lx<cl+246;lx+=18){g.fillStyle=lx%36===0?'#f2b632':'#e2462c';g.beginPath();g.arc(lx,110,2.5,0,7);g.fill();}}
   if(i===2){alvearBG(g,R,T,arch);
     // fachada de Obras Sanitarias ("El Templo del Rock") para el BA Rock IV
@@ -4504,7 +4511,62 @@ function cineActor(styKey,x,y,face,poseKey,hold,scMul,walkPh){
   const sv=st.scale;st.scale=sv*(scMul||1.35);try{drawPuppet(f,x,y);}catch(e){}st.scale=sv;
 }
 
+// ============================================================================
+// PORTADAS DE DISCOS Y LOGOS OFICIALES REALES DE RICARDO IORIO
+// ============================================================================
+const ALBUM_COVERS = {
+  luchando: 'img/covers/luchando.jpg',
+  batalla: 'img/covers/batalla.jpg',
+  hermetica89: 'img/covers/hermetica89.jpg',
+  acido: 'img/covers/acido.jpg',
+  victimas: 'img/covers/victimas.jpg',
+  guanaco: 'img/covers/guanaco.jpg',
+  fondoblanco: 'img/covers/fondoblanco.jpg',
+  toroypampa: 'img/covers/toroypampa.jpg',
+  trillando: 'img/covers/trillando.jpg',
+  ayerdeseo: 'img/covers/ayerdeseo.jpg'
+};
+
+const BAND_LOGOS = {
+  v8: 'img/logos/v8.png',
+  hermetica: 'img/logos/hermetica.png',
+  almafuerte: 'img/logos/almafuerte.png',
+  iorio: 'img/logos/iorio.png'
+};
+
+const ALBUM_IMGS = {}, LOGO_IMGS = {};
+if(typeof window !== 'undefined' && typeof Image !== 'undefined'){
+  for(const k in ALBUM_COVERS){
+    const im = new Image();
+    im.src = ALBUM_COVERS[k];
+    ALBUM_IMGS[k] = im;
+  }
+  for(const k in BAND_LOGOS){
+    const im = new Image();
+    im.src = BAND_LOGOS[k];
+    LOGO_IMGS[k] = im;
+  }
+}
+
 function drawV8Logo(g, x, y, s, gl){
+  const img = LOGO_IMGS['v8'];
+  if(img && img.complete && img.naturalWidth > 0){
+    g.save();
+    g.translate(x, y);
+    if(gl){
+      g.globalCompositeOperation = 'lighter';
+      g.fillStyle = 'rgba(230,40,20,.4)';
+      g.beginPath();g.ellipse(0, 0, 44*s, 22*s, 0, 0, Math.PI*2);g.fill();
+      g.globalCompositeOperation = 'source-over';
+    }
+    const iw = 74 * s;
+    const ih = iw * (img.naturalHeight / img.naturalWidth);
+    try {
+      g.drawImage(img, -iw/2, -ih/2, iw, ih);
+    } catch(e){}
+    g.restore();
+    return;
+  }
   g.save();
   g.translate(x, y);
   g.scale(s, s);
@@ -4568,6 +4630,24 @@ function drawV8Logo(g, x, y, s, gl){
 }
 
 function drawHermeticaLogo(g, x, y, s, gl){
+  const img = LOGO_IMGS['hermetica'];
+  if(img && img.complete && img.naturalWidth > 0){
+    g.save();
+    g.translate(x, y);
+    if(gl){
+      g.globalCompositeOperation = 'lighter';
+      g.fillStyle = 'rgba(240,180,40,.4)';
+      g.beginPath();g.ellipse(0, 0, 50*s, 22*s, 0, 0, Math.PI*2);g.fill();
+      g.globalCompositeOperation = 'source-over';
+    }
+    const iw = 78 * s;
+    const ih = iw * (img.naturalHeight / img.naturalWidth);
+    try {
+      g.drawImage(img, -iw/2, -ih/2, iw, ih);
+    } catch(e){}
+    g.restore();
+    return;
+  }
   g.save();
   g.translate(x, y);
   g.scale(s, s);
@@ -4619,6 +4699,24 @@ function drawHermeticaLogo(g, x, y, s, gl){
 }
 
 function drawAlmafuerteLogo(g, x, y, s, gl){
+  const img = LOGO_IMGS['almafuerte'];
+  if(img && img.complete && img.naturalWidth > 0){
+    g.save();
+    g.translate(x, y);
+    if(gl){
+      g.globalCompositeOperation = 'lighter';
+      g.fillStyle = 'rgba(255,200,60,.35)';
+      g.beginPath();g.ellipse(0, 0, 50*s, 20*s, 0, 0, Math.PI*2);g.fill();
+      g.globalCompositeOperation = 'source-over';
+    }
+    const iw = 80 * s;
+    const ih = iw * (img.naturalHeight / img.naturalWidth);
+    try {
+      g.drawImage(img, -iw/2, -ih/2, iw, ih);
+    } catch(e){}
+    g.restore();
+    return;
+  }
   g.save();
   g.translate(x, y);
   g.scale(s, s);
@@ -4662,6 +4760,24 @@ function drawAlmafuerteLogo(g, x, y, s, gl){
 }
 
 function drawIorioLogo(g, x, y, s, gl){
+  const img = LOGO_IMGS['iorio'];
+  if(img && img.complete && img.naturalWidth > 0){
+    g.save();
+    g.translate(x, y);
+    if(gl){
+      g.globalCompositeOperation = 'lighter';
+      g.fillStyle = 'rgba(110,180,255,.4)';
+      g.beginPath();g.ellipse(0, 0, 44*s, 20*s, 0, 0, Math.PI*2);g.fill();
+      g.globalCompositeOperation = 'source-over';
+    }
+    const iw = 72 * s;
+    const ih = iw * (img.naturalHeight / img.naturalWidth);
+    try {
+      g.drawImage(img, -iw/2, -ih/2, iw, ih);
+    } catch(e){}
+    g.restore();
+    return;
+  }
   g.save();
   g.translate(x, y);
   g.scale(s, s);
@@ -4704,6 +4820,25 @@ function drawAlbumCover(g, key, x, y, sz, label){
   g.save();
   g.translate(x, y);
   const w = sz, h = sz;
+
+  const realImg = ALBUM_IMGS[key];
+  if(realImg && realImg.complete && realImg.naturalWidth > 0){
+    g.fillStyle = 'rgba(0,0,0,0.65)';
+    g.fillRect(2.5, 2.5, w, h);
+    try {
+      g.drawImage(realImg, 0, 0, w, h);
+    } catch(e){}
+    g.strokeStyle = 'rgba(255,255,255,0.28)';
+    g.lineWidth = 1;
+    g.strokeRect(0.5, 0.5, w - 1, h - 1);
+    g.fillStyle = 'rgba(255,255,255,0.1)';
+    g.fillRect(0, 0, 1.8, h);
+    g.restore();
+    if(label){
+      txt(label, x + w/2, y + h + 2, '#d8cfc0', 3.8, 'center');
+    }
+    return;
+  }
 
   g.fillStyle = 'rgba(0,0,0,0.6)';
   g.fillRect(3, 3, w, h);
@@ -6398,32 +6533,33 @@ function drawEnding(){
 
   // Baúles de gira y exhibición de discografía sobre el escenario
   ctx.fillStyle = '#100e14';
-  ctx.fillRect(8, 172, 148, 46);
+  ctx.fillRect(6, 172, 164, 46);
   ctx.strokeStyle = '#32323c';
   ctx.lineWidth = 1.2;
-  ctx.strokeRect(8, 172, 148, 46);
+  ctx.strokeRect(6, 172, 164, 46);
   ctx.fillStyle = '#9ca0a8';
-  ctx.fillRect(7, 171, 4, 4); ctx.fillRect(153, 171, 4, 4);
-  ctx.fillRect(7, 215, 4, 4); ctx.fillRect(153, 215, 4, 4);
-  txt('DISCOGRAFÍA ESENCIAL · V8 · LA H · ALMAFUERTE', 82, 175, '#f2d278', 4.2, 'center');
+  ctx.fillRect(5, 171, 4, 4); ctx.fillRect(167, 171, 4, 4);
+  ctx.fillRect(5, 215, 4, 4); ctx.fillRect(167, 215, 4, 4);
+  txt('DISCOGRAFÍA ESENCIAL · TAPAS HISTÓRICAS REALES', 88, 175, '#f2d278', 4.2, 'center');
 
-  drawAlbumCover(ctx, 'luchando', 12, 182, 24, '1983');
-  drawAlbumCover(ctx, 'acido', 41, 182, 24, '1991');
-  drawAlbumCover(ctx, 'victimas', 70, 182, 24, '1994');
-  drawAlbumCover(ctx, 'guanaco', 99, 182, 24, '1995');
-  drawAlbumCover(ctx, 'toroypampa', 128, 182, 24, '2006');
+  drawAlbumCover(ctx, 'luchando', 10, 182, 23, '1983');
+  drawAlbumCover(ctx, 'acido', 36, 182, 23, '1991');
+  drawAlbumCover(ctx, 'victimas', 62, 182, 23, '1994');
+  drawAlbumCover(ctx, 'guanaco', 88, 182, 23, '1995');
+  drawAlbumCover(ctx, 'toroypampa', 114, 182, 23, '2006');
+  drawAlbumCover(ctx, 'ayerdeseo', 140, 182, 23, '2008');
 
   // Estandartes de las 4 bandas históricas en el fondo del escenario
   ctx.fillStyle = '#14101a';
-  ctx.fillRect(8, 126, 148, 42);
+  ctx.fillRect(6, 126, 164, 42);
   ctx.strokeStyle = '#302638';
   ctx.lineWidth = 1;
-  ctx.strokeRect(8, 126, 148, 42);
+  ctx.strokeRect(6, 126, 164, 42);
 
-  drawV8Logo(ctx, 26, 147, 0.65, finSongBand === 'v8' && finSingT > 0);
-  drawHermeticaLogo(ctx, 62, 147, 0.62, finSongBand === 'hermetica' && finSingT > 0);
-  drawAlmafuerteLogo(ctx, 100, 147, 0.62, finSongBand === 'almafuerte' && finSingT > 0);
-  drawIorioLogo(ctx, 136, 147, 0.65, finSongBand === 'iorio' && finSingT > 0);
+  drawV8Logo(ctx, 24, 147, 0.65, finSongBand === 'v8' && finSingT > 0);
+  drawHermeticaLogo(ctx, 64, 147, 0.62, finSongBand === 'hermetica' && finSingT > 0);
+  drawAlmafuerteLogo(ctx, 106, 147, 0.62, finSongBand === 'almafuerte' && finSingT > 0);
+  drawIorioLogo(ctx, 148, 147, 0.65, finSongBand === 'iorio' && finSingT > 0);
 
   // Mástil y Bandera Argentina flameando gigante
   ctx.fillStyle = '#dfdcd5';
