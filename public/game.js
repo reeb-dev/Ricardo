@@ -2662,7 +2662,7 @@ const DISCOS=[
  {t:'VÍCTIMAS DEL VACIAMIENTO',c:'#d87a3a',s:'El último disco de estudio de Hermética, de 1994. En 1995 salió "Lo último", en vivo en Obras.'},
  {t:'MUNDO GUANACO',c:'#e8e2d0',s:'El primer disco de Almafuerte, de 1995. El nombre de la banda homenajea al poeta Pedro B. Palacios.'},
  {t:'PIEDRA LIBRE',c:'#c8a060',s:'Almafuerte sacó "Piedra libre" en 2001. Antes: "Del entorno", "Almafuerte" y "A fondo blanco".'},
- {t:'TORO Y PAMPA',c:'#a83a2a',s:'"Toro y pampa" salió en 2006, ya con la vida de campo como tema.'},
+ {t:'TORO Y PAMPA',c:'#a83a2a',s:'"Toro y pampa" (2006, versión de estudio): consagración del folclore pesado e inspiración de "Pa\' Pelusa".'},
  {t:'TRILLANDO LA FINA',c:'#6a8a3a',s:'El último disco de Almafuerte, de 2012. Como solista grabó "Tangos y milongas" (2014) y "Atesorando en los cielos" (2015).'}];
 // afiches: [x, título, línea 1, línea 2, color]
 const AFICHES=[
@@ -2674,7 +2674,7 @@ const AFICHES=[
  [[560,'MONSTERS','OF ROCK','RIVER 3/9/94','#ff5a3a'],[1700,'DISCO DE ORO','OBRAS','12/11/94','#e8c83a']],
  [[520,'ALMAFUERTE','BIBLIOTECA','DE OLIVOS','#e8e2d0'],[1640,'ALMAFUERTE','ARPEGIOS','','#c8322a']],
  [[640,'IORIO','Y FLAVIO','PESO ARGENTO','#3a8ad8'],[1700,'ALMAFUERTE','PIEDRA LIBRE','GIRA','#c8a060']],
- [[600,'ALMAFUERTE','TORO Y PAMPA','','#a83a2a'],[1500,'PEÑAROL','MAR DEL PLATA','AGUANTE PELUSA','#f2d22a']],
+ [[600,'ALMAFUERTE','TORO Y PAMPA','DE ESTUDIO 2006','#a83a2a'],[1500,'PA\' PELUSA','MAR DEL PLATA','ALVARADO Y PEÑAROL','#f2d22a']],
  [[620,'UNAS ESTROFAS','MÁS · GIRA 2023','CON CHEWELCHE','#f2b632'],[1600,'ALL BOYS 2013','25 MIL','EN EL ESTADIO','#e8e2d0']]];
 let GUI={moto:null,got:{}};
 function guiReset(){GUI.moto=null;if(DISCOS[lvl])items.push({kind:'disco',x:Math.round(LW*.52),y:232,z:0,vz:0,t:0});}
@@ -3262,7 +3262,7 @@ const CINES=[
  [['stage','MONUMENTAL · SEPTIEMBRE 1994','Monsters of Rock en River Plate: decenas de miles de remeras negras del Oeste copan la cancha antes de Kiss y Sabbath.'],['scene','VÍCTIMAS DEL VACIAMIENTO','Afuera, los matones de valla y los empresarios quieren hacer negocio con la pasión popular (escena de ficción).'],['face','DISCO DE ORO Y DESPEDIDA','En el pico de su convocatoria, Hermética se separa en diciembre de 1994.']],
  [['face','EL AMASIJO DE UN GRAN SUEÑO · 1995','Tras la separación de Hermética, Ricardo funda Almafuerte en 1995: canta y toca el bajo.'],['scene','LLUVIA EN CONSTITUCIÓN','Junto a Claudio "Tano" Marciello y Claudio Cardaci vuelven a empezar desde abajo.'],['stage','MUNDO GUANACO','El metal pesado abraza la milonga, el tango y los versos de José Larralde y Pedro Bonifacio Palacios.']],
  [['road','RUTAS ARGENTINAS · 2001','Entre cacerolazos, corralito bancario y rutas cortadas, el micro de Almafuerte recorre cada provincia.'],['scene','PIEDRA LIBRE EN EL INTERIOR','Mientras los bancos se quedan con el ahorro de los abuelos, los clubes del interior laten con la banda.'],['face','PATRIA Y CAMINO','Donde otros ven crisis y se fugan, la banda sale ruta por ruta a cantarle a su gente.']],
- [['campo','SIERRA DE LA VENTANA · 2006','Lejos del cemento y la histeria porteña, el cantor halla su refugio entre cerros, molinos y eucaliptos.'],['campo','LA LUZ MALA DE LA PAMPA','En la noche serrana flota la luz mala sobre las osamentas: "Gas fosforescente del hueso; no hay que temerle al fantasma sino al vivo", decía Ricardo.'],['face','TORO Y PAMPA','Le canta a los amigos y al orgullo de su sangre tehuelche.'],['stage','FOGÓN Y GUITARRA','Con el Tano Marciello y Beto Ceriotti, Almafuerte hace tronar el folclore pesado en todo el país.']],
+ [['campo','SIERRA DE LA VENTANA · 2006','Lejos del cemento y la histeria porteña, el cantor halla su refugio entre cerros, molinos y eucaliptos.'],['campo','LA LUZ MALA DE LA PAMPA','En la noche serrana flota la luz mala sobre las osamentas: "Gas fosforescente del hueso; no hay que temerle al fantasma sino al vivo", decía Ricardo.'],['face','TORO Y PAMPA (ESTUDIO)','El álbum de estudio (2006) y la amistad leal que inspiró Pa\' Pelusa: al amigo de Peñarol y Alvarado que en la mala jamás lo dejó a pata.'],['stage','FOGÓN Y GUITARRA','Con el Tano Marciello y Beto Ceriotti, Almafuerte hace tronar el folclore pesado en todo el país.']],
  [['campo','SÁBADO SANTO · PUEBLO DE CAMPO 2012','En "Trillando la fina", un espanto nocturno desvela a los vecinos mientras la prensa amarilla busca carroña.'],['face','MUERE MONSTRUO MUERE','Al monstruo lo atan y lo llevan lejos; al comerciante informador lo sacan del pueblo.'],['scene','CHARLA CON BETO CASELLA','Una charla de amigos: Beto Casella lo entrevistó varias veces.']],
  [['campo','CORONEL SUÁREZ · TIERRA ADENTRO 2023','Coronel Suárez, tierra adentro: ahí vivía, lejos del ruido de la ciudad.'],['face','SÉ VOS, NOMÁS','Un saludo del juego a quien hizo del metal un oficio.'],['stage','UNAS ESTROFAS MÁS','En 2023 recorría el país con la gira "Unas estrofas más". Murió el 24 de octubre de 2023.']]];
 let CINE=null;
@@ -3371,7 +3371,7 @@ function cineBG(kind,t){const g=ctx,sk=LV?LV.skin:'ric1',R=(a,b,w,h,c)=>{g.fillS
     g.fillStyle='#3a2416';g.fillRect(fx-9,fy,18,3);g.fillRect(fx-7,fy-2,14,3);
     for(let k=0;k<3;k++){g.fillStyle=k===0?'#e2462c':k===1?'#f29b2e':'#f8e27a';g.beginPath();g.arc(fx-3+k*3,fy-3-Math.abs(Math.sin(t*.25+k))*4,4-k*.8,0,7);g.fill();}
     if(lvl===8){
-      cineActor('ricT',W*.42,198,1,'mate','mate',1.4);cineActor('pelusa',W*.64,198,-1,'stand',null,1.38);
+      cineActor('ricT',W*.42,198,1,'mate','mate',1.4);cineActor('peon',W*.64,198,-1,'mate','mate',1.38);
       const lx=W*.82,ly=94+Math.sin(t*.12)*8,rad=14+Math.sin(t*.2)*2;
       const gl=g.createRadialGradient(lx,ly,2,lx,ly,rad*2);
       gl.addColorStop(0,'rgba(255,255,240,.95)');gl.addColorStop(.3,'rgba(120,255,220,.7)');gl.addColorStop(.7,'rgba(60,180,240,.35)');gl.addColorStop(1,'rgba(20,80,200,0)');
@@ -3425,7 +3425,7 @@ function drawCine(){const C=CINE;if(!C)return;const [kind,head,cap]=C.P[C.i],t=C
     const sk=LV?LV.skin:'ric1';
     if(C.gift&&C.i===1){g.save();g.translate(vx+vw*.5,vy+vh*.54);g.scale(2.2,2.2);BASS(0,0,-.35,true);g.restore();}
     else{
-      const ally=lvl===0?'viejo':lvl===1?'chofa':lvl===2?'carpo':lvl<=6?'violero':lvl===7?'jubilado':lvl===8?'pelusa':lvl===9?'beto':'anselmo';
+      const ally=lvl===0?'viejo':lvl===1?'chofa':lvl===2?'carpo':lvl<=6?'violero':lvl===7?'jubilado':lvl===8?'peon':lvl===9?'beto':'anselmo';
       cineActor(sk,vx+vw*.36,vy+vh-12,1,lvl>=8?'mate':'stand',lvl>=7&&lvl<8?'mic':lvl<7?'bass':'mate',1.15);
       cineActor(ally,vx+vw*.70,vy+vh-12,-1,'stand',ally==='chofa'||ally==='violero'?'gtr':null,1.12);
     }
