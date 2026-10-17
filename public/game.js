@@ -1191,10 +1191,22 @@ cv.addEventListener('pointerdown',e=>{audioInit();if(AC&&AC.state==='suspended')
     state='play';
   }
   else if(state==='title'){
-    if(cy>=234&&cy<=252&&cx>=220&&cx<=466){albumOpen();return;}
-    if(cy>=198&&cy<=220&&cx>=216&&cx<=468){diffSet(diff+1);sfx('blip');return;}
-    const rowStep=Math.min(8.5,122/LEVELS.length);
-    if(cy>=74&&cy<=74+LEVELS.length*rowStep&&cx>=218&&cx<=468){const row=Math.floor((cy-74)/rowStep);if(row>=0&&row<LEVELS.length){if(sel===row){if(typeof lmSync==='function')lmSync(false);one.start=1;return;}sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}if(typeof lmSync==='function')lmSync(true);sfx('blip');return;}}
+    if(cy>=202&&cy<=226&&cx>=206&&cx<=336){diffSet(diff+1);sfx('blip');return;}
+    if(cy>=202&&cy<=226&&cx>=338&&cx<=472){albumOpen();return;}
+    if(cy>=228&&cy<=264&&cx>=206&&cx<=472){if(typeof lmSync==='function')lmSync(false);one.start=1;return;}
+    if(cy>=42&&cy<=54&&cx>=206&&cx<=472){sel=(sel+LEVELS.length-1)%LEVELS.length;try{song=LEVELS[sel].song;step=0;}catch(e){}if(typeof lmSync==='function')lmSync(true);sfx('blip');return;}
+    if(cy>=186&&cy<=200&&cx>=206&&cx<=472){sel=(sel+1)%LEVELS.length;try{song=LEVELS[sel].song;step=0;}catch(e){}if(typeof lmSync==='function')lmSync(true);sfx('blip');return;}
+    const VIS_ROWS=6;
+    const startRow=Math.max(0,Math.min(LEVELS.length-VIS_ROWS,sel-2));
+    const listTop=56,rowH=21.5;
+    if(cy>=listTop&&cy<listTop+VIS_ROWS*rowH&&cx>=206&&cx<=472){
+      const row=startRow+Math.floor((cy-listTop)/rowH);
+      if(row>=0&&row<LEVELS.length){
+        if(sel===row){if(typeof lmSync==='function')lmSync(false);one.start=1;return;}
+        sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}if(typeof lmSync==='function')lmSync(true);sfx('blip');return;
+      }
+    }
+    if(cx<206){if(typeof lmSync==='function')lmSync(false);one.start=1;return;}
     one.start=1;}
   else if(state==='results'){
     if(cy>=192&&cy<=220&&cx>=W/2+20&&cx<=W/2+160){toTitleMenu();return;}
@@ -2814,7 +2826,7 @@ function lmTick(){
   if(LM.labT>0)LM.labT--;
   for(const b of LM.btns||[]){
     if(b.id==='bMenu')b.style.display=(state==='pause'||state==='gameover')?'block':'none';
-    else b.style.display=(state==='title'||state==='pause')?'block':'none';
+    else b.style.display=(state==='pause')?'block':'none';
   }
   if(LM.ov)LM.ov.style.display='none';
   const want=musicOn&&lmOn()&&state!=='gameover';
@@ -6243,32 +6255,226 @@ function grade(){ctx.save();ctx.globalCompositeOperation='saturation';ctx.global
   ctx.globalCompositeOperation='multiply';ctx.globalAlpha=.32;ctx.fillStyle='#f0cc94';ctx.fillRect(0,0,W,H);
   ctx.globalAlpha=1;ctx.drawImage(VIGN,0,0);
   ctx.globalCompositeOperation='overlay';ctx.globalAlpha=.12;ctx.drawImage(GRAIN,-((tick*13)%64),-((tick*7)%32));ctx.restore();}
+function getLevelEra(idx){
+  if(idx === 14 || (LEVELS[idx] && LEVELS[idx].fin)){
+    return { band:'iorio', bandName:'LEGADO ETERNO', years:'1962 - 2023', albumKey:'toroypampa', albumTitle:'EL METAL NUNCA MUERE', col:'#f2b632', eraTitle:'TODAS LAS ÉPOCAS' };
+  }
+  if(idx <= 2){
+    const ak = (idx === 2 ? 'luchando' : (idx === 1 ? 'batalla' : 'luchando'));
+    const at = (idx === 2 ? 'LUCHANDO POR EL METAL (1983)' : (idx === 1 ? 'UN PASO MÁS EN LA BATALLA' : 'CASEROS / DEMOS V8 (1979)'));
+    return { band:'v8', bandName:'V8', years:'1979 - 1987', albumKey:ak, albumTitle:at, col:'#e23828', eraTitle:'ÉPOCA V8' };
+  }
+  if(idx <= 5){
+    const ak = (idx === 3 ? 'hermetica89' : (idx === 4 ? 'acido' : 'victimas'));
+    const at = (idx === 3 ? 'HERMÉTICA (1989)' : (idx === 4 ? 'ÁCIDO ARGENTINO (1991)' : 'VÍCTIMAS DEL VACIAMIENTO'));
+    return { band:'hermetica', bandName:'HERMÉTICA', years:'1988 - 1994', albumKey:ak, albumTitle:at, col:'#2fa8df', eraTitle:'ÉPOCA HERMÉTICA' };
+  }
+  if(idx <= 11 || idx === 13){
+    const ak = (idx === 6 ? 'guanaco' : (idx === 7 || idx === 13 ? 'fondoblanco' : (idx === 9 ? 'trillando' : 'toroypampa')));
+    const at = (idx === 6 ? 'MUNDO GUANACO (1995)' : (idx === 7 ? 'PIEDRA LIBRE (2001)' : (idx === 9 ? 'TRILLANDO LA FINA (2012)' : (idx === 13 ? 'ULTIMANDO · RUTA 76' : 'TORO Y PAMPA (2006)'))));
+    return { band:'almafuerte', bandName:'ALMAFUERTE', years:'1995 - 2016', albumKey:ak, albumTitle:at, col:'#f2b632', eraTitle:'ÉPOCA ALMAFUERTE' };
+  }
+  return { band:'iorio', bandName:'IORIO SOLISTA', years:'2008 - 2023', albumKey:'ayerdeseo', albumTitle:'AYER DESEO, HOY REALIDAD', col:'#6cace4', eraTitle:'IORIO SOLISTA' };
+}
+
 function drawTitle(){
-  ctx.fillStyle='#0b0910';ctx.fillRect(0,0,W,H);
-  const g=ctx.createRadialGradient(110,150,10,110,150,190);g.addColorStop(0,'rgba(226,70,44,.38)');g.addColorStop(1,'rgba(226,70,44,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  for(let k=0;k<40;k++){ctx.fillStyle='rgba(239,228,210,'+(.05+hsh(k,2)*.1).toFixed(2)+')';ctx.fillRect(hsh(k,1)*W,(hsh(k,3)*H+tick*.2*(1+hsh(k,4)))%H,1,1);}
-  const L5=LEVELS[sel],st=STY[L5.skin];
-  ctx.save();ctx.beginPath();ctx.rect(14,40,190,214);ctx.clip();drawFaceFront(st,10,46,200);ctx.restore();
-  ctx.strokeStyle='#e2462c';ctx.lineWidth=2;ctx.strokeRect(14,40,190,214);
-  txt(L5.place.split('·').pop().trim(),109,240,'#f2b632',8,'center');
-  ctx.save();ctx.translate(342,30);ctx.rotate(-.05);txt('RICARDO IORIO',3,3,'#7a1a14',18,'center');txt('RICARDO IORIO',0,0,'#f2b632',18,'center');ctx.restore();
-  ctx.fillStyle='#e2462c';ctx.save();ctx.translate(342,66);ctx.rotate(-.05);ctx.fillRect(-112,-8,224,18);txt('UNA VIDA DE METAL',0,-3,'#fff',9,'center');ctx.restore();
-  const rowStep=Math.min(8.5,122/LEVELS.length);
-  LEVELS.forEach((L,i)=>{const y=76+i*rowStep,open=i<unl,on=i===sel;
-    if(on){ctx.fillStyle='rgba(226,70,44,.28)';ctx.fillRect(222,y-2,240,rowStep+1);ctx.fillStyle='#f2b632';ctx.fillRect(222,y-2,3,rowStep+1);}
-    txt((L.fin?'★':(L.bonus?'★':(i+1)+'.'))+' '+(open?L.title:'???'),230,y,open?(on?'#fff':'#efe4d2'):'#5a4a5e',rowStep>8?4.2:3.8);});
+  ctx.fillStyle='#09070d';ctx.fillRect(0,0,W,H);
+  const era=getLevelEra(sel);
+
+  // Fondo atmosférico sutil con partículas doradas
+  const gBg=ctx.createRadialGradient(100,140,20,100,140,260);
+  gBg.addColorStop(0,'rgba(226,70,44,.28)');gBg.addColorStop(1,'rgba(9,7,13,0)');
+  ctx.fillStyle=gBg;ctx.fillRect(0,0,W,H);
+  for(let k=0;k<35;k++){
+    const px=(hsh(k,1)*W+tick*.3*(1+hsh(k,4)))%W;
+    const py=(hsh(k,3)*H+tick*.15*(1+hsh(k,2)))%H;
+    ctx.fillStyle='rgba(242,182,50,'+(.06+hsh(k,5)*.14).toFixed(2)+')';
+    ctx.fillRect(px,py,1,1);
+  }
+
+  // ===================== MARQUESINA SUPERIOR (HEADER) =====================
+  ctx.fillStyle='rgba(16,11,22,.95)';ctx.fillRect(0,0,W,40);
+  ctx.fillStyle='#e2462c';ctx.fillRect(0,39,W,1.5);
+  ctx.fillStyle='#f2b632';ctx.fillRect(W/2-140,39,280,1.5);
+  ctx.fillStyle='#6cace4';ctx.fillRect(0,39,60,1.5);ctx.fillRect(W-60,39,60,1.5);
+
+  // Título Ricardo Iorio en 3D Chrome Arcade
+  txt('RICARDO IORIO',145,7,'#4a0e08',13,'center');
+  txt('RICARDO IORIO',145,6,'#8a1a12',13,'center');
+  txt('RICARDO IORIO',145,5,'#f2b632',13,'center');
+  txt('RICARDO IORIO',145,4.5,'#fff9e6',13,'center');
+
+  // Cinta con estrellas
+  ctx.fillStyle='rgba(26,18,34,.9)';ctx.fillRect(40,22,210,12);
+  ctx.strokeStyle='#f2b632';ctx.lineWidth=1;ctx.strokeRect(40.5,22.5,209,11);
+  ctx.fillStyle='#6cace4';ctx.fillRect(41,23,6,10);ctx.fillRect(243,23,6,10);
+  txt('★ UNA VIDA DE METAL ★',145,24,'#efe4d2',5.2,'center');
+
+  // Pill época y récord a la derecha
+  ctx.fillStyle='rgba(22,16,30,.92)';ctx.fillRect(280,6,192,28);
+  ctx.strokeStyle=era.col;ctx.lineWidth=1.2;ctx.strokeRect(280.5,6.5,191,27);
+  txt(era.eraTitle+' · '+era.years,376,10,era.col,5,'center');
+  txt('RÉCORD: '+(hiscore?String(hiscore).padStart(6,'0'):'000000')+' · ARCADE',376,21,'#efe4d2',4.5,'center');
+
+  // ===================== SHOWCASE IZQUIERDO (RICARDO & DISCOGRAFÍA) =====================
+  const L5=LEVELS[sel]||LEVELS[0],st=STY[L5.skin];
+  const bx=8,by=44,bw=192,bh=220;
+  ctx.fillStyle='#0f0c16';ctx.fillRect(bx,by,bw,bh);
+  ctx.strokeStyle=era.col;ctx.lineWidth=1.5;ctx.strokeRect(bx+.5,by+.5,bw-1,bh-1);
+  ctx.strokeStyle='rgba(255,255,255,.14)';ctx.lineWidth=1;ctx.strokeRect(bx+2.5,by+2.5,bw-5,bh-5);
+  // Remaches en esquinas
+  for(const [rx,ry] of [[bx+5,by+5],[bx+bw-5,by+5],[bx+5,by+bh-5],[bx+bw-5,by+bh-5]]){
+    ctx.fillStyle='#f2b632';ctx.fillRect(rx-1,ry-1,3,3);ctx.fillStyle='#fff';ctx.fillRect(rx,ry,1,1);
+  }
+
+  // Header del Showcase: Logo Oficial de la Banda y Nombre
+  ctx.fillStyle='rgba(22,16,32,.94)';ctx.fillRect(bx+3,by+3,bw-6,26);
+  ctx.fillStyle=era.col;ctx.fillRect(bx+3,by+28,bw-6,1.2);
+  drawBandLogo(ctx,era.band,bx+40,by+16,0.38,true);
+  txt(era.bandName,bx+82,by+7,era.col,6);
+  txt(era.years,bx+82,by+17,'#c8bed4',4.5);
+
+  // Escenario Central: Retrato de Ricardo + Disco de Vinilo Real
+  const stY=by+30,stH=124;
+  const rad=ctx.createRadialGradient(bx+65,stY+55,8,bx+65,stY+55,90);
+  rad.addColorStop(0,era.col+'36');rad.addColorStop(1,'rgba(10,8,14,0)');
+  ctx.fillStyle=rad;ctx.fillRect(bx+3,stY,bw-6,stH);
+
+  // Retrato
+  ctx.save();ctx.beginPath();ctx.rect(bx+3,stY,bw-6,stH);ctx.clip();
+  drawFaceFront(st,bx-2,stY-2,146);
+  ctx.restore();
+
+  // Disco de vinilo que asoma detrás de la tapa
+  const vx=bx+146,vy=stY+62;
+  ctx.fillStyle='#0d0d12';ctx.beginPath();ctx.arc(vx,vy,26,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.arc(vx,vy,22,0,Math.PI*2);ctx.stroke();
+  ctx.beginPath();ctx.arc(vx,vy,16,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle=era.col;ctx.beginPath();ctx.arc(vx,vy,9,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#000';ctx.beginPath();ctx.arc(vx,vy,2.5,0,Math.PI*2);ctx.fill();
+
+  // Tapa Real del Álbum
+  drawAlbumCover(ctx,era.albumKey,bx+116,stY+32,64);
+
+  // Placa Inferior del Showcase (Capítulo, Lugar y Música)
+  const py=by+155,ph=bh-158;
+  ctx.fillStyle='rgba(18,13,26,.96)';ctx.fillRect(bx+3,py,bw-6,ph);
+  ctx.fillStyle=era.col;ctx.fillRect(bx+3,py,bw-6,1.2);
+  txt(L5.chap||('CAPÍTULO '+(sel+1)),bx+bw/2,py+4,'#f2b632',5.5,'center');
+  const tLen=L5.title.length;
+  const tSz=tLen>22?4.6:tLen>16?5.6:6.8;
+  txt(L5.title,bx+bw/2,py+15,'#ffffff',tSz,'center');
+  txt('📍 '+L5.place,bx+bw/2,py+27,'#d8cedf',4.6,'center');
+
+  // Mini barras de ecualizador animadas
+  const curS=SONGS[L5.song]||SONGS[song];
+  for(let b=0;b<5;b++){
+    const bh2=2+Math.abs(Math.sin(tick*.25+b*1.1))*7;
+    ctx.fillStyle=era.col;ctx.fillRect(bx+18+b*5,py+51-bh2,3,bh2);
+  }
+  txt('♫ '+(curS?.name||'16-BIT TRACK'),bx+48,py+43,era.col,5.2);
+  txt(era.albumTitle,bx+bw/2,py+53,'#9b8aa3',3.8,'center');
+
+  // ===================== PANEL DERECHO: SELECTOR DE NIVELES (CARRUSEL) =====================
+  const rx=206,ry=44,rw=266,rh=154;
+  ctx.fillStyle='rgba(12,9,18,.92)';ctx.fillRect(rx,ry,rw,rh);
+  ctx.strokeStyle='#2e223c';ctx.lineWidth=1;ctx.strokeRect(rx+.5,ry+.5,rw-1,rh-1);
+
+  const VIS_ROWS=6;
+  const startRow=Math.max(0,Math.min(LEVELS.length-VIS_ROWS,sel-2));
+
+  // Indicador de Scroll Superior
+  if(startRow>0){
+    ctx.fillStyle='rgba(26,18,36,.95)';ctx.fillRect(rx+2,ry+2,rw-4,10);
+    const blink=tick%30<18;
+    txt('▲ MÁS CAPÍTULOS ANTERIORES ('+startRow+')',rx+rw/2,ry+3,blink?'#f2b632':'#9b8aa3',4.5,'center');
+  } else {
+    ctx.fillStyle='rgba(20,14,28,.8)';ctx.fillRect(rx+2,ry+2,rw-4,10);
+    txt('── CAPÍTULOS DE SU VIDA (1-15) ──',rx+rw/2,ry+3,'#8a7a94',4.2,'center');
+  }
+
+  // 6 Filas Visibles del Carrusel (21.5px de alto cada una)
+  const listTop=ry+13,rowH=21.5;
+  for(let k=0;k<VIS_ROWS;k++){
+    const idx=startRow+k;
+    if(idx>=LEVELS.length)break;
+    const L=LEVELS[idx],open=idx<unl,on=idx===sel,eraL=getLevelEra(idx);
+    const y=listTop+k*rowH;
+
+    if(on){
+      // Fila Activa Seleccionada
+      const pulse=Math.sin(tick*.15)*.15+.85;
+      ctx.fillStyle='rgba(226,70,44,'+(.32*pulse).toFixed(2)+')';ctx.fillRect(rx+2,y,rw-4,rowH-1);
+      ctx.strokeStyle='#f2b632';ctx.lineWidth=1.2;ctx.strokeRect(rx+2.5,y+.5,rw-5,rowH-2);
+      ctx.fillStyle='#f2b632';ctx.fillRect(rx+2,y,3,rowH-1);
+      txt('►',rx+7,y+5,'#f2b632',6.5);
+    } else {
+      // Fila Inactiva
+      ctx.fillStyle=(k%2===0)?'rgba(18,14,26,.65)':'rgba(14,10,20,.65)';
+      ctx.fillRect(rx+2,y,rw-4,rowH-1);
+    }
+
+    // Número o badge de capítulo
+    const numTag=L.fin?'★ FIN':(L.bonus?'★ BON':'['+String(idx+1).padStart(2,'0')+']');
+    txt(numTag,rx+16,y+6,on?'#f2b632':(open?'#9b8aa3':'#5a4a5e'),5);
+
+    // Título del nivel
+    const titleText=L.fin?'EL METAL NUNCA MUERE':(open?L.title:'??? BLOQUEADO');
+    txt(titleText,rx+50,y+5,open?(on?'#ffffff':'#efe4d2'):'#5a4a5e',on?5.8:5.2);
+
+    // Pill de Época / Año a la derecha
+    const LEVEL_YEARS=['1978','1979','1982','1988','1991','1994','1995','2001','2006','2012','2006','1999','2023','2003','FIN'];
+    const yearMatch=L.place.match(/\b\d{4}\b/);
+    const yearTag=LEVEL_YEARS[idx]||(L.fin?'FIN':(yearMatch?yearMatch[0]:'VIVO'));
+    ctx.fillStyle=on?(eraL.col+'44'):'rgba(255,255,255,.06)';
+    ctx.fillRect(rx+rw-50,y+4,44,13);
+    ctx.strokeStyle=on?eraL.col:'rgba(255,255,255,.1)';
+    ctx.lineWidth=1;ctx.strokeRect(rx+rw-49.5,y+4.5,43,12);
+    txt(yearTag,rx+rw-28,y+6,on?'#fff':eraL.col,4.5,'center');
+  }
+
+  // Indicador de Scroll Inferior
+  const rem=LEVELS.length-(startRow+VIS_ROWS);
+  const footY=ry+rh-11;
+  if(rem>0){
+    ctx.fillStyle='rgba(26,18,36,.95)';ctx.fillRect(rx+2,footY,rw-4,10);
+    const blink=tick%30<18;
+    txt('▼ MÁS CAPÍTULOS SIGUIENTES ('+rem+')',rx+rw/2,footY+1.5,blink?'#f2b632':'#9b8aa3',4.5,'center');
+  } else {
+    ctx.fillStyle='rgba(20,14,28,.8)';ctx.fillRect(rx+2,footY,rw-4,10);
+    txt('★ FIN DEL VIAJE · EL METAL NUNCA MUERE ★',rx+rw/2,footY+1.5,'#f2b632',4.2,'center');
+  }
+
+  // ===================== PANEL DE CONTROL INFERIOR (BOTONES ARCADE) =====================
   const df=DIFFS[diff];
-  ctx.fillStyle='rgba(18,14,24,.92)';ctx.fillRect(222,201,240,17);
-  ctx.strokeStyle=df.col;ctx.lineWidth=1.2;ctx.strokeRect(222.5,201.5,239,16);
-  txt('◄ DIFICULTAD: '+df.name+' ►',342,204,df.col,6,'center');
-  txt(df.desc,342,212,'#b0a2b8',4,'center');
-  const curS=SONGS[LEVELS[sel]?.song]||SONGS[song];if(curS&&curS.name)txt('♫ 16-BIT: '+curS.name,342,219,'#f2b632',5,'center');if(tick%60<40)txt(coarse?'TOCÁ PARA JUGAR':'ENTER / ESPACIO PARA JUGAR',342,227.5,'#fff',7,'center');
   const albGotN=Object.keys(ALB.got||{}).length,albTot=albumTotal();
-  ctx.fillStyle='rgba(26,20,34,.94)';ctx.fillRect(222,236,240,13.5);
-  ctx.strokeStyle='#f2b632';ctx.lineWidth=1;ctx.strokeRect(222.5,236.5,239,12.5);
-  txt('📖 ÁLBUM DE FIGURITAS ('+albGotN+'/'+albTot+') · TOCÁ O APRETÁ G',342,240,'#f2b632',4.5,'center');
-  txt('▲/▼: CAPÍTULO · ◄/►: DIFICULTAD · '+(sel<unl?LEVELS[sel].place:'BLOQUEADO'),342,251,'#9b8aa3',4,'center');
-  if(hiscore)txt('RÉCORD '+String(hiscore).padStart(7,'0'),342,258,'#f2b632',4.5,'center');}
+
+  // Botón 1: Dificultad (Izquierda)
+  ctx.fillStyle='rgba(18,13,26,.95)';ctx.fillRect(206,202,130,24);
+  ctx.strokeStyle=df.col;ctx.lineWidth=1.3;ctx.strokeRect(206.5,202.5,129,23);
+  txt('◄ '+df.name.toUpperCase()+' ►',271,205,df.col,5.8,'center');
+  const dfDesc=diff===0?'DAÑO -30% · 10 PAPAS':diff===2?'DAÑO +40% · 5 PAPAS':'BALANCE · 8 PAPAS';
+  txt(dfDesc,271,215,'#b0a2b8',4.2,'center');
+
+  // Botón 2: Álbum de Figuritas (Derecha)
+  ctx.fillStyle='rgba(26,18,36,.95)';ctx.fillRect(340,202,132,24);
+  ctx.strokeStyle='#f2b632';ctx.lineWidth=1.3;ctx.strokeRect(340.5,202.5,131,23);
+  txt('📖 ÁLBUM FIGURITAS',406,205,'#f2b632',5.2,'center');
+  txt('COLECCIÓN ('+albGotN+'/'+albTot+') · [G]',406,215,'#efe4d2',4,'center');
+
+  // Botón 3: JUGAR (Arcade Pulsante)
+  const pulsePlay=Math.sin(tick*.12)*.18+.82;
+  ctx.fillStyle='rgba(226,70,44,'+(.28*pulsePlay).toFixed(2)+')';ctx.fillRect(206,230,266,32);
+  ctx.strokeStyle='#f2b632';ctx.lineWidth=1.5;ctx.strokeRect(206.5,230.5,265,31);
+  // Remaches / esquinas arcade
+  ctx.fillStyle='#f2b632';
+  ctx.fillRect(207,231,4,4);ctx.fillRect(467,231,4,4);ctx.fillRect(207,257,4,4);ctx.fillRect(467,257,4,4);
+
+  const playText=coarse?'▶ TOCÁ PARA JUGAR ◀':'▶ ENTER / ESPACIO PARA JUGAR ◀';
+  txt(playText,339,235,'#ffffff',7,'center');
+  txt('▲/▼ ELEGIR · ◄/► DIFICULTAD · Z/ESPACIO ACCIÓN',339,249,'#cfc2dc',4.2,'center');
+}
 function drawCard(){ctx.fillStyle='#0b0910';ctx.fillRect(0,0,W,H);
   const k=Math.min(1,cardT/30);ctx.globalAlpha=k;
   if(FAR)ctx.drawImage(FAR,0,0,W*RS,190*RS,0,0,W,190);
