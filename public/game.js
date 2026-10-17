@@ -426,6 +426,13 @@ const SCENES=[
     R(1120,70,190,70,'#8a6a52');brick(1120,70,190,70,'#9a6a4a');g.fillStyle='#5a2a20';g.beginPath();g.moveTo(1110,72);g.lineTo(1215,46);g.lineTo(1320,72);g.closePath();g.fill();
     R(1150,82,130,16,'#1e3a6a');T('LÍNEA SARMIENTO',1215,87,'#f0f0f0',5,'center');R(1138,104,26,36,'#2a2422');R(1266,104,26,36,'#2a2422');
     T('RAMAL QUE PARA,',920,146,'#e8e2d0',5);T('RAMAL QUE CIERRA',920,156,'#e8e2d0',5);
+    // Mural emblemático: Gil Trabajador
+    R(1340,78,140,54,'#1e2430');R(1342,80,136,50,'#2a3442');
+    T('¡GIL TRABAJADOR!',1410,88,'#f2b632',6,'center');
+    T('EL PAÍS SE LEVANTA',1410,100,'#e8e4dc',4.5,'center');
+    T('CON TUS MANOS',1410,110,'#6cace4',5,'center');
+    T('HERMÉTICA · 1991',1410,122,'#c8322a',4,'center');
+
     for(const lx of [1060,1300]){R(lx-1,70,3,70,'#2e2c34');R(lx-6,66,13,5,'#4a4852');}
     // metalúrgica cerrada
     R(1500,60,420,116,'#5a4a42');brick(1500,60,420,116,'#6a4a3a');R(1500,56,420,6,'#3a2a24');T('METALÚRGICA DEL OESTE',1710,70,'#e8e2d0',7,'center');
@@ -1188,7 +1195,7 @@ const LEVELS=[
   winLines:[{w:'productor',s:'¡Pará, loco! ¡Dejen los equipos prendidos, toquen lo que quieran!'},{w:'ric2',s:'Así se habla. Que se escuche desde Libertador hasta Caseros: ¡Luchando por el metal!'}],
   winSay:'¡BRIGADAS METÁLICAS!',
   quips:['¡Llegaron las Brigadas Metálicas!','Cálmense, no rompan nada, pero no se callen.','Fuerte, crudo y en castellano.','Gracias al Carpo hoy nos escuchan todos.']},
- {LW:2700,skin:'ric3',song:'l3',bossSong:'bossThrash',food:'pizza',chap:'CAPÍTULO 3',villains:'Caretas privatizadores, Doctores de la Ley, tasadores, transas y El Vaciador',title:'ÁCIDO ARGENTINO',place:'EL OESTE · 1991',hazard:'moto',
+ {LW:2700,skin:'ric3',song:'l3',bossSong:'bossThrash',food:'pizza',chap:'CAPÍTULO 3',villains:'Caretas privatizadores, Doctores de la Ley, tasadores, transas y El Vaciador',title:'GIL TRABAJADOR',place:'EL OESTE · 1991',hazard:'moto',
   card:['Con Hermética puso en letras la realidad del obrero, el conurbano y el desguace industrial de los años 90.','En 1991 editaron "Ácido argentino", con temas como "Gil trabajador", "Memoria de siglos" y "En las calles de Liniers".','En 1992 abrieron para Black Sabbath y para Motörhead en Obras Sanitarias.'],
   npcs:[{kind:'vecina',x:250,y:198,face:1}],
   locks:[{trig:120,L:0,groups:[[['careta','R'],['careta','R']],[['movilero','R'],['careta2','L']]]},
@@ -1211,7 +1218,7 @@ const LEVELS=[
    {w:'vaciador',s:'¡El obrero ya fue, melenudo! ¡Tasadores, ejecuten el desalojo!'},
    {w:'ric3',s:'La dignidad del laburante no entra en ningún remate.'}],
   winLines:[{w:'vaciador',s:'¡Basta, suspendo la subasta! ¡Dejo las escrituras en la mesa!'},{w:'ric3',s:'Que prendan los motores de nuevo. Y esta noche los espero a todos en Obras.'}],
-  winSay:'¡MEMORIA DE SIGLOS!',
+  winSay:'¡AGUANTE EL GIL TRABAJADOR!',
   quips:['El que labura no es ningún gil trabajador.','Olvídalo y volverá por más.','Doctor de la ley, disfrazado de señor.','Ácido argentino en las venas.']},
  {LW:2800,skin:'ric4',song:'l4',bossSong:'bossFolk',food:'empanada',chap:'CAPÍTULO 4',villains:'Políticos en campaña, bancarios del corralito, cuatreros y El Banquero',title:'PIEDRA LIBRE',place:'RUTAS DEL INTERIOR · 2001',hazard:'camion',
   card:['Con Almafuerte recorrió las rutas del país profundo junto a Claudio "Tano" Marciello.','Fusionó el metal pesado con la milonga, el tango y la poesía de Pedro B. Palacios y José Larralde.','En 2001, año de crisis y corralito, editó "Piedra libre" y grabó el vivo "En vivo Obras 2001".'],
@@ -1457,7 +1464,7 @@ const NEWLEVELS={
   if(LEVELS[9])LEVELS[9].guns=[[900,'escopeta'],[1600,'damajuana']];
   if(LEVELS[8])LEVELS[8].guns=[[800,'boleadora'],[1700,'boleadora']];
   if(LEVELS[7])LEVELS[7].guns=[[800,'damajuana'],[1500,'escopeta']];
-  if(LEVELS[4])LEVELS[4].guns=[[1500,'bersa']];
+  if(LEVELS[4])LEVELS[4].guns=[[650,'llave_taller'],[1250,'cajon'],[1500,'bersa']];
   if(LEVELS[2])LEVELS[2].guns=[[1200,'bersa']];
   if(LEVELS[3])LEVELS[3].guns=[[1400,'bersa']];
 })();
@@ -1747,6 +1754,7 @@ function updNPC(n){if(n.ally){updAlly(n);return;}
 // Armas: Escopeta recortada calibre 12, pistola Bersa Thunder 9mm, cajón de papas, boleadoras y damajuana
 Object.assign(MOVES,{gun:{dmg:18,kd:1.2,h:40},buck:{dmg:14,kd:1.6,h:44},frase:{dmg:14,kd:1.1,h:40}});
 const GUNS={
+  llave_taller:{name:'LLAVE FRANCESA 12"',ammo:6,dur:16,col:'#9ec2e6'},
   fal:{name:'FAL CRIOLLO 7.62',ammo:12,dur:14,col:'#8fd2ff'},
   mate_cocido:{name:'JARRO DE MATE COCIDO',ammo:4,dur:18,col:'#ffd27a'},
   escopeta:{name:'ESCOPETA RECORTADA',ammo:8,dur:22,col:'#ff5a36'},
@@ -1770,6 +1778,10 @@ function gunTick(f){const G=GUNS[f.hold];f.t++;if(!G){f.state='idle';return;}
     else if(f.hold==='fal'){
       for(let b=0;b<2;b++)shots.push({x:x+b*8*f.face,y:f.y+rnd(-2,2),z:z+rnd(-1,1),vx:f.face*12,owner:f,t:0,k:'bala',back:true,mv:MOVES.gun,life:45});
       sfx('gun');shake=Math.max(shake,3);parts.push({k:'wave',x,y:f.y,t:0,max:8,col:'140,210,255'});floatTxt(x,f.y-z-16,pick(['¡7.62!','¡RÁFAGA!','¡FAL!']),'#8fd2ff');
+    }
+    else if(f.hold==='llave_taller'){
+      shots.push({x,y:f.y,z:z+2,vx:f.face*7,vz:1.1,owner:f,t:0,k:'llave',back:true,mv:MOVES.buck,life:48});
+      sfx('whoosh');floatTxt(x,f.y-z-16,'¡TUERCAZO DE TALLER!','#9ec2e6');
     }
     else if(f.hold==='mate_cocido'){
       shots.push({x,y:f.y,z:z+3,vx:f.face*5.5,vz:1.1,owner:f,t:0,k:'jarro',back:true,mv:MOVES.buck,life:50});
@@ -1797,7 +1809,16 @@ function gunTick(f){const G=GUNS[f.hold];f.t++;if(!G){f.state='idle';return;}
   if(f.t>=G.dur)f.state='idle';}
 function pickGun(f,it){f.hold=it.kind;f.ammo=it.ammo||GUNS[it.kind].ammo;it.gone=true;sfx('pickup');floatTxt(f.x,f.y-80,GUNS[it.kind].name+'!',GUNS[it.kind].col);}
 function drawGunItem(k,X,y){const R=(a,b,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(a,b,w,h);};
-  if(k==='fal'){
+  if(k==='llave_taller'){
+    R(X-10,y-14,20,5,OUT);R(X-9,y-13,18,3,'#7c8898');
+    R(X+6,y-16,6,9,OUT);R(X+7,y-15,4,7,'#a4b0c0');R(X+8,y-14,2,3,'#1a1c22');
+    R(X-12,y-13,4,3,OUT);R(X-11,y-12,2,1,'#a4b0c0');
+  }
+  else   if(k==='llave_taller'){
+    for(const p of [0,1])L(hx-dx*4,hy-dy*4,hx+dx*14,hy+dy*14,3.2,'#7c8898',p);
+    L(hx+dx*14,hy+dy*14,hx+dx*18,hy+dy*18,5,'#a4b0c0',1);
+  }
+  else   if(k==='fal'){
     R(X-14,y-14,28,4,OUT);R(X-13,y-13,26,2,'#363c32');
     R(X-6,y-11,5,7,OUT);R(X-5,y-10,4,6,'#222620');
     R(X-12,y-12,6,5,'#4a5244');R(X+11,y-14,3,1,'#7a8274');
@@ -2007,7 +2028,7 @@ const LEVEL_TRACK_MAP = [
   // Cap 4: Hermética 1988 (Recoleta / San Martín, Helloween)
   { song: 'desde_el_oeste', boss: 'c3' }, // Desde el oeste / Tú eres su seguridad
   // Cap 5: Ácido Argentino 1991 (El Oeste, desguace industrial)
-  { song: 'del_camionero', boss: 'c5' }, // Del camionero / Gil trabajador
+  { song: 'c5', boss: 'b1' }, // Gil trabajador / Olvídalo y volverá por más
   // Cap 6: Monumental 1994 (Estadio River, Víctimas del vaciamiento)
   { song: 'liniers', boss: 'b1' }, // En las calles de Liniers / Olvídalo y volverá por más
   // Cap 7: Cemento 1995 (Nace Almafuerte, Mundo Guanaco, clausurador)
@@ -2636,7 +2657,7 @@ const DISCOS=[
  {t:'LUCHANDO POR EL METAL',c:'#c8322a',s:'El primer disco de V8 salió en 1983, con Pappo de invitado.'},
  {t:'UN PASO MÁS EN LA BATALLA',c:'#e8c83a',s:'El segundo disco de V8. Después vino "El fin de los inicuos" y la banda se separó a mediados de los 80.'},
  {t:'HERMÉTICA',c:'#3a8ad8',s:'El primer disco de Hermética salió en 1989. Él tocaba el bajo y escribía las letras.'},
- {t:'ÁCIDO ARGENTINO',c:'#8ad83a',s:'"Ácido argentino" salió en 1991. Antes salió el EP "Intérpretes", con "Cambalache".'},
+ {t:'GIL TRABAJADOR',c:'#8ad83a',s:'"Gil trabajador" es el himno obrero de Hermética, del emblemático disco "Ácido argentino" (1991).'},
  {t:'VÍCTIMAS DEL VACIAMIENTO',c:'#d87a3a',s:'El último disco de estudio de Hermética, de 1994. En 1995 salió "Lo último", en vivo en Obras.'},
  {t:'MUNDO GUANACO',c:'#e8e2d0',s:'El primer disco de Almafuerte, de 1995. El nombre de la banda homenajea al poeta Pedro B. Palacios.'},
  {t:'PIEDRA LIBRE',c:'#c8a060',s:'Almafuerte sacó "Piedra libre" en 2001. Antes: "Del entorno", "Almafuerte" y "A fondo blanco".'},
@@ -3000,7 +3021,7 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
 rutaInsert();
   if(LEVELS[10])LEVELS[10].guns=[[700,'boleadora'],[1400,'damajuana'],[1900,'escopeta']];
   DATOS[0].unshift('En 1972 recibió su primera guitarra y en 1978 su primer bajo, un Faim que le compraron sus padres.');
-  AFICHES[4].push([1300,'BLACK SABBATH','OBRAS 1992','ABRE HERMÉTICA','#7a5a9a']);AFICHES[5].push([1700,'MONSTERS OF ROCK','KISS Y SABBATH','RIVER 3/9/94','#c8a060']);
+  AFICHES[4].push([1300,'GIL TRABAJADOR','HERMÉTICA 1991','ÁCIDO ARGENTINO','#f2b632']);AFICHES[4].push([1750,'BLACK SABBATH','OBRAS 1992','ABRE HERMÉTICA','#7a5a9a']);AFICHES[5].push([1700,'MONSTERS OF ROCK','KISS Y SABBATH','RIVER 3/9/94','#c8a060']);
   AFICHES[6].push([1500,'ALMAFUERTE','VERSIONA A','LARRALDE','#a87a4a']);AFICHES[10].push([1400,'JOSÉ LARRALDE','VERSIONADO','POR ALMAFUERTE','#a87a4a']);
   DATOS[4].push('En 1992, con Ácido argentino, Hermética abrió para Black Sabbath en Obras.');
   DATOS[5].push('A comienzos de septiembre de 1994 tocaron en el Monsters of Rock de River, con Kiss y Black Sabbath.');
@@ -3912,6 +3933,13 @@ function drawEnt(e){if(e.gone||e.state==='ride'||e.state==='hidden')return;if(e.
   if(e.dazed>0){for(let i=0;i<3;i++){const a=tick*.15+i*2.1;ctx.fillStyle='#f2e6a0';ctx.fillRect(X+Math.cos(a)*12-1,Y-90*e.st.scale+Math.sin(a)*3,3,3);}}}
 function drawShot(s){const X=Math.round(s.x-cam.x),Y=Math.round(s.y-s.z);ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(X,Math.round(s.y),5,2,0,0,Math.PI*2);ctx.fill();
   if(s.k==='frase'){drawFrase(s,X,Y);return;}if(s.k==='pizza'){drawPizza(s,X,Y);return;}
+  if(s.k==='llave'){
+    ctx.save();ctx.translate(X,Y);ctx.rotate(s.t*.5);
+    ctx.fillStyle=OUT;ctx.fillRect(-8,-3,16,6);ctx.fillStyle='#8a98a8';ctx.fillRect(-7,-2,14,4);
+    ctx.fillStyle=OUT;ctx.fillRect(4,-5,6,10);ctx.fillStyle='#b0bcc8';ctx.fillRect(5,-4,4,8);
+    ctx.fillStyle='#14161c';ctx.fillRect(6,-2,2,4);
+    ctx.restore();return;
+  }
   if(s.k==='jarro'){
     ctx.save();ctx.translate(X,Y);ctx.rotate(s.t*.3);
     ctx.fillStyle=OUT;ctx.fillRect(-6,-6,12,12);ctx.fillStyle='#5a7088';ctx.fillRect(-5,-5,10,10);ctx.fillStyle='#c8d6e4';ctx.fillRect(-5,-5,10,2);
