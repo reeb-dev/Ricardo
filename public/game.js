@@ -1158,7 +1158,7 @@ const LEVELS=[
    {trig:1180,L:1100,train:true,groups:[[['chorro','R'],['patotero2','L'],['patotero','R']],[['estibador','L'],['chorro','R'],['patotero2','R']]],after:'rescue'},
    {trig:1820,L:1740,hazard:true,groups:[[['patotero','L'],['estibador','R'],['patotero2','R']],[['chorro','R'],['hippie','L'],['patotero','R'],['patotero2','L']]]},
    {boss:true,groups:[]}],
-  rescue:{kind:'chofa',x:1420,y:192,hold:'gtr'},guns:[[700,'escopeta'],[1950,'escopeta']],
+  rescue:{kind:'chofa',x:1420,y:192,hold:'gtr'},guns:[[320,'escopeta'],[700,'escopeta'],[1950,'escopeta']],
   props:[[380,'cajon','mila'],[470,'cajon','fruta'],[860,'tacho','mate'],[1500,'tacho','mila'],[1900,'cajon','fruta'],[2050,'tacho','mate']],pipe:[1460,240],
   intro:[{w:'viejo',s:'Ricardo, levantate que son las cuatro y el camión no espera. Hay que ir al Abasto a cargar las papas.'},
    {w:'ric1',s:'Ya voy, viejo. Mirá mis manos: de cargar cajones van a salir los callos para tocar el bajo.'},
@@ -1538,7 +1538,7 @@ function updPlayer(f){if(rideTick(f))return;
       if(press.papa){if(papas>0){f.state='papa';f.t=0;}else if(!f.say)say(f,'¡Sin papas!',40);break;}
       if(press.dodge&&!(f.dcd>0)){f.state='dodge';f.t=0;const d=ix||(-f.face);f.dvx=d*3.6;f.dvy=iy*1.6;if(ix)f.face=ix;f.dcd=24;sfx('whoosh');break;}
       if(press.jump){f.state='jump';f.vz=4.4;f.vx=ix*1.7;f.vy=iy*.9;f.jatk=false;f.hitList=new Set();sfx('jump');break;}
-      if(f.buf>0){f.buf=0;const it=items.find(i=>(i.kind==='pipe'||GUNS[i.kind])&&i.z<=0&&Math.abs(i.x-f.x)<16&&Math.abs(i.y-f.y)<9);
+      if(f.buf>0){f.buf=0;const it=items.find(i=>(i.kind==='pipe'||GUNS[i.kind])&&i.z<=0&&Math.abs(i.x-f.x)<26&&Math.abs(i.y-f.y)<18);
         if(it&&!f.hold&&GUNS[it.kind]){pickGun(f,it);break;}
         if(it&&!f.hold){f.hold='pipe';f.wdur=12;it.gone=true;sfx('pickup');floatTxt(f.x,f.y-80,MEL().toUpperCase(),'#d6dbe2');break;}
         if(GUNS[f.hold]){fireGun(f);break;}if(f.run&&!f.hold){f.run=0;startMove(f,'rush');break;}startMove(f,f.hold==='pipe'?'pipe1':'jab');break;}
@@ -1547,6 +1547,7 @@ function updPlayer(f){if(rideTick(f))return;
       f.state=(ix||iy)?'walk':'idle';if(ix||iy)f.walkPh+=.21;
       if(ix){const e=ents.find(e=>e.team===1&&!e.D.boss&&['idle','walk','hurt','windup'].includes(e.state)&&Math.sign(e.x-f.x)===f.face&&Math.abs(e.x-f.x)<20*f.st.scale&&Math.abs(e.y-f.y)<5&&e.z<=0);
         if(e){f.state='grab';f.t=0;f.grab=e;f.knees=0;e.state='grabbed';e.grabbedBy=f;e.move=null;sfx('punch');}}
+      for(const it of items){if(!f.hold&&GUNS[it.kind]&&!it.gone&&it.z<=0&&Math.abs(it.x-f.x)<20&&Math.abs(it.y-f.y)<14){pickGun(f,it);break;}}
       for(const it of items){if(it.kind!=='pipe'&&!it.gone&&it.z<=0&&Math.abs(it.x-f.x)<14&&Math.abs(it.y-f.y)<9){if(guiPick(it,f)||lombrizPick(it,f))continue;it.gone=true;const Fd=FOOD[it.kind]||FOOD.mate;f.hp=Math.min(f.max,f.hp+Fd[2]);if(it.kind==='mate'){meter=Math.min(300,meter+80);say(f,'Un whisky y seguimos.',90);}if(it.kind==='fruta'&&Math.random()<.5)say(f,'Como la de mi viejo.',90);sfx('heal');floatTxt(f.x,f.y-80,Fd[0],Fd[1]);}}
       break;}
     case 'atk':{f.t++;const mv=f.move;if(f.t===mv.a0){sfx('whoosh');if(mv.step)f.x+=f.face*mv.step;}
@@ -3705,7 +3706,13 @@ function drawHUD2(){
   for(let i=0;i<8;i++){const x=62+i*10;ctx.fillStyle=OUT;ctx.beginPath();ctx.ellipse(x,48,4.4,3.6,0,0,7);ctx.fill();ctx.fillStyle=i<papas?(lvl>=2?'#d8322a':'#b8864a'):'#3a2a22';ctx.beginPath();ctx.ellipse(x,48,3.5,2.7,0,0,7);ctx.fill();
     if(i<papas&&lvl>=2){ctx.fillStyle='#16141a';ctx.beginPath();ctx.arc(x,48,1.2,0,7);ctx.fill();}}
   txt(lvl>=2?'DISCOS (B)':'PAPAS (B)',144,45,'#c8b8cc',6);
-  if(GUNS[player.hold]){const G=GUNS[player.hold];txt(G.name+' x'+player.ammo,244,14,G.col,7);txt('Z DISPARA',244,25,'#c8b8cc',5);}
+  if(GUNS[player.hold]){const G=GUNS[player.hold];txt(G.name+' x'+player.ammo,244,14,G.col,7);txt(coarse?'TOCÁ GOLPE PARA DISPARAR':'Z O BOTÓN GOLPE DISPARA',244,25,'#ffe08a',5);}
+  const atkBtn=document.getElementById('bAtk');
+  if(atkBtn){
+    const gunName=player&&player.hold&&GUNS[player.hold]?'DISPARAR ('+player.ammo+')':'GOLPE';
+    if(atkBtn.textContent!==gunName)atkBtn.textContent=gunName;
+  }
+
   txt(String(score).padStart(7,'0'),W-8,8,'#fff',10,'right');txt(LV.place,W-8,22,'#c8b8cc',6,'right');
   const df=DIFFS[diff];txt(df.name,W-8,32,df.col,5,'right');
   if(!musicOn)txt('MÚSICA: NO',W-8,41,'#c8b8cc',5,'right');else{const cS=SONGS[song];if(cS&&cS.name)txt('♫ '+cS.name,W-8,41,'#f2b632',4.5,'right');}
