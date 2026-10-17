@@ -1186,18 +1186,25 @@ cv.addEventListener('pointerdown',e=>{audioInit();if(AC&&AC.state==='suspended')
       if(cy>=118&&cy<=140){toTitleMenu();return;}
       if(cy>=142&&cy<=162){cycleTouchAlpha();return;}
       if(cy>=164&&cy<=184){albumOpen();return;}
-      if(LV&&LV.camioneta&&cy>=184&&cy<=206){state='play';startWinCut();return;}
+      if(LV&&LV.camioneta&&cy>=180&&cy<=214){state='play';noPause=60;startWinCut();return;}
     }
     state='play';
   }
   else if(state==='title'){
     if(cy>=234&&cy<=252&&cx>=220&&cx<=466){albumOpen();return;}
     if(cy>=198&&cy<=220&&cx>=216&&cx<=468){diffSet(diff+1);sfx('blip');return;}
-    if(cy>=74&&cy<=196&&cx>=218&&cx<=468){const row=Math.floor((cy-74)/8.5);if(row>=0&&row<LEVELS.length){if(sel===row){if(typeof lmSync==='function')lmSync(false);one.start=1;return;}sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}if(typeof lmSync==='function')lmSync(true);sfx('blip');return;}}
+    const rowStep=Math.min(8.5,122/LEVELS.length);
+    if(cy>=74&&cy<=74+LEVELS.length*rowStep&&cx>=218&&cx<=468){const row=Math.floor((cy-74)/rowStep);if(row>=0&&row<LEVELS.length){if(sel===row){if(typeof lmSync==='function')lmSync(false);one.start=1;return;}sel=row;try{song=LEVELS[sel].song;step=0;}catch(e){}if(typeof lmSync==='function')lmSync(true);sfx('blip');return;}}
     one.start=1;}
   else if(state==='results'){
     if(cy>=192&&cy<=220&&cx>=W/2+20&&cx<=W/2+160){toTitleMenu();return;}
     one.start=1;
+  }
+  else if(state==='ending'){
+    if(cy>=242&&cy<=264&&cx>=W/2-95&&cx<=W/2+95){toTitleMenu();return;}
+    if(endT<420){endT=420;return;}
+    singNext();
+    return;
   }
   else if(state!=='play')one.start=1;});
 document.getElementById('touch').addEventListener('contextmenu',e=>e.preventDefault());
@@ -1788,11 +1795,17 @@ function updPlayer(f){if(rideTick(f))return;
               'Tierra adentro hasta que se apague el último faro.';
       say(f,q,190);
     }
-    if(press.start&&f.x>5000&&f.x<6200&&state==='play'){
-      startWinCut();return;
+    // Finalización de Ruta 76 sin colgarse: en Parador El Ombú con acción o al llegar al arco de López Lecube
+    if((press.atk||press.jump||press.spec||press.start)&&f.x>5000&&f.x<6450&&state==='play'){
+      floatTxt(f.x+30,f.y-80,'¡LLEGADA A PARADOR EL OMBÚ!','#f2b632');
+      sfx('truck');noPause=60;startWinCut();return;
+    }
+    if(f.x>=6500&&state==='play'){
+      floatTxt(f.x+30,f.y-80,'¡LLEGADA A DESTINO · LÓPEZ LECUBE!','#f2b632');
+      sfx('truck');noPause=60;startWinCut();return;
     }
     if(LV.freeRoad){
-      if(f.x>=6600){
+      if(f.x>=7200){
         f.x-=6000;
         cam.x=Math.max(0,cam.x-6000);
         f.lap=(f.lap||0)+1;
@@ -2108,7 +2121,7 @@ function updLocks(){
 
 /* ================= cutscenes ================= */
 function startCut(lines,onEnd){bubbles=[];cut={lines,i:0,ch:0,onEnd};state='cut';}
-function startChapter(i,keep){resetWorld(i,keep);if(cineStart())return;state='card';cardT=0;}
+function startChapter(i,keep){resetWorld(i,keep);if(LV&&LV.fin){state='ending';endT=420;song='l5';return;}if(cineStart())return;state='card';cardT=0;}
 function startIntro(){state='intro';introT=0;if(LV.ride||LV.camioneta)sfx('truck');}
 function afterIntro(){state='play';for(const k in npcs){const n=npcs[k];if(n===npcs.rescue)continue;if(n.kind==='pelusa_friend'){n.ally=true;n.state='idle';n.face=1;n.cd=25;n.hold='pala_pizzera';continue;}if(LV&&LV.malvinas&&n.kind==='combatiente'){n.ally=true;n.state='idle';n.face=1;n.cd=25;n.hold='fal';continue;}if(n.kind==='reporter'){if(n.state!=='hidden')n.state='runoff';}else n.state='walkoff';}
   if(LV.pelusa&&!ents.some(e=>e.ally)){const p=mk('pelusa_friend',player.x-36,player.y+6);p.ally=true;p.face=1;p.cd=30;p.hold='pala_pizzera';ents.push(p);}
@@ -3562,6 +3575,33 @@ function rutaLevel(){
     ]
   };
 }
+function finLevel(){
+  return {
+    LW:2000,skin:'ric5',song:'l5',bossSong:'l5',food:'asado',bonus:true,fin:true,
+    villains:'Ninguno · Gran Celebración y Homenaje Eterno',
+    title:'FIN',place:'TIERRA ADENTRO · HOMENAJE A IORIO',hazard:null,
+    card:[
+      'Homenaje eterno a Ricardo Iorio (1962 - 2023), padre fundador del metal pesado nacional argentino.',
+      'Ricardo canta sus estrofas inmortales junto a la Bandera Argentina, su camioneta y su gente.',
+      'Presioná Golpear, Saltar o tocá la pantalla para hacer cantar a Ricardo con notas y acordes de gloria.'
+    ],
+    npcs:[],guns:[],locks:[],rescue:null,props:[],pipe:null,
+    intro:[
+      {w:'ric5',s:'¡Gracias a todos los que sienten el metal pesado argentino en el corazón!'},
+      {w:'ric5',s:'Mientras haya en la patria hombres que trabajen y sientan la música, el metal nunca muere.'}
+    ],
+    rescueLines:[],boss:null,summons:[],bossLines:[],
+    winLines:[
+      {w:'ric5',s:'¡Por el orgullo de ser argentino! ¡El metal pesado nunca muere!'}
+    ],
+    winSay:'¡VIVA LA PATRIA!',
+    quips:[
+      '¡Se vos, no mientas, no te confundas!',
+      '¡Por el orgullo de ser argentino!',
+      '¡El metal pesado nunca muere!'
+    ]
+  };
+}
 const RUTA_SCENE={weather:'dust',light:'#9aa6be',
   lamps:[{x:520,y:70,r:110,c:'255,214,150'},{x:1400,y:70,r:110,c:'255,214,150'},{x:2180,y:70,r:110,c:'255,214,150'},{x:3260,y:70,r:110,c:'255,214,150'},{x:4300,y:70,r:110,c:'255,214,150'},{x:5310,y:70,r:110,c:'255,214,150'},{x:5950,y:70,r:110,c:'255,214,150'}],signs:[],
   far(g){sky(g,['#090c1c','#182042','#383458','#6e5248'],85);
@@ -3676,6 +3716,18 @@ const RUTA_SCENE={weather:'dust',light:'#9aa6be',
     }
     tree(6020,174,102,'#1e3820',38);
     lamp(5780,70);lamp(5950,70);
+
+    // 7) SECTOR 7: ARCO DE LLEGADA / DESTINO FINAL (6400..6600)
+    sign(6440,'LÓPEZ LECUBE','RINCÓN SERRANO · DESTINO FINAL');
+    R(6496,80,6,96,'#4a3a2a');R(6554,80,6,96,'#4a3a2a');
+    R(6492,80,72,16,'#1e3a5a');R(6492,94,72,3,'#f2b632');
+    T('LÓPEZ LECUBE · DESTINO FINAL',6528,84,'#f2f2ea',3.8,'center');
+    T('RINCÓN SERRANO DEL ORGULLO NACIONAL',6528,91,'#f2d23a',3.2,'center');
+    R(6527,60,2,20,'#d8d4cc');
+    R(6529,60,20,4,'#6cace4');R(6529,64,20,4,'#ffffff');R(6529,68,20,4,'#6cace4');
+    g.fillStyle='#f2b632';g.beginPath();g.arc(6539,66,1.8,0,7);g.fill();
+    tree(6590,174,96,'#223a22',32);
+    lamp(6440,70);lamp(6550,70);
   }
 };
 
@@ -4120,6 +4172,38 @@ function rutaInsert(){
     });
   }
 }
+function finInsert(){
+  const L=finLevel();
+  LEVELS.push(L);SCENES.push(SCENES[12]||RUTA_SCENE);
+  DISCOS.push({t:'FIN · EL METAL NUNCA MUERE',c:'#e2b632',s:'Homenaje eterno a Ricardo Iorio (1962 - 2023): fundador de V8, Hermética y Almafuerte. La bandera argentina en alto y el metal pesado en el corazón.'});
+  AFICHES.push([[400,'EL METAL','NUNCA','MUERE','#f2b632'],[900,'RICARDO IORIO','1962 - 2023','ETERNO','#6cace4']]);
+  DATOS.push([
+    'Ricardo Iorio (1962 - 2023) fundó las tres bandas fundamentales del metal pesado argentino: V8, Hermética y Almafuerte.',
+    'Definió su vida como una marcha tierra adentro, cantando a los trabajadores, la historia nacional y el orgullo de ser argentino.',
+    'Su obra sigue viva en cada acorde, en cada estrofa y en cada corazón metalero de la patria.'
+  ]);
+  MODS.push('');CLIMA.push({gold:1,firefly:1,sep:.03,lbl:'ATARDECER EN EL CAMPO · FIN'});
+  if(typeof CINES!=='undefined'){
+    CINES.push([
+      ['campo','TIERRA ADENTRO','Lejos del ruido, donde la patria se hace con las manos y el metal late con fuerza.'],
+      ['face','RICARDO IORIO','Fue quien fue por ser él mismo, sin pedir permiso ni arrodillarse jamás.'],
+      ['stage','EL METAL NUNCA MUERE','"Cumplir con el destino que nos forjamos: la memoria de los pueblos no se apaga."']
+    ]);
+  }
+  if(typeof SHOWS!=='undefined'){
+    SHOWS.push({
+      v:'TIERRA ADENTRO · HOMENAJE NACIONAL',d:'1962 - 2023 · IN MEMORIAM',b:'RICARDO IORIO',
+      L:[['Ricardo Iorio','voz','me'],['Banda eterna','guitarra','violero'],['Banda eterna','bajo','heavy'],['Banda eterna','batería','heavy']],
+      set:['Se vos','Sentir indiano','El metal nunca muere'],
+      r:[
+        'El padre del metal pesado argentino canta con el corazón al pie de la Bandera Argentina.',
+        'La guitarra, el bajo y la batería retumban a lo largo y a lo ancho de la pampa.',
+        '¡Gracias por la música, Ricardo! Tu memoria sigue en pie para siempre.'
+      ],
+      f:['EL METAL NUNCA MUERE','RICARDO IORIO']
+    });
+  }
+}
 function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   const L=monstruoLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
   LEVELS.splice(9,0,L);SCENES.splice(9,0,MONSTRUO_SCENE);
@@ -4130,7 +4214,8 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   CLIMA.splice(9,0,{mist:1.1,storm_eerie:1,sep:.06,lbl:'SÁBADO SANTO DE MADRUGADA · 2012'});
   pelusaInsert();
   malvinasInsert();
-rutaInsert();
+  rutaInsert();
+  finInsert();
   if(LEVELS[12])LEVELS[12].guns=[[700,'boleadora'],[1400,'damajuana'],[1900,'escopeta']];
   DATOS[0].unshift('En 1972 recibió su primera guitarra y en 1978 su primer bajo, un Faim que le compraron sus padres.');
   AFICHES[4].push([1300,'GIL TRABAJADOR','HERMÉTICA 1991','ÁCIDO ARGENTINO','#f2b632']);AFICHES[4].push([1750,'BLACK SABBATH','OBRAS 1992','ABRE HERMÉTICA','#7a5a9a']);AFICHES[5].push([1700,'MONSTERS OF ROCK','KISS Y SABBATH','RIVER 3/9/94','#c8a060']);
@@ -4140,7 +4225,7 @@ rutaInsert();
   DATOS[6].push('Almafuerte también versionó tangos y folclore: Gardel, Troilo y José Larralde.');
   if(DATOS[12])DATOS[12].push('Como solista grabó covers, entre ellos una versión en castellano de un tema de Black Sabbath.');
   DATOS[8].push('Su madre, Elda Pedraza, tenía ascendencia tehuelche.');
-  LEVELS.forEach((l,i)=>l.chap=l.bonus?'CAPÍTULO BONUS':'CAPÍTULO '+(i+1));musicByEra();
+  LEVELS.forEach((l,i)=>l.chap=l.fin?'CAPÍTULO FINAL':(l.bonus?'CAPÍTULO BONUS':'CAPÍTULO '+(i+1)));musicByEra();
   try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');unl=LEVELS.length;}catch(e){}
 }
 
@@ -4839,8 +4924,8 @@ function drawHUD2(){
     const totKm=(player?(player.km||0)+Math.floor(player.x/80):0);
     const lapTxt=(player&&player.lap?' · VUELTA '+(player.lap+1):'');
     txt('🛣 BONAERENSE RUTA 76 · KM '+totKm+lapTxt,W/2,6,'#f2b632',5,'center');
-    if(player&&player.x>5000&&player.x<6200&&tick%50<34){
-      txt(coarse?'⛽ PARADOR EL OMBÚ · TOCÁ PAUSA PARA FINALIZAR O SEGUÍ':'⛽ PARADOR EL OMBÚ · ENTER / START: DESCANSAR · O SEGUÍ DE LARGO',W/2,H-22,'#ffe08a',5,'center');
+    if(player&&player.x>5000&&player.x<6480&&tick%50<34){
+      txt(coarse?'⛽ PARADOR EL OMBÚ / DESTINO · TOCÁ ACCIÓN PARA FINALIZAR':'⛽ PARADOR EL OMBÚ · Z / ESPACIO / ENTER: LLEGAR A DESTINO · O SEGUÍ',W/2,H-22,'#ffe08a',5,'center');
     }
   }
   if(rutaRadioBanner&&rutaRadioBanner.t>0){
@@ -4992,6 +5077,7 @@ function update(){tick++;readInput();if(state!=='play')noPause=40;else if(noPaus
     else{stepWorld();updParts();if(papas<8&&++papaT>=200){papas++;papaT=0;}}
   }
   else if(state==='pause'){
+    if(LV&&LV.camioneta&&(press.atk||press.spec||keys['KeyF'])){state='play';noPause=60;startWinCut();return;}
     if(press.start||press.pause)state='play';
     else if(press.esc||press.menu){toTitleMenu();return;}
     else if(press.restart){startChapter(lvl,false);return;}
@@ -5006,7 +5092,15 @@ function update(){tick++;readInput();if(state!=='play')noPause=40;else if(noPaus
     results.k++;if(results.k>60&&(press.start||press.atk||press.jump)){showStart();}
   }
   else if(state==='show'){if(press.esc||press.menu){toTitleMenu();return;}showUpd();}
-  else if(state==='ending'){if(press.esc||press.menu){toTitleMenu();return;}endT++;updParts();if(endT>300&&endT<420&&(press.start||press.atk||press.jump)){endT=420;}else if(endT>620&&(press.start||press.atk||press.jump)){toTitleMenu();}}
+  else if(state==='ending'){
+    if(press.esc||press.menu){toTitleMenu();return;}
+    endT++;updParts();
+    if(endT<420&&(press.start||press.atk||press.jump||press.spec||press.papa)){endT=420;}
+    else if(endT>=420){
+      if(press.atk||press.jump||press.spec||press.papa){singNext();}
+      else if(press.start){toTitleMenu();}
+    }
+  }
   else if(state==='gameover'){
     if(press.esc||press.menu){toTitleMenu();return;}
     gameoverT++;if(gameoverT>20&&(press.start||press.atk||press.jump||press.papa||press.spec||press.dodge)){resurrectPlayer();}
@@ -5596,9 +5690,10 @@ function drawTitle(){
   txt(L5.place.split('·').pop().trim(),109,240,'#f2b632',8,'center');
   ctx.save();ctx.translate(342,30);ctx.rotate(-.05);txt('RICARDO IORIO',3,3,'#7a1a14',18,'center');txt('RICARDO IORIO',0,0,'#f2b632',18,'center');ctx.restore();
   ctx.fillStyle='#e2462c';ctx.save();ctx.translate(342,66);ctx.rotate(-.05);ctx.fillRect(-112,-8,224,18);txt('UNA VIDA DE METAL',0,-3,'#fff',9,'center');ctx.restore();
-  LEVELS.forEach((L,i)=>{const y=76+i*8.5,open=i<unl,on=i===sel;
-    if(on){ctx.fillStyle='rgba(226,70,44,.28)';ctx.fillRect(222,y-2,240,9.5);ctx.fillStyle='#f2b632';ctx.fillRect(222,y-2,3,9.5);}
-    txt((L.bonus?'★':(i+1)+'.')+' '+(open?L.title:'???'),230,y,open?(on?'#fff':'#efe4d2'):'#5a4a5e',4.2);});
+  const rowStep=Math.min(8.5,122/LEVELS.length);
+  LEVELS.forEach((L,i)=>{const y=76+i*rowStep,open=i<unl,on=i===sel;
+    if(on){ctx.fillStyle='rgba(226,70,44,.28)';ctx.fillRect(222,y-2,240,rowStep+1);ctx.fillStyle='#f2b632';ctx.fillRect(222,y-2,3,rowStep+1);}
+    txt((L.fin?'★':(L.bonus?'★':(i+1)+'.'))+' '+(open?L.title:'???'),230,y,open?(on?'#fff':'#efe4d2'):'#5a4a5e',rowStep>8?4.2:3.8);});
   const df=DIFFS[diff];
   ctx.fillStyle='rgba(18,14,24,.92)';ctx.fillRect(222,201,240,17);
   ctx.strokeStyle=df.col;ctx.lineWidth=1.2;ctx.strokeRect(222.5,201.5,239,16);
@@ -5675,35 +5770,311 @@ function drawTourMap(t){ctx.fillStyle='#0c1020';ctx.fillRect(0,0,W,H);
   const L=['Algunas fechas documentadas','de la gira "Unas estrofas más".','','Del oeste del conurbano','a todo el país, pueblo por pueblo.','','Toda una vida tierra adentro.'];
   L.forEach((s,i)=>txt(s,360,96+i*13,'#c8bcd0',4,'center'));
   if(t>300&&t%60<40)txt('ENTER PARA SEGUIR',360,236,'#9b8aa3',4,'center');ctx.globalAlpha=1;}
-function drawEnding(){if(endT<420){drawTourMap(endT);return;}const t=endT-420;
-  const sk=ctx.createLinearGradient(0,0,0,190);sk.addColorStop(0,'#1e2a5a');sk.addColorStop(.45,'#a85a6a');sk.addColorStop(.8,'#f0a060');sk.addColorStop(1,'#ffd890');ctx.fillStyle=sk;ctx.fillRect(0,0,W,H);
-  for(let k=0;k<30;k++){ctx.fillStyle='rgba(255,255,255,'+(.3+hsh(k,4)*.5).toFixed(2)+')';ctx.fillRect(hsh(k,1)*W,hsh(k,2)*60,1,1);}
-  const sg=ctx.createRadialGradient(330,176,6,330,176,180);sg.addColorStop(0,'rgba(255,230,160,.95)');sg.addColorStop(.15,'rgba(255,200,120,.5)');sg.addColorStop(1,'rgba(255,200,120,0)');ctx.fillStyle=sg;ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#ffe2a0';ctx.beginPath();ctx.arc(330,180-Math.min(t,600)*.02,22,0,Math.PI*2);ctx.fill();
-  // sierras lejanas y la pampa
-  ctx.fillStyle='#6a5a7a';ctx.beginPath();ctx.moveTo(0,180);for(let x=0;x<=W;x+=10)ctx.lineTo(x,160-Math.sin(x*.012)*14-Math.sin(x*.04)*5);ctx.lineTo(W,180);ctx.fill();
-  const gr=ctx.createLinearGradient(0,176,0,H);gr.addColorStop(0,'#7a7a3a');gr.addColorStop(1,'#3a4a1e');ctx.fillStyle=gr;ctx.fillRect(0,176,W,H-176);
-  for(let k=0;k<160;k++){const x=hsh(k,7)*W,y=180+hsh(k,8)*90,sw=Math.sin(t*.05+k)*1.5;ctx.strokeStyle=hsh(k,9)>.5?'#9a9a4a':'#5a6a2a';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+sw,y-4-hsh(k,3)*4);ctx.stroke();}
-  // molino, alambrado y caballos
-  ctx.fillStyle='#2a2024';ctx.fillRect(56,96,3,84);ctx.fillRect(50,176,15,4);ctx.save();ctx.translate(57,96);ctx.rotate(t*.04);for(let k=0;k<12;k++){ctx.rotate(Math.PI/6);ctx.fillRect(2,-1.2,16,2.4);}ctx.restore();
-  for(let x=0;x<W;x+=40){ctx.fillStyle='#3a2a20';ctx.fillRect(x,168,2,14);}ctx.fillStyle='rgba(60,40,30,.6)';ctx.fillRect(0,172,W,1);ctx.fillRect(0,177,W,1);
-  for(const [hx,ph] of [[120,0],[150,2]]){const b=Math.sin(t*.06+ph)*1;ctx.fillStyle='#2a1a14';ctx.beginPath();ctx.ellipse(hx,170+b,11,5,0,0,Math.PI*2);ctx.fill();ctx.fillRect(hx+7,160+b,4,10);ctx.beginPath();ctx.ellipse(hx+12,159+b,5,3,-.4,0,Math.PI*2);ctx.fill();for(const lx of [-8,-4,5,8])ctx.fillRect(hx+lx,173+b,2,8);}
-  // el mástil y la bandera grande
-  ctx.fillStyle='#d8d4cc';ctx.fillRect(196,20,3,180);ctx.fillStyle='#f2c03a';ctx.beginPath();ctx.arc(197.5,19,3,0,Math.PI*2);ctx.fill();
-  const fy=Math.max(24,150-t*.8);drawFlag(199,fy,150,96,t);
-  // fogón, la banda y los amigos
-  const fx=300,fy2=214;for(let k=0;k<6;k++){const a=t*.3+k;ctx.fillStyle=k%2?'rgba(255,140,40,.9)':'rgba(255,220,90,.9)';ctx.beginPath();ctx.ellipse(fx+Math.sin(a)*3,fy2-6-k*2,5-k*.6,8-k,0,0,Math.PI*2);ctx.fill();}
-  ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.5;ctx.drawImage(glow('#ffb060'),fx-40,fy2-40,80,60);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
-  for(let k=0;k<12;k++){const a=(t*2+k*37)%60;ctx.fillStyle='rgba(255,200,90,'+(1-a/60).toFixed(2)+')';ctx.fillRect(fx+Math.sin(k+t*.05)*8,fy2-10-a,1,1);}
-  for(const f of FANS){const up=Math.sin(t*.2+f.ph)>.3;ctx.fillStyle=f.c;ctx.beginPath();ctx.arc(f.x,f.y,4,0,Math.PI*2);ctx.fill();ctx.fillRect(f.x-4,f.y+3,8,16);if(up){ctx.fillRect(f.x+2,f.y-12,2,10);}}
-  const hero={st:STY.ric5,pose:Object.assign({},t%80<40?PO.victory:PO.spec,{tilt:Math.sin(t*.08)*.08}),face:1,flash:0,holdBack:'bass',kind:'ric5',state:t%80<40?'victory':'spec'};
-  const sv=STY.ric5.scale;STY.ric5.scale=1.9;drawPuppet(hero,150,236);STY.ric5.scale=sv;
-  grade();
-  // título y créditos
-  if(t>40){const a=Math.min(1,(t-40)/40);ctx.globalAlpha=a;txt('TIERRA ADENTRO',W/2+2,14,'#3a1410',18,'center');txt('TIERRA ADENTRO',W/2,12,'#f2b632',18,'center');ctx.globalAlpha=1;}
-  const lines=['Lejos del ruido, donde la patria se hace con las manos.','Fue quien fue, por ser él mismo, sin pedir permiso.','','Gracias por jugar. Ricardio es una parodia de fans, sin fines de lucro,','en homenaje a la música de Ricardo Iorio: V8, Hermética y Almafuerte.','Los diálogos son ficción. In memoriam: Ricardo Iorio (1962 - 2023).','',total?'TIEMPO TOTAL '+Math.floor(total.t/60)+':'+String(total.t%60).padStart(2,'0')+' · PUNTAJE '+String(score).padStart(7,'0'):''];
-  if(t>120){ctx.fillStyle='rgba(8,6,11,.66)';ctx.fillRect(12,38,178,118);let yy=44;lines.forEach((s,i)=>{if(!s){yy+=4;return;}const ls=wrap(s,i<2?28:34);if(t>120+i*20)ls.forEach((l,j)=>txt(l,101,yy+j*7,i<2?'#f2e2b0':'#d8cfc0',i<2?5:4,'center'));yy+=ls.length*7+2;});}
-  if(t>260&&tick%60<40)txt(coarse?'TOCÁ PARA VOLVER':'ENTER PARA VOLVER',W/2,256,'#fff',7,'center');}
+let finSongIdx = 0, finSingT = 0, finSingText = '', finSingSub = '';
+const FIN_SONGS = [
+  { sub: 'V8 · DESTRUCTOR (1983)', txt: '«¡NO SE DAN CUENTA QUE VIVEN EN UN MUNDO DESTRUCTO Y CIEGO!»' },
+  { sub: 'V8 · BRIGADAS METÁLICAS (1983)', txt: '«¡HERMANO METÁLICO, EN ESTE DÍA DE RESPLANDOR!»' },
+  { sub: 'HERMÉTICA · CRÁNEO CANDENTE (1989)', txt: '«¡MIENTRAS HAYA VIDA EN MÍ, DEFENDERÉ LO QUE SOY!»' },
+  { sub: 'HERMÉTICA · MEMORIA DE SIGLOS (1991)', txt: '«¡RUBRICARÁS LA HISTORIA, CON LA VICTORIA DE TU CORAZÓN!»' },
+  { sub: 'HERMÉTICA · SOY DE LA ESQUINA (1991)', txt: '«¡SI DE CHICO APRENDÍ A NO DOBLEGARME ANTE EL PODER!»' },
+  { sub: 'HERMÉTICA · OLVIDALO Y VOLVÉ POR MÁS (1994)', txt: '«¡DESDE EL BARRO ME LEVANTÉ, Y A LA LUZ DEL DÍA ME ENTREGUÉ!»' },
+  { sub: 'ALMAFUERTE · EL PIBE TIGRE (1995)', txt: '«¡PORQUE EL QUE SE OLVIDA DE DÓNDE VIENE, NO SABE A DÓNDE VA!»' },
+  { sub: 'ALMAFUERTE · A VOS AMIGO (1998)', txt: '«¡SABRÁS QUE ES CIERTO, AMIGO MÍO, QUE EL METAL NO TIENE FIN!»' },
+  { sub: 'ALMAFUERTE · SÉ VOS (1998)', txt: '«¡SÉ VOS, NOMÁS, Y AL MUNDO ENFRENTARÁS SIN TEMOR!»' },
+  { sub: 'ALMAFUERTE · DEL COLIMBA (2001)', txt: '«¡CUMPLIENDO CON LA PATRIA SIN QUEJARSE, PARADO EN LA HUELLA!»' },
+  { sub: 'HOMENAJE NACIONAL · RICARDO IORIO', txt: '«¡VIVA LA PATRIA Y EL METAL PESADO ARGENTINO!»' }
+];
+
+function singNext(){
+  finSingT = 190;
+  const s = FIN_SONGS[finSongIdx % FIN_SONGS.length];
+  finSongIdx++;
+  finSingText = s.txt;
+  finSingSub = s.sub;
+  if(typeof snd !== 'undefined' && snd && snd.pow) snd.pow();
+  for(let i = 0; i < 10; i++){
+    parts.push({
+      k: 'txt',
+      txt: ['♪','♫','♩','♬','⭐','🇦🇷','⚡'][Math.floor(Math.random() * 7)],
+      x: 236 + rnd(-16, 16),
+      y: 165 + rnd(-6, 6),
+      vx: rnd(-1.4, 1.4),
+      vy: rnd(-2.4, -0.9),
+      t: 0,
+      max: 75,
+      c: Math.random() < .5 ? '#ffd860' : '#78baff'
+    });
+  }
+}
+
+function drawBigFin(cx, cy, t){
+  ctx.save();
+  const pulse = 1 + Math.sin(t * 0.08) * 0.03;
+  ctx.translate(cx, cy);
+  ctx.scale(pulse, pulse);
+
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = 'rgba(255, 205, 60, 0.22)';
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 72, 24, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalCompositeOperation = 'source-over';
+
+  const text = 'FIN';
+  ctx.font = '900 36px ' + FONT;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  for(let d = 7; d >= 1; d--){
+    ctx.fillStyle = d === 7 ? 'rgba(0,0,0,0.65)' : (d > 3 ? '#2e1502' : '#7c4308');
+    ctx.fillText(text, d * 1.1, d * 1.1);
+  }
+
+  const fg = ctx.createLinearGradient(0, -18, 0, 18);
+  fg.addColorStop(0, '#fffbe6');
+  fg.addColorStop(0.25, '#ffd942');
+  fg.addColorStop(0.65, '#e08f0a');
+  fg.addColorStop(1, '#824602');
+  ctx.fillStyle = fg;
+  ctx.fillText(text, 0, 0);
+
+  ctx.lineWidth = 2.2;
+  ctx.strokeStyle = '#1a0b02';
+  ctx.strokeText(text, 0, 0);
+
+  const glX = -45 + ((t * 2.2) % 110);
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(-50, -22, 100, 44);
+  ctx.clip();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+  ctx.beginPath();
+  ctx.moveTo(glX - 8, 22);
+  ctx.lineTo(glX + 2, 22);
+  ctx.lineTo(glX + 14, -22);
+  ctx.lineTo(glX + 4, -22);
+  ctx.fill();
+  ctx.restore();
+
+  txt('★  LIBERTAD Y METAL PESADO  ★', 0, 24, '#ffe48a', 4.5, 'center');
+  ctx.restore();
+}
+
+function drawEnding(){
+  if(endT < 420){
+    drawTourMap(endT);
+    txt(coarse ? 'TOCÁ PARA IR AL FINAL DIRECTO' : 'ENTER / CLICK PARA IR AL FINAL DIRECTO', W/2, 256, '#ffe48a', 4.8, 'center');
+    return;
+  }
+  const t = endT - 420;
+  if(t === 1 || (t === 25 && finSingT === 0)) singNext();
+  if(finSingT > 0) finSingT--;
+
+  const sk = ctx.createLinearGradient(0, 0, 0, 190);
+  sk.addColorStop(0, '#142048');
+  sk.addColorStop(0.42, '#853e5c');
+  sk.addColorStop(0.78, '#e6824a');
+  sk.addColorStop(1, '#fed685');
+  ctx.fillStyle = sk;
+  ctx.fillRect(0, 0, W, H);
+
+  for(let k = 0; k < 28; k++){
+    ctx.fillStyle = 'rgba(255,255,255,' + (.25 + hsh(k, 4) * .5).toFixed(2) + ')';
+    ctx.fillRect(hsh(k, 1) * W, hsh(k, 2) * 60, 1, 1);
+  }
+
+  const sg = ctx.createRadialGradient(380, 172, 6, 380, 172, 170);
+  sg.addColorStop(0, 'rgba(255,240,180,.95)');
+  sg.addColorStop(0.18, 'rgba(255,190,90,.45)');
+  sg.addColorStop(1, 'rgba(255,190,90,0)');
+  ctx.fillStyle = sg;
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#ffeaa0';
+  ctx.beginPath();
+  ctx.arc(380, 172 - Math.min(t, 500) * 0.02, 22, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#564268';
+  ctx.beginPath();
+  ctx.moveTo(0, 175);
+  for(let x = 0; x <= W; x += 10) ctx.lineTo(x, 156 - Math.sin(x * 0.012) * 15 - Math.sin(x * 0.04) * 6);
+  ctx.lineTo(W, 175);
+  ctx.fill();
+
+  const gr = ctx.createLinearGradient(0, 172, 0, H);
+  gr.addColorStop(0, '#696c2e');
+  gr.addColorStop(1, '#2c3916');
+  ctx.fillStyle = gr;
+  ctx.fillRect(0, 172, W, H - 172);
+
+  for(let k = 0; k < 120; k++){
+    const x = hsh(k, 7) * W, y = 176 + hsh(k, 8) * 94, sw = Math.sin(t * 0.05 + k) * 1.5;
+    ctx.strokeStyle = hsh(k, 9) > 0.5 ? '#989c42' : '#4d5c22';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + sw, y - 4 - hsh(k, 3) * 4);
+    ctx.stroke();
+  }
+
+  // Molino y alambrado
+  ctx.fillStyle = '#221b1f';
+  ctx.fillRect(44, 98, 3, 80);
+  ctx.fillRect(38, 174, 15, 4);
+  ctx.save();
+  ctx.translate(45.5, 98);
+  ctx.rotate(t * 0.04);
+  for(let k = 0; k < 12; k++){
+    ctx.rotate(Math.PI / 6);
+    ctx.fillRect(2, -1.2, 15, 2.4);
+  }
+  ctx.restore();
+
+  for(let x = 0; x < W; x += 40){
+    ctx.fillStyle = '#32241b';
+    ctx.fillRect(x, 166, 2, 14);
+  }
+  ctx.fillStyle = 'rgba(50,32,24,.55)';
+  ctx.fillRect(0, 170, W, 1);
+  ctx.fillRect(0, 175, W, 1);
+
+  // Ford F-100 en la pampa
+  ctx.save();
+  ctx.translate(92, 218);
+  ctx.scale(1.15, 1.15);
+  drawTruck(0, 0, false);
+  ctx.restore();
+
+  // Fogón campero
+  const fx = 168, fy2 = 222;
+  for(let k = 0; k < 6; k++){
+    const a = t * 0.3 + k;
+    ctx.fillStyle = k % 2 ? 'rgba(255,130,30,.92)' : 'rgba(255,225,85,.92)';
+    ctx.beginPath();
+    ctx.ellipse(fx + Math.sin(a) * 3, fy2 - 5 - k * 2, 5 - k * 0.6, 8 - k, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalAlpha = 0.5;
+  ctx.drawImage(glow('#ffb060'), fx - 35, fy2 - 35, 70, 50);
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+
+  for(let k = 0; k < 10; k++){
+    const a = (t * 2 + k * 37) % 55;
+    ctx.fillStyle = 'rgba(255,210,90,' + (1 - a / 55).toFixed(2) + ')';
+    ctx.fillRect(fx + Math.sin(k + t * 0.05) * 8, fy2 - 8 - a, 1.2, 1.2);
+  }
+
+  // Mástil y Bandera Argentina flameando gigante
+  ctx.fillStyle = '#dfdcd5';
+  ctx.fillRect(265, 32, 3.5, 172);
+  ctx.fillStyle = '#f2c03a';
+  ctx.beginPath();
+  ctx.arc(266.8, 30, 3.8, 0, Math.PI * 2);
+  ctx.fill();
+  drawFlag(268, 44, 185, 115, t);
+
+  // Cartel 3D "FIN"
+  drawBigFin(W / 2, 30, t);
+
+  // Amigos y público escuchando al costado
+  for(const f of FANS){
+    const up = Math.sin(t * 0.2 + f.ph) > 0.3;
+    ctx.fillStyle = f.c;
+    ctx.beginPath();
+    ctx.arc(f.x > 260 ? f.x + 20 : f.x - 30, f.y, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect((f.x > 260 ? f.x + 20 : f.x - 30) - 4, f.y + 3, 8, 16);
+    if(up) ctx.fillRect((f.x > 260 ? f.x + 20 : f.x - 30) + 2, f.y - 12, 2, 10);
+  }
+
+  // Ricardo Iorio cantando apasionadamente en primer plano
+  const singPose = Object.assign({}, finSingT > 0 ? PO.atk : (t % 70 < 35 ? PO.spec : PO.victory), {
+    tilt: Math.sin(t * 0.12) * 0.08,
+    lean: 0.08 + Math.sin(t * 0.06) * 0.04
+  });
+  const hero = {
+    st: STY.ric5,
+    pose: singPose,
+    face: 1,
+    flash: 0,
+    hold: 'mic',
+    holdBack: 'bass',
+    kind: 'ric5',
+    state: finSingT > 0 ? 'atk' : 'idle'
+  };
+  const sv = STY.ric5.scale;
+  STY.ric5.scale = 2.1;
+  drawPuppet(hero, 236, 232);
+  STY.ric5.scale = sv;
+
+  // Pie de micrófono clásico vintage
+  ctx.fillStyle = '#222';
+  ctx.fillRect(244, 202, 2.2, 34);
+  ctx.fillRect(238, 235, 14, 2.5);
+  ctx.fillStyle = '#b0b5c0';
+  ctx.beginPath();
+  ctx.arc(245, 201, 3.2, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Animación de boca cantando
+  if(finSingT > 0 && Math.sin(t * 0.5) > 0){
+    ctx.fillStyle = '#1c0808';
+    ctx.beginPath();
+    ctx.ellipse(244, 169, 2.2, 2.8, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Cartel / burbuja de letra cuando Ricardo canta
+  if(finSingT > 0 && finSingText){
+    ctx.save();
+    ctx.fillStyle = 'rgba(10, 8, 16, 0.90)';
+    ctx.strokeStyle = '#ffd700';
+    ctx.lineWidth = 1.4;
+    const bw = 360;
+    const bx = (W - bw) / 2, by = 132, bh = 34;
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(bx, by, bw, bh, 6); else ctx.rect(bx, by, bw, bh);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffd700';
+    ctx.beginPath();
+    ctx.moveTo(242, by + bh);
+    ctx.lineTo(245, by + bh + 5);
+    ctx.lineTo(248, by + bh);
+    ctx.fill();
+
+    txt(finSingSub, W / 2, by + 4, '#8cc4ff', 4.5, 'center');
+    txt(finSingText, W / 2, by + 17, '#fffbe0', 5.5, 'center');
+    ctx.restore();
+  } else if(t > 60){
+    // Texto homenaje y estadísticas
+    const lines = [
+      'Lejos del ruido, donde la patria se hace con las manos.',
+      'Fue quien fue, por ser él mismo, sin pedir permiso.',
+      'In memoriam: Ricardo Iorio (1962 - 2023). ¡El metal pesado es eterno!',
+      total ? ('TIEMPO TOTAL ' + Math.floor(total.t / 60) + ':' + String(total.t % 60).padStart(2, '0') + ' · PUNTAJE ' + String(score).padStart(7, '0')) : ''
+    ];
+    ctx.fillStyle = 'rgba(8, 6, 12, 0.75)';
+    ctx.fillRect(8, 56, 184, 52);
+    let yy = 60;
+    lines.forEach((s, i) => {
+      if(!s) return;
+      const ls = wrap(s, 29);
+      ls.forEach(l => {
+        txt(l, 100, yy, i === 0 ? '#ffe08a' : (i === 2 ? '#70b5ff' : '#ddd4c6'), i === 0 ? 4.5 : 4.0, 'center');
+        yy += 6.2;
+      });
+    });
+  }
+
+  // Interacción en vivo
+  const singPrompt = coarse ? '🎤 TOCÁ LA PANTALLA PARA HACER CANTAR A RICARDO' : '🎤 APRETÁ Z / ESPACIO / CLICK PARA HACER CANTAR A RICARDO';
+  txt(singPrompt, W / 2, 245, (t % 40 < 25 ? '#ffe08a' : '#ffffff'), 5.2, 'center');
+  txt('🏠 VOLVER AL MENÚ PRINCIPAL (ESC / M / ENTER)', W / 2, 258, '#9fc0ea', 4.5, 'center');
+}
 
 
 // v13: cada capítulo tiene su vuelta: pogo que empuja, ruta de noche, viento en la sierra, cortes de luz en Cemento, flashes en Recoleta
@@ -5865,7 +6236,7 @@ function drawPause(){
     const by6=py+158;
     ctx.fillStyle='rgba(42,60,34,.94)';ctx.fillRect(px+16,by6,pw-32,18);
     ctx.strokeStyle='#72d24a';ctx.lineWidth=1.2;ctx.strokeRect(px+16,by6,pw-32,18);
-    txt('🏁 LLEGAR A DESTINO (FINALIZAR)',W/2,by6+4,'#a8f28a',5,'center');
+    txt(coarse?'🏁 TOCÁ ACÁ: LLEGAR A DESTINO (FINALIZAR)':'🏁 LLEGAR A DESTINO (FINALIZAR · TECLA F)',W/2,by6+4,'#a8f28a',5,'center');
   }
 }
 
