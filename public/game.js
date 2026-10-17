@@ -1201,7 +1201,7 @@ cv.addEventListener('pointerdown',e=>{audioInit();if(AC&&AC.state==='suspended')
     one.start=1;
   }
   else if(state==='ending'){
-    if(cy>=242&&cy<=264&&cx>=W/2-95&&cx<=W/2+95){toTitleMenu();return;}
+    if(cy>=248&&cy<=268&&cx>=W/2-115&&cx<=W/2+115){toTitleMenu();return;}
     if(endT<420){endT=420;return;}
     singNext();
     return;
@@ -3020,7 +3020,7 @@ let IKB=null;
 function DEF(fn){if(IKB)IKB.push({d:fn});else fn();}
 function GRP(fn){const prev=IKB;IKB=[];try{fn();}finally{const q=IKB;IKB=prev;ctx.strokeStyle=OUTP;ctx.lineJoin='round';for(const o of q)if(o.s){ctx.lineWidth=o.lw;for(const p of o.s)ctx.stroke(p);}for(const o of q){if(o.s){ctx.fillStyle=o.f;for(const p of o.s)ctx.fill(p);}else o.d();}}}
 function INK(paths,fill,lw){if(IKB){IKB.push({s:paths,f:fill,lw:lw||1});return;}ctx.strokeStyle=OUTP;ctx.lineWidth=lw||1;ctx.lineJoin='round';for(const p of paths)ctx.stroke(p);ctx.fillStyle=fill;for(const p of paths)ctx.fill(p);}
-function LG(x1,y1,x2,y2,c,hi,lo){const g=ctx.createLinearGradient(x1,y1,x2,y2),H=shade(c,hi||1.16),M=c,S=shade(c,lo||.66);g.addColorStop(0,H);g.addColorStop(.18,shade(c,((hi||1.16)+1)/2));g.addColorStop(.5,M);g.addColorStop(.6,shade(c,.8));g.addColorStop(.68,S);g.addColorStop(.88,S);g.addColorStop(1,shade(c,(lo||.66)*1.12));return g;}
+function LG(x1,y1,x2,y2,c,hi,lo){if(!isFinite(x1)||!isFinite(y1)||!isFinite(x2)||!isFinite(y2)){x1=0;y1=0;x2=0;y2=10;}const g=ctx.createLinearGradient(x1,y1,x2,y2),H=shade(c,hi||1.16),M=c,S=shade(c,lo||.66);g.addColorStop(0,H);g.addColorStop(.18,shade(c,((hi||1.16)+1)/2));g.addColorStop(.5,M);g.addColorStop(.6,shade(c,.8));g.addColorStop(.68,S);g.addColorStop(.88,S);g.addColorStop(1,shade(c,(lo||.66)*1.12));return g;}
 // miembro con forma: más ancho en el medio, puntas redondas y luz del lado de arriba/adelante
 function LIMB(x1,y1,x2,y2,w1,w2,c,fl,bul){const dx=x2-x1,dy=y2-y1,l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l,a=w1/2,b=w2/2,bm=Math.max(a,b)*(bul||1.1),mx=(x1+x2)/2,my=(y1+y2)/2,tn=Math.atan2(ny,nx);
   const p=new Path2D();p.moveTo(x1+nx*a,y1+ny*a);p.quadraticCurveTo(mx+nx*bm,my+ny*bm,x2+nx*b,y2+ny*b);p.arc(x2,y2,b,tn,tn-Math.PI,true);p.quadraticCurveTo(mx-nx*bm,my-ny*bm,x1-nx*a,y1-ny*a);p.arc(x1,y1,a,tn+Math.PI,tn,true);p.closePath();
@@ -5499,7 +5499,7 @@ function update(){tick++;readInput();if(state!=='play')noPause=40;else if(noPaus
     if(endT<420&&(press.start||press.atk||press.jump||press.spec||press.papa)){endT=420;}
     else if(endT>=420){
       if(press.atk||press.jump||press.spec||press.papa){singNext();}
-      else if(press.start){toTitleMenu();}
+      else if(press.start){toTitleMenu();return;}
     }
   }
   else if(state==='gameover'){
@@ -6422,9 +6422,12 @@ function drawEnding(){
   }
 
   // Ricardo Iorio cantando apasionadamente en primer plano
-  const singPose = Object.assign({}, finSingT > 0 ? PO.atk : (t % 70 < 35 ? PO.spec : PO.victory), {
-    tilt: Math.sin(t * 0.12) * 0.08,
-    lean: 0.08 + Math.sin(t * 0.06) * 0.04
+  const singBase = finSingT > 0
+    ? mkP({ fa1: 1.5, fa2: 1.6, ba1: -0.8, ba2: 0.6, lean: 0.15, tilt: -0.12, crouch: 2 })
+    : (t % 70 < 35 ? PO.spec : PO.victory);
+  const singPose = Object.assign({}, singBase, {
+    tilt: (singBase.tilt || 0) + Math.sin(t * 0.12) * 0.08,
+    lean: (singBase.lean || 0) + Math.sin(t * 0.06) * 0.04
   });
   const hero = {
     st: STY.ric5,
@@ -6434,7 +6437,7 @@ function drawEnding(){
     hold: 'mic',
     holdBack: 'bass',
     kind: 'ric5',
-    state: finSingT > 0 ? 'atk' : 'idle'
+    state: finSingT > 0 ? 'jab' : 'idle'
   };
   const sv = STY.ric5.scale;
   STY.ric5.scale = 2.1;
@@ -6508,8 +6511,15 @@ function drawEnding(){
 
   // Interacción en vivo
   const singPrompt = coarse ? '🎤 TOCÁ LA PANTALLA PARA HACER CANTAR A RICARDO' : '🎤 APRETÁ Z / ESPACIO / CLICK PARA HACER CANTAR A RICARDO';
-  txt(singPrompt, W / 2, 245, (t % 40 < 25 ? '#ffe08a' : '#ffffff'), 5.2, 'center');
-  txt('🏠 VOLVER AL MENÚ PRINCIPAL (ESC / M / ENTER)', W / 2, 258, '#9fc0ea', 4.5, 'center');
+  txt(singPrompt, W / 2, 239, (t % 40 < 25 ? '#ffe08a' : '#ffffff'), 5.2, 'center');
+
+  const btnX = W / 2 - 110, btnY = 250, btnW = 220, btnH = 15;
+  ctx.fillStyle = 'rgba(16, 12, 24, 0.88)';
+  ctx.fillRect(btnX, btnY, btnW, btnH);
+  ctx.strokeStyle = '#4e6e9e';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(btnX, btnY, btnW, btnH);
+  txt('🏠 VOLVER AL MENÚ PRINCIPAL (ESC / M / ENTER)', W / 2, btnY + 3.5, '#b0d0ff', 4.5, 'center');
 }
 
 
