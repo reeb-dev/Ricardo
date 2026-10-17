@@ -1386,15 +1386,16 @@ function resetWorld(i,keep){v14Levels();lvl=i;truckDone=false;truck=null;modRese
   malvFlagT=0;malvSoldierT=90;
   if(!keep){score=0;lives=3;total={t:0,combo:0,hits:0};}meter=100;combo=0;comboT=0;maxCombo=0;hitsTaken=0;timeF=0;lastHit=null;results=null;song=LV.song;step=0;
   if(typeof LM!=='undefined'&&LM.el){LM.songEnded=false;if(state!=='title')LM.el.currentTime=0;}
-  for(const l of LV.locks){l.g=0;l.mt=0;l.extra=0;}
+  for(const l of (LV.locks||[])){l.g=0;l.mt=0;l.extra=0;}
   player=mk('ricardio',-40,226);player.st=STY[skin];player.face=1;player.herido=!!(LV&&LV.pelusa);player.operated=false;
   if(LV&&LV.fixedGun){player.hold=LV.fixedGun;player.ammo=999;}
   if(diff===0){player.hp=player.max=140;}else if(diff===2){player.hp=player.max=100;}
   hpTrail=player.hp;ents.push(player);boss=null;npcs={};
-  for(const n of LV.npcs){const e=mk(n.kind,n.x,n.y);e.face=n.face;e.hold=n.hold||null;if(n.hidden)e.state='hidden';npcs[n.kind]=e;ents.push(e);}
-  {const r=LV.rescue,e=mk(r.kind,r.x,r.y);e.face=1;e.state='tied';e.hold=r.hold||null;npcs.rescue=e;ents.push(e);}
-  for(const [x,k,d] of LV.props)props.push({kind:k,x,y:k==='tacho'?192:194,hp:1,drop:d,flash:0});
-  items.push({kind:'pipe',x:LV.pipe[0],y:LV.pipe[1],z:0,vz:0,t:0});guiReset();GUI.motoDone=0;if(LV.dyn==='campo')items.push({kind:'lombriz',x:1150,y:232,z:0,vz:0,t:0});for(const [gx,gk] of (LV.guns||[]))items.push({kind:gk,x:gx,y:226,z:0,vz:0,t:0});
+  for(const n of (LV.npcs||[])){const e=mk(n.kind,n.x,n.y);e.face=n.face;e.hold=n.hold||null;if(n.hidden)e.state='hidden';npcs[n.kind]=e;ents.push(e);}
+  if(LV.rescue){const r=LV.rescue,e=mk(r.kind,r.x,r.y);e.face=1;e.state='tied';e.hold=r.hold||null;npcs.rescue=e;ents.push(e);}
+  for(const [x,k,d] of (LV.props||[]))props.push({kind:k,x,y:k==='tacho'?192:194,hp:1,drop:d,flash:0});
+  if(LV.pipe)items.push({kind:'pipe',x:LV.pipe[0],y:LV.pipe[1],z:0,vz:0,t:0});
+  guiReset();GUI.motoDone=0;if(LV.dyn==='campo')items.push({kind:'lombriz',x:1150,y:232,z:0,vz:0,t:0});for(const [gx,gk] of (LV.guns||[]))items.push({kind:gk,x:gx,y:226,z:0,vz:0,t:0});
 }
 
 // v9: los cinco capítulos nuevos, intercalados en orden cronológico
