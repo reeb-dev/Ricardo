@@ -688,15 +688,17 @@ const R16 = (s) => s.trim().split(/\s+/).map(x => x === "-" ? null : +x);
 const R12 = (s) => s.trim().split(/\s+/).map(x => x === "-" ? null : +x);
 
 const SONGS = {
-  // Cap 10: Pa' Pelusa (Almafuerte - Trillando la fina 2012)
+    // Cap 10: Pa\' Pelusa (Almafuerte - Trillando la fina 2012) - Melodía 16-Bit exacta
   pa_pelusa: {
-    name: "PA\' PELUSA (ALMAFUERTE)",
-    bpm: 142, div: 12, order: ["A", "A", "B", "A", "C", "B"],
+    name: "PA' PELUSA (ALMAFUERTE)",
+    bpm: 132, div: 12, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
-      A: { bars: 4, roots: [0, 0, 5, 3], riff: R12("0 - 0 3 - 0 5 - 3 0 - 0"), m: "o.po.po.po.p", k: "x..x..x..x..", s: "...x.....x..", h: "sh", bombo: "x..x..x.x..x",
-           lead: [[0, 12, 3], [3, 15, 3], [6, 17, 6], [12, 19, 3], [15, 17, 3], [18, 15, 6], [24, 17, 3], [27, 15, 3], [30, 12, 6], [36, 10, 3], [39, 12, 9]] },
-      B: { bars: 4, roots: [0, 5, 3, -2], riff: R12("0 - - 0 - - 0 - - 0 - -"), m: "l.....l.....", k: "x.....x.....", s: "...x.....x..", h: "ride", bombo: "x.....x.....", fill: 1,
-           lead: [[0, 19, 3], [3, 17, 3], [6, 15, 6], [12, 17, 3], [15, 15, 3], [18, 14, 6], [24, 12, 6], [30, 10, 6], [36, 12, 12]] },
+      A: { bars: 4, roots: [0, 0, -2, -4], riff: R12("0 - 0 3 - 5 6 - 5 3 - 0"), m: "o.po.poo.oo.", k: "x..x..x..x..", s: "...x.....x..", h: "8", bombo: "x..x..x.x..x",
+           // 'Llegue a Mar del Plata arrastrando el dolor... de visceras rotas infectando mi interior'
+           lead: [[0, 12, 3], [3, 12, 3], [6, 15, 3], [9, 14, 3], [12, 12, 6], [18, 10, 3], [21, 12, 3], [24, 15, 6], [30, 14, 3], [33, 12, 3], [36, 10, 6], [42, 12, 6]] },
+      B: { bars: 4, roots: [0, 3, 5, 3], riff: R12("0 - - 0 - - 0 - - 0 - -"), m: "l.....l.....", k: "x.....x.....", s: "...x.....x..", h: "ride", bombo: "x.....x.....", fill: 1,
+           // 'Quien al verme en la mala a pata no me dejo... auxilio me brindo sin dudarlo'
+           lead: [[0, 17, 3], [3, 17, 3], [6, 19, 6], [12, 17, 3], [15, 15, 3], [18, 14, 6], [24, 15, 3], [27, 17, 3], [30, 19, 6], [36, 17, 3], [39, 15, 3], [42, 12, 6]] },
       C: { bars: 2, roots: [0, 0], riff: R12("0 0 0 0 0 0 0 0 0 0 0 0"), m: "pppppppppppp", k: "xxxxxxxxxxxx", dk: 1, s: "......x.....", h: "16", fill: 1 }
     }
   },
@@ -3051,49 +3053,51 @@ function pelusaLevel(){
     [[['enfermero','L'],['patovica','R'],['enfermero','R']],[['enfermero','R'],['tasador','L'],['patovica','R'],['enfermero','L']]]
   );
   return {
-    LW:2800,skin:'ricA',song:'pa_pelusa',bossSong:'bossThrash',food:'pizza',lmKey:'pa pelusa',
+    LW:2800,skin:'ricA',song:'pa_pelusa',bossSong:'bossThrash',food:'pizza',lmKey:'pa pelusa',pelusa:true,
     villains:'Camilleros abusivos, cobradores de sanatorio y El Matasano de guardia',
-    title:"PA\' PELUSA",place:'MAR DEL PLATA · PIZZERÍA TOPACIO',hazard:'ambulancia',
+    title:"PA' PELUSA",place:'MAR DEL PLATA · PIZZERÍA TOPACIO',hazard:'ambulancia',
     card:[
       '"Llegué a Mar del Plata arrastrando el dolor de vísceras rotas infectando mi interior... A pesar de eso, Almafuerte sonó, contentando a los metaleros del Atlántico."',
-      'Homenaje directo a la canción "Pa\' Pelusa" (Trillando la fina, 2012): la historia real en que Ricardo llegó descompensado por una peritonitis fulminante a Mar del Plata tras dar un show.',
-      'Su amigo Carlos "Pelusa" López (pizzero de Topacio, hincha de Alvarado y Peñarol) no lo dejó a pata: lo cargó en brazos, se plantó ante los médicos del sanatorio y le salvó la vida.'
+      'Homenaje directo y absoluto a la canción "Pa\' Pelusa" (Trillando la fina, 2012): la historia verídica de la noche en que Ricardo casi muere por una peritonitis fulminante.',
+      'Su amigo del alma Carlos "Pelusa" López (Mestre de Topacio, pizzero de profesión, de Alvarado y Peñarol) combate a su lado, lo asiste con pizzas calientes, no lo deja a pata y se planta ante los matasanos de la clínica para salvarle la vida.'
     ],
     npcs:[{kind:'pelusa_friend',x:250,y:198,face:1,hold:'pizza'}],
-    guns:[[650,'pala_pizzera'],[1300,'escopeta'],[1850,'pala_pizzera'],[2200,'bersa']],
+    guns:[[550,'pala_pizzera'],[1100,'pala_pizzera'],[1650,'escopeta'],[2200,'pala_pizzera']],
     locks:L,
     rescue:{kind:'pelusa_friend',x:1420,y:192,hold:'pizza'},
     props:[[380,'tacho','pizza'],[840,'cajon','pizza'],[1480,'tacho','mate'],[1960,'cajon','pizza'],[2320,'tacho','pizza']],
     pipe:[1460,240],
     intro:[
-      {w:'pelusa_friend',s:'¡Ricardo! Te vi llegar arrastrando el dolor de las tripas rotas. ¡No te podés ni tener en pie, hermano!'},
-      {w:'ricA',s:'A pesar de eso tocamos y Almafuerte sonó para todos los metaleros del Atlántico, Pelusa.'},
-      {w:'pelusa_friend',s:'Acá en la pizzería Topacio y en Peñarol a los amigos no los dejamos a pata jamás. ¡Vamos a la clínica!'},
-      {w:'ricA',s:'Preguntó el matasano por qué razón el perro cristiano aguantó tanto dolor... ¡Vamos al frente!'}
+      {w:'pelusa_friend',s:'¡Ricardo! Te vi llegar al puerto arrastrando el dolor de vísceras rotas. ¡Casi te me vas, hermano!'},
+      {w:'ricA',s:'A pesar de eso, Pelusa, Almafuerte sonó contentando a los metaleros del Atlántico.'},
+      {w:'pelusa_friend',s:'¡Mestre de Topacio, pizzero de profesión! De Alvarado y Peñarol: ¡a vos en la mala a pata no te dejo jamás!'},
+      {w:'ricA',s:'Aviso a los míos, pasilleando madrugo... ¡Desperté y allí estaba este amigo! ¡Vamos a la clínica!'}
     ],
     rescueLines:[
-      {w:'pelusa_friend',s:'¡Tomá una porción de fugazzeta caliente, Ricardo! Los camilleros no querían abrir la puerta del sanatorio.'},
-      {w:'ricA',s:'Mestre de Topacio, pizzero de profesión: quien al verme en la mala auxilio me brindó sin dudarlo.'},
-      {w:'pelusa_friend',s:'Adentro está El Matasano exigiendo pagarés antes de operar. ¡Vamos a abrir paso!'},
-      {w:'ricA',s:'Hurguen mis infiernos, que el tordo autorizó. ¡A la guardia!'}
+      {w:'pelusa_friend',s:'¡Tomá, Ricardo! ¡Fugazzeta y fainá caliente recién salida de la pala para que agarres fuerza!'},
+      {w:'ricA',s:'¡Quien al verme en la mala, me brindó auxilio sin dudarlo! ¡Sos de fierro, Pelusa!'},
+      {w:'pelusa_friend',s:'El Matasano y sus camilleros te quieren dejar en el pasillo por no tener seguro. ¡De acá no nos mueve nadie!'},
+      {w:'ricA',s:'Preguntó el matasano por qué razón el perro cristiano aguantó tanto dolor... ¡Hurguen mis infiernos, que el tordo autorizó!'}
     ],
     boss:'matasano',
     summons:[['enfermero','patovica'],['enfermero','enfermero']],
     bossLines:[
-      {w:'matasano',s:'¡Momento! Este paciente tiene el peritoneo infectado y no tiene seguro privado. ¡Fuera de mi guardia!'},
-      {w:'ricA',s:'Yo tengo lo más valioso del mundo: la palabra de un hermano de Alvarado y Peñarol.'},
-      {w:'matasano',s:'¡Seguridad de la clínica! ¡Sujétenlo y saquen a este cantor rebelde!'}
+      {w:'matasano',s:'¿Por qué motivo o razón este perro cristiano sigue de pie con semejante infección? ¡Afuera de mi guardia!'},
+      {w:'pelusa_friend',s:'¡A mi amigo me lo atendés ya mismo o te reviento el sanatorio con la pala de pizza!'},
+      {w:'ricA',s:'Escuchó del tordo mi grave convicción. ¡Con un amigo como el Pelusa no hay dolor que me tumbe!'}
     ],
     winLines:[
-      {w:'matasano',s:'¡Increíble resistencia! ¡Prepárenlo urgente para cirugía, este hombre sobrevive a todo!'},
-      {w:'ricA',s:'¡En Mar del Plata fue sucedido! ¡Para el Pelusa López que en la mala a pata no me dejó!'}
+      {w:'matasano',s:'¡Basta, por favor! ¡Abran quirófano de urgencia! ¡Este hombre y su amigo son indestructibles!'},
+      {w:'ricA',s:'¡En Mar del Plata fue sucedido! ¡Pa\' Pelusa quiero, pa\' Pelusa doy, pa\' Pelusa dejo dedicada esta canción!'}
     ],
-    winSay:"¡PA\' PELUSA!",
+    winSay:"¡PA' PELUSA!",
     quips:[
       '¡En Mar del Plata tengo un amigo!',
-      '¡De Alvarado y Peñarol, pizzero de profesión!',
+      '¡Mestre de Topacio, pizzero de profesión!',
       '¡Quien al verme en la mala a pata no me dejó!',
-      '¡Aguantando el dolor como un perro cristiano!'
+      '¡De Alvarado y Peñarol!',
+      '¡Hurguen mis infiernos, él autorizó!',
+      '¡Pasilleando madrugo, desperté y allí estaba mi amigo!'
     ]
   };
 }
