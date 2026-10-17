@@ -206,7 +206,74 @@ function drawIorioHead(st,sk,hc,fl){
   if(I.beard==='candado'){ctx.fillStyle=I.beardC;ctx.fillRect(4.4,6.6,3.6,4);ctx.fillRect(3,7.4,1.6,2.6);}
   if(I.beard==='full'||I.beard==='long'){ctx.fillStyle=shade(I.beardC,I.gray>=1?.82:1.35);const n=I.beard==='long'?5:3;for(let k=0;k<n;k++)ctx.fillRect(2+k*1.4,7+(k%2)*2,1,I.beard==='long'?8:3.5);}
 }
+function drawTerrorHead(hx,hy,a,st,fl){
+  ctx.save();ctx.translate(hx,hy);ctx.rotate(a);ctx.scale(.92,.92);
+  const sk=fl?'#fff':st.skin;
+  for(const p of [0,1]){
+    for(const dir of [-1,1]){
+      const ox=dir<0?-2:3;
+      ctx.fillStyle=p?(fl?'#fff':LG(-8,-18,8,0,'#ded4c4',1.1,.45)):OUT;
+      ctx.beginPath();
+      ctx.moveTo(ox-2*dir,-4);
+      ctx.quadraticCurveTo(ox-8*dir,-14,ox-14*dir,-21);
+      ctx.quadraticCurveTo(ox-19*dir,-24,ox-22*dir,-22);
+      ctx.quadraticCurveTo(ox-16*dir,-16,ox-8*dir,-10);
+      ctx.quadraticCurveTo(ox-3*dir,-6,ox+2*dir,-4);
+      ctx.closePath();ctx.fill();
+      if(!fl&&p){
+        ctx.strokeStyle='#241620';ctx.lineWidth=.7;
+        for(let r=0;r<5;r++){
+          const rx=ox-(7+r*2.4)*dir,ry=-10-r*2;
+          ctx.beginPath();ctx.moveTo(rx-1.2,ry-1.2);ctx.lineTo(rx+1.5,ry+1.2);ctx.stroke();
+        }
+      }
+    }
+    Cc(1,-1,8.5,sk,p);
+    Cc(5,3,7.2,sk,p);
+    if(p){
+      ctx.fillStyle=fl?'#fff':'#140e18';
+      ctx.beginPath();
+      ctx.moveTo(3,1);ctx.lineTo(13,2.5);ctx.lineTo(11,7.5);ctx.lineTo(4,9.5);ctx.lineTo(-2,7);
+      ctx.closePath();ctx.fill();
+    }
+  }
+  if(!fl){
+    ctx.fillStyle='#3e080e';ctx.beginPath();
+    ctx.moveTo(4.8,2.8);ctx.lineTo(12.5,3.4);ctx.lineTo(10.5,6.8);ctx.lineTo(4.2,7.2);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#f8f4ec';
+    for(let f=0;f<5;f++){
+      const fx=5.2+f*1.5;
+      ctx.beginPath();ctx.moveTo(fx,2.8);ctx.lineTo(fx+.6,5.2);ctx.lineTo(fx+1.2,2.8);ctx.fill();
+      if(f<4){
+        const bx=5.8+f*1.4;
+        ctx.beginPath();ctx.moveTo(bx,7);ctx.lineTo(bx+.5,4.8);ctx.lineTo(bx+1,7);ctx.fill();
+      }
+    }
+    const dr=(tick*.18+(hx||0))%8;
+    ctx.fillStyle='#7aff42';ctx.fillRect(8.5,7.2+dr*.8,1.2,2.2);
+    if(dr>4)ctx.fillRect(11,7+(dr-4)*.9,1,1.8);
+    const eyePulse=.85+Math.sin(tick*.25)*.25;
+    const eg=ctx.createRadialGradient(5.5,-2.5,.5,5.5,-2.5,6*eyePulse);
+    eg.addColorStop(0,'rgba(255,240,60,.95)');
+    eg.addColorStop(.35,'rgba(255,40,10,.8)');
+    eg.addColorStop(1,'rgba(180,0,0,0)');
+    ctx.fillStyle=eg;ctx.beginPath();ctx.arc(5.5,-2.5,6*eyePulse,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#100406';ctx.fillRect(5.2,-4.5,1,4.2);
+    ctx.fillStyle='#261b2a';
+    for(let k=0;k<4;k++){
+      ctx.beginPath();
+      ctx.moveTo(-5-k*2.2,-3+k*2.5);
+      ctx.lineTo(-8-k*3,-7+k*2.2);
+      ctx.lineTo(-3-k*2,0+k*2.8);
+      ctx.fill();
+    }
+    ctx.strokeStyle='rgba(255,42,18,.75)';ctx.lineWidth=.5;
+    ctx.beginPath();ctx.moveTo(1,-5);ctx.lineTo(4,-3.5);ctx.lineTo(7,-3.8);ctx.lineTo(10,0);ctx.stroke();
+  }
+  ctx.restore();
+}
 function drawHead(hx,hy,a,st,fl){
+  if(st.terrorMonster){drawTerrorHead(hx,hy,a,st,fl);return;}
   ctx.save();ctx.translate(hx,hy);ctx.rotate(a);ctx.scale(.86,.86);
   const sk=fl?'#fff':st.skin,hc=fl?'#fff':(st.ior?st.ior.hairC:(st.hairC||'#111'));
   if(st.ior){drawIorioHead(st,sk,hc,fl);ctx.restore();return;}
@@ -1873,9 +1940,9 @@ function updBoss(b){const p=player;b.cd--;
   switch(b.state){
     case 'idle':case 'walk':{if(p.hp<=0){b.state='idle';break;}b.face=sd;
       if(b.cd<=0){if(Math.abs(dx)<48&&Math.abs(dy)<8){startMove(b,'bpunch');break;}
-        if(b.D.bthrow&&Math.abs(dx)>90&&Math.abs(dy)<16&&Math.random()<.5){b.state='bthrow';b.t=0;say(b,b.D.bthrow==='patacon'?'¡TOMÁ, PATACONES!':b.D.bthrow==='baba'?'¡LUZ MALA!':'¡FIRMÁ ESTO!',50);break;}
-        const r=Math.random();if(r<.45&&Math.abs(dy)<26){b.state='ctele';b.t=0;b.ty=p.y;say(b,b.D.dozer?'¡PRENDAN LA TOPADORA!':'¡TE PASO POR ARRIBA!',60);break;}
-        if(r<.75){b.state='slamj';b.t=0;b.tx=p.x;b.ty=p.y;b.sx=b.x;b.sy=b.y;say(b,b.kind==='vaciador'?'¡VENDIDO!':'¡ACÁ MANDO YO!',50);break;}
+        if(b.D.bthrow&&Math.abs(dx)>90&&Math.abs(dy)<16&&Math.random()<.5){b.state='bthrow';b.t=0;say(b,b.kind==='monstruo_jefe'?'¡MIASMA DE LA NOCHE!':b.D.bthrow==='patacon'?'¡TOMÁ, PATACONES!':b.D.bthrow==='baba'?'¡LUZ MALA!':'¡FIRMÁ ESTO!',50);break;}
+        const r=Math.random();if(r<.45&&Math.abs(dy)<26){b.state='ctele';b.t=0;b.ty=p.y;say(b,b.kind==='monstruo_jefe'?'¡LE HE VISTO LAS PATAS!':b.D.dozer?'¡PRENDAN LA TOPADORA!':'¡TE PASO POR ARRIBA!',60);break;}
+        if(r<.75){b.state='slamj';b.t=0;b.tx=p.x;b.ty=p.y;b.sx=b.x;b.sy=b.y;say(b,b.kind==='monstruo_jefe'?'¡¡¡GRRRRAAAAAAAARRRGH!!!':b.kind==='vaciador'?'¡VENDIDO!':'¡ACÁ MANDO YO!',50);break;}
         b.cd=40;}
       const tx=p.x-sd*34,ty=p.y,mx=tx-b.x,my=ty-b.y,d=Math.hypot(mx,my);
       if(d>4){b.x+=mx/d*b.D.spd;b.y+=my/d*b.D.spd*.6;b.state='walk';b.walkPh+=.16;}else b.state='idle';break;}
@@ -1885,10 +1952,18 @@ function updBoss(b){const p=player;b.cd--;
     case 'bcharge':b.t++;b.x+=b.vx;hitCheck(b,MOVES.bcharge);if(b.t%3===0)dust(b.x-b.face*14,b.y,2);
       if(b.x<lock.L+20||b.x>lock.L+W-20){b.x=clamp(b.x,lock.L+20,lock.L+W-20);b.state='hurt';b.t=30;b.vx=-b.face*1.5;shake=6;sfx('heavy');dust(b.x+b.face*16,b.y,10);b.cd=40;}break;
     case 'slamj':b.t++;{const k=Math.min(1,b.t/40);b.x=b.sx+(b.tx-b.sx)*k;b.y=b.sy+(b.ty-b.sy)*k;b.z=Math.sin(k*Math.PI)*70;
-      if(b.t>=40){b.z=0;b.state='slam';b.t=0;shake=9;stopT=4;sfx('heavy');dust(b.x,b.y,14);parts.push({k:'wave',x:b.x,y:b.y,t:0,max:22,col:'255,190,120'});
+      if(b.t>=40){b.z=0;b.state='slam';b.t=0;shake=9;stopT=4;sfx('heavy');dust(b.x,b.y,14);parts.push({k:'wave',x:b.x,y:b.y,t:0,max:22,col:b.kind==='monstruo_jefe'?'255,40,20':'255,190,120'});
         if(hittable(p)&&Math.abs(p.x-b.x)<70&&Math.abs(p.y-b.y)<24&&p.z<6){applyHit(b,p,MOVES.slam,Math.sign(p.x-b.x)||1);}}}break;
     case 'slam':b.t++;if(b.t>30){b.state='idle';b.cd=rnd(40,70);}break;
-    case 'taunt':b.t++;if(b.t===2){say(b,b.sum2?'¡TODOS CONTRA ÉL!':'¡MUCHACHOS!',80);}if(b.t===30){const S=(b.D.summons||LV.summons)[b.sum2?1:0];spawnEnemy(S[0],'L');spawnEnemy(S[1],'R');}if(b.t>60){b.state='idle';b.cd=60;}break;
+    case 'taunt':b.t++;
+      if(b.t===2){
+        if(b.kind==='monstruo_jefe'){
+          say(b,'¡¡¡UN SILENCIO QUE A TODOS CALLÓ!!!',80);
+          sfx('scream');shake=10;parts.push({k:'wave',x:b.x,y:b.y,t:0,max:34,col:'255,40,20'});
+        } else say(b,b.sum2?'¡TODOS CONTRA ÉL!':'¡MUCHACHOS!',80);
+      }
+      if(b.t===30){const S=(b.D.summons||LV.summons)[b.sum2?1:0];spawnEnemy(S[0],'L');spawnEnemy(S[1],'R');}
+      if(b.t>60){b.state='idle';b.cd=60;}break;
     case 'bthrow':b.t++;if(b.t===18||b.t===32){shots.push({k:b.D.bthrow,x:b.x+b.face*16,y:b.y,z:46*b.st.scale,vx:b.face*3.4,owner:b,t:0});sfx('whoosh');}if(b.t>=46){b.state='idle';b.cd=rnd(40,70);}break;
   }}
 function bossDefeated(){slowT=110;flashT=10;sfx('heavy');score+=boss.D.pts;for(const e of ents)if(e.team===1&&e!==boss&&e.hp>0){e.hp=0;knockdown(e,Math.sign(e.x-player.x)||1,1);}}
@@ -1983,8 +2058,15 @@ function startMonsterCut(){const old=boss;old.gone=true;ents=ents.filter(e=>e!==
   startCut(LV.monsterLines,()=>{state='play';banner={a:boss.D.name,b:'EL QUE COMPRA ALMAS',t:80,boss:true};boss.cd=90;});}
 function monsterDeath(){const b=boss,k=110-slowT;b.flash=k%4<2?2:0;
   if(k%5===0){spark(b.x+rnd(-30,30),b.y-rnd(20,90),true);sfx('heavy');shake=Math.max(shake,5);}
-  if(slowT===25){flashT=14;shake=12;sfx('scream');for(let i=0;i<46;i++)parts.push({k:'deb',x:b.x+rnd(-24,24),y:b.y-rnd(10,110),vx:rnd(-4.5,4.5),vy:rnd(-6,-1),t:0,max:80,c:i%3?'#4e7e2e':'#f2d22a',w:rnd(2,7)|0,h:rnd(2,5)|0});
-    parts.push({k:'wave',x:b.x,y:b.y,t:0,max:30,col:'160,255,120'});floatTxt(b.x,b.y-120,'¡EL MONSTRUO CAYÓ!','#f2b632');b.gone=true;}}
+  if(slowT===25){flashT=14;shake=14;sfx('scream');
+    if(b.kind==='monstruo_jefe'){
+      for(let i=0;i<64;i++)parts.push({k:'deb',x:b.x+rnd(-30,30),y:b.y-rnd(10,130),vx:rnd(-6,6),vy:rnd(-7,-1),t:0,max:90,c:['#ff2211','#140e18','#ff9900','#2a1a30','#f4efe0'][i%5],w:rnd(3,8)|0,h:rnd(3,6)|0});
+      parts.push({k:'wave',x:b.x,y:b.y,t:0,max:36,col:'255,50,20'});floatTxt(b.x,b.y-130,'¡MUERE MONSTRUO MUERE!','#ff3311');
+    }else{
+      for(let i=0;i<46;i++)parts.push({k:'deb',x:b.x+rnd(-24,24),y:b.y-rnd(10,110),vx:rnd(-4.5,4.5),vy:rnd(-6,-1),t:0,max:80,c:i%3?'#4e7e2e':'#f2d22a',w:rnd(2,7)|0,h:rnd(2,5)|0});
+      parts.push({k:'wave',x:b.x,y:b.y,t:0,max:30,col:'160,255,120'});floatTxt(b.x,b.y-120,'¡EL MONSTRUO CAYÓ!','#f2b632');
+    }
+    b.gone=true;}}
 function startWinCut(){startCut(LV.winLines,()=>{state='victory';introT=0;player.state='victory';player.holdBack='bass';player.hold=LV&&LV.fixedGun?LV.fixedGun:null;player.face=LV&&LV.malvinas?1:-1;if(LV&&LV.malvinas){malvFlagT=1;player.x=clamp(2515,cam.x+40,cam.x+W-120);player.y=224;if(!ents.some(e=>e.kind==='combatiente'&&!e.gone)){const s=mk('combatiente',2475,232);s.ally=true;s.hold='fal';s.face=1;ents.push(s);}for(const e of ents){if(e.kind==='combatiente'&&!e.gone){e.state='victory';e.face=1;e.x=2475;e.y=232;}}banner={a:'¡BANDERA ARGENTINA EN ALTO!',b:'SE ARRIÓ LA BANDERA INGLESA · HONOR Y GLORIA',t:190};}sfx('win');});}
 function updCut(){const c=cut,l=c.lines[c.i];if(l.fx==='reporter'&&npcs.reporter&&npcs.reporter.state==='hidden'){const r=npcs.reporter;r.x=cam.x+W-30;r.tx=player.x+46;r.y=player.y-4;r.state='runin';}if(c.ch<l.s.length){c.ch+=1.0;if(tick%3===0)sfx('blip');}
   if(press.atk||press.jump||press.start){if(c.ch<l.s.length)c.ch=l.s.length;else{c.i++;c.ch=0;if(c.i>=c.lines.length){cut=null;c.onEnd&&c.onEnd();}}}}
@@ -2668,7 +2750,48 @@ function faceSpec(st){const I=st.ior;
   if(I)return {hairC:I.hairC,hi:I.hi,len:I.len,type:I.hair==='buzz'?'buzz':I.hair==='short'?'short':I.hair==='crest'?'crest':I.hair==='swept'?'swept':I.curly?'curly':'curtain',stub:I.stub||0,stubC:I.stubC,jaw:I.jaw||0,stache:I.beard==='none'?null:I.stacheC,beard:I.beard==='candado'?'candado':I.beard==='full'?'full':I.beard==='long'?'long':null,beardC:I.beardC||I.hairC,brow:I.brow,gray:I.gray||0,age:I.gray>=1?2:I.gray?1:0};
   const h=st.hair||'short';return {hairC:st.hairC||'#1a1410',hi:shade(st.hairC||'#1a1410',1.6),len:h==='long'?13:0,type:h==='long'?'curtain':h,stache:st.stache||null,beard:st.beard?'full':null,beardC:st.beardC||st.hairC||'#1a1410',brow:shade(st.hairC||'#2a2018',.8),
     gray:0,age:(st.hairC==='#d8d2c6'||st.hairC==='#c8c2b8'||st.hairC==='#8a8278')?2:0,glasses:st.glasses,cap:h==='cap'?st.capC:null,boina:h==='boina',band:st.band,cigar:st.cigar,lizard:st.lizard,wolf:st.wolf,horns:st.horns};}
-function drawFaceFront(st,x,y,sz){if(st.ior&&!st.lizard){drawIorioPortrait(st,x,y,sz);return;}const F=faceSpec(st),g=ctx,u=sz/40,sk=st.skin;g.save();g.translate(x,y);g.scale(u,u);g.lineJoin='round';g.lineCap='round';
+function drawTerrorPortrait(st,x,y,sz){
+  const g=ctx,u=sz/40;g.save();g.translate(x,y);g.scale(u,u);g.lineJoin='round';g.lineCap='round';
+  const bg=g.createRadialGradient(20,20,2,20,20,25);
+  bg.addColorStop(0,'#3a0812');bg.addColorStop(.6,'#180610');bg.addColorStop(1,'#08040a');
+  g.fillStyle=bg;g.fillRect(0,0,40,40);
+  for(const dir of [-1,1]){
+    const hg=g.createLinearGradient(20+dir*4,14,20+dir*20,-4);
+    hg.addColorStop(0,'#1c1420');hg.addColorStop(.5,'#8a7c6e');hg.addColorStop(1,'#ded4c4');
+    g.fillStyle=hg;g.beginPath();
+    g.moveTo(20+dir*4,12);g.quadraticCurveTo(20+dir*14,2,20+dir*18,-2);
+    g.quadraticCurveTo(20+dir*19,4,20+dir*14,10);g.quadraticCurveTo(20+dir*9,14,20+dir*4,15);
+    g.closePath();g.fill();
+    g.strokeStyle='#241620';g.lineWidth=.7;
+    for(let r=0;r<5;r++){
+      const rx=20+dir*(8+r*2),ry=9-r*2;
+      g.beginPath();g.moveTo(rx-1,ry-1);g.lineTo(rx+1.2,ry+1.5);g.stroke();
+    }
+  }
+  g.fillStyle='#16101c';g.beginPath();
+  g.moveTo(20,6);g.quadraticCurveTo(30,8,30,20);g.lineTo(27,32);g.lineTo(20,36);g.lineTo(13,32);g.lineTo(10,20);g.quadraticCurveTo(10,8,20,6);g.fill();
+  g.fillStyle='#42080e';g.beginPath();
+  g.moveTo(13,22);g.quadraticCurveTo(20,20,27,22);g.lineTo(25,32);g.quadraticCurveTo(20,34,15,32);g.closePath();g.fill();
+  g.fillStyle='#f6f0e4';
+  for(let f=0;f<6;f++){
+    const fx=14.5+f*2;
+    g.beginPath();g.moveTo(fx,22);g.lineTo(fx+.8,26);g.lineTo(fx+1.6,22);g.fill();
+    if(f<5){const bx=15.5+f*2;g.beginPath();g.moveTo(bx,32);g.lineTo(bx+.7,28);g.lineTo(bx+1.4,32);g.fill();}
+  }
+  const dr=(tick*.2)%6;g.fillStyle='#7aff42';g.fillRect(19,32+dr*.8,1.4,2.4);
+  for(const dir of [-1,1]){
+    const ex=20+dir*5.5,ey=16;
+    const og=g.createRadialGradient(ex,ey,1,ex,ey,5.5);
+    og.addColorStop(0,'#fff880');og.addColorStop(.4,'#ff2211');og.addColorStop(1,'rgba(160,0,0,0)');
+    g.fillStyle=og;g.beginPath();g.arc(ex,ey,5.5,0,Math.PI*2);g.fill();
+    g.fillStyle='#0c0204';g.fillRect(ex-.5,ey-3.5,1,7);
+  }
+  g.strokeStyle='rgba(255,40,16,.8)';g.lineWidth=.6;g.beginPath();
+  g.moveTo(15,10);g.lineTo(18,13);g.lineTo(20,11);g.lineTo(22,13);g.lineTo(25,10);
+  g.moveTo(20,13);g.lineTo(20,18);g.stroke();
+  g.restore();
+}
+function drawFaceFront(st,x,y,sz){if(st.terrorMonster){drawTerrorPortrait(st,x,y,sz);return;}if(st.ior&&!st.lizard){drawIorioPortrait(st,x,y,sz);return;}const F=faceSpec(st),g=ctx,u=sz/40,sk=st.skin;g.save();g.translate(x,y);g.scale(u,u);g.lineJoin='round';g.lineCap='round';
   const P=(pts,c)=>{g.fillStyle=c;g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++){const p=pts[i];if(p.length===4)g.quadraticCurveTo(p[0],p[1],p[2],p[3]);else g.lineTo(p[0],p[1]);}g.closePath();g.fill();};
   const S=(pts,c,w)=>{g.strokeStyle=c;g.lineWidth=w;g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++){const p=pts[i];if(p.length===4)g.quadraticCurveTo(p[0],p[1],p[2],p[3]);else g.lineTo(p[0],p[1]);}g.stroke();};
   const dk=shade(sk,.72),lt=shade(sk,1.12),hc=F.hairC,len=F.len*1.3;
@@ -2813,7 +2936,24 @@ function LIMB(x1,y1,x2,y2,w1,w2,c,fl,bul){const dx=x2-x1,dy=y2-y1,l=Math.hypot(d
   const p=new Path2D();p.moveTo(x1+nx*a,y1+ny*a);p.quadraticCurveTo(mx+nx*bm,my+ny*bm,x2+nx*b,y2+ny*b);p.arc(x2,y2,b,tn,tn-Math.PI,true);p.quadraticCurveTo(mx-nx*bm,my-ny*bm,x1-nx*a,y1-ny*a);p.arc(x1,y1,a,tn+Math.PI,tn,true);p.closePath();
   if(fl){INK([p],'#ffffff',.9);return p;}
   const s=(nx*.45-ny)>0?1:-1;INK([p],LG(mx+nx*bm*s,my+ny*bm*s,mx-nx*bm*s,my-ny*bm*s,c),.9);return p;}
-function SHOE2(fx,fy,c,st,fl){const sn=st.sneak||(!st.coat&&parseInt(c.slice(1,3),16)>170);
+function SHOE2(fx,fy,c,st,fl){
+  if(st.terrorMonster){
+    const p=P2([[fx-5,fy-4],[fx+2,fy-5.5],[fx+8,fy-2.4],[fx+11,fy+1.6],[fx+7,fy+2.2],[fx-2,fy+2.2],[fx-7,fy-.5]]);
+    if(fl){INK([p],'#fff',.9);return;}
+    INK([p],LG(fx,fy-6,fx,fy+2,'#140e18',1.3,.6),.9);
+    DEF(()=>{
+      ctx.fillStyle='#e8ded0';
+      for(let c=0;c<3;c++){
+        const cx=fx+3.5+c*2.4,cy=fy+.6;
+        ctx.beginPath();ctx.moveTo(cx,cy-1.4);ctx.lineTo(cx+3.6,cy+1.4);ctx.lineTo(cx-.6,cy+1.4);ctx.fill();
+        ctx.fillStyle='#2a0a0e';ctx.fillRect(cx+2.2,cy+.4,1.4,1);ctx.fillStyle='#e8ded0';
+      }
+      ctx.beginPath();ctx.moveTo(fx-4,fy-1.6);ctx.lineTo(fx-8,fy+1);ctx.lineTo(fx-2.8,fy+1);ctx.fill();
+      ctx.strokeStyle='rgba(255,30,15,.6)';ctx.lineWidth=.45;ctx.beginPath();ctx.moveTo(fx-2,fy-3);ctx.lineTo(fx+5,fy);ctx.stroke();
+    });
+    return;
+  }
+  const sn=st.sneak||(!st.coat&&parseInt(c.slice(1,3),16)>170);
   const p=sn?P2([[fx-3.4,fy-3.4],[fx+2,fy-3.9],[fx+6.4,fy-2.2,fx+7.6,fy+.4],[fx+7.6,fy+1.8],[fx-3.6,fy+1.8]]):P2([[fx-3.2,fy-6.4],[fx+1.6,fy-6.4],[fx+2.4,fy-3.6],[fx+6.6,fy-2.6,fx+7.2,fy+.2],[fx+7.2,fy+1.8],[fx-3.4,fy+1.8]]);
   if(fl){INK([p],'#fff',.9);return;}INK([p],LG(fx,fy-5,fx,fy+2,c,1.2,.7),.9);
   DEF(()=>{if(sn){ctx.fillStyle='#f4f0e6';ctx.fillRect(fx-3.4,fy+.6,11,1.2);ctx.strokeStyle=shade(c,.62);ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(fx-.6,fy-3.4);ctx.lineTo(fx+2.6,fy-.4);ctx.moveTo(fx+1,fy-3.6);ctx.lineTo(fx+4,fy-.8);ctx.stroke();}
@@ -2822,6 +2962,25 @@ function HAND(hx,hy,a2,c,fl){const p=new Path2D();p.ellipse(hx+.4,hy,3.5,3,a2*-.
   if(fl){INK([p,t],'#fff',.8);return;}const g=ctx.createRadialGradient(hx-.6,hy-1.2,.2,hx,hy,4);g.addColorStop(0,shade(c,1.18));g.addColorStop(.6,c);g.addColorStop(1,shade(c,.75));INK([p,t],g,1);
   DEF(()=>{ctx.strokeStyle=shade(c,.6);ctx.lineWidth=.3;ctx.beginPath();for(let k=-1;k<=1;k++){ctx.moveTo(hx+1.6,hy+k*1.5);ctx.lineTo(hx+3.6,hy+k*1.4);}ctx.moveTo(hx+1.4,hy-2.6);ctx.quadraticCurveTo(hx+2.4,hy,hx+1.4,hy+2.6);ctx.stroke();
     ctx.fillStyle=shade(c,1.12);for(let k=-1;k<=1;k++){ctx.beginPath();ctx.arc(hx+2,hy+k*1.5-.3,.45,0,7);ctx.fill();}});}
+function drawTerrorClaws(hx,hy,a2,fl,isAtk){
+  ctx.save();ctx.translate(hx,hy);ctx.rotate(a2*.35);
+  const p=new Path2D();p.ellipse(0,0,4.8,3.6,0,0,7);
+  if(fl){INK([p],'#fff',.9);ctx.restore();return;}
+  INK([p],'#140e18',1);
+  for(let k=-1.5;k<=1.5;k+=1){
+    const cy=k*1.7;
+    ctx.fillStyle='#e8ded0';
+    ctx.beginPath();ctx.moveTo(1.2,cy-.8);ctx.quadraticCurveTo(5.2,cy-.4,8.5,cy+1.2);ctx.lineTo(2,cy+1.2);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#2a0a0e';ctx.fillRect(6.8,cy+.4,1.8,1.1);
+  }
+  if(isAtk){
+    ctx.strokeStyle='rgba(255,30,20,.85)';ctx.lineWidth=1.5;
+    for(let k=-1;k<=1;k++){
+      ctx.beginPath();ctx.arc(0,0,16+k*4,-.7,.8);ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
 // torso en coordenadas locales (cadera en 0,0; cuello en 0,-25; adelante es +x)
 function TORSO2(st,f,fl){const w=st.torsoW,h=w/2,bel=(+st.belly||0)*h*.55,c=st.top;
   const pts=[[-h*.95,1.5],[-h*.86,-8,-h*1.0,-15],[-h*1.05,-21,-h*.62,-24],[-1.8,-25.6],[2.4,-25.4],[h*.78,-24.2],[h*1.12,-19,h*1.06,-15],[h*1.0+bel*.6,-11,h*.9+bel,-7],[h*.95+bel*.7,-1.5,h*.92,1.5],[h*.2,2.6],[-h*.6,2.6]];
@@ -2829,6 +2988,17 @@ function TORSO2(st,f,fl){const w=st.torsoW,h=w/2,bel=(+st.belly||0)*h*.55,c=st.t
   const g=ctx.createLinearGradient(-h,0,h+bel,0);g.addColorStop(0,shade(c,.62));g.addColorStop(.55,c);g.addColorStop(.85,shade(c,1.18));g.addColorStop(1,shade(c,.9));INK([body],g);
   ctx.save();ctx.clip(body);
   const v=ctx.createLinearGradient(0,-26,0,3);v.addColorStop(0,'rgba(255,240,220,.12)');v.addColorStop(.5,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.25)');ctx.fillStyle=v;ctx.fillRect(-h*2,-27,h*4+bel*2,31);
+  if(st.terrorMonster){
+    for(let k=0;k<5;k++){
+      const sy=-24+k*5.2,sx=-h*.95-(k===2?6:k===1||k===3?4.5:3);
+      ctx.fillStyle='#0d0912';ctx.beginPath();ctx.moveTo(-h*.8,sy-2.5);ctx.lineTo(sx-7,sy);ctx.lineTo(-h*.8,sy+2.5);ctx.closePath();ctx.fill();
+      ctx.strokeStyle='#38283c';ctx.lineWidth=.6;ctx.stroke();
+    }
+    const pulse=.55+Math.sin(tick*.14)*.35;
+    ctx.strokeStyle='rgba(255,34,18,'+pulse.toFixed(2)+')';ctx.lineWidth=.9;ctx.beginPath();
+    ctx.moveTo(h*.2,-20);ctx.quadraticCurveTo(h*.5,-16,h*.3,-10);ctx.moveTo(h*.4,-14);ctx.lineTo(h*.8+bel*.5,-12);ctx.moveTo(-h*.2,-18);ctx.quadraticCurveTo(-h*.1,-12,h*.1,-6);ctx.stroke();
+    ctx.strokeStyle='rgba(255,190,40,'+(pulse*.7).toFixed(2)+')';ctx.lineWidth=.45;ctx.stroke();
+  }
   const S=(c2,w2,pp)=>{ctx.strokeStyle=c2;ctx.lineWidth=w2;ctx.beginPath();ctx.moveTo(pp[0],pp[1]);for(let i=2;i<pp.length;i+=4)ctx.quadraticCurveTo(pp[i],pp[i+1],pp[i+2],pp[i+3]);ctx.stroke();};
   if(st.camo){const cc=['#3e3c26','#7a7452','#2c2a1c','#6a5a3a'];for(let k=0;k<18;k++){ctx.fillStyle=cc[k%4];ctx.beginPath();ctx.ellipse(-h+((k*7.3)%(w+bel)),-24+((k*5.7)%25),2.2,1.2,k,0,7);ctx.fill();}}
   if(st.overall){ctx.fillStyle=st.overall;ctx.fillRect(-h*1.2,-14,w*1.3+bel,18);ctx.strokeStyle=st.overall;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-h*.5,-14);ctx.lineTo(-h*.4,-24);ctx.moveTo(h*.6,-14);ctx.lineTo(h*.5,-24);ctx.stroke();ctx.fillStyle=shade(st.overall,.7);ctx.fillRect(h*.1,-11,4,3);}
@@ -2917,12 +3087,14 @@ function drawPuppet(f,X,Y){
       else LIMB(x0,sy,ex,ey,6.8*BK,5.4*BK,col,fl,1.12);
       LIMB(ex,ey,hx,hy,(bare?5:5.6)*BK,(bare?3.8:4.6)*BK,bare?skin:col,fl,1.12);
       if(!fl&&!bare)DEF(()=>{ctx.fillStyle=shade(col,.5);const cx=ex+(hx-ex)*.82,cy=ey+(hy-ey)*.82;ctx.beginPath();ctx.arc(cx,cy,2.4,0,7);ctx.fill();});
-      if(!(weapon||st.staff&&back))HAND(hx,hy,a2,skin,fl);});
+      if(st.terrorMonster)drawTerrorClaws(hx,hy,a2,fl,['atk','bpunch','bpunch2','bcharge'].includes(f.state));
+      else if(!(weapon||st.staff&&back))HAND(hx,hy,a2,skin,fl);});
     if(!fl&&!bare){ctx.strokeStyle=shade(col,.52);ctx.lineWidth=.4;for(let k=0;k<3;k++){const t=.72+k*.1,px=x0+(ex-x0)*t,py=sy+(ey-sy)*t;ctx.beginPath();ctx.moveTo(px-1.8,py-.6);ctx.quadraticCurveTo(px,py+.8,px+1.6,py-.4);ctx.stroke();}}
     if(!fl&&st.wrist){const wx=ex+(hx-ex)*.78,wy=ey+(hy-ey)*.78;LIMB(ex+(hx-ex)*.66,ey+(hy-ey)*.66,wx,wy,5,4.6,st.wrist,false,1);
       if(st.studs){ctx.fillStyle='#e0e4ec';ctx.beginPath();ctx.arc(wx-1.2,wy-.8,.4,0,7);ctx.arc(wx+1.2,wy+.6,.4,0,7);ctx.fill();}}
     if(st.tattoo&&bare&&!fl&&!back){ctx.fillStyle='rgba(28,44,72,.68)';ctx.beginPath();ctx.ellipse((ex+hx)/2,(ey+hy)/2,1.7,1.1,a2,0,7);ctx.fill();}
-    if(weapon||st.staff&&back)HAND(hx,hy,a2,skin,fl);
+    if(st.terrorMonster)drawTerrorClaws(hx,hy,a2,fl,['atk','bpunch','bpunch2','bcharge'].includes(f.state));
+    else if(weapon||st.staff&&back)HAND(hx,hy,a2,skin,fl);
     if(st.staff&&!weapon&&back&&(f.state==='idle'||f.state==='walk'||f.state==='stand')&&!fl){ // el bastón de madera de los últimos shows
       ctx.strokeStyle=OUTP;ctx.lineWidth=2.6;ctx.beginPath();ctx.moveTo(hx+3,hy-30);ctx.quadraticCurveTo(hx+1,hy-10,hx+2.6,-1);ctx.stroke();ctx.strokeStyle='#7a5a36';ctx.lineWidth=1.7;ctx.stroke();
       ctx.strokeStyle='#a8865a';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(hx+2.6,hy-29);ctx.quadraticCurveTo(hx+.6,hy-10,hx+2.1,-2);ctx.stroke();HAND(hx,hy,a2,skin,fl);}
@@ -2951,7 +3123,7 @@ function drawPuppet(f,X,Y){
   if(st.coat)SKIRT(st,hipY,sl,cl,knee(P.ft1,1.5),knee(P.bt1,-1.5),fl);
   if(f.herido)arm(-.12,1.25,-1.5,topB,skB,null,true);
   if(!fl){ctx.fillStyle='rgba(30,16,12,.3)';ctx.beginPath();ctx.ellipse(hx+1,hy+5.4,3,1.4,P.lean,0,7);ctx.fill();}
-  if(st.lizard)drawHead(hx,hy,P.lean*.5+P.tilt,st,fl);else drawHead2(hx,hy,P.lean*.5+P.tilt,st,fl,(f.state==='walk'?Math.sin(tick*.25)*1.4+1.2:Math.sin(tick*.05+(f.x||0))*.4)+(f.state==='hurt'?2:0));
+  if(st.terrorMonster)drawTerrorHead(hx,hy,P.lean*.5+P.tilt,st,fl);else if(st.lizard)drawHead(hx,hy,P.lean*.5+P.tilt,st,fl);else drawHead2(hx,hy,P.lean*.5+P.tilt,st,fl,(f.state==='walk'?Math.sin(tick*.25)*1.4+1.2:Math.sin(tick*.05+(f.x||0))*.4)+(f.state==='hurt'?2:0));
   if(f.herido&&!fl){
     // Gotas de sudor frío por el dolor de peritonitis
     const swY=(tick*.12)%3;
@@ -3123,41 +3295,102 @@ function drawGuinos(cx){for(const [x,a,b,c,col] of (AFICHES[lvl]||[]))if(x-cx>-4
 const MOTOST={scale:.95,skin:'#e6b48e',hair:'long',hairC:'#2a1a10',top:'#151418',shirt:'#0d0d10',pants:'#2f4a7a',boots:'#0b0b0d',torsoW:10,jacket:true,studs:true};
 
 // v20: nivel "Muere monstruo muere" (Trillando la fina, 2012) + entrevista histórica con Beto Casella +
-// "El Comerciante Informador" (de "El amasijo de un gran sueño": el mercader del rumor y la prensa amarilla que lucra y deshonra).
+// "El Espanto de Sábado Santo" (la bestia infernal de las leyendas que Ricardo enfrenta, ata a su camioneta y encomienda a Dios).
 Object.assign(STY,{
   beto:{scale:1.03,skin:'#e4b28a',hair:'slick',hairC:'#161218',glasses:true,top:'#1a1820',shirt:'#e8e2d0',tie:'#c8322a',pants:'#24222c',boots:'#0b0b0d',torsoW:10.5,jacket:true},
   informador:{scale:1.0,skin:'#e2b08c',hair:'slick',hairC:'#2a2018',stache:'#2a2018',glasses:true,top:'#b89638',shirt:'#e8e2d0',tie:'#1a1418',pants:'#3a3632',boots:'#1a1410',torsoW:10.5,jacket:true},
   comerciante:{scale:1.34,skin:'#e6b490',hair:'slick',hairC:'#1e1612',stache:'#1e1612',glasses:true,top:'#4a2438',shirt:'#f2e6c8',tie:'#e2c24a',vest:'#2a1622',pants:'#2a2228',boots:'#120e0c',torsoW:15,belly:1.3,cigar:true},
-  espanto:Object.assign({},STY.reptil,{skin:'#3e3a44',top:'#24202a',shirt:'#3a3440',pants:'#1e1a22',boots:'#2a2430',scale:1.12})
+  espanto:Object.assign({},STY.reptil,{skin:'#261e30',top:'#1c1624',shirt:'#2e243a',pants:'#140e1c',boots:'#1e1428',scale:1.15,horns:true}),
+  monstruo_jefe:{scale:2.25,skin:'#16101c',hair:'bald',lizard:true,horns:true,tail:true,spikes:true,terrorMonster:true,top:'#0e0a12',shirt:'#0e0a12',pants:'#0a060e',boots:'#06040a',torsoW:19,bulk:1.45,belly:1.2}
 });
 Object.assign(DEFS,{
   beto:N('beto'),
   informador:E('informador',30,1.0,'OPERADOR DEL CHISME',190,{ai:'ranged',shot:'papel',hold:'papel'}),
-  espanto:Object.assign({},DEFS.reptil,{sty:'espanto',name:'ESPANTO DE MADRUGADA',hp:40}),
-  comerciante:E('comerciante',420,.9,'EL COMERCIANTE INFORMADOR',8000,{boss:1,bthrow:'papel',hold:'mic'})
+  espanto:Object.assign({},DEFS.reptil,{sty:'espanto',name:'ESPANTO DE MADRUGADA',hp:45}),
+  comerciante:E('comerciante',220,1.0,'EL COMERCIANTE INFORMADOR',3500,{bthrow:'papel',hold:'mic'}),
+  monstruo_jefe:E('monstruo_jefe',520,1.05,'EL ESPANTO DE SÁBADO SANTO',10000,{boss:1,monster:1,heavy:1,bthrow:'miasma',summons:[['espanto','espanto'],['espanto','espanto']]})
 });
-Object.assign(NAMES,{beto:'BETO CASELLA',informador:'OPERADOR AMARILLISTA',comerciante:'EL COMERCIANTE INFORMADOR',espanto:'EL ESPANTO'});
-Object.assign(BARKS,{informador:['¡Comerciante informador: vendo el rumor al mejor postor!','¡Recortale esa frase que hacemos tapa!','¡Si hay pelea en la banda vendemos el doble!','¡Un título venenoso vale oro!'],
-  espanto:['¡Uuuuhhh!','¡Grrrr!','¡Sábado Santo es mío!'],comerciante:['¡Yo rumoreo y deshonro por contrato!','¡Todo escándalo cotiza en mi mostrador!']});
-Object.assign(DIEQ,{informador:'Como canté en "El amasijo de un gran sueño": comerciante informador que rumorea y deshonra.',espanto:'¡Fuera de acá, espanto! Que el pueblo duerma en paz.',comerciante:'El que comercia con la honra ajena termina masticando su propio veneno.'});
+Object.assign(NAMES,{
+  beto:'BETO CASELLA',
+  informador:'OPERADOR AMARILLISTA',
+  comerciante:'EL COMERCIANTE INFORMADOR',
+  espanto:'EL ESPANTO',
+  monstruo_jefe:'EL ESPANTO DE SÁBADO SANTO'
+});
+Object.assign(BARKS,{
+  informador:['¡Comerciante informador: vendo el rumor al mejor postor!','¡Recortale esa frase que hacemos tapa!','¡Si hay pelea en la banda vendemos el doble!','¡Un título venenoso vale oro!'],
+  comerciante:['¡Yo rumoreo y deshonro por contrato!','¡Todo escándalo cotiza en mi mostrador!','¡Liberen al monstruo para sacar la foto!'],
+  espanto:['¡Uuuuhhh!','¡Grrrr!','¡Sábado Santo es nuestro!','¡Las sombras del monte!'],
+  monstruo_jefe:[
+    '¡¡¡GRRRRAAAAAAAARRRGH!!!',
+    '¡Fue en Sábado Santo de madrugada!',
+    '¡Le he visto las patas y no eran de gallo!',
+    '¡Un espanto que la noche trajo!',
+    '¡Un silencio que a todos calló!'
+  ]
+});
+Object.assign(DIEQ,{
+  informador:'Como canté en "El amasijo de un gran sueño": comerciante informador que rumorea y deshonra.',
+  comerciante:'El que comercia con la honra ajena termina masticando su propio veneno.',
+  espanto:'¡Fuera de acá, espanto! Que el pueblo duerma en paz.',
+  monstruo_jefe:'Lo até a la culata de la camioneta y me lo llevé tierra adentro... y lo encomendé a Dios.'
+});
 
 function monstruoLevel(){
-  const L=L_STD([[['informador','R'],['espanto','R']],[['informador','L'],['buchon','R']]],[[['espanto','R'],['informador','L'],['buchon','R']],[['informador','R'],['espanto','L']]],
-    [[['espanto','R'],['informador','L'],['espanto','R']],[['buchon','L'],['informador','R'],['espanto','R']]],[[['informador','L'],['espanto','R'],['informador','R']],[['espanto','R'],['informador','L'],['espanto','R'],['buchon','L']]]);
-  return {LW:2600,skin:'ricT',song:'c8',bossSong:'b2',food:'asado',lmKey:'monstruo',
-    villains:'Operadores de prensa amarilla, espantos de Sábado Santo y El Comerciante Informador',title:'MUERE MONSTRUO MUERE',place:'UN PUEBLO DE CAMPO · 2012',hazard:'jabali',
-    card:['En 2012 Almafuerte editó su último álbum de estudio, "Trillando la fina", que abre con "Muere monstruo muere" (letra de Iorio, música de Marciello).','Fue amigo de Beto Casella, que lo entrevistó varias veces en televisión.','Pero detrás de las notas sinceras siempre merodea "El Comerciante Informador" (de "El amasijo de un gran sueño"), que lucra con el chisme y el espanto.'],
-    npcs:[{kind:'beto',x:250,y:198,face:1,hold:'mic'}],guns:[[700,'escopeta'],[1700,'escopeta']],locks:L,
+  const L=L_STD(
+    [[['informador','R'],['espanto','R']],[['informador','L'],['buchon','R']]],
+    [[['espanto','R'],['informador','L'],['buchon','R']],[['informador','R'],['espanto','L']]],
+    [[['espanto','R'],['informador','L'],['espanto','R']],[['buchon','L'],['informador','R'],['espanto','R']]],
+    [[['informador','L'],['comerciante','R']],[['espanto','R'],['informador','L'],['espanto','R']]]
+  );
+  return {
+    LW:2600,skin:'ricT',song:'c8',bossSong:'b2',food:'asado',lmKey:'monstruo',
+    villains:'Prensa amarillista, sombras nocturnas y El Espanto de Sábado Santo',
+    title:'MUERE MONSTRUO MUERE',place:'UN PUEBLO DE CAMPO · 2012',hazard:'jabali',
+    card:[
+      'En 2012 Almafuerte editó su último álbum de estudio, "Trillando la fina", que abre con la descomunal y tenebrosa "Muere monstruo muere" (letra de Iorio, música de Marciello).',
+      '"Fue en sábado santo de madrugada, cuando en tu casa se metió... le he visto las patas y no eran de gallo... un espanto que la noche trajo... un silencio que a todos calló... ¡Muere monstruo muere!"',
+      'Ricardo se adentra en la noche campera para enfrentar a la bestia infernal de las leyendas, atarla a la culata de su camioneta y encomendarla a Dios para devolverle la calma al pueblo.'
+    ],
+    npcs:[{kind:'beto',x:250,y:198,face:1,hold:'mic'}],
+    guns:[[700,'escopeta'],[1700,'escopeta']],
+    locks:L,
     rescue:{kind:'peon',x:1420,y:192},
-    props:[[420,'fardo','asado'],[820,'tacho','asado'],[1520,'fardo','asado'],[1940,'tacho','asado'],[2080,'fardo','asado']],pipe:[1460,240],
-    intro:[{w:'beto',s:'Querido Ricardo, vine hasta el campo para charlar como amigos de tus canciones y de tu vida tierra adentro.'},{w:'ricT',s:'Beto querido, con vos hablo de corazón porque venís de frente. El problema son los buitres que nos siguieron por la ruta.'},
-      {w:'beto',s:'Vino "El Comerciante Informador" con sus pasquines amarillos, y encima de madrugada apareció el espanto de Sábado Santo.'},{w:'ricT',s:'Al comerciante informador que rumorea y deshonra lo saco carpiendo, y del monstruo me encargo yo para que el pueblo duerma en paz.'}],
-    rescueLines:[{w:'peon',s:'¡Don Ricardo! Los pasquineros del Comerciante Informador me ataron para inventar que en su campo pasan cosas raras.'},{w:'ricT',s:'Viven del amasijo de los sueños ajenos: mienten en los diarios para vender papel y dividir amigos.'},
-      {w:'peon',s:'Además soltaron al espanto del galpón para sacarle fotos y asustar a los vecinos en Sábado Santo.'},{w:'ricT',s:'Primero le cierro el quiosco al informador, y al bicho lo llevo lejos y lo encomiendo a Dios.'}],
-    boss:'comerciante',summons:[['informador','espanto'],['espanto','informador']],
-    bossLines:[{w:'comerciante',s:'¡Soy El Comerciante Informador! Yo invento internas, vendo rumores y convierto tu vida en espectáculo de feria.'},{w:'ricT',s:'Ya te retraté en "El amasijo de un gran sueño": comerciante informador que rumorea y deshonra.'},{w:'comerciante',s:'¡Paparazzis, pasquineros! ¡Suelten al espanto y saquen la foto de tapa!'}],
-    winLines:[{w:'comerciante',s:'¡No me rompas los diarios! ¡Me vuelvo a las redacciones de la capital!'},{w:'ricT',s:'Rajá con tus chismes. Y al monstruo me lo llevo atado tierra adentro y que Dios se apiade: acá en el pueblo no asusta más.'}],
-    winSay:'¡MUERE MONSTRUO MUERE!',quips:['Comerciante informador, que rumorea y deshonra.','Tierra adentro, el tiempo corre distinto.','Sábado Santo de madrugada: ¡muere monstruo muere!','Con mi amigo Beto hablo de frente; a los amarillistas ni cabida.']};
+    props:[[420,'fardo','asado'],[820,'tacho','asado'],[1520,'fardo','asado'],[1940,'tacho','asado'],[2080,'fardo','asado']],
+    pipe:[1460,240],
+    intro:[
+      {w:'beto',s:'Querido Ricardo, vine hasta el campo para charlar como amigos de tus canciones y de tu vida tierra adentro.'},
+      {w:'ricT',s:'Beto querido, con vos hablo de corazón porque venís de frente. Pero en este pueblo de noche ronda una sombra pesada.'},
+      {w:'beto',s:'Los vecinos dicen que en Sábado Santo de madrugada se metió un espanto en las casas, y que el Comerciante Informador lo azuza para lucrar con el terror.'},
+      {w:'ricT',s:'Al comerciante le cierro el quiosco, y a la bestia la enfrento yo mismo para que el pueblo vuelva a dormir en paz.'}
+    ],
+    rescueLines:[
+      {w:'peon',s:'¡Don Ricardo! Los pasquineros del Comerciante Informador me ataron y abrieron las rejas del galpón abandonado.'},
+      {w:'ricT',s:'Viven del amasijo de los sueños ajenos, pero liberar a esa criatura en Sábado Santo es cruzar todo límite.'},
+      {w:'peon',s:'¡La bestia está suelta junto al molino! ¡Le vi las patas en la oscuridad y no eran de gallo!'},
+      {w:'ricT',s:'Tranquilo, paisano. Del monstruo me encargo yo: lo voy a atar a la culata de la F-100 y llevarlo tierra adentro.'}
+    ],
+    boss:'monstruo_jefe',
+    summons:[['espanto','espanto'],['espanto','espanto']],
+    bossLines:[
+      {w:'monstruo_jefe',s:'¡¡¡GRRRRAAAAAAAARRRGH!!! ¡Fue en Sábado Santo de madrugada cuando en tu casa me metí!'},
+      {w:'ricT',s:'¡Le he visto las patas y no eran de gallo! ¡Un espanto que la noche trajo, un silencio que a todos calló!'},
+      {w:'monstruo_jefe',s:'¡Las sombras del monte reclaman este pueblo! ¡Nadie amanece vivo frente a mi furia!'},
+      {w:'ricT',s:'¡Te voy a atar a la culata de la camioneta y llevarte tierra adentro! ¡MUERE MONSTRUO MUERE!'}
+    ],
+    winLines:[
+      {w:'ricT',s:'¡Lo até a la culata de la camioneta y me lo llevé tierra adentro... y lo encomendé a Dios!'},
+      {w:'beto',s:'¡Impresionante, Ricardo! El pueblo vuelve a tener paz gracias a tu coraje y a tu verdad.'},
+      {w:'ricT',s:'El verdadero peligro no era solo este espanto, sino los que lucran con el miedo. ¡En esta tierra gaucha manda la dignidad!'}
+    ],
+    winSay:'¡MUERE MONSTRUO MUERE!',
+    quips:[
+      'Fue en Sábado Santo de madrugada: ¡muere monstruo muere!',
+      'Le he visto las patas y no eran de gallo.',
+      'Un espanto que la noche trajo, un silencio que a todos calló.',
+      'Lo até a la culata de la camioneta y me lo llevé tierra adentro.'
+    ]
+  };
 }
 const MONSTRUO_SCENE={weather:'mist',light:'#b09aa6',
   lamps:[{x:520,y:70,r:110,c:'255,200,140'},{x:1180,y:70,r:110,c:'255,200,140',flick:true},{x:1880,y:70,r:110,c:'255,200,140'}],signs:[],
@@ -3814,8 +4047,8 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   const L=monstruoLevel(),b=L.locks[L.locks.length-1];b.L=L.LW-W;b.trig=b.L+80;
   LEVELS.splice(9,0,L);SCENES.splice(9,0,MONSTRUO_SCENE);
   DISCOS.splice(9,0,{t:'MUERE MONSTRUO MUERE',c:'#7a5a8a',s:'"Muere monstruo muere" abre "Trillando la fina" (2012): letra de Iorio y música de Claudio Marciello.'});
-  AFICHES.splice(9,0,[[640,'ALMAFUERTE','TRILLANDO','LA FINA','#6a8a3a'],[2260,'SE VENDE','GALPÓN','CON ESPANTO','#e8e2d0']]);
-  DATOS.splice(9,0,['"Trillando la fina" (2012) fue el último disco de estudio de Almafuerte.','"Muere monstruo muere" tiene letra de Iorio y música de Claudio Marciello.','La figura del comerciante informador aparece en "El amasijo de un gran sueño" (Mundo guanaco, 1995): el periodismo que lucra con rumores y rupturas.','Beto Casella, su amigo, lo entrevistó varias veces en televisión.']);
+  AFICHES.splice(9,0,[[640,'ALMAFUERTE','TRILLANDO','LA FINA','#6a8a3a'],[2260,'¡PELIGRO!','ESPANTO','SUELTO','#e2462c']]);
+  DATOS.splice(9,0,['"Trillando la fina" (2012) fue el último disco de estudio de Almafuerte.','"Muere monstruo muere" relata el terror nocturno de Sábado Santo: la bestia infernal que Iorio ata a la camioneta y encomienda a Dios.','Ricardo fue amigo íntimo de Beto Casella, quien lo entrevistó en numerosas ocasiones televisivas memorables.','La canción inmortaliza el grito criollo de resistencia: "Le he visto las patas y no eran de gallo... ¡Muere monstruo muere!"']);
   MODS.splice(9,0,'');
   pelusaInsert();
   malvinasInsert();
@@ -5034,7 +5267,27 @@ function drawEnt(e){if(e.gone||e.state==='ride'||e.state==='hidden')return;if(e.
   if(e===player&&LV&&LV.camioneta){drawPlayerCamioneta(e,X,Y);return;}
   if(e===npcs.rescue&&e.state==='tied'){ctx.fillStyle=LV.dyn==='campo'?'#6a4a2e':'#2e2c34';ctx.fillRect(X-8,Y-62,4,62);}
   if(e.D.dozer&&(e.state==='bcharge'||e.state==='ctele'))drawDozer(e,X,Y);
-  if(e.st.tail){const s=e.st.scale,w=Math.sin(tick*.1)*6;for(const p of [0,1]){ctx.strokeStyle=p?e.st.skin:OUT;ctx.lineWidth=p?7:10;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(X-e.face*4*s,Y-22*s);ctx.quadraticCurveTo(X-e.face*24*s,Y-8+w,X-e.face*44*s,Y-6-w);ctx.stroke();}if(e.st.horns){const tx=X-e.face*44*s,ty=Y-6-w;ctx.fillStyle=e.st.skin;ctx.beginPath();ctx.moveTo(tx,ty-6*s);ctx.lineTo(tx-e.face*8*s,ty);ctx.lineTo(tx,ty+6*s);ctx.fill();}}
+  if(e.st.terrorMonster){
+    const s=e.st.scale,rad=32*s;
+    const gl=ctx.createRadialGradient(X,Y-4,3,X,Y-4,rad);
+    gl.addColorStop(0,'rgba(45,0,10,.68)');gl.addColorStop(.55,'rgba(90,10,18,.25)');gl.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gl;ctx.beginPath();ctx.ellipse(X,Y-2,rad,rad*.35,0,0,Math.PI*2);ctx.fill();
+    const tw=Math.sin(tick*.12)*8;
+    for(const p of [0,1]){
+      ctx.strokeStyle=p?'#181220':OUT;ctx.lineWidth=p?9*s:12*s;ctx.lineCap='round';ctx.beginPath();
+      ctx.moveTo(X-e.face*6*s,Y-26*s);ctx.quadraticCurveTo(X-e.face*30*s,Y-10+tw,X-e.face*54*s,Y-8-tw);ctx.stroke();
+    }
+    const tx=X-e.face*54*s,ty=Y-8-tw;
+    ctx.fillStyle='#d8cfc0';ctx.beginPath();ctx.moveTo(tx,ty-8*s);ctx.lineTo(tx-e.face*14*s,ty);ctx.lineTo(tx,ty+8*s);ctx.fill();
+    ctx.strokeStyle='#2a1a24';ctx.lineWidth=1;ctx.stroke();
+    for(let k=1;k<=3;k++){
+      const spx=X-e.face*(14+k*11)*s,spy=Y-20+k*3+tw*(k/3);
+      ctx.fillStyle='#0d0912';ctx.beginPath();ctx.moveTo(spx,spy);ctx.lineTo(spx-e.face*6,spy-7);ctx.lineTo(spx+e.face*4,spy);ctx.fill();
+    }
+    if(tick%3===0&&e.state!=='dead'&&e.hp>0){
+      parts.push({k:'deb',x:e.x+rnd(-25,25)*s,y:e.y-rnd(6,65)*s,vx:rnd(-.7,.7),vy:-rnd(.8,2.4),t:0,max:38,c:Math.random()<.45?'#ff2a18':Math.random()<.75?'#ffaa14':'#160e1a',w:rnd(1.5,3.5),h:rnd(1.5,3.5)});
+    }
+  } else if(e.st.tail){const s=e.st.scale,w=Math.sin(tick*.1)*6;for(const p of [0,1]){ctx.strokeStyle=p?e.st.skin:OUT;ctx.lineWidth=p?7:10;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(X-e.face*4*s,Y-22*s);ctx.quadraticCurveTo(X-e.face*24*s,Y-8+w,X-e.face*44*s,Y-6-w);ctx.stroke();}if(e.st.horns){const tx=X-e.face*44*s,ty=Y-6-w;ctx.fillStyle=e.st.skin;ctx.beginPath();ctx.moveTo(tx,ty-6*s);ctx.lineTo(tx-e.face*8*s,ty);ctx.lineTo(tx,ty+6*s);ctx.fill();}}
   drawPuppetLit(e,X,Y);
   if(e.kind==='heavy'&&e.ally){const hb=Math.sin(tick*.22)*2;txt('🤘 BRIGADA 🤘',X,Y-96*e.st.scale+hb,'#f2b632',4,'center');}
   if(e.papeT>0){e.papeT--;const bob=Math.sin(tick*.25)*2;txt('¡PAPERO!',X,Y-98*e.st.scale+bob,'#ff6a4a',4.5,'center');ctx.fillStyle='#b8864a';ctx.beginPath();ctx.ellipse(X,Y-86*e.st.scale+bob,5,3.6,0,0,7);ctx.fill();}
@@ -5093,6 +5346,18 @@ function drawShot(s){const X=Math.round(s.x-cam.x),Y=Math.round(s.y-s.z);ctx.fil
     gl.addColorStop(0,'#ffffff');gl.addColorStop(.3,'#7affdf');gl.addColorStop(.7,'rgba(60,180,250,.6)');gl.addColorStop(1,'rgba(0,100,200,0)');
     ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,14,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#ffffff';ctx.beginPath();ctx.arc(0,0,4,0,Math.PI*2);ctx.fill();
+  } else if(k==='miasma'){
+    const gl=ctx.createRadialGradient(0,0,1,0,0,18);
+    gl.addColorStop(0,s.back?'#ffffff':'#ffea78');
+    gl.addColorStop(.35,s.back?'rgba(255,220,100,.95)':'rgba(255,40,16,.88)');
+    gl.addColorStop(.7,s.back?'rgba(120,200,255,.5)':'rgba(50,10,24,.65)');
+    gl.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,18,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=s.back?'#fff':'#ff3311';ctx.beginPath();ctx.arc(0,0,5,0,Math.PI*2);ctx.fill();
+    if(!s.back){
+      ctx.strokeStyle='rgba(255,30,15,.75)';ctx.lineWidth=1.2;
+      for(let a=0;a<3;a++){const ang=s.t*.35+a*Math.PI*2/3;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(ang)*12,Math.sin(ang)*12);ctx.stroke();}
+    }
   } else if(k==='baba'){const gl=ctx.createRadialGradient(0,0,1,0,0,16);gl.addColorStop(0,'rgba(220,255,240,.95)');gl.addColorStop(.35,s.back?'rgba(255,210,120,.7)':'rgba(120,230,200,.6)');gl.addColorStop(1,'rgba(80,200,180,0)');ctx.fillStyle=gl;ctx.beginPath();ctx.arc(0,0,16,0,Math.PI*2);ctx.fill();ctx.fillStyle='#f4fff8';ctx.beginPath();ctx.arc(0,0,4,0,Math.PI*2);ctx.fill();}
   else if(k==='boleadora'){
     ctx.rotate(s.t*.6);
