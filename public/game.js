@@ -830,10 +830,10 @@ const SONGS = {
            lead: [[0, 15, 4], [4, 17, 4], [8, 19, 8], [16, 17, 4], [20, 15, 4], [24, 14, 8], [32, 15, 4], [36, 17, 4], [40, 19, 8], [48, 22, 4], [52, 24, 8]] }
     }
   },
-  // Cap 9: Toro y Pampa (Almafuerte)
+  // Cap 9: Toro y Pampa (Almafuerte - Versión 16-Bit Estudio)
   c8: {
-    name: "TORO Y PAMPA (ALMAFUERTE)",
-    bpm: 138, div: 12, order: ["A", "A", "B", "A", "C"],
+    name: "TORO Y PAMPA (16-BIT ESTUDIO)",
+    bpm: 136, div: 12, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, -2, -4], riff: R12("0 - 0 3 - 0 5 - 3 0 - 0"), m: "o.po.po.po.p", k: "x..x..x..x..", s: "...x.....x..", h: "sh", bombo: "x..x..x.x..x",
            lead: [[0, 12, 3], [3, 15, 3], [6, 17, 6], [12, 15, 3], [15, 14, 3], [18, 12, 6], [24, 15, 3], [27, 17, 3], [30, 19, 6], [36, 17, 3], [39, 15, 3], [42, 12, 6]] },
@@ -911,6 +911,7 @@ SONGS.l5 = SONGS.c8;
 SONGS.bossRock = SONGS.b0;
 SONGS.bossThrash = SONGS.b1;
 SONGS.bossFolk = SONGS.b2;
+SONGS.toro_y_pampa = SONGS.c8;
 SONGS.street = SONGS.c7;
 
 for (const k in SONGS) {
@@ -1450,7 +1451,7 @@ const NEWLEVELS={
   bossLines:[{w:'clausurador',s:'Señor Iorio: el matafuegos está vencido, el volumen excede el código y todavía no vi ningún sobre arriba de mi carpeta.'},{w:'ricA',s:'El único código que conocemos es dar la cara frente a los pibes que pagaron su entrada.'},{w:'clausurador',s:'¡Inspectores! ¡Clausura definitiva y secuestro de instrumentos!'}],
   winLines:[{w:'clausurador',s:'¡Sello aprobado! ¡Adentro, adentro, que ya está habilitado!'},{w:'ricA',s:'Entrá, Tano, y pelá esos solos criollos. ¡Bienvenidos al Mundo Guanaco!'}],
   winSay:'¡MUNDO GUANACO!',quips:['Del amasijo de un gran sueño salimos de pie.','Con el Tano Marciello, pesado y bien criollo.','Al que vive de la coima no se le baja la cabeza.','Como decía Almafuerte: no te des por vencido ni aun vencido.']},
- sierras06:{LW:2600,skin:'ricT',song:'l5',bossSong:'bossFolk',food:'asado',villains:'Cazadores furtivos, falsos gurúes new age, lobizones y El Intendente',title:'TORO Y PAMPA',place:'SIERRA DE LA VENTANA · 2006',hazard:'jabali',
+ sierras06:{LW:2600,skin:'ricT',song:'c8',bossSong:'bossFolk',food:'asado',villains:'Cazadores furtivos, falsos gurúes new age, lobizones y El Intendente',title:'TORO Y PAMPA',place:'SIERRA DE LA VENTANA · 2006',hazard:'jabali',
   card:['En 2006 Almafuerte lanzó "Toro y pampa", su celebrado álbum de estudio que consagró el folclore pesado y la vida de campo.','Inspirado en la amistad pura y leal que más tarde inmortalizó en "Pa\' Pelusa" (Trillando la fina, 2012): homenaje a Carlos "Pelusa" López, pizzero de Mar del Plata, de Alvarado y Peñarol, que en la mala no lo dejó a pata.','En las sierras bonaerenses, Ricardo combate con el orgullo gaucho y criollo para que nadie profane la tierra.'],
   npcs:[{kind:'peon',x:250,y:198,face:1,hold:'mate'}],guns:[[700,'escopeta'],[1700,'escopeta']],
   locks:L_STD([[['cazador','R'],['newage','R']],[['agrimensor','R'],['cazador','L']]],[[['newage','R'],['cazador','L'],['reptil','R']],[['cazador','R'],['newage','L']]],
@@ -2072,7 +2073,7 @@ const LEVEL_TRACK_MAP = [
   // Cap 8: Rutas del interior 2001 (Crisis, corralito, Obras 2001)
   { song: 'convide_rutero', boss: 'piedra_libre' }, // Convide rutero / Piedra libre
   // Cap 9: Sierras 2006 (Sierra de la Ventana, Toro y pampa)
-  { song: 'toro_y_pampa', boss: 'b2' }, // Toro y pampa / Triunfo
+  { song: 'c8', boss: 'b2' }, // Toro y pampa 16-bit estudio / Triunfo
   // Cap 10: Muere monstruo muere 2012 (Pueblo de campo, Trillando la fina, Beto Casella)
   { song: 'monstruo', boss: 'el_amasijo' }, // Muere monstruo muere / El Comerciante Informador
   // Cap 11: Tierra adentro 2023 (Coronel Suárez, combate contra El Loteador y Mandinga)
