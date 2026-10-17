@@ -690,7 +690,7 @@ const R12 = (s) => s.trim().split(/\s+/).map(x => x === "-" ? null : +x);
 const SONGS = {
     // Cap 10: Pa\' Pelusa (Almafuerte - Trillando la fina 2012) - Melodía 16-Bit exacta
   pa_pelusa: {
-    name: "PA' PELUSA (ALMAFUERTE)",
+    name: "PA' PELUSA",
     bpm: 132, div: 12, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, -2, -4], riff: R12("0 - 0 3 - 5 6 - 5 3 - 0"), m: "o.po.poo.oo.", k: "x..x..x..x..", s: "...x.....x..", h: "8", bombo: "x..x..x.x..x",
@@ -704,7 +704,7 @@ const SONGS = {
   },
   // Cap Malvinas: Patria al Hombro (Almafuerte / Ricardo Iorio)
   patria_al_hombro: {
-    name: "PATRIA AL HOMBRO (ALMAFUERTE)",
+    name: "PATRIA AL HOMBRO",
     bpm: 148, div: 12, order: ["A", "A", "B", "A", "C", "B"],
     sec: {
       A: { bars: 4, roots: [0, 0, 3, 5], riff: R12("0 - 0 3 - 0 5 - 3 0 - 0"), m: "o.po.po.po.p", k: "x..x..x..x..", s: "...x.....x..", h: "sh", bombo: "x..x..x.x..x",
@@ -716,7 +716,7 @@ const SONGS = {
   },
   // Boss Malvinas: Sentir Indiano / Combate Austral
   sentir_indiano: {
-    name: "SENTIR INDIANO (ALMAFUERTE - BOSS)",
+    name: "SENTIR INDIANO",
     bpm: 158, div: 12, order: ["A", "A", "B"],
     sec: {
       A: { bars: 4, roots: [0, 0, 1, -2], riff: R12("0 - 0 1 - 0 7 - 6 0 - 0"), m: "o.po.po.oo.p", k: "x..x..x..x..", s: "......x.....", h: "8", bombo: "x..x..x.x..x",
@@ -727,7 +727,7 @@ const SONGS = {
   },
   // Cap 1: Muy Cansado Estoy (V8)
   c0: {
-    name: "MUY CANSADO ESTOY (V8)",
+    name: "MUY CANSADO ESTOY",
     bpm: 132, div: 12, order: ["A", "A", "B", "B", "C", "A"],
     sec: {
       A: { bars: 4, roots: [0, 0, 5, 0], riff: R12("0 - 0 3 - 5 6 - 5 3 - 0"), m: "o.po.poo.oo.", k: "x.....x..x..", s: "...x.....x..", h: "ride",
@@ -740,7 +740,7 @@ const SONGS = {
   },
   // Cap 2: Brigadas Metálicas (V8)
   c1: {
-    name: "BRIGADAS METÁLICAS (V8)",
+    name: "BRIGADAS METÁLICAS",
     bpm: 196, div: 16, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, -4, -2], riff: R16("0 0 0 0 3 - 2 0 0 0 0 0 -2 - 0 0"), m: "ppppopopppppoopp", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
@@ -752,7 +752,7 @@ const SONGS = {
   },
   // Cap 3: Destrucción (V8)
   c2: {
-    name: "DESTRUCCIÓN (V8)",
+    name: "DESTRUCCIÓN",
     bpm: 208, div: 16, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, 0, 1], riff: R16("0 0 0 0 3 - 2 - 0 0 0 0 1 - 0 0"), m: "ppppoppoppppoppp", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "....x.......x...", h: "8",
@@ -764,7 +764,7 @@ const SONGS = {
   },
   // Cap 4: Tú Eres Su Seguridad (Hermética)
   c3: {
-    name: "TÚ ERES SU SEGURIDAD (HERMÉTICA)",
+    name: "TÚ ERES SU SEGURIDAD",
     bpm: 172, div: 16, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, 3, 5], riff: R16("0 - 0 0 3 - 0 0 5 - 6 5 3 - 0 0"), m: "o.ppo.ppo.poo.pp", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
@@ -776,7 +776,7 @@ const SONGS = {
   },
   // Cap 5: Memoria de Siglos (Hermética)
   c4: {
-    name: "MEMORIA DE SIGLOS (HERMÉTICA)",
+    name: "MEMORIA DE SIGLOS",
     bpm: 164, div: 16, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, -2, -4], riff: R16("0 0 - 0 0 - 0 0 3 0 - 0 5 3 - 0"), m: "pp.pp.ppo.po.oo.", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
@@ -789,7 +789,7 @@ const SONGS = {
   },
   // Cap 6: Gil Trabajador (Hermética)
   c5: {
-    name: "GIL TRABAJADOR (HERMÉTICA)",
+    name: "GIL TRABAJADOR",
     bpm: 154, div: 16, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, -2, 3], riff: R16("0 - - 0 - 0 3 - 0 - 6 5 3 - - 0"), m: "o..p.po.p.ooo..p", k: "x..x.x..x.x....x", s: "....x.......x...", h: "8",
@@ -802,7 +802,7 @@ const SONGS = {
   },
   // Cap 7: El Amasijo de un Gran Sueño (Almafuerte)
   c6: {
-    name: "EL AMASIJO DE UN GRAN SUEÑO (ALMAFUERTE)",
+    name: "EL AMASIJO DE UN GRAN SUEÑO",
     bpm: 146, div: 12, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, 5, 3], riff: R12("0 - 0 3 - 0 5 - 6 5 3 -"), m: "o.po.po.poo.", k: "x..x..x..x..", s: "...x.....x..", h: "sh", bombo: "x.xx..x.xx..",
@@ -814,7 +814,7 @@ const SONGS = {
   },
   // Cap 8: Sé Vos (Almafuerte)
   c7: {
-    name: "SÉ VOS (ALMAFUERTE)",
+    name: "SÉ VOS",
     bpm: 122, div: 16, order: ["A", "B", "A", "B", "C", "B"],
     pl: [[0, 7], [4, 12], [8, 15], [12, 19]],
     sec: {
@@ -834,7 +834,7 @@ const SONGS = {
   },
   // Cap 9: Toro y Pampa (Almafuerte - Versión 16-Bit Estudio)
   c8: {
-    name: "TORO Y PAMPA (16-BIT ESTUDIO)",
+    name: "TORO Y PAMPA",
     bpm: 136, div: 12, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, -2, -4], riff: R12("0 - 0 3 - 0 5 - 3 0 - 0"), m: "o.po.po.po.p", k: "x..x..x..x..", s: "...x.....x..", h: "sh", bombo: "x..x..x.x..x",
@@ -846,7 +846,7 @@ const SONGS = {
   },
   // Cap 10: Muere Monstruo Muere (Almafuerte)
   c9: {
-    name: "MUERE MONSTRUO MUERE (ALMAFUERTE)",
+    name: "MUERE MONSTRUO MUERE",
     bpm: 160, div: 16, order: ["A", "A", "B", "A", "B", "C"],
     sec: {
       A: { bars: 4, roots: [0, 0, 1, 3], riff: R16("0 0 0 0 1 - 0 0 3 - 0 0 1 - 0 0"), m: "ppppoppppoppoppp", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
@@ -858,7 +858,7 @@ const SONGS = {
   },
   // Cap 11: A Vos Amigo (Almafuerte / Iorio)
   c10: {
-    name: "A VOS AMIGO (ALMAFUERTE)",
+    name: "A VOS AMIGO",
     bpm: 118, div: 12, order: ["A", "A", "B", "A", "B", "C"],
     pl: [[0, 7], [3, 12], [6, 15], [9, 19]],
     sec: {
@@ -871,7 +871,7 @@ const SONGS = {
   },
   // Boss V8: Cautivos del Sistema
   b0: {
-    name: "CAUTIVOS DEL SISTEMA (V8 - BOSS)",
+    name: "CAUTIVOS DEL SISTEMA",
     bpm: 204, div: 16, order: ["A", "A", "B"],
     sec: {
       A: { bars: 4, roots: [0, 1, 0, -2], riff: R16("0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1"), m: "ppppppppppppoooo", k: "xxxxxxxxxxxxxxxx", dk: 1, s: "....x.......x...", h: "8",
@@ -882,7 +882,7 @@ const SONGS = {
   },
   // Boss Hermética: Olvídalo y Volverá por Más
   b1: {
-    name: "OLVÍDALO Y VOLVERÁ POR MÁS (HERMÉTICA - BOSS)",
+    name: "OLVÍDALO Y VOLVERÁ POR MÁS",
     bpm: 198, div: 16, order: ["A", "A", "B"],
     sec: {
       A: { bars: 4, roots: [0, 0, 1, -1], riff: R16("0 0 0 0 1 0 0 0 6 0 0 0 5 0 3 1"), m: "ppppopppopppopoo", k: "x.x.x.x.x.x.x.x.", s: "....x.......x...", h: "8",
@@ -893,7 +893,7 @@ const SONGS = {
   },
   // Boss Almafuerte: Triunfo
   b2: {
-    name: "TRIUNFO (ALMAFUERTE - BOSS)",
+    name: "TRIUNFO",
     bpm: 156, div: 12, order: ["A", "A", "B"],
     sec: {
       A: { bars: 4, roots: [0, 0, 1, -2], riff: R12("0 - 0 1 - 0 7 - 6 0 - 0"), m: "o.po.po.oo.p", k: "x..x..x..x..", s: "......x.....", h: "8", bombo: "x..x..x.x..x",
@@ -915,6 +915,13 @@ SONGS.bossThrash = SONGS.b1;
 SONGS.bossFolk = SONGS.b2;
 SONGS.toro_y_pampa = SONGS.c8;
 SONGS.street = SONGS.c7;
+SONGS.desde_el_oeste = SONGS.c3;
+SONGS.liniers = SONGS.c4;
+SONGS.el_amasijo = SONGS.c6;
+SONGS.convide_rutero = SONGS.c7;
+SONGS.monstruo = SONGS.c9;
+SONGS.ultimando = SONGS.c10;
+SONGS.ruta_76 = Object.assign({}, SONGS.c8, { name: "RUTA 76" });
 
 for (const k in SONGS) {
   const S = SONGS[k];
@@ -2052,6 +2059,9 @@ const BUILTIN_TRACKS = [
   { era: 2, key: 'c7', name: 'Sé vos (Almafuerte)', url: 'audio/c7.mp3' },
   { era: 2, key: 'c8', name: 'Toro y pampa (Almafuerte)', url: 'audio/c8.mp3' },
   { era: 2, key: 'c10', name: 'A vos amigo (Almafuerte)', url: 'audio/c10.mp3' },
+  { era: 2, key: 'pa_pelusa', name: "Pa' Pelusa (Almafuerte)", url: 'audio/pa_pelusa.mp3' },
+  { era: 2, key: 'patria_al_hombro', name: 'Patria al hombro (Almafuerte)', url: 'audio/patria_al_hombro.mp3' },
+  { era: 2, key: 'sentir_indiano', name: 'Sentir indiano (Almafuerte)', url: 'audio/sentir_indiano.mp3' },
   { era: 2, key: 'b2', name: 'Triunfo (Almafuerte)', url: 'audio/b2.mp3' },
   { era: 2, key: 'intro', name: 'Tierra adentro (Iorio - Flavio)', url: 'audio/intro.mp3' }
 ];
@@ -2065,22 +2075,22 @@ const LEVEL_TRACK_MAP = [
   // Cap 3: BA Rock 1982 (Obras Sanitarias, naranjas / Destrucción)
   { song: 'c2', boss: 'b0' }, // Destrucción / Cautivos del sistema
   // Cap 4: Hermética 1988 (Recoleta / San Martín, Helloween)
-  { song: 'desde_el_oeste', boss: 'c3' }, // Desde el oeste / Tú eres su seguridad
+  { song: 'c3', boss: 'b1' }, // Tú eres su seguridad / Olvídalo y volverá por más
   // Cap 5: Ácido Argentino 1991 (El Oeste, desguace industrial)
   { song: 'c5', boss: 'b1' }, // Gil trabajador / Olvídalo y volverá por más
   // Cap 6: Monumental 1994 (Estadio River, Víctimas del vaciamiento)
-  { song: 'liniers', boss: 'b1' }, // En las calles de Liniers / Olvídalo y volverá por más
+  { song: 'c4', boss: 'b1' }, // Memoria de siglos / Olvídalo y volverá por más
   // Cap 7: Cemento 1995 (Nace Almafuerte, Mundo Guanaco, clausurador)
-  { song: 'el_amasijo', boss: 'del_entorno' }, // El amasijo de un gran sueño / Del entorno
+  { song: 'c6', boss: 'b2' }, // El amasijo de un gran sueño / Triunfo
   // Cap 8: Rutas del interior 2001 (Crisis, corralito, Obras 2001)
-  { song: 'convide_rutero', boss: 'piedra_libre' }, // Convide rutero / Piedra libre
+  { song: 'c7', boss: 'b2' }, // Sé vos / Triunfo
   // Cap 9: Sierras 2006 (Sierra de la Ventana, Toro y pampa)
-  { song: 'c8', boss: 'b2' }, // Toro y pampa 16-bit estudio / Triunfo
-  // Cap 10: Muere monstruo muere 2012 (Pueblo de campo, Trillando la fina, Beto Casella)
-  { song: 'monstruo', boss: 'el_amasijo' }, // Muere monstruo muere / El Comerciante Informador
-  // Cap 11: Tierra adentro 2023 (Coronel Suárez, combate contra El Loteador y Mandinga)
-  { song: 'ultimando', boss: 'b0' }, // Tierra adentro / Triunfo
-  // Cap 12 (Bonus): Ruta 76 (Noche, peaje, KM 76)
+  { song: 'c8', boss: 'b2' }, // Toro y pampa / Triunfo
+  // Cap 10: Muere monstruo muere 2012 (se desplaza al 12 con pelusa y malvinas)
+  { song: 'c9', boss: 'b2' }, // Muere monstruo muere / Triunfo
+  // Cap 11: Tierra adentro 2023 (se desplaza al 13)
+  { song: 'c10', boss: 'b2' }, // A vos amigo / Triunfo
+  // Cap 12 (Bonus): Ruta 76 (se desplaza al 14)
   { song: 'ruta_76', boss: 'b2' } // Ruta 76 / Triunfo
 ];
 
@@ -2902,7 +2912,7 @@ function malvinasLevel(){
   return {
     LW:2800,skin:'ric5',song:'patria_al_hombro',bossSong:'sentir_indiano',food:'asado',lmKey:'malvinas',
     villains:'Soldados coloniales británicos, comandos de la Corona y el Lord Colonialista Pirata',
-    title:'MALVINAS ARGENTINAS',place:'PUERTO ARGENTINO · ISLAS MALVINAS',hazard:'patrullero',
+    title:'PATRIA AL HOMBRO',place:'PUERTO ARGENTINO · ISLAS MALVINAS',hazard:'patrullero',
     card:[
       'Homenaje a los 649 héroes caídos en 1982 y a los veteranos de la Gesta de Malvinas.',
       'Ricardo Iorio siempre llevó la causa patriótica y el honor de los combatientes como estandarte sagrado en canciones como "Patria al hombro".',
