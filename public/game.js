@@ -1185,8 +1185,8 @@ cv.addEventListener('pointerdown',e=>{audioInit();if(AC&&AC.state==='suspended')
       if(cy>=94&&cy<=116){startChapter(lvl,false);sfx('blip');return;}
       if(cy>=118&&cy<=140){toTitleMenu();return;}
       if(cy>=142&&cy<=162){cycleTouchAlpha();return;}
-      if(cy>=164&&cy<=184){albumOpen();return;}
-      if(LV&&LV.camioneta&&cy>=180&&cy<=214){state='play';noPause=60;startWinCut();return;}
+      if(cy>=164&&cy<=182){albumOpen();return;}
+      if(LV&&LV.camioneta&&cy>=183&&cy<=206){state='play';noPause=60;startWinCut();return;}
     }
     state='play';
   }
@@ -1795,17 +1795,17 @@ function updPlayer(f){if(rideTick(f))return;
               'Tierra adentro hasta que se apague el último faro.';
       say(f,q,190);
     }
-    // Finalización de Ruta 76 sin colgarse: en Parador El Ombú con acción o al llegar al arco de López Lecube
-    if((press.atk||press.jump||press.spec||press.start)&&f.x>5000&&f.x<6450&&state==='play'){
-      floatTxt(f.x+30,f.y-80,'¡LLEGADA A PARADOR EL OMBÚ!','#f2b632');
+    // Finalización de Ruta 76: en Parador El Ombú con Enter/F, o al cruzar el arco de López Lecube
+    if((press.start||keys['KeyF'])&&f.x>=5600&&f.x<=6250&&state==='play'){
+      floatTxt(f.x+30,f.y-80,'¡PARADA EN PARADOR EL OMBÚ!','#f2b632');
       sfx('truck');noPause=60;startWinCut();return;
     }
-    if(f.x>=6500&&state==='play'){
+    if(f.x>=6540&&state==='play'){
       floatTxt(f.x+30,f.y-80,'¡LLEGADA A DESTINO · LÓPEZ LECUBE!','#f2b632');
       sfx('truck');noPause=60;startWinCut();return;
     }
     if(LV.freeRoad){
-      if(f.x>=7200){
+      if(f.x>=7000){
         f.x-=6000;
         cam.x=Math.max(0,cam.x-6000);
         f.lap=(f.lap||0)+1;
@@ -2097,7 +2097,7 @@ function updShots(){for(const s of shots){s.t++;s.x+=s.vx;if(s.vy)s.y+=s.vy;if(s
   else if(hittable(player)&&player.z<30&&Math.abs(player.y-s.y)<8&&Math.abs(player.x-s.x)<10){applyHit(s.owner,player,MOVES.phone,Math.sign(s.vx));s.gone=true;if(s.k==='tomate')splat(s.x,s.y-s.z);if(s.k==='copa')spark(s.x,s.y-s.z,true);if(s.k==='canionazo'||s.k==='fuego'||s.k==='miasma'){shake=Math.max(shake,4.5);spark(s.x,s.y-s.z,true);sfx('heavy');}if(s.k==='cajon')for(let i=0;i<4;i++)parts.push({k:'deb',x:s.x,y:s.y-s.z,vx:rnd(-2,2),vy:rnd(-3,-1),t:0,max:25,c:'#8a5e36',w:4,h:2});}}
   shots=shots.filter(s=>!s.gone);}
 function splat(x,y){for(let i=0;i<6;i++)parts.push({k:'deb',x,y,vx:rnd(-2,2),vy:rnd(-3,-.5),t:0,max:30,c:'#d8322a',w:3,h:3});}
-const SONG_DURS=[174,186,128,305,186,348,202,246,210,288,232,248,197,235];
+const SONG_DURS=[174,186,128,305,186,348,202,246,210,288,232,248,197,235,240];
 function levelSongProgress(){
   const fallback=SONG_DURS[lvl]||200;
   const dur=(typeof LM!=='undefined'&&LM.el&&isFinite(LM.el.duration)&&LM.el.duration>30)?LM.el.duration:fallback;
@@ -2608,12 +2608,18 @@ const LEVEL_TRACK_MAP = [
   { song: 'piedra_libre', boss: 'b2' },
   // Cap 9: Sierras 2006 (Toro y pampa - estudio)
   { song: 'c8', boss: 'b2' },
-  // Cap 10: Muere monstruo muere 2012 (se desplaza al 12 con pelusa y malvinas)
+  // Cap 10: Pa' Pelusa (A vos amigo / Convide rutero)
+  { song: 'convide_rutero', boss: 'b2' },
+  // Cap 11: Patria al hombro (Malvinas)
+  { song: 'c7', boss: 'b2' },
+  // Cap 12: Muere monstruo muere 2012
   { song: 'c9', boss: 'b2' },
-  // Cap 11: Tierra adentro 2023 (se desplaza al 13)
+  // Cap 13: Tierra adentro 2023
   { song: 'tierra_adentro', boss: 'b0' },
-  // Cap 12 (Bonus): Ruta 76 (se desplaza al 14)
-  { song: 'ruta_76', boss: 'b2' }
+  // Cap 14 (Bonus): Ruta 76
+  { song: 'ruta_76', boss: 'b2' },
+  // Cap 15 (Final): FIN · Homenaje Nacional
+  { song: 'l5', boss: 'l5' }
 ];
 
 const LM = { askOff: 1, retro: true, tracks: [], userTracks: [], cur: null, want: null, el: null, label: null, labT: 0, era: -1, err: false, pending: false };
@@ -2720,6 +2726,21 @@ function lmSync(force){
     if(p&&p.then)p.then(()=>{LM.pending=false;}).catch(()=>{LM.pending=false;});
     else LM.pending=false;
   }
+}
+
+function lmPlay(t){
+  if(!LM.el||!musicOn||!t)return;
+  LM.cur=t;
+  LM.err=false;
+  LM.pending=true;
+  LM.songEnded=false;
+  LM.el.src=t.url;
+  LM.el.currentTime=0;
+  LM.label='♫ 16-BIT: '+(t.name||'').toUpperCase();
+  LM.labT=180;
+  const p=LM.el.play();
+  if(p&&p.then)p.then(()=>{LM.pending=false;}).catch(()=>{LM.pending=false;});
+  else LM.pending=false;
 }
 
 function lmSetup(){
@@ -5145,7 +5166,7 @@ const SHOWS=[
   r:['Como solista grabó covers, tangos y milongas.','Larralde, uno de sus referentes criollos.','Su gente lo sigue cantando.'],f:['RICARDO IORIO','TIERRA ADENTRO']}];
 let SHOW=null;
 function showStart(){const S=SHOWS[lvl];if(!S){showEnd();return;}SHOW={S,t:0,i:0,ch:0};state='show';try{song=LV.song;}catch(e){}sfx('win');}
-function showEnd(){SHOW=null;if(lvl<LEVELS.length-1&&!LEVELS[lvl+1].bonus)startChapter(lvl+1,true);else{state='ending';endT=0;song='l5';}}
+function showEnd(){SHOW=null;if(lvl<LEVELS.length-1&&(!LEVELS[lvl+1].bonus||LEVELS[lvl+1].fin))startChapter(lvl+1,true);else{state='ending';endT=420;song='l5';}}
 function showUpd(){const Q=SHOW;if(!Q){showEnd();return;}Q.t++;const r=Q.S.r[Q.i]||'';if(Q.ch<r.length)Q.ch+=.8;
   if(press.start){showEnd();return;}
   if(Q.t>40&&(press.atk||press.jump||Q.ch>=r.length+150)){if(Q.ch<r.length)Q.ch=r.length;else{Q.i++;Q.ch=0;if(Q.i>=Q.S.r.length)showEnd();}}}
@@ -5325,8 +5346,10 @@ function drawHUD2(){
     const totKm=(player?(player.km||0)+Math.floor(player.x/80):0);
     const lapTxt=(player&&player.lap?' · VUELTA '+(player.lap+1):'');
     txt('🛣 BONAERENSE RUTA 76 · KM '+totKm+lapTxt,W/2,6,'#f2b632',5,'center');
-    if(player&&player.x>5000&&player.x<6480&&tick%50<34){
-      txt(coarse?'⛽ PARADOR EL OMBÚ / DESTINO · TOCÁ ACCIÓN PARA FINALIZAR':'⛽ PARADOR EL OMBÚ · Z / ESPACIO / ENTER: LLEGAR A DESTINO · O SEGUÍ',W/2,H-22,'#ffe08a',5,'center');
+    if(player&&player.x>=5600&&player.x<=6200&&tick%50<34){
+      txt(coarse?'⛽ PARADOR EL OMBÚ (YPF) · PAUSA O F PARA PARAR · O SEGUÍ':'⛽ PARADOR EL OMBÚ · ENTER / F: PARAR A COMER ASADO · O SEGUÍ',W/2,H-22,'#ffe08a',5,'center');
+    } else if(player&&player.x>6200&&player.x<6540&&tick%50<34){
+      txt('🏁 ARCO DE LÓPEZ LECUBE ADELANTE · DESTINO FINAL',W/2,H-22,'#8cc4ff',5,'center');
     }
   }
   if(rutaRadioBanner&&rutaRadioBanner.t>0){
@@ -5413,6 +5436,10 @@ function lombrizPick(it,f){if(it.kind!=='lombriz')return false;it.gone=true;scor
 // v23: Bandas sonoras de Ricardo Iorio en 16-bits (V8, Hermética, Almafuerte)
 function musicByEra(){
   LEVELS.forEach((L,i)=>{
+    if(L.song && SONGS[L.song]){
+      if(!L.bossSong) L.bossSong = i<=2 ? 'b0' : i<=5 ? 'b1' : 'b2';
+      return;
+    }
     if(LEVEL_TRACK_MAP[i]){
       L.song = LEVEL_TRACK_MAP[i].song;
       L.bossSong = LEVEL_TRACK_MAP[i].boss;
