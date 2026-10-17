@@ -260,7 +260,7 @@ function HELD(weapon,hx,hy,a2,f,st){
     if(weapon==='tomate'){for(const p of [0,1])Cc(hx,hy-3,3.2,'#d8322a',p);ctx.fillStyle='#4f8a3a';ctx.fillRect(hx-1,hy-7,2,2);}
     if(weapon==='papel'||weapon==='contrato'){ctx.fillStyle=OUT;ctx.fillRect(hx-5,hy-8,10,9);ctx.fillStyle='#ece8e0';ctx.fillRect(hx-4,hy-7,8,7);ctx.fillStyle='#8a8a92';ctx.fillRect(hx-3,hy-5,6,1);ctx.fillRect(hx-3,hy-3,5,1);}
     if(weapon==='patacon'){ctx.fillStyle=OUT;ctx.fillRect(hx-6,hy-6,12,7);ctx.fillStyle='#a8c08a';ctx.fillRect(hx-5,hy-5,10,5);ctx.fillStyle='#5a7a4a';ctx.fillRect(hx-1,hy-4,3,3);}
-    if(weapon==='bersa'||weapon==='escopeta'||weapon==='cajon'||weapon==='boleadora'||weapon==='damajuana')drawGunHeld(weapon,hx,hy,a2,f);
+    if(GUNS&&GUNS[weapon])drawGunHeld(weapon,hx,hy,a2,f);
     if(weapon==='mate'){for(const p of [0,1])Cc(hx+1,hy-3,3.4,'#5c3a1e',p);ctx.strokeStyle='#c9c9cf';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(hx+1,hy-5);ctx.lineTo(hx+3,hy-10);ctx.stroke();}}
 function drawTruck(x,y,riding){
   ctx.save();ctx.translate(Math.round(x),Math.round(y));
@@ -1383,10 +1383,12 @@ function v14Levels(){v15Villains();if(v14Levels.done)return;v14Levels.done=1;LEV
 LEVELS[0].locks.forEach((l,i)=>{if(l.groups&&l.groups.length)l.groups.push(i%2?[['patotero','R'],['chorro','L'],['patotero2','R'],['estibador','L']]:[['chorro','R'],['patotero2','L'],['patotero','R']]);});}
 function resetWorld(i,keep){v14Levels();lvl=i;truckDone=false;truck=null;modReset();datoT=0;dato=null;papas=diff===0?10:diff===2?5:8;papaT=0;LV=LEVELS[i];skin=LV.skin;buildLevel(i);
   ents=[];items=[];props=[];parts=[];bubbles=[];shots=[];hazard=null;quipDeck=[];cam.x=0;lockIdx=0;lock=null;stopT=0;shake=0;flashT=0;slowT=0;banner=null;goT=0;cut=null;train=null;
+  malvFlagT=0;malvSoldierT=90;
   if(!keep){score=0;lives=3;total={t:0,combo:0,hits:0};}meter=100;combo=0;comboT=0;maxCombo=0;hitsTaken=0;timeF=0;lastHit=null;results=null;song=LV.song;step=0;
   if(typeof LM!=='undefined'&&LM.el){LM.songEnded=false;if(state!=='title')LM.el.currentTime=0;}
   for(const l of LV.locks){l.g=0;l.mt=0;l.extra=0;}
   player=mk('ricardio',-40,226);player.st=STY[skin];player.face=1;player.herido=!!(LV&&LV.pelusa);player.operated=false;
+  if(LV&&LV.fixedGun){player.hold=LV.fixedGun;player.ammo=999;}
   if(diff===0){player.hp=player.max=140;}else if(diff===2){player.hp=player.max=100;}
   hpTrail=player.hp;ents.push(player);boss=null;npcs={};
   for(const n of LV.npcs){const e=mk(n.kind,n.x,n.y);e.face=n.face;e.hold=n.hold||null;if(n.hidden)e.state='hidden';npcs[n.kind]=e;ents.push(e);}
@@ -1508,13 +1510,14 @@ const NEWLEVELS={
 
 
 /* ================= fighters logic ================= */
+let malvFlagT=0,malvSoldierT=0;
 const alive=()=>ents.filter(e=>e.team===1&&e.state!=='dead'&&!e.gone);
 function hittable(t){return !t.gone&&t.inv<=0&&!['fall','down','getup','dead','thrown'].includes(t.state)&&t.team!==2;}
 function startMove(f,name){f.move=MOVES[name];f.mname=name;f.state='atk';f.t=0;f.hitList=new Set();f.connected=false;}
 function knockdown(t,dir,pow){bardo(t);if(t.state==='grabbed'||t.grabbedBy)releaseGrab(t);if(t.state==='grab'&&t.grab)releaseGrab(t.grab);
   t.state='fall';t.t=0;t.vz=3.1*pow;t.vx=dir*2.2*pow;t.z=Math.max(t.z,1);t.bounce=true;t.move=null;t.hold&&t===player&&dropWeapon(t);}
 function releaseGrab(e){const g=e.grabbedBy;if(g){g.grab=null;if(['grab','knee','hbutt','throw'].includes(g.state)){g.state='idle';}}e.grabbedBy=null;if(e.state==='grabbed'){e.state='idle';e.cd=40;}}
-function dropWeapon(f){if(!f.hold||(f.hold!=='pipe'&&!GUNS[f.hold]))return;items.push({kind:f.hold,x:f.x,y:f.y,z:20,vz:2,t:0,ammo:f.ammo});f.hold=null;}
+function dropWeapon(f){if(f===player&&LV&&LV.fixedGun)return;if(!f.hold||(f.hold!=='pipe'&&!GUNS[f.hold]))return;items.push({kind:f.hold,x:f.x,y:f.y,z:20,vz:2,t:0,ammo:f.ammo});f.hold=null;}
 function spark(x,y,big){parts.push({k:'spark',x,y,t:0,max:big?14:10,big});parts.push({k:'ring',x,y,t:0,max:big?14:9,r:big?22:12});}
 function dust(x,y,n){for(let i=0;i<(n||5);i++)parts.push({k:'dust',x:x+rnd(-8,8),y:y-rnd(0,4),vx:rnd(-.8,.8),vy:rnd(-.6,-.1),t:0,max:rnd(18,30)|0,r:rnd(2,4)});}
 function floatTxt(x,y,s,c){parts=parts.filter(p=>p.k!=='txt');parts.push({k:'txt',x,y,s:String(s).slice(0,26),c:c||'#fff',t:0,max:30});}
@@ -1579,6 +1582,7 @@ function bounds(f){f.y=clamp(f.y,GT,GB);if(f===player)f.x=clamp(f.x,cam.x+10,Mat
 
 /* ----- player ----- */
 function updPlayer(f){if(rideTick(f))return;
+  if(LV&&LV.fixedGun&&(!f.hold||f.hold!==LV.fixedGun)){f.hold=LV.fixedGun;f.ammo=999;}
   if(commonUpdate(f)){bounds(f);return;}
   const ix=(inp.right?1:0)-(inp.left?1:0),iy=(inp.down?1:0)-(inp.up?1:0);
   if(press.atk)f.buf=9;else if(f.buf>0)f.buf--;
@@ -1596,7 +1600,7 @@ function updPlayer(f){if(rideTick(f))return;
       if(ix)f.face=ix;
       const rk=runChk(f,ix),camSpd=(LV&&LV.camioneta)?1.28:1;f.x+=ix*f.D.spd*rk*camSpd;f.y+=iy*f.D.spd*.68*camSpd;if(rk>1)f.walkPh+=.12;
       f.state=(ix||iy)?'walk':'idle';if(ix||iy){f.walkPh+=.24;if(LV&&LV.camioneta&&tick%6===0)dust(f.x-f.face*34,f.y+2,1);}
-      if(ix&&!(LV&&LV.camioneta)){const e=ents.find(e=>e.team===1&&!e.D.boss&&['idle','walk','hurt','windup'].includes(e.state)&&Math.sign(e.x-f.x)===f.face&&Math.abs(e.x-f.x)<20*f.st.scale&&Math.abs(e.y-f.y)<5&&e.z<=0);
+      if(ix&&!(LV&&(LV.camioneta||LV.fixedGun))){const e=ents.find(e=>e.team===1&&!e.D.boss&&['idle','walk','hurt','windup'].includes(e.state)&&Math.sign(e.x-f.x)===f.face&&Math.abs(e.x-f.x)<20*f.st.scale&&Math.abs(e.y-f.y)<5&&e.z<=0);
         if(e){f.state='grab';f.t=0;f.grab=e;f.knees=0;e.state='grabbed';e.grabbedBy=f;e.move=null;sfx('punch');}}
       for(const it of items){if(!f.hold&&GUNS[it.kind]&&!it.gone&&it.z<=0&&Math.abs(it.x-f.x)<24&&Math.abs(it.y-f.y)<16){pickGun(f,it);break;}}
       for(const it of items){if(it.kind!=='pipe'&&!it.gone&&it.z<=0&&Math.abs(it.x-f.x)<18&&Math.abs(it.y-f.y)<11){if(guiPick(it,f)||lombrizPick(it,f))continue;it.gone=true;const Fd=FOOD[it.kind]||FOOD.mate;f.hp=Math.min(f.max,f.hp+Fd[2]);if(it.kind==='mate'){meter=Math.min(300,meter+80);say(f,'Un whisky y seguimos.',55);}if(it.kind==='fruta'&&Math.random()<.5)say(f,'Como la de mi viejo.',55);sfx('heal');floatTxt(f.x,f.y-80,Fd[0],Fd[1]);}}
@@ -1753,8 +1757,9 @@ function updLocks(){
 function startCut(lines,onEnd){bubbles=[];cut={lines,i:0,ch:0,onEnd};state='cut';}
 function startChapter(i,keep){resetWorld(i,keep);if(cineStart())return;state='card';cardT=0;}
 function startIntro(){state='intro';introT=0;if(LV.ride||LV.camioneta)sfx('truck');}
-function afterIntro(){state='play';for(const k in npcs){const n=npcs[k];if(n===npcs.rescue)continue;if(n.kind==='pelusa_friend'){n.ally=true;n.state='idle';n.face=1;n.cd=25;n.hold='pala_pizzera';continue;}if(n.kind==='reporter'){if(n.state!=='hidden')n.state='runoff';}else n.state='walkoff';}
+function afterIntro(){state='play';for(const k in npcs){const n=npcs[k];if(n===npcs.rescue)continue;if(n.kind==='pelusa_friend'){n.ally=true;n.state='idle';n.face=1;n.cd=25;n.hold='pala_pizzera';continue;}if(LV&&LV.malvinas&&n.kind==='combatiente'){n.ally=true;n.state='idle';n.face=1;n.cd=25;n.hold='fal';continue;}if(n.kind==='reporter'){if(n.state!=='hidden')n.state='runoff';}else n.state='walkoff';}
   if(LV.pelusa&&!ents.some(e=>e.ally)){const p=mk('pelusa_friend',player.x-36,player.y+6);p.ally=true;p.face=1;p.cd=30;p.hold='pala_pizzera';ents.push(p);}
+  if(LV.malvinas&&!ents.some(e=>e.ally&&e.kind==='combatiente')){const s=mk('combatiente',player.x-34,player.y+6);s.ally=true;s.face=1;s.cd=25;s.hold='fal';s.allyTimer=520;ents.push(s);}
   banner={a:LV.chap,b:LV.title,t:80};}
 function updIntro(){introT++;const p=player;
   if(LV.camioneta){const k=Math.min(1,introT/90),e=1-Math.pow(1-k,3);p.x=-110+e*220;p.y=228;p.z=0;p.face=1;
@@ -1768,7 +1773,7 @@ function updIntro(){introT++;const p=player;
   else{if(introT<=90){p.x=-30+introT*1.55;p.y=226;p.state='walk';p.walkPh+=p.herido?.14:.21;p.face=1;}
     if(introT===91)p.state='idle';
     if(introT===110)startCut(LV.intro,afterIntro);}}
-function startRescueCut(){const f=npcs.rescue;startCut(LV.rescueLines,()=>{state='play';if(LV&&LV.pelusa&&player){player.operated=true;player.hp=player.max;hpTrail=player.max;sfx('heal');floatTxt(player.x,player.y-82,'¡OPERADO!','#8fe0ff');}f.state='runoff';f.face=-1;say(player,quip(),60);});}
+function startRescueCut(){const f=npcs.rescue;startCut(LV.rescueLines,()=>{state='play';if(LV&&LV.pelusa&&player){player.operated=true;player.hp=player.max;hpTrail=player.max;sfx('heal');floatTxt(player.x,player.y-82,'¡OPERADO!','#8fe0ff');}if(LV&&LV.malvinas&&f){f.ally=true;f.state='idle';f.face=1;f.cd=22;f.hold='fal';f.allyTimer=620;floatTxt(f.x,f.y-78,'¡SOLDADO ALIADO!','#75aadb');}else{f.state='runoff';f.face=-1;}say(player,quip(),60);});}
 function startBossCut(){boss=mk(LV.boss,LW-80,224);boss.face=-1;ents.push(boss);
   startCut(LV.bossLines,()=>{state='play';banner={a:boss.D.name,b:LV.place,t:80,boss:true};boss.cd=90;});}
 function startMonsterCut(){const old=boss;old.gone=true;ents=ents.filter(e=>e!==old);
@@ -1779,7 +1784,7 @@ function monsterDeath(){const b=boss,k=110-slowT;b.flash=k%4<2?2:0;
   if(k%5===0){spark(b.x+rnd(-30,30),b.y-rnd(20,90),true);sfx('heavy');shake=Math.max(shake,5);}
   if(slowT===25){flashT=14;shake=12;sfx('scream');for(let i=0;i<46;i++)parts.push({k:'deb',x:b.x+rnd(-24,24),y:b.y-rnd(10,110),vx:rnd(-4.5,4.5),vy:rnd(-6,-1),t:0,max:80,c:i%3?'#4e7e2e':'#f2d22a',w:rnd(2,7)|0,h:rnd(2,5)|0});
     parts.push({k:'wave',x:b.x,y:b.y,t:0,max:30,col:'160,255,120'});floatTxt(b.x,b.y-120,'¡EL MONSTRUO CAYÓ!','#f2b632');b.gone=true;}}
-function startWinCut(){startCut(LV.winLines,()=>{state='victory';introT=0;player.state='victory';player.holdBack='bass';player.hold=null;player.face=-1;sfx('win');});}
+function startWinCut(){startCut(LV.winLines,()=>{state='victory';introT=0;player.state='victory';player.holdBack='bass';player.hold=LV&&LV.fixedGun?LV.fixedGun:null;player.face=LV&&LV.malvinas?1:-1;if(LV&&LV.malvinas){malvFlagT=1;player.x=clamp(2515,cam.x+40,cam.x+W-120);player.y=224;if(!ents.some(e=>e.kind==='combatiente'&&!e.gone)){const s=mk('combatiente',2475,232);s.ally=true;s.hold='fal';s.face=1;ents.push(s);}for(const e of ents){if(e.kind==='combatiente'&&!e.gone){e.state='victory';e.face=1;e.x=2475;e.y=232;}}banner={a:'¡BANDERA ARGENTINA EN ALTO!',b:'SE ARRIÓ LA BANDERA INGLESA · HONOR Y GLORIA',t:190};}sfx('win');});}
 function updCut(){const c=cut,l=c.lines[c.i];if(l.fx==='reporter'&&npcs.reporter&&npcs.reporter.state==='hidden'){const r=npcs.reporter;r.x=cam.x+W-30;r.tx=player.x+46;r.y=player.y-4;r.state='runin';}if(c.ch<l.s.length){c.ch+=1.4;if(tick%3===0)sfx('blip');}
   if(press.atk||press.jump||press.start){if(c.ch<l.s.length)c.ch=l.s.length;else{c.i++;c.ch=0;if(c.i>=c.lines.length){cut=null;c.onEnd&&c.onEnd();}}}}
 function drawHeart(x,y,full,sz){sz=sz||1;ctx.save();ctx.translate(x,y);ctx.scale(sz,sz);
@@ -1848,6 +1853,8 @@ function gunTick(f){const G=GUNS[f.hold];f.t++;if(!G){f.state='idle';return;}
     }
     else if(f.hold==='fal'){
       for(let b=0;b<2;b++)shots.push({x:x+b*8*f.face,y:f.y+rnd(-2,2),z:z+rnd(-1,1),vx:f.face*12,owner:f,t:0,k:'bala',back:true,mv:MOVES.gun,life:45});
+      for(const e of ents){if(e.team===1&&hittable(e)&&Math.sign(e.x-f.x)===f.face&&Math.abs(e.x-f.x)<28&&Math.abs(e.y-f.y)<12){applyHit(f,e,MOVES.gun,f.face);break;}}
+      for(const p of props){if(p.hp>0&&Math.sign(p.x-f.x)===f.face&&Math.abs(p.x-f.x)<32&&Math.abs(p.y-f.y)<16)breakProp(p);}
       sfx('gun');shake=Math.max(shake,3);parts.push({k:'wave',x,y:f.y,t:0,max:8,col:'140,210,255'});floatTxt(x,f.y-z-16,pick(['¡7.62!','¡RÁFAGA!','¡FAL!']),'#8fd2ff');
     }
     else if(f.hold==='llave_taller'){
@@ -1880,7 +1887,8 @@ function gunTick(f){const G=GUNS[f.hold];f.t++;if(!G){f.state='idle';return;}
       shots.push({x,y:f.y,z:z+4,vx:f.face*6,vz:1.2,owner:f,t:0,k:'damajuana',back:true,mv:MOVES.buck,life:48});
       sfx('whoosh');floatTxt(x,f.y-z-16,'¡DESCORCHE!','#d880d8');
     }
-    f.ammo--;if(f.ammo<=0){floatTxt(f.x,f.y-80,'SIN BALAS','#ff5a3a');f.hold=null;}}
+    if(f===player&&LV&&LV.fixedGun)f.ammo=999;
+    else{f.ammo--;if(f.ammo<=0){floatTxt(f.x,f.y-80,'SIN BALAS','#ff5a3a');f.hold=null;}}}
   if(f.t>=G.dur)f.state='idle';}
 function pickGun(f,it){f.hold=it.kind;f.ammo=it.ammo||GUNS[it.kind].ammo;it.gone=true;sfx('pickup');floatTxt(f.x,f.y-80,GUNS[it.kind].name+'!',GUNS[it.kind].col);}
 function drawGunItem(k,X,y){const R=(a,b,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(a,b,w,h);};
@@ -1889,20 +1897,12 @@ function drawGunItem(k,X,y){const R=(a,b,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(a
     R(X+6,y-16,6,9,OUT);R(X+7,y-15,4,7,'#a4b0c0');R(X+8,y-14,2,3,'#1a1c22');
     R(X-12,y-13,4,3,OUT);R(X-11,y-12,2,1,'#a4b0c0');
   }
-  else   if(k==='llave_taller'){
-    for(const p of [0,1])L(hx-dx*4,hy-dy*4,hx+dx*14,hy+dy*14,3.2,'#7c8898',p);
-    L(hx+dx*14,hy+dy*14,hx+dx*18,hy+dy*18,5,'#a4b0c0',1);
-  }
-  else   if(k==='pala_pizzera'){
+  else if(k==='pala_pizzera'){
     R(X-16,y-13,24,3,OUT);R(X-15,y-12,22,2,'#a8844a');
     ctx.fillStyle=OUT;ctx.beginPath();ctx.ellipse(X+10,y-12,6,6,0,0,7);ctx.fill();
     ctx.fillStyle='#9ea4ae';ctx.beginPath();ctx.ellipse(X+10,y-12,5,5,0,0,7);ctx.fill();
   }
-  else   if(k==='pala_pizzera'){
-    for(const p of [0,1])L(hx-dx*10,hy-dy*10,hx+dx*14,hy+dy*14,3,'#a8844a',p);
-    ctx.fillStyle='#9ea4ae';ctx.beginPath();ctx.arc(hx+dx*18,hy+dy*18,6,0,7);ctx.fill();
-  }
-  else   if(k==='fal'){
+  else if(k==='fal'){
     R(X-14,y-14,28,4,OUT);R(X-13,y-13,26,2,'#363c32');
     R(X-6,y-11,5,7,OUT);R(X-5,y-10,4,6,'#222620');
     R(X-12,y-12,6,5,'#4a5244');R(X+11,y-14,3,1,'#7a8274');
@@ -1912,25 +1912,7 @@ function drawGunItem(k,X,y){const R=(a,b,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(a
     R(X+5,y-12,3,6,OUT);R(X+5,y-11,2,4,'#5a7088');
     ctx.fillStyle='rgba(255,255,255,.4)';ctx.fillRect(X-3,y-17,2,2);ctx.fillRect(X+1,y-19,2,2);
   }
-  else   if(k==='pala_pizzera'){
-    R(X-16,y-13,24,3,OUT);R(X-15,y-12,22,2,'#a8844a');
-    ctx.fillStyle=OUT;ctx.beginPath();ctx.ellipse(X+10,y-12,6,6,0,0,7);ctx.fill();
-    ctx.fillStyle='#9ea4ae';ctx.beginPath();ctx.ellipse(X+10,y-12,5,5,0,0,7);ctx.fill();
-  }
-  else   if(k==='pala_pizzera'){
-    for(const p of [0,1])L(hx-dx*10,hy-dy*10,hx+dx*14,hy+dy*14,3,'#a8844a',p);
-    ctx.fillStyle='#9ea4ae';ctx.beginPath();ctx.arc(hx+dx*18,hy+dy*18,6,0,7);ctx.fill();
-  }
-  else   if(k==='fal'){
-    for(const p of [0,1])L(hx-dx*10,hy-dy*10,hx+dx*16,hy+dy*16,3.8,'#363c32',p);
-    L(hx+dx*16,hy+dy*16,hx+dx*22,hy+dy*22,2.2,'#7a8274',1);
-    L(hx-dx*2-nx*3,hy-dy*2-ny*3,hx+dx*2,hy+dy*2,3.5,'#222620',1);
-    L(hx-dx*8,hy-dy*8,hx-dx*2,hy-dy*2,4.2,'#4a5244',1);
-  }
-  else if(k==='mate_cocido'){
-    ctx.fillStyle=OUT;ctx.fillRect(hx-5,hy-9,10,12);ctx.fillStyle='#5a7088';ctx.fillRect(hx-4,hy-8,8,10);ctx.fillStyle='#c8d6e4';ctx.fillRect(hx-4,hy-8,8,2);
-  }
-  else   if(k==='escopeta'){
+  else if(k==='escopeta'){
     R(X-13,y-13,6,6,OUT);R(X-12,y-12,5,4,'#6a3a1e');
     R(X-7,y-14,6,6,OUT);R(X-6,y-13,5,4,'#3e424c');
     R(X-1,y-14,14,3,OUT);R(X-1,y-13,13,2,'#7c8494');
@@ -1959,6 +1941,24 @@ function drawGunHeld(k,hx,hy,a2,f){const dx=Math.sin(a2),dy=Math.cos(a2),nx=-dy,
     L(hx+dx*6-nx*1.2,hy+dy*6-ny*1.2,hx+dx*20-nx*1.2,hy+dy*20-ny*1.2,2.2,'#525866',1);
     L(hx+dx*5,hy+dy*5,hx+dx*11,hy+dy*11,3.2,'#7a4a28',1);
   }
+  else if(k==='fal'){
+    for(const p of [0,1])L(hx-dx*9,hy-dy*9,hx+dx*14,hy+dy*14,3.8,'#363c32',p);
+    L(hx+dx*14,hy+dy*14,hx+dx*22,hy+dy*22,2.2,'#7a8274',1);
+    L(hx-dx*2-nx*3,hy-dy*2-ny*3,hx+dx*2,hy+dy*2,3.5,'#222620',1);
+    L(hx-dx*8,hy-dy*8,hx-dx*2,hy-dy*2,4.2,'#4a5244',1);
+  }
+  else if(k==='pala_pizzera'){
+    for(const p of [0,1])L(hx-dx*10,hy-dy*10,hx+dx*14,hy+dy*14,3,'#a8844a',p);
+    ctx.fillStyle=OUT;ctx.beginPath();ctx.arc(hx+dx*18,hy+dy*18,6.5,0,7);ctx.fill();
+    ctx.fillStyle='#9ea4ae';ctx.beginPath();ctx.arc(hx+dx*18,hy+dy*18,5.5,0,7);ctx.fill();
+  }
+  else if(k==='llave_taller'){
+    for(const p of [0,1])L(hx-dx*4,hy-dy*4,hx+dx*14,hy+dy*14,3.2,'#7c8898',p);
+    L(hx+dx*14,hy+dy*14,hx+dx*18,hy+dy*18,5,'#a4b0c0',1);
+  }
+  else if(k==='mate_cocido'){
+    ctx.fillStyle=OUT;ctx.fillRect(hx-5,hy-9,10,12);ctx.fillStyle='#5a7088';ctx.fillRect(hx-4,hy-8,8,10);ctx.fillStyle='#c8d6e4';ctx.fillRect(hx-4,hy-8,8,2);
+  }
   else if(k==='bersa'){
     for(const p of [0,1])L(hx,hy,hx+dx*10,hy+dy*10,3.6,'#2e323c',p);
     L(hx-dx*2-nx*2,hy-dy*2-ny*2,hx+dx*2,hy+dy*2,3.5,'#181a20',1);
@@ -1968,9 +1968,9 @@ function drawGunHeld(k,hx,hy,a2,f){const dx=Math.sin(a2),dy=Math.cos(a2),nx=-dy,
   else if(k==='boleadora'){ctx.strokeStyle=OUT;ctx.lineWidth=2;ctx.beginPath();ctx.arc(hx+dx*12,hy+dy*12,4,0,7);ctx.arc(hx-dy*8,hy+dx*8,3.5,0,7);ctx.stroke();ctx.fillStyle='#5a3a1e';ctx.fill();ctx.strokeStyle='#b88a4a';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(hx,hy);ctx.lineTo(hx+dx*12,hy+dy*12);ctx.moveTo(hx,hy);ctx.lineTo(hx-dy*8,hy+dx*8);ctx.stroke();}
   else if(k==='damajuana'){ctx.fillStyle=OUT;ctx.fillRect(hx-5,hy-12,10,14);ctx.fillStyle='#7a5a3a';ctx.fillRect(hx-4,hy-11,8,12);ctx.fillStyle='#4a245a';ctx.fillRect(hx-2,hy-16,4,5);}
   if(f&&f.state==='shoot'&&f.t>=2&&f.t<=6){
-    const dist=k==='escopeta'?22:k==='bersa'?11:0;
+    const dist=k==='escopeta'||k==='fal'?22:k==='bersa'?11:0;
     if(dist>0){
-      const mx=hx+dx*dist,my=hy+dy*dist,sz=k==='escopeta'?8:4;
+      const mx=hx+dx*dist,my=hy+dy*dist,sz=k==='escopeta'?8:k==='fal'?6:4;
       ctx.fillStyle='#fffce0';ctx.beginPath();ctx.arc(mx,my,sz*.5,0,Math.PI*2);ctx.fill();
       ctx.fillStyle='#f2a032';ctx.beginPath();ctx.arc(mx+dx*3,my+dy*3,sz*.8,0,Math.PI*2);ctx.fill();
       ctx.fillStyle='#d83218';ctx.beginPath();ctx.arc(mx+dx*6,my+dy*6,sz*.4,0,Math.PI*2);ctx.fill();
@@ -2021,11 +2021,63 @@ function convertToMetal(e){
   say(e,pick(['¡AGUANTE RICARDO!','¡V8 NO MURIÓ!','¡A ESTOS CARETA LOS LIMPIO YO!','¡BRIGADAS METÁLICAS!']),100);
   if(comebackOK())say(player,pick(['¡Bienvenido a las brigadas!','¡Sentí el poder del metal!','¡Así me gusta, carajo!']),90);
 }
-// Pelusa y aliados metaleros convertidos
-function updAlly(n){if(state!=='play'){n.state='idle';return;}
-  if(n.allyTimer){n.allyTimer--;if(n.allyTimer<=0){n.ally=false;n.state='runoff';floatTxt(n.x,n.y-80,'¡AGUANTE EL METAL! 🤘','#f2b632');say(n,pick(['¡Nos vemos en Cemento, Ricardo!','¡Aguante Almafuerte!','¡Hasta la próxima, Ricardo!']),90);return;}}
+// Pelusa, Soldados Argentinos (Patria al Hombro) y aliados metaleros convertidos
+function updAlly(n){if(state!=='play'){if(state!=='victory')n.state='idle';return;}
+  if(n.allyTimer){n.allyTimer--;if(n.allyTimer<=0){n.ally=false;n.state='runoff';floatTxt(n.x,n.y-80,n.kind==='combatiente'?'¡VIVA LA PATRIA! 🇦🇷':'¡AGUANTE EL METAL! 🤘',n.kind==='combatiente'?'#75aadb':'#f2b632');say(n,n.kind==='combatiente'?pick(['¡Patria al hombro, Ricardo!','¡Sigan avanzando, muchachos!','¡Por nuestros hermanos!']):pick(['¡Nos vemos en Cemento, Ricardo!','¡Aguante Almafuerte!','¡Hasta la próxima, Ricardo!']),60);return;}}
   const p=player;
   let tgt=null,d=1e9;for(const e of ents){if(e.team!==1||!hittable(e))continue;const dd=Math.abs(e.x-n.x)+Math.abs(e.y-n.y)*2;if(dd<d){d=dd;tgt=e;}}
+  if(n.kind==='combatiente'){
+    n.hold='fal';
+    if(n.state==='shoot'){
+      n.t++;
+      if(n.t===3){
+        const z=34*n.st.scale,sx=n.x+n.face*20;
+        for(let b=0;b<2;b++)shots.push({x:sx+b*7*n.face,y:n.y+rnd(-2,2),z:z+rnd(-1,1),vx:n.face*11.5,owner:n,t:0,k:'bala',back:true,mv:MOVES.gun,life:42});
+        sfx('gun');floatTxt(sx,n.y-z-14,'¡7.62!','#75aadb');
+      }
+      if(n.t>=14)n.state='idle';
+      return;
+    }
+    if(n.state==='atk'){
+      n.t++;
+      if(n.t===6&&tgt&&Math.abs(tgt.x-n.x)<38&&Math.abs(tgt.y-n.y)<15){
+        applyHit(n,tgt,MOVES.buck,Math.sign(tgt.x-n.x)||n.face);
+        sfx('punch');spark(tgt.x,tgt.y-30,false);shake=Math.max(shake,2);
+        floatTxt(tgt.x,tgt.y-70,'¡CULATAZO!','#75aadb');
+      }
+      if(n.t>=15)n.state='idle';
+      return;
+    }
+    n.mateT=(n.mateT||0)+1;
+    if(n.mateT>440&&p.hp<p.max*.8){
+      n.mateT=0;
+      items.push({kind:'asado',x:p.x+p.face*18,y:p.y,z:16,vz:2,t:0});
+      floatTxt(n.x,n.y-76,'¡MATE COCIDO!','#75aadb');
+      say(n,pick(['¡Tomá caliente, hermano!','¡Fuerza, conscripto!','¡Patria al hombro!']),60);
+    }
+    if(tgt){
+      n.face=tgt.x>n.x?1:-1;
+      const dx=tgt.x-n.x,dy=tgt.y-n.y;
+      if(Math.abs(dx)>52&&Math.abs(dx)<235&&Math.abs(dy)<16&&--n.cd<=0){
+        n.state='shoot';n.t=0;n.cd=34+rnd(0,18);
+        if(Math.random()<.28)say(n,pick(['¡Fuego de cobertura!','¡Por la Celeste y Blanca!','¡Con lo puesto pero al frente!']),55);
+        return;
+      }
+      if(Math.abs(dx)>32||Math.abs(dy)>9){
+        n.x+=clamp(dx,-2.4,2.4);n.y+=clamp(dy,-1.3,1.3);n.walkPh+=.33;n.state='walk';
+      } else {
+        n.state='idle';
+        if(--n.cd<=0){n.cd=28+rnd(0,16);n.state='atk';n.t=0;}
+      }
+    } else {
+      const slotOff=(n===npcs.rescue)?-56:-34;
+      const tx=p.x+p.face*slotOff,ty=clamp(p.y+(n===npcs.rescue?-7:7),GT+6,GB-4),dx=tx-n.x,dy=ty-n.y;
+      if(Math.abs(dx)>8||Math.abs(dy)>4){n.x+=clamp(dx,-2.3,2.3);n.y+=clamp(dy,-1.2,1.2);n.walkPh+=.3;n.state='walk';}
+      else n.state='idle';
+      n.face=p.face;
+    }
+    return;
+  }
   if(n.kind==='heavy'){
     if(n.state==='atk'){n.t++;if(n.t===6&&tgt&&Math.abs(tgt.x-n.x)<36&&Math.abs(tgt.y-n.y)<14){applyHit(n,tgt,MOVES.buck,Math.sign(tgt.x-n.x)||n.face);sfx('punch');spark(tgt.x,tgt.y-30,false);shake=Math.max(shake,2);floatTxt(tgt.x,tgt.y-70,pick(['¡GOLPE METALERO!','¡CABEZAZO!','¡POR RICARDO!']),'#f2b632');}if(n.t>=16)n.state='idle';return;}
     if(tgt){n.face=tgt.x>n.x?1:-1;const dx=tgt.x-n.x,dy=tgt.y-n.y;
@@ -3100,48 +3152,48 @@ function malvinasLevel(){
     [[['comando','L'],['ingles','R'],['comando','R']],[['ingles','R'],['comando','L'],['ingles','L'],['comando','R']]]
   );
   return {
-    LW:2800,skin:'ric5',song:'patria_al_hombro',bossSong:'sentir_indiano',food:'asado',lmKey:'malvinas',
+    LW:2800,skin:'ric5',song:'patria_al_hombro',bossSong:'sentir_indiano',food:'asado',lmKey:'malvinas',malvinas:true,fixedGun:'fal',
     villains:'Soldados coloniales británicos, comandos de la Corona y el Lord Colonialista Pirata',
     title:'PATRIA AL HOMBRO',place:'PUERTO ARGENTINO · ISLAS MALVINAS',hazard:'patrullero',
     card:[
       'Homenaje a los 649 héroes caídos en 1982 y a los veteranos de la Gesta de Malvinas.',
-      'Ricardo Iorio siempre llevó la causa patriótica y el honor de los combatientes como estandarte sagrado en canciones como "Patria al hombro".',
-      'Entre turba helada, viento austral y trincheras, Ricardo defiende el suelo irrenunciable contra la soberbia pirata del imperio británico.'
+      'Ricardo Iorio avanza con su FAL criollo fijo al hombro y el apoyo de soldados argentinos en combate.',
+      'Al derrotar al invasor al final del nivel, se arria la bandera inglesa y flamea en lo alto la Bandera Argentina.'
     ],
-    npcs:[{kind:'combatiente',x:250,y:198,face:1,hold:'mate'}],
-    guns:[[650,'fal'],[1350,'mate_cocido'],[1850,'fal'],[2200,'escopeta']],
+    npcs:[{kind:'combatiente',x:250,y:198,face:1,hold:'fal'}],
+    guns:[],
     locks:L,
-    rescue:{kind:'combatiente',x:1420,y:192},
+    rescue:{kind:'combatiente',x:1420,y:192,hold:'fal'},
     props:[[380,'tacho','asado'],[840,'fardo','asado'],[1480,'tacho','mate'],[1960,'fardo','asado'],[2320,'tacho','asado']],
     pipe:[1460,240],
     intro:[
       {w:'combatiente',s:'¡Ricardo! El viento austral sopla fuerte y los piratas ingleses avanzan desde el estrecho.'},
-      {w:'ric5',s:'Firme en la trinchera, muchacho. 649 centinelas eternos nos cuidan desde este suelo.'},
-      {w:'combatiente',s:'Un Lord colonialista mandó a sus tropas a confiscar hasta los recuerdos de nuestros pibes.'},
-      {w:'ric5',s:'A la Patria se la lleva en el alma y se la defiende de pie. ¡Viva la Patria, carajo!'}
+      {w:'ric5',s:'Firme en la trinchera, hermano: llevo el FAL al hombro y 649 centinelas eternos en el alma.'},
+      {w:'combatiente',s:'Nuestros soldados argentinos van a ir sumándose al combate para cubrirte con fuego de 7.62.'},
+      {w:'ric5',s:'¡Vamos hasta el mástil del fuerte a bajar el trapo pirata e izar la Celeste y Blanca!'}
     ],
     rescueLines:[
-      {w:'combatiente',s:'¡Gracias por el aguante, Iorio! Nos tenían rodeados en el cerro, pero no entregamos la enseña patria.'},
-      {w:'ric5',s:'Jamás se rinde el gaucho ni el soldado argentino. Tomate un mate cocido caliente.'},
-      {w:'combatiente',s:'El Lord Pirata está en el búnker naval con sus comandos tomando té mientras saquean.'},
-      {w:'ric5',s:'Vamos a enseñarle que en esta tierra manda la dignidad criolla.'}
+      {w:'combatiente',s:'¡Gracias por el aguante, Iorio! Me sumo a tu escuadra con mi FAL.'},
+      {w:'ric5',s:'Jamás se rinde el soldado argentino. Avancemos juntos hacia Puerto Argentino.'},
+      {w:'combatiente',s:'El Lord Pirata está en la comandancia custodiando el mástil con bandera inglesa.'},
+      {w:'ric5',s:'Hoy arriamos esa bandera usurpadora y sube la Argentina a lo más alto.'}
     ],
     boss:'lord_pirata',
     summons:[['comando','ingles'],['comando','comando']],
     bossLines:[
-      {w:'lord_pirata',s:'¡Surrender, gaucho! This archipelago belongs to the British Crown forever!'},
-      {w:'ric5',s:'Ustedes son piratas del mundo: robaron tierras en todos los continentes, pero acá no pasarán.'},
-      {w:'lord_pirata',s:'¡Guards, open fire! Let us eliminate this rebel singer!'}
+      {w:'lord_pirata',s:'¡Surrender, gaucho! Our British flag flies over this post!'},
+      {w:'ric5',s:'Ustedes son piratas del mundo, pero hoy arriamos su bandera y vuelve a flamear la nuestra.'},
+      {w:'lord_pirata',s:'¡Guards, open fire! Defend the Union Jack!'}
     ],
     winLines:[
-      {w:'lord_pirata',s:'¡Disgrace! My troops are defeated by a handful of brave fighters...'},
-      {w:'ric5',s:'¡Las Malvinas son argentinas, ayer, hoy y para toda la eternidad! ¡Honor y gloria a los caídos!'}
+      {w:'lord_pirata',s:'¡Impossible! They are lowering the Union Jack...'},
+      {w:'ric5',s:'¡Abajo el trapo pirata y arriba la Celeste y Blanca! ¡Las Malvinas son argentinas para siempre!'}
     ],
     winSay:'¡LAS MALVINAS SON ARGENTINAS!',
     quips:[
       '¡649 héroes que viven por siempre en nuestra memoria!',
-      '¡La Patria no se negocia ni se vende a ningún imperio!',
-      '¡Viento austral y corazón de metal argento!',
+      '¡La Patria al hombro, con el FAL y nuestros soldados!',
+      '¡Abajo el trapo pirata, arriba la Celeste y Blanca!',
       '¡Honor y gloria a los veteranos de Malvinas!'
     ]
   };
@@ -3188,7 +3240,7 @@ const MALVINAS_SCENE={
       R(200+k*18,154,20,10,'#7a7458');R(202+k*18,155,16,8,'#9c9472');
       R(210+k*18,146,20,10,'#6a644c');R(212+k*18,147,16,8,'#888062');
     }
-    // Mástil con Bandera Argentina flameando en Malvinas
+    // Mástil con Bandera Argentina flameando en la primera trinchera
     R(360,60,4,114,'#b0b8c0');
     drawFlag(364,62,44,26,tick);
 
@@ -3213,13 +3265,19 @@ const MALVINAS_SCENE={
     T('BRITISH MILITARY POST',1670,114,'#c8322a',4,'center');
 
     // Cartel usurpador tachado
-    R(2240,102,260,52,'#1a1e28');R(2242,104,256,48,'#2a3040');
-    T('FALKLAND ISLANDS',2370,112,'#8894a4',5,'center');
+    R(2210,104,240,50,'#1a1e28');R(2212,106,236,46,'#2a3040');
+    T('FALKLAND ISLANDS',2330,114,'#8894a4',4.8,'center');
     // Tachón rojo con aerosol argentino
-    g.strokeStyle='#c8322a';g.lineWidth=3;g.beginPath();g.moveTo(2260,116);g.lineTo(2480,116);g.stroke();
-    T('¡LAS MALVINAS SON ARGENTINAS!',2370,128,'#6cace4',5,'center');
-    T('1982 · PROHIBIDO OLVIDAR',2370,138,'#f2b632',4.5,'center');
-    R(2270,154,4,20,'#4a5060');R(2470,154,4,20,'#4a5060');
+    g.strokeStyle='#c8322a';g.lineWidth=3;g.beginPath();g.moveTo(2230,118);g.lineTo(2430,118);g.stroke();
+    T('¡LAS MALVINAS SON ARGENTINAS!',2330,129,'#6cace4',4.6,'center');
+    T('1982 · PROHIBIDO OLVIDAR',2330,139,'#f2b632',4,'center');
+    R(2240,154,4,20,'#4a5060');R(2420,154,4,20,'#4a5060');
+
+    // Mástil principal de Puerto Argentino al final del nivel (x=2560, visible en la pelea final y victoria)
+    R(2542,162,40,12,'#4a5258');R(2546,156,32,6,'#68727a');
+    R(2559,36,5,120,'#d0d8e0');R(2560,36,2,120,'#ffffff');
+    g.fillStyle='#f2b632';g.beginPath();g.arc(2561.5,34,4,0,7);g.fill();
+    T('MÁSTIL DE PUERTO ARGENTINO',2562,175,'#f2e2b8',3.6,'center');
   }
 };
 
@@ -3511,14 +3569,14 @@ function monstruoInsert(){if(monstruoInsert.done)return;monstruoInsert.done=1;
   pelusaInsert();
   malvinasInsert();
 rutaInsert();
-  if(LEVELS[10])LEVELS[10].guns=[[700,'boleadora'],[1400,'damajuana'],[1900,'escopeta']];
+  if(LEVELS[12])LEVELS[12].guns=[[700,'boleadora'],[1400,'damajuana'],[1900,'escopeta']];
   DATOS[0].unshift('En 1972 recibió su primera guitarra y en 1978 su primer bajo, un Faim que le compraron sus padres.');
   AFICHES[4].push([1300,'GIL TRABAJADOR','HERMÉTICA 1991','ÁCIDO ARGENTINO','#f2b632']);AFICHES[4].push([1750,'BLACK SABBATH','OBRAS 1992','ABRE HERMÉTICA','#7a5a9a']);AFICHES[5].push([1700,'MONSTERS OF ROCK','KISS Y SABBATH','RIVER 3/9/94','#c8a060']);
-  AFICHES[6].push([1500,'ALMAFUERTE','VERSIONA A','LARRALDE','#a87a4a']);AFICHES[10].push([1400,'JOSÉ LARRALDE','VERSIONADO','POR ALMAFUERTE','#a87a4a']);
+  AFICHES[6].push([1500,'ALMAFUERTE','VERSIONA A','LARRALDE','#a87a4a']);if(AFICHES[12])AFICHES[12].push([1400,'JOSÉ LARRALDE','VERSIONADO','POR ALMAFUERTE','#a87a4a']);
   DATOS[4].push('En 1992, con Ácido argentino, Hermética abrió para Black Sabbath en Obras.');
   DATOS[5].push('A comienzos de septiembre de 1994 tocaron en el Monsters of Rock de River, con Kiss y Black Sabbath.');
   DATOS[6].push('Almafuerte también versionó tangos y folclore: Gardel, Troilo y José Larralde.');
-  DATOS[10].push('Como solista grabó covers, entre ellos una versión en castellano de un tema de Black Sabbath.');
+  if(DATOS[12])DATOS[12].push('Como solista grabó covers, entre ellos una versión en castellano de un tema de Black Sabbath.');
   DATOS[8].push('Su madre, Elda Pedraza, tenía ascendencia tehuelche.');
   LEVELS.forEach((l,i)=>l.chap=l.bonus?'CAPÍTULO BONUS':'CAPÍTULO '+(i+1));musicByEra();
   try{const sv=JSON.parse(localStorage.getItem('ricardio-v9')||'{}');unl=LEVELS.length;}catch(e){}
@@ -4197,10 +4255,10 @@ function drawHUD2(){
   for(let i=0;i<8;i++){const x=62+i*10;ctx.fillStyle=OUT;ctx.beginPath();ctx.ellipse(x,48,4.4,3.6,0,0,7);ctx.fill();ctx.fillStyle=i<papas?(lvl>=2?'#d8322a':'#b8864a'):'#3a2a22';ctx.beginPath();ctx.ellipse(x,48,3.5,2.7,0,0,7);ctx.fill();
     if(i<papas&&lvl>=2){ctx.fillStyle='#16141a';ctx.beginPath();ctx.arc(x,48,1.2,0,7);ctx.fill();}}
   txt(lvl>=2?'DISCOS (B)':'PAPAS (B)',144,45,'#c8b8cc',6);
-  if(GUNS[player.hold]){const G=GUNS[player.hold];txt(G.name+' x'+player.ammo,244,14,G.col,6);txt(coarse?'TOCÁ GOLPE':'Z DISPARA',244,23,'#ffe08a',4.2);}
+  if(GUNS[player.hold]){const G=GUNS[player.hold],fix=LV&&LV.fixedGun;txt(G.name+(fix?' (FIJA)':' x'+player.ammo),244,14,G.col,6);txt(coarse?'TOCÁ DISPARAR':'Z DISPARA RÁFAGA',244,23,'#ffe08a',4.2);}
   const atkBtn=document.getElementById('bAtk');
   if(atkBtn){
-    const gunName=player&&player.hold&&GUNS[player.hold]?'DISPARAR ('+player.ammo+')':'GOLPE';
+    const gunName=player&&player.hold&&GUNS[player.hold]?(LV&&LV.fixedGun?'DISPARAR FAL':'DISPARAR ('+player.ammo+')'):'GOLPE';
     if(atkBtn.textContent!==gunName)atkBtn.textContent=gunName;
   }
 
@@ -4278,6 +4336,20 @@ function musicByEra(){
 function stepWorld(){
   timeF++;
   if(diff===0&&tick%45===0&&player&&player.hp>0&&player.hp<player.max){player.hp=Math.min(player.max,player.hp+1);}
+  if(LV&&LV.malvinas&&state==='play'){
+    if(--malvSoldierT<=0){
+      malvSoldierT=260+(rnd(0,90)|0);
+      const curAllies=ents.filter(e=>e.ally&&e.kind==='combatiente'&&!e.gone).length;
+      if(curAllies<2){
+        const sy=clamp(player.y+rnd(-12,12),GT+6,GB-4);
+        const s=mk('combatiente',cam.x-18,sy);
+        s.ally=true;s.face=1;s.hold='fal';s.cd=18;s.allyTimer=520;
+        ents.push(s);
+        floatTxt(Math.max(cam.x+42,player.x-40),sy-76,'¡SOLDADO ARGENTINO! 🇦🇷','#75aadb');
+        say(s,pick(['¡Acá llega la infantería argentina, Ricardo!','¡Fuego de cobertura con el FAL!','¡Patria al hombro, hermano!','¡Por las Malvinas!']),60);
+      }
+    }
+  }
   if(comboT>0){comboT--;if(comboT===0){if(combo>=5){const b=combo*combo*5;score+=b;floatTxt(player.x,player.y-95,'COMBO +'+b,'#f2b632');}combo=0;}}
   if(lastHit&&--lastHit.t<=0)lastHit=null;
   assignEngage();
@@ -4307,11 +4379,11 @@ function update(){tick++;readInput();if(state!=='play')noPause=40;else if(noPaus
     if(press.start||press.atk||press.jump){audioInit();startChapter(sel,false);}}
   else if(state==='card'){cardT++;if(cardT>40&&(press.start||press.atk||press.jump))startIntro();}
   else if(state==='intro'){updIntro();for(const e of ents)if(e!==player&&e.team===2)updNPC(e);updParts();}
-  else if(state==='cut'){updCut();for(const e of ents)if(e.team===2)updNPC(e);updParts();}
+  else if(state==='cut'){updCut();if(LV&&LV.malvinas&&boss&&boss.hp<=0)malvFlagT=Math.min(75,(malvFlagT||1)+.45);for(const e of ents)if(e.team===2)updNPC(e);updParts();}
   else if(state==='play'){
     if((press.start||press.pause||press.esc)&&noPause<=0){state='pause';return;}
     modTick();datoTick();if(banner&&--banner.t<=0)banner=null;if(goT>0)goT--;
-    if(slowT>0){slowT--;if(slowT%3===0){stepWorld();}if(boss&&boss.D.monster&&!boss.gone)monsterDeath();updParts();if(slowT===0){if(LV.final&&boss&&!boss.D.monster)startMonsterCut();else startWinCut();}}
+    if(slowT>0){slowT--;if(LV&&LV.malvinas)malvFlagT=Math.min(45,(malvFlagT||0)+.4);if(slowT%3===0){stepWorld();}if(boss&&boss.D.monster&&!boss.gone)monsterDeath();updParts();if(slowT===0){if(LV.final&&boss&&!boss.D.monster)startMonsterCut();else startWinCut();}}
     else if(stopT>0){stopT--;updParts();}
     else{stepWorld();updParts();if(papas<8&&++papaT>=200){papas++;papaT=0;}}
   }
@@ -4323,7 +4395,7 @@ function update(){tick++;readInput();if(state!=='play')noPause=40;else if(noPaus
   }
   else if(state==='cine'){if(press.esc||press.menu){toTitleMenu();return;}cineUpd();}
   else if(state==='album'){albumUpd();}
-  else if(state==='victory'){introT++;updParts();if(introT===20)say(player,LV.winSay,130);if(introT===150){if(LV.truck&&!truckDone)startTruck();else{makeResults();state='results';}}}
+  else if(state==='victory'){introT++;if(LV&&LV.malvinas){malvFlagT=Math.min(140,(malvFlagT||1)+1);if(introT===35)floatTxt(2560,64,'¡ARRIBA LA CELESTE Y BLANCA!','#75aadb');}updParts();if(introT===20)say(player,LV.winSay,90);if(introT===(LV&&LV.malvinas?230:150)){if(LV.truck&&!truckDone)startTruck();else{makeResults();state='results';}}}
   else if(state==='truck'){updTruck();updParts();}
   else if(state==='results'){
     if(press.esc||press.menu){toTitleMenu();return;}
@@ -4381,6 +4453,7 @@ function targetPose(f){
 function smoothPose(f){
   let tp=targetPose(f);
   if(f.hold==='camera'&&['idle','walk','aim'].includes(f.state)){tp=Object.assign({},tp,{fa1:PO.film.fa1,fa2:PO.film.fa2});}
+  if(f.hold==='fal'&&['idle','walk','runin','runoff'].includes(f.state)){tp=Object.assign({},tp,{fa1:.58,fa2:1.42});}
   if(f.herido&&!['fall','thrown','down','dead','getup','ride','victory'].includes(f.state)){
     tp=Object.assign({},tp,{
       ba1:-.12,
@@ -4405,9 +4478,79 @@ function drawTrain(cx){const S=SCENES[lvl],T=S.track;if(!T||cx+W<T.x0-40||cx>T.x
   if(train){for(let c=0;c<5;c++){const tx=Math.round(train.x+c*124-cx);if(tx>W||tx<-130)continue;ctx.fillStyle=T.col;ctx.fillRect(tx,88,120,48);ctx.fillStyle=shade(T.col,.7);ctx.fillRect(tx,88,120,6);ctx.fillStyle='#2f3542';ctx.fillRect(tx,128,120,8);
     ctx.fillStyle=T.stripe;ctx.fillRect(tx,118,120,4);for(let w=0;w<6;w++){ctx.fillStyle='#ffe9a8';ctx.fillRect(tx+8+w*19,98,13,14);}
     if(c===0){ctx.fillStyle='#d8d2c6';ctx.fillRect(tx-6,96,8,30);}}}}
+function drawUkFlag(x,y,w,h,t,droop){
+  ctx.save();
+  for(let i=0;i<w;i+=2){
+    const wy=Math.sin(t*.12+i*.18)*(droop?1:2.2)+(droop?i*.18:0);
+    const sx=x+i,sy=y+wy;
+    ctx.fillStyle='#012169';ctx.fillRect(sx,sy,2,h);
+    // Diagonales blancas y rojas (Union Jack)
+    const d1=Math.floor((i/w)*h),d2=Math.floor((1-i/w)*h);
+    ctx.fillStyle='#ffffff';ctx.fillRect(sx,sy+clamp(d1-2,0,h-3),2,4);ctx.fillRect(sx,sy+clamp(d2-2,0,h-3),2,4);
+    ctx.fillStyle='#c8102e';ctx.fillRect(sx,sy+clamp(d1-1,0,h-2),2,2);ctx.fillRect(sx,sy+clamp(d2-1,0,h-2),2,2);
+    // Cruz central blanca y roja
+    ctx.fillStyle='#ffffff';ctx.fillRect(sx,sy+Math.floor(h/2)-3,2,6);
+    if(Math.abs(i-w/2)<4)ctx.fillRect(sx,sy,2,h);
+    ctx.fillStyle='#c8102e';ctx.fillRect(sx,sy+Math.floor(h/2)-2,2,4);
+    if(Math.abs(i-w/2)<2.2)ctx.fillRect(sx,sy,2,h);
+  }
+  ctx.restore();
+}
+function drawArFlag(x,y,w,h,t){
+  ctx.save();
+  const bh=h/3;
+  for(let i=0;i<w;i+=2){
+    const wy=Math.sin(t*.16+i*.16)*2.4;
+    const sx=x+i,sy=y+wy;
+    ctx.fillStyle='#75aadb';ctx.fillRect(sx,sy,2,bh);
+    ctx.fillStyle='#ffffff';ctx.fillRect(sx,sy+bh,2,bh);
+    ctx.fillStyle='#75aadb';ctx.fillRect(sx,sy+bh*2,2,bh);
+  }
+  const sunX=x+w*.46,sunY=y+h*.5+Math.sin(t*.16+(w*.46)*.16)*2.4;
+  ctx.fillStyle='#f2b632';ctx.beginPath();ctx.arc(sunX,sunY,3.6,0,7);ctx.fill();
+  ctx.strokeStyle='#d4881c';ctx.lineWidth=.9;
+  for(let r=0;r<8;r++){const a=r*Math.PI/4+t*.03;ctx.beginPath();ctx.moveTo(sunX+Math.cos(a)*3.5,sunY+Math.sin(a)*3.5);ctx.lineTo(sunX+Math.cos(a)*5.6,sunY+Math.sin(a)*5.6);ctx.stroke();}
+  ctx.restore();
+}
 function drawDyn(cx){
   if(LV.dyn==='ruta'){for(const fx of [1036,1106,1124]){const X=fx-cx;if(X<-30||X>W+30)continue;const wv=Math.sin(tick*.12+fx)*3;ctx.fillStyle='#d8241e';ctx.beginPath();ctx.moveTo(X+2,90);ctx.lineTo(X+22+wv,95+wv*.4);ctx.lineTo(X+2,102);ctx.fill();}}
   if(LV.dyn==='campo'){const X=771-cx;if(X>-40&&X<W+40){ctx.save();ctx.translate(X,60);ctx.rotate(tick*.05);ctx.fillStyle='#8a8a92';for(let k=0;k<12;k++){ctx.rotate(Math.PI/6);ctx.fillRect(2,-1.5,18,3);}ctx.restore();ctx.fillStyle='#5a5a64';ctx.fillRect(X-2,58,4,4);ctx.fillRect(X+2,59,14,2);ctx.fillRect(X+14,54,2,10);}}
+  if(LV&&LV.malvinas){
+    const X=2562-cx;
+    if(X>-90&&X<W+90){
+      const p=clamp((malvFlagT||0)/110,0,1);
+      // Driza del mástil
+      ctx.strokeStyle='rgba(230,235,240,.65)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(X-2,38);ctx.lineTo(X-2,154);ctx.moveTo(X+3,38);ctx.lineTo(X+3,154);ctx.stroke();
+      // Bandera inglesa (Union Jack): arriba durante el combate, se baja al terminar el nivel
+      const ukP=clamp(p/.58,0,1);
+      const ukY=40+ukP*94;
+      if(p<.85){
+        ctx.save();
+        if(p>.58)ctx.globalAlpha=clamp(1-(p-.58)/.27,0,1);
+        drawUkFlag(X-46,ukY,44,24,tick,ukP>.7);
+        ctx.restore();
+      }
+      // Bandera Argentina (Celeste y Blanca con el Sol de Mayo): sube hasta el tope del mástil al finalizar el nivel
+      if(p>.18){
+        const arP=clamp((p-.18)/.72,0,1);
+        const arY=132-arP*92;
+        drawArFlag(X+2,arY,52,30,tick);
+      }
+      if(malvFlagT>0){
+        ctx.save();
+        const msg=p<.52?'▼ BAJANDO BANDERA INGLESA ▼':'▲ BANDERA ARGENTINA EN LO ALTO ▲';
+        ctx.font='4px '+FONT;ctx.textAlign='center';
+        const mw=ctx.measureText(msg).width+8;
+        const bx=clamp(X-mw/2,6,W-mw-6);
+        ctx.fillStyle='rgba(10,14,22,.82)';ctx.fillRect(bx,22,mw,9);
+        ctx.fillStyle='#75aadb';ctx.fillRect(bx,22,mw,1.5);
+        ctx.fillStyle=p<.52?'#ff8a6a':'#75aadb';
+        ctx.fillText(msg,bx+mw/2,28);
+        ctx.restore();
+      }
+    }
+  }
   for(const s of SIGNS){const X=s.x-cx;if(X<-120||X>W+120)continue;const on=tick%180<170&&!(s.flick&&tick%97<6);ctx.fillStyle=on?s.c:s.off;ctx.font=(s.size||8)+'px '+FONT;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(U(s.t),X,s.y);
     if(on){ctx.globalCompositeOperation='lighter';ctx.globalAlpha=.35;ctx.drawImage(glow(s.c),X-50,s.y-16,100,40);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';}}}
 function drawWeather(cx){const w=SCENES[lvl].weather;
