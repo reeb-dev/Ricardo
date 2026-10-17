@@ -1118,7 +1118,7 @@ cv.addEventListener('pointerdown',e=>{audioInit();if(AC&&AC.state==='suspended')
       if(cy>=118&&cy<=140){toTitleMenu();return;}
       if(cy>=142&&cy<=162){cycleTouchAlpha();return;}
       if(cy>=164&&cy<=184){albumOpen();return;}
-      if(LV&&LV.camioneta&&cy>=186&&cy<=206){LV.freeRoad=!LV.freeRoad;sfx('blip');floatTxt(player?player.x:W/2,player?player.y-75:100,LV.freeRoad?'RUTA LIBRE: ACTIVADA':'RUTA LIBRE: DESACTIVADA','#f2b632');return;}
+      if(LV&&LV.camioneta&&cy>=184&&cy<=206){state='play';startWinCut();return;}
     }
     state='play';
   }
@@ -1632,21 +1632,53 @@ function updPlayer(f){if(rideTick(f))return;
         if(tk)lmPlay(tk);
       }
     }
-    if(f.x>380&&!f.h380){f.h380=true;say(f,'Corral de piedras levanté donde amargar mi sangre en tus márgenes barros...',180);}
-    if(f.x>1050&&!f.h1050){f.h1050=true;say(f,'Sendero ayer transitado por los pampas de Catriel, rumbo al Sauce Corto y loncos de Cura Malal...',190);}
-    if(f.x>1750&&!f.h1750){f.h1750=true;say(f,'Allá por los arenales de Chasicó, fortines donde el gaucho por decreto se apagó...',190);}
-    if(f.x>2450&&!f.h2450){f.h2450=true;say(f,'Que nace en Sierra Chica y muere en López Lecube, rumbo a la bahía que fuera blanca alguna vez...',190);}
-    if(f.x>2950&&!f.h2950){f.h2950=true;say(f,'Bonaerense Ruta 76... ¡al rincón serrano del orgullo nacional!',190);}
+    const lap=f.lap||0;
+    if(f.x>380&&!f.h380){
+      f.h380=true;
+      const q=lap===0?'Corral de piedras levanté donde amargar mi sangre en tus márgenes barros...':
+              lap===1?'Acá está el corral de piedras... laburo de peón y sudor criollo.':
+              'El camino de ripio y la pampa abierta: esto es la libertad.';
+      say(f,q,180);
+    }
+    if(f.x>1050&&!f.h1050){
+      f.h1050=true;
+      const q=lap===0?'Sendero ayer transitado por los pampas de Catriel, rumbo al Sauce Corto y loncos de Cura Malal...':
+              lap===1?'Indios ricos de Ventana y loncos de Cura Malal... memoria viva de la tierra.':
+              'No hay gps que valga cuando conocés la huella de memoria.';
+      say(f,q,190);
+    }
+    if(f.x>1750&&!f.h1750){
+      f.h1750=true;
+      const q=lap===0?'Allá por los arenales de Chasicó, fortines donde el gaucho por decreto se apagó...':
+              lap===1?'Los fortines de Chasicó... memoria que el viento pampeano no borra.':
+              'Con la F-100 y Almafuerte en la casetera no hace falta nada más.';
+      say(f,q,190);
+    }
+    if(f.x>2450&&!f.h2450){
+      f.h2450=true;
+      const q=lap===0?'Que nace en Sierra Chica y muere en López Lecube, rumbo a la bahía que fuera blanca alguna vez...':
+              lap===1?'López Lecube a la vista... estación de ferrocarril que resiste en pie.':
+              'Tierra adentro hasta que se apague el último faro.';
+      say(f,q,190);
+    }
+    if(f.x>2950&&!f.h2950){
+      f.h2950=true;
+      say(f,'Bonaerense Ruta 76... ¡al rincón serrano del orgullo nacional!',190);
+    }
+    if(press.start&&f.x>2600&&state==='play'){
+      startWinCut();return;
+    }
     if(LV.freeRoad){
-      if(f.x>=(LV.LW||3200)-140){
+      if(f.x>=(LV.LW||3400)-140){
         f.x=240;cam.x=0;
+        f.lap=(f.lap||0)+1;
         f.km=(f.km||0)+76;
         f.h380=f.h1050=f.h1750=f.h2450=f.h2950=false;
-        floatTxt(f.x+35,f.y-75,'KM '+(f.km)+' · RUTA LIBRE','#f2b632');
-        say(f,pick(['¡Bonaerense Ruta 76, sigo andándote!','¡Toda una vida tierra adentro!','Corral de piedras levanté donde amargar mi sangre...','¡Al rincón serrano del orgullo nacional!']),190);
+        floatTxt(f.x+35,f.y-75,'KM '+(f.km)+' · RUTA 76 · VUELTA '+(f.lap+1),'#f2b632');
+        say(f,pick(['¡Bonaerense Ruta 76, sigo andándote!','¡De Sierra Chica a López Lecube, la F-100 sigue firme!','¡Toda una vida tierra adentro!','Corral de piedras levanté donde amargar mi sangre...','¡Al rincón serrano del orgullo nacional!']),190);
       }
     }else{
-      if(f.x>=(LV.LW||3200)-140&&state==='play'){startWinCut();return;}
+      if(f.x>=(LV.LW||3400)-140&&state==='play'){startWinCut();return;}
     }
     bounds(f);return;
   }
@@ -3083,7 +3115,7 @@ Object.assign(DIEQ,{
 
 function rutaLevel(){
   return {
-    LW:3400,skin:'ricT',song:'ruta_76',bossSong:'ruta_76',food:'asado',bonus:true,camioneta:true,lmKey:'ruta 76',
+    LW:3400,skin:'ricT',song:'ruta_76',bossSong:'ruta_76',food:'asado',bonus:true,camioneta:true,freeRoad:true,lmKey:'ruta 76',
     villains:'Ninguno · Recorrido solitario por la Ruta 76',
     title:'RUTA 76',place:'SIERRA CHICA A LÓPEZ LECUBE · RP 76',hazard:null,
     card:[
@@ -4322,7 +4354,14 @@ function drawHUD2(){
 
   txt(String(score).padStart(7,'0'),W-8,8,'#fff',9,'right');txt(LV.place,W-8,21,'#c8b8cc',5,'right');
   const df=DIFFS[diff];txt(df.name,W-8,30,df.col,4.5,'right');
-  if(LV&&LV.camioneta&&LV.freeRoad)txt('🛣 RUTA LIBRE',W/2,6,'#f2b632',5,'center');
+  if(LV&&LV.camioneta){
+    const totKm=(player?(player.km||0)+Math.floor(player.x/40):0);
+    const lapTxt=(player&&player.lap?' · VUELTA '+(player.lap+1):'');
+    txt('🛣 BONAERENSE RUTA 76 · KM '+totKm+lapTxt,W/2,6,'#f2b632',5,'center');
+    if(player&&player.x>2600&&tick%50<34){
+      txt(coarse?'🏁 TOCÁ PAUSA PARA FINALIZAR O SEGUÍ VIAJANDO':'🏁 ENTER: LLEGAR AL DESTINO · O SEGUÍ DE LARGO',W/2,H-22,'#ffe08a',5,'center');
+    }
+  }
   if(rutaRadioBanner&&rutaRadioBanner.t>0){
     rutaRadioBanner.t--;
     const r=rutaRadioBanner,o=Math.min(1,r.t/12);
@@ -4647,32 +4686,49 @@ function drawWeather(cx){const w=SCENES[lvl].weather;
   else if(w==='dust'){for(let k=0;k<40;k++){const x=(hsh(k,1)*W*1.5+tick*(.4+hsh(k,2)*.8))%(W+20)-10,y=60+hsh(k,3)*200+Math.sin(tick*.02+k)*6;ctx.fillStyle='rgba(255,220,170,'+(.25+hsh(k,4)*.3).toFixed(2)+')';ctx.fillRect(x,y,1+(k%3===0),1);}}
   else if(w==='leaves'){for(const r of RAIN){if(r.k>.35)continue;r.y+=.5+r.s*.12;r.x+=Math.sin(tick*.04+r.s)*.6+.8;if(r.y>H){r.y=-6;r.x=Math.random()*W-40;}if(r.x>W+10)r.x=-10;ctx.fillStyle=r.s>5.5?'#7a8a3a':'#a8843a';ctx.fillRect(r.x,r.y,3,2);}}}
 function drawRutaSunset(cx){
-  const pSun=clamp((player?player.x:cx)/((LV.LW||3400)-360),0,1);
+  const dist=(player?((player.km||0)*28+player.x):cx);
+  const cycle=((dist/4400)%1+1)%1;
   ctx.save();
   const skyGr=ctx.createLinearGradient(0,0,0,172);
-  if(pSun<0.42){
-    const k=pSun/0.42;
+  let pSun=0,isNight=false,isDawn=false;
+  if(cycle<0.26){
+    const k=cycle/0.26;
     skyGr.addColorStop(0,'#111b36');skyGr.addColorStop(.48,'#2a3356');skyGr.addColorStop(.82,'#6b4a3a');skyGr.addColorStop(1,'#b87442');
-    ctx.globalAlpha=.15+k*.45;
-  }else if(pSun<0.82){
-    const k=(pSun-.42)/.4;
+    ctx.globalAlpha=.15+k*.35;pSun=k*0.42;
+  }else if(cycle<0.52){
+    const k=(cycle-0.26)/0.26;
     skyGr.addColorStop(0,'#16122e');skyGr.addColorStop(.32,'#4e1e36');skyGr.addColorStop(.65,'#b83824');skyGr.addColorStop(.88,'#e87022');skyGr.addColorStop(1,'#f8b438');
-    ctx.globalAlpha=.6+k*.35;
+    ctx.globalAlpha=.5+k*.45;pSun=0.42+k*0.52;
+  }else if(cycle<0.80){
+    isNight=true;const k=(cycle-0.52)/0.28;
+    skyGr.addColorStop(0,'#04030a');skyGr.addColorStop(.35,'#090614');skyGr.addColorStop(.7,'#110a1c');skyGr.addColorStop(1,'#1a1026');
+    ctx.globalAlpha=.94;
   }else{
-    skyGr.addColorStop(0,'#090714');skyGr.addColorStop(.34,'#1c0e26');skyGr.addColorStop(.68,'#581c2c');skyGr.addColorStop(.9,'#9a3a22');skyGr.addColorStop(1,'#c4602a');
-    ctx.globalAlpha=.92;
+    isDawn=true;const k=(cycle-0.80)/0.20;
+    skyGr.addColorStop(0,'#0c1224');skyGr.addColorStop(.38,'#261a38');skyGr.addColorStop(.7,'#6e3040');skyGr.addColorStop(1,'#d88244');
+    ctx.globalAlpha=.82-k*.35;
   }
   ctx.fillStyle=skyGr;ctx.fillRect(0,0,W,172);
-  const sunX=Math.round(W*.76-pSun*140),sunY=Math.round(52+pSun*108);
-  if(sunY<172){
-    const sg=ctx.createRadialGradient(sunX,sunY,4,sunX,sunY,52);
-    sg.addColorStop(0,'rgba(255,246,190,.92)');sg.addColorStop(.35,'rgba(255,145,50,.55)');sg.addColorStop(1,'rgba(255,80,30,0)');
-    ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sunX,sunY,52,0,7);ctx.fill();
-    ctx.fillStyle='#fff4ce';ctx.beginPath();ctx.arc(sunX,sunY,Math.max(8,13-pSun*4),0,7);ctx.fill();
+  if(!isNight&&!isDawn){
+    const sunX=Math.round(W*.78-pSun*160),sunY=Math.round(48+pSun*114);
+    if(sunY<172){
+      const sg=ctx.createRadialGradient(sunX,sunY,4,sunX,sunY,52);
+      sg.addColorStop(0,'rgba(255,246,190,.92)');sg.addColorStop(.35,'rgba(255,145,50,.55)');sg.addColorStop(1,'rgba(255,80,30,0)');
+      ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sunX,sunY,52,0,7);ctx.fill();
+      ctx.fillStyle='#fff4ce';ctx.beginPath();ctx.arc(sunX,sunY,Math.max(8,13-pSun*4),0,7);ctx.fill();
+    }
+  }else if(isNight){
+    const moonX=Math.round(W*.8),moonY=44;
+    const mg=ctx.createRadialGradient(moonX,moonY,3,moonX,moonY,32);
+    mg.addColorStop(0,'rgba(235,245,255,.85)');mg.addColorStop(.4,'rgba(160,205,255,.25)');mg.addColorStop(1,'rgba(100,160,255,0)');
+    ctx.fillStyle=mg;ctx.beginPath();ctx.arc(moonX,moonY,32,0,7);ctx.fill();
+    ctx.fillStyle='#f0f6ff';ctx.beginPath();ctx.arc(moonX,moonY,9,0,7);ctx.fill();
+    ctx.fillStyle='#090614';ctx.beginPath();ctx.arc(moonX+3.5,moonY-1.5,7.5,0,7);ctx.fill();
   }
-  if(pSun>.62){
-    const a=clamp((pSun-.62)/.38,0,1);ctx.fillStyle='rgba(255,255,255,'+(a*.85).toFixed(2)+')';
-    for(let k=0;k<26;k++){const sx=(hsh(k,11)*W),sy=(hsh(k,13)*85);if((k+tick)%24<18)ctx.fillRect(sx,sy,1,1);}
+  if(cycle>0.42&&cycle<0.88){
+    const a=(cycle>0.52&&cycle<0.80)?0.92:0.55;
+    ctx.fillStyle='rgba(255,255,255,'+a+')';
+    for(let k=0;k<32;k++){const sx=(hsh(k,11)*W),sy=(hsh(k,13)*88);if((k+tick)%24<20)ctx.fillRect(sx,sy,k%5===0?1.5:1,k%5===0?1.5:1);}
   }
   ctx.restore();
 }
@@ -5201,9 +5257,9 @@ function drawPause(){
 
   if(LV&&LV.camioneta){
     const by6=py+158;
-    ctx.fillStyle=LV.freeRoad?'rgba(42,60,34,.94)':'rgba(26,20,34,.94)';ctx.fillRect(px+16,by6,pw-32,18);
-    ctx.strokeStyle=LV.freeRoad?'#72d24a':'#e2462c';ctx.lineWidth=1;ctx.strokeRect(px+16,by6,pw-32,18);
-    txt('🛣 MODO RUTA LIBRE: '+(LV.freeRoad?'ACTIVADO':'DESACTIVADO'),W/2,by6+4,LV.freeRoad?'#a8f28a':'#f2b632',4.8,'center');
+    ctx.fillStyle='rgba(42,60,34,.94)';ctx.fillRect(px+16,by6,pw-32,18);
+    ctx.strokeStyle='#72d24a';ctx.lineWidth=1.2;ctx.strokeRect(px+16,by6,pw-32,18);
+    txt('🏁 LLEGAR A DESTINO (FINALIZAR)',W/2,by6+4,'#a8f28a',5,'center');
   }
 }
 
