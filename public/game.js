@@ -6872,7 +6872,7 @@ const FIN_SONGS = [
 ];
 
 function singNext(){
-  finSingT = 190;
+  finSingT = 240;
   const s = FIN_SONGS[finSongIdx % FIN_SONGS.length];
   finSongIdx++;
   finSingText = s.txt;
@@ -6955,7 +6955,7 @@ function drawEnding(){
     return;
   }
   const t = endT - 420;
-  if(t === 1 || (t === 25 && finSingT === 0)) singNext();
+  if((t === 1 || t === 25) && finSingT === 0) singNext();
   if(finSingT > 0) finSingT--;
 
   const sk = ctx.createLinearGradient(0, 0, 0, 190);
@@ -7230,12 +7230,12 @@ function drawEnding(){
     ctx.fill();
   }
 
-  // 8) Cartel / burbuja de letra cuando Ricardo canta (posicionada a la derecha del micrófono sin tapar a Ricardo)
+  // 8) Cartel / burbuja de letra cuando Ricardo canta (posicionada sobre el escenario sin tapar a Ricardo ni salirse)
   if(finSingT > 0 && finSingText){
     ctx.save();
-    const bx = 268, by = 126, bw = 204, bh = 54;
+    const bx = 214, by = 68, bw = 258, bh = 56;
 
-    ctx.fillStyle = 'rgba(10, 8, 16, 0.94)';
+    ctx.fillStyle = 'rgba(10, 8, 16, 0.95)';
     ctx.strokeStyle = '#ffd700';
     ctx.lineWidth = 1.4;
     ctx.beginPath();
@@ -7243,45 +7243,76 @@ function drawEnding(){
     ctx.fill();
     ctx.stroke();
 
-    // Piquito de la burbuja hacia el micrófono / boca de Ricardo
+    // Marco interior dorado fino
+    ctx.strokeStyle = 'rgba(255, 215, 0, 0.28)';
+    ctx.lineWidth = 0.8;
+    ctx.strokeRect(bx + 2, by + 2, bw - 4, bh - 4);
+
+    // Piquito de la burbuja hacia la boca de Ricardo (x=254, y=145)
     ctx.fillStyle = '#ffd700';
     ctx.beginPath();
-    ctx.moveTo(bx, by + 18);
-    ctx.lineTo(bx - 8, by + 23);
-    ctx.lineTo(bx, by + 28);
+    ctx.moveTo(248, by + bh);
+    ctx.lineTo(253, by + bh + 10);
+    ctx.lineTo(258, by + bh);
     ctx.closePath();
     ctx.fill();
 
-    // Portada del disco
-    drawAlbumCover(ctx, finSongAlbum, bx + 6, by + 8, 38);
+    // Portada del disco (40x40) con marco dorado
+    drawAlbumCover(ctx, finSongAlbum, bx + 7, by + 8, 40);
     ctx.strokeStyle = '#ffd700';
     ctx.lineWidth = 1;
-    ctx.strokeRect(bx + 6, by + 8, 38, 38);
+    ctx.strokeRect(bx + 7, by + 8, 40, 40);
 
-    // Subtítulo con año y banda
-    const txtX = bx + 48 + (bw - 54) / 2;
-    drawCleanTxt(finSingSub, txtX, by + 12, '#8cc4ff', 'bold 4.4px "Press Start 2P", monospace');
+    // Área de texto (ancho disponible ~196px)
+    const txtLeft = bx + 52;
+    const txtRight = bx + bw - 8;
+    const txtW = txtRight - txtLeft;
+    const txtCenterX = txtLeft + txtW / 2;
 
-    // Letra partida en líneas legibles sin desbordar el cartel
-    const words = finSingText.split(' ');
-    const lines = [];
-    let cur = '';
-    for(const w of words){
-      if((cur + ' ' + w).trim().length <= 26){
-        cur = (cur + ' ' + w).trim();
-      } else {
-        if(cur) lines.push(cur);
-        cur = w;
+    // Subtítulo con banda, tema y año
+    drawCleanTxt(finSingSub, txtCenterX, by + 12, '#8cc4ff', 'bold 4.5px "Press Start 2P", monospace');
+
+    // Divisor decorativo
+    ctx.strokeStyle = 'rgba(255, 215, 0, 0.22)';
+    ctx.lineWidth = 0.6;
+    ctx.beginPath();
+    ctx.moveTo(txtLeft + 8, by + 20);
+    ctx.lineTo(txtRight - 8, by + 20);
+    ctx.stroke();
+
+    // Helper a prueba de desbordes: mide el ancho real y ajusta tamaño dinámicamente
+    const drawSafeLyrics = (str, cx, cy, col, maxW) => {
+      ctx.save();
+      let sz = 5.6;
+      ctx.font = 'bold ' + sz + 'px -apple-system, system-ui, "Segoe UI", sans-serif';
+      while(ctx.measureText(str).width > maxW && sz > 3.6){
+        sz -= 0.2;
+        ctx.font = 'bold ' + sz + 'px -apple-system, system-ui, "Segoe UI", sans-serif';
       }
-    }
-    if(cur) lines.push(cur);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#000000';
+      ctx.fillText(str, cx + 0.8, cy + 0.8);
+      ctx.fillStyle = col;
+      ctx.fillText(str, cx, cy);
+      ctx.restore();
+    };
 
-    if(lines.length === 1){
-      drawCleanTxt(lines[0], txtX, by + 32, '#fffbe0', 'bold 5.8px -apple-system, system-ui, sans-serif');
+    // Separación inteligente de estrofas por pausa o punto medio
+    const commaIdx = finSingText.indexOf(',');
+    let line1 = '', line2 = '';
+    if(commaIdx > 10 && commaIdx < finSingText.length - 10){
+      line1 = finSingText.slice(0, commaIdx + 1).trim();
+      line2 = finSingText.slice(commaIdx + 1).trim();
     } else {
-      drawCleanTxt(lines[0], txtX, by + 27, '#fffbe0', 'bold 5.6px -apple-system, system-ui, sans-serif');
-      drawCleanTxt(lines[1] + (lines[2] ? ' ' + lines[2] : ''), txtX, by + 39, '#ffe48a', 'bold 5.6px -apple-system, system-ui, sans-serif');
+      const words = finSingText.split(' ');
+      const half = Math.ceil(words.length / 2);
+      line1 = words.slice(0, half).join(' ');
+      line2 = words.slice(half).join(' ');
     }
+
+    drawSafeLyrics(line1, txtCenterX, by + 30, '#fffbe0', txtW - 10);
+    drawSafeLyrics(line2, txtCenterX, by + 42, '#ffd700', txtW - 10);
 
     ctx.restore();
   }
@@ -7701,5 +7732,5 @@ let acc=0,lt=performance.now();const DT=1000/60;
 function frame(t){acc+=Math.min(100,t-lt);lt=t;let u=0;while(acc>=DT){update();acc-=DT;u=1;}if(u)render();requestAnimationFrame(frame);}
 requestAnimationFrame(frame);
 if(/[?&]debug\b/.test(location.search))window.__game={get songs(){return SONGS;},get song(){return song;},truck(){cam.x=LW-W;player.x=LW-200;startTruck();},rec(ms){return new Promise(res=>{const d=AC.createMediaStreamDestination();master.connect(d);const r=new MediaRecorder(d.stream),ch=[];r.ondataavailable=e=>ch.push(e.data);r.onstop=()=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.readAsDataURL(new Blob(ch));};r.start();setTimeout(()=>r.stop(),ms);});},get audio(){return {st:AC&&AC.state,drum:!!drumG,lead:!!gLead,t:AC&&AC.currentTime};},get state(){return state;},get player(){return player;},get ents(){return ents;},get cam(){return cam;},get boss(){return boss;},get lockIdx(){return lockIdx;},get lvl(){return lvl;},get score(){return score;},set meter(v){meter=v;},get hazard(){return hazard;},
-  start(i){audioInit();startChapter(i,false);},skip(){if(state==='card')startIntro();},warp(i,x){ents.filter(e=>e.team===1).forEach(e=>e.gone=true);lock=null;lockIdx=i;cam.x=x-120;player.x=x;},unlockAll(){unl=LEVELS.length;},monster(){boss=mk('loteador',player.x+90,player.y);ents.push(boss);startMonsterCut();},killBoss(){boss.hp=0;},ending(){total={t:300,combo:20,hits:10};state='ending';endT=0;}};
+  start(i){audioInit();startChapter(i,false);},skip(){if(state==='card')startIntro();},warp(i,x){ents.filter(e=>e.team===1).forEach(e=>e.gone=true);lock=null;lockIdx=i;cam.x=x-120;player.x=x;},unlockAll(){unl=LEVELS.length;},monster(){boss=mk('loteador',player.x+90,player.y);ents.push(boss);startMonsterCut();},killBoss(){boss.hp=0;},ending(){total={t:300,combo:20,hits:10};state='ending';endT=425;},sing(i){if(typeof i==='number')finSongIdx=i;singNext();},get singT(){return finSingT;},get singTxt(){return finSingText;}};
 })();
